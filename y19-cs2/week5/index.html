@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 コンピュータサイエンス第二 第5週 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+dd { margin-bottom: 1em; }
+.sample { margin-left: 2em; }
+.small { font-size: 80%; }
+.box { border: 1px solid black; padding: 0.5em; }
+.def { background: #ccffcc; border: solid 1px black; padding: 1em; margin: 0.5em; text-align: center; font-size: 120%; }
+.bg1 { background: #ffaaff; }
+.bg2 { background: #aaffff; }
+.bg3 { background: #ffffaa; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>コンピュータサイエンス第二 第5週</h1>
+<div class=nav>2020年1月6日 (月)</div>
+
+<ol start="0">
+<li> <a href="#stderr">補足・ファイルへの出力とターミナルへの表示を分けるには</a>
+<li> <a href="#readable">わかりやすいプログラムとは?</a>
+<li> <a href="#stringop">文字列の処理・つづき</a>
+<li> <a href="#readcsv">PythonでCSV形式を読み込む</a>
+<li> <a href="#johnsnow">ジョン・スノウの功績</a>
+<li> <a href="#assignments">本日の課題</a>
+</ol>
+
+
+<h2>雑談</h2>
+
+<p>日本は「先進国」なのか?
+<ul>
+<li> <a href="https://www.cia.gov/library/publications/the-world-factbook/rankorder/2102rank.html">平均寿命</a> (<mark>日本:2位</mark>、韓国:11位、台湾:40位、中国:102位)
+<li> <a href="https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(PPP)_per_capita">一人あたり平均所得</a> (台湾:14位、<mark>日本:28位</mark>、韓国:29位、中国:73位)
+<li> <a href="https://www.cia.gov/library/publications/the-world-factbook/fields/223rank.html">所得の平等さ</a> (台湾:43位、韓国:47位、<mark>日本:70位</mark>、中国:113位)
+<li> <a href="https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0">世界報道自由度ランキング</a> (韓国:41位、台湾:42位、<mark>日本:67位</mark>、中国:177位)
+<li> <a href="https://www.ef.com/__/~/media/centralefcom/epi/downloads/full-reports/v9/ef-epi-2019-english.pdf">国際英語力ランキング</a> (韓国:37位、台湾:38位、中国:40位、<mark>日本:53位</mark>)
+<li> <a href="https://www.cfr.org/interactive/legal-barriers/country-rankings">職場における女性の平等インデックス</a> (韓国:22位、台湾:43位、中国:85位、<mark>日本:89位</mark>)
+</ul>
+<p>
+つまり長生きだけはするが、たいして金持ちでもなく、
+不公平であり、本音も言えない。
+
+<p>
+IT業界における女性の社会進出はとくに遅れている:
+<a href="https://www.npr.org/sections/money/2014/10/21/357629765/when-women-stopped-coding">米国における統計</a>
+<p>
+1980年代になにが起こったのかというと、パソコンの登場である。
+当時、パソコンは「男の子向けのオモチャ」という位置づけで販売されていた:
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=ZekAbt2o6Ms">Commodore 64 CM (米国)</a>
+<li> <a href="https://www.youtube.com/watch?v=-FqrmB1hi7o">TRS-80 CM (米国)</a>
+<li> <a href="https://www.youtube.com/watch?v=OZgG8QK5N04">SEGA SC-3000H CM (日本)</a>
+<li> <a href="https://www.youtube.com/watch?v=BEnf3L0S5Q8">SHARP X1F CM (日本)</a>
+</ul>
+<p>
+この傾向は、消費者に対してある一定のメッセージを送っている。
+<blockquote class=box>
+<a href="http://www.smbc-comics.com/index.php?db=comics&id=1883">Saturday Morning Breakfast Cereal</a> (漫画)
+<ol>
+<li> 男の子向けのオモチャ: 「メカブロックスだよ! 何通りにも組み合わせができて遠隔操作できるんだ!」
+<li> 女の子向けのオモチャ: 「人形だよ!」
+<li> 後年… 「なんでこの業界はみんな野郎ばっかりなんだ?」
+</ol>
+</blockquote>
+<p>
+しかし、女性でもコンピュータ・サイエンスのパイオニアは存在する:
+<ul>
+<li> <a href="https://en.wikipedia.org/wiki/Ada_Lovelace">Ada Lovelace</a>
+  - 世界初のプログラマとも言われる。
+  蒸気で動くコンピュータ (解析機関) のために
+  <a href="https://commons.wikimedia.org/wiki/File:Diagram_for_the_computation_of_Bernoulli_numbers.jpg">ベルヌーイ数を計算するプログラム</a>を書いた。
+<li> <a href="https://www.youtube.com/watch?v=pzhBmlkRd0U">Grace Hopper</a>
+  - プログラムの「バグ」という言葉を広めたとされる。
+<li> <a href="https://en.wikipedia.org/wiki/Margaret_Hamilton_(scientist)">Margaret Hamilton</a>
+  - NASAで アポロ11号の飛行制御プログラムの開発責任者。
+</ul>
+
+
+<h2 id="stderr">0. 補足・ファイルへの出力とターミナルへの表示を分けるには</h2>
+<p>
+プログラムのデバッグの際には
+「途中結果を <code>print()</code> で表示してみる」
+のが非常に効果的である。ところが
+Python で「<code>&gt; ファイル名</code>」文字を使ってリダイレクトを行うと、
+すべての <code>print()</code> 関数がファイルに出力される。
+このため、出力先のファイルに2種類の文字が混じってしまう:
+<div class=file>
+foo.py
+<pre>
+print("hello")  <span class=comment># ターミナルに表示したい。</span>
+print("&lt;rect x='10' y='10' width='20' height='30' /&gt;")  <span class=comment># SVGに出力したい。</span>
+</pre></div>
+<blockquote><pre>
+$ <strong>python foo.py &gt; out.svg</strong>
+(最初のprint文もout.svgに出力されてしまう)
+</pre></blockquote>
+<p>
+このような場合は、以下のようにすると
+ファイルへの出力とターミナルへの表示を分けることができる:
+<div class=file>
+foo.py
+<pre>
+<mark>import sys</mark>
+print("hello"<mark>, file=sys.stderr</mark>)  <span class=comment># ターミナルに表示される。</span>
+print("&lt;rect x='10' y='10' width='20' height='30' /&gt;")  <span class=comment># SVGに出力される。</span>
+</pre></div>
+ふつうに実行しても変化はないが…
+<blockquote><pre>
+$ <strong>python foo.py</strong>
+hello
+&lt;rect x='10' y='10' width='20' height='30' /&gt;
+</pre></blockquote>
+<p>
+リダイレクトを行うと2番目の <code>print</code>だけが
+<code>out.svg</code> に出力される。
+<blockquote><pre>
+$ <strong>python foo.py &gt; out.svg</strong>
+hello
+(&lt;rect ... は out.svg に出力された)
+</pre></blockquote>
+
+
+<h2 id="readable">1. わかりやすいプログラムとは?</h2>
+<h3>第1問</h3>
+<p>
+以下の関数 <code>f(a,b,c)</code> は何を計算するか?
+なぜそう推測できるのか? わかりにくい点があれば述べよ。
+<blockquote><pre>
+def f(a,b,c):
+    n = 0
+    d = 0
+    if ((a % 400) == 0) or ((a % 4) == 0 and (a % 100) != 0):
+        d = 1
+    for i in range(b-1):
+        if i == 1:
+            n = n + 28 + d
+        elif i == 3 or i == 5 or i == 8 or i == 10:
+            n = n + 30
+        else:
+            n = n + 31
+    return n + c - 1
+</pre></blockquote>
+
+<h3>第2問</h3>
+<p> 以下の関数 <code>g(a,b,c)</code> は何を計算するか?
+  なぜそう推測できるのか? わかりにくい点があれば述べよ。
+<blockquote><pre>
+def g(a,b,c):
+    d = [0]*400
+    for i in range(100):
+        d[i*4] = 1
+    d[100] = 0
+    d[200] = 0
+    d[300] = 0
+    e = [31,28,31,30,31,30,31,31,30,31,30,31]
+    e[1] = e[1] + d[a % 400]
+    n = 0
+    for i in range(b-1):
+        n = n + e[i]
+    return n + c - 1
+</pre></blockquote>
+
+<h3>第3問</h3>
+<p>
+以下の関数 <code>countdays(year,month,day)</code> は何を計算するか?
+なぜそう推測できるのか? <code>countdays(2019,3,1)</code> が
+呼ばれたときの実行をエミュレートせよ。
+<blockquote><pre>
+<span class=comment># countdays(year, month, day):</span>
+<span class=comment># 指定された年の 1月1日から数えた日数を計算する。</span>
+def countdays(year, month, day):
+    <span class=comment># n には合計日数が入る。</span>
+    n = 0
+    <span class=comment># まず前月 (month-1月) までの日数を足し合わせる。</span>
+    for i in range(month-1):
+        <span class=comment># m は現在の月が入る。</span>
+        m = i + 1
+        if m == 2:
+            <span class=comment># 2月は、うるう年か否かによって処理が分かれる。</span>
+            if (((year % 400) == 0) or
+                ((year % 4) == 0 and (year % 100) != 0)):
+                <span class=comment># うるう年の場合は29日。</span>
+                n = n + 29
+            else:
+                <span class=comment># 通常の年は28日。</span>
+                n = n + 28
+        elif m == 4 or m == 6 or m == 9 or m == 11:
+            <span class=comment># 4, 6, 9, 11月は 30日である。</span>
+            n = n + 30
+        else:
+            <span class=comment># それ以外の月は 31日である。</span>
+            n = n + 31
+    <span class=comment># その月の1日からday日の日数を足す。</span>
+    n = n + day - 1
+    return n
+</pre></blockquote>
+
+<h3>わかりやすいプログラムの特徴</h3>
+<ul>
+<li> 各部分のおおまかな方針 (「前月までの日数を足し合わせる」など) を
+  コメントで説明している。
+<li> <u>なぜ</u>特定の処理をやるのかを説明している。
+</ul>
+<p>
+プログラミングは、数学の証明を書くのにやや似ている。
+読む人に「なぜこの方法でうまくいくのか」を説得しなければならない。
+一見何をしているかわからないプログラムは、
+ブラックボックスと同じようなものなので信用されない。
+
+
+<h2 id="stringop">2. 文字列の処理・つづき</h2>
+
+<h3>2.1. 文字列のスライス</h3>
+<p>
+<a href="../week3/index.html#arrayslice">リストと同じく</a>、文字列もスライスが可能である。
+<blockquote><pre>
+s = "HEADACHE"
+</pre></blockquote>
+<p>
+この場合、<code>s</code>のスライスは、以下のようになる:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="350" height="230">
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+    <rect x="130" y="10" width="40" height="40" />
+    <rect x="170" y="10" width="40" height="40" />
+    <rect x="210" y="10" width="40" height="40" />
+    <rect x="250" y="10" width="40" height="40" />
+    <rect x="290" y="10" width="40" height="40" />
+  </g>
+  <g fill="#88ff88" stroke="black">
+    <rect x="10" y="80" width="40" height="25" />
+    <rect x="290" y="80" width="40" height="25" />
+    <rect x="90" y="110" width="80" height="25" />
+    <rect x="130" y="140" width="120" height="25" />
+    <rect x="10" y="170" width="80" height="25" />
+    <rect x="210" y="200" width="120" height="25" />
+  </g>
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">H</text>
+    <text x="70" y="35">E</text>
+    <text x="110" y="35">A</text>
+    <text x="150" y="35">D</text>
+    <text x="190" y="35">A</text>
+    <text x="230" y="35">C</text>
+    <text x="270" y="35">H</text>
+    <text x="310" y="35">E</text>
+    </g>
+    <text x="10" y="70">0</text>
+    <text x="50" y="70">1</text>
+    <text x="90" y="70">2</text>
+    <text x="130" y="70">3</text>
+    <text x="170" y="70">4</text>
+    <text x="210" y="70">5</text>
+    <text x="250" y="70">6</text>
+    <text x="290" y="70">7</text>
+    <text x="330" y="70">8</text>
+    <g style="font-family: monospace;">
+      <text x="30" y="100">s[0]</text>
+      <text x="310" y="100">s[-1]</text>
+      <text x="130" y="130">s[2:4]</text>
+      <text x="190" y="160">s[3:-2]</text>
+      <text x="50" y="190">s[:2]</text>
+      <text x="270" y="220">s[5:]</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<div class=ex>
+<div class=header>練習問題</div>
+<ol type=i>
+  <li> <code>s[2:6]</code> の文字列を答えよ。
+  <li> <code>s[4:]</code> の文字列を答えよ。
+  <li> <code>s[:2]</code> の文字列を答えよ。
+  <li> <code>s[-2:]</code> の文字列を答えよ。
+  <li> <code>s[-2:-1]</code> の文字列を答えよ。
+</ol>
+</div>
+
+<h3>2.2. 文字列の検索</h3>
+<p>
+文字列に対してスライスが使えると、
+ある文字列の中に含まれる<u>部分文字列</u>の検索をおこなうことができる。
+これは、検索したい文字列をスライドさせながら各位置と比較することでおこなう:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="350" height="150">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+    <rect x="130" y="10" width="40" height="40" />
+    <rect x="170" y="10" width="40" height="40" />
+    <rect x="210" y="10" width="40" height="40" />
+    <rect x="250" y="10" width="40" height="40" />
+    <rect x="290" y="10" width="40" height="40" />
+  </g>
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">V</text>
+    <text x="70" y="35">A</text>
+    <text x="110" y="35">C</text>
+    <text x="150" y="35">A</text>
+    <text x="190" y="35">T</text>
+    <text x="230" y="35">I</text>
+    <text x="270" y="35">O</text>
+    <text x="310" y="35">N</text>
+    </g>
+    <text x="10" y="70">0</text>
+    <text x="50" y="70">1</text>
+    <text x="90" y="70">2</text>
+    <text x="130" y="70">3</text>
+    <text x="170" y="70">4</text>
+    <text x="210" y="70">5</text>
+    <text x="250" y="70">6</text>
+    <text x="290" y="70">7</text>
+    <text x="330" y="70">8</text>
+  </g>
+  <g transform="translate(20,75)">
+  <g fill="#ffccff" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+  </g>
+  <line fill="none" stroke="black" stroke-width="6" marker-end="url(#arrow)"
+        x1="140" x2="190" y1="30" y2="30" />
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">C</text>
+    <text x="70" y="35">A</text>
+    <text x="110" y="35">T</text>
+    </g>
+    <text x="10" y="70">i</text>
+    <text x="50" y="70">i+1</text>
+    <text x="90" y="70">i+2</text>
+    <text x="130" y="70">i+3</text>
+  </g>
+  </g>
+</svg>
+</div>
+
+<blockquote><pre>
+<span class=comment># ある文字列に含まれる部分文字列を発見する。</span>
+s = "VACATION"  <span class=comment># 検索対象の文字列</span>
+t = "CAT"       <span class=comment># 含まれる文字列</span>
+for i in range(6):  <span class=comment># 0〜5</span>
+    if s[i:i+3] == t:
+        print("found", i)
+</pre></blockquote>
+
+<div class=ex>
+<div class=header>演習 5-1.</div>
+<ol type=i>
+  <li> 上のプログラムを一般化し、関数 <code>find(s, t)</code> として実現せよ。
+    これは与えられた文字列 <code>s</code> の中に含まれる <code>t</code> の位置を
+    整数として返し、見つからなければ <code>-1</code> を返すものとする:
+<pre>
+def find(s, t):
+    ...
+
+print(find("VACATION", "CAT"))  <span class=comment># 2</span>
+print(find("VACATION", "DOG"))  <span class=comment># -1</span>
+</pre>
+  <li> 検索対象 <code>s</code> が<em>n</em>文字あったとき、この関数の最悪計算量を答えよ。
+    (<code>t</code> の長さは <code>s</code> に比べて十分に小さいとする。)
+</ol>
+</div>
+
+<h3>2.3. Python による文字列の検索</h3>
+<p>
+文字列の検索は基本的な処理なので、
+Python にはすでに上の <code>find</code>関数に相当する機能がある。
+(これには <em>O</em>(n) の時間がかかる。)
+<blockquote><pre>
+s = "vacation"
+print(s.find("cat"))  <span class=comment># 2</span>
+print(s.find("dog"))  <span class=comment># -1</span>
+</pre></blockquote>
+<p>
+また、単に部分文字列が「含まれているか」否かを判定するには
+もっと簡単に <code>in</code>演算子 が使える。
+これは <code>&lt;</code>, <code>&gt;</code>, <code>==</code> などと
+同様に、左辺と右辺に文字列の値を並べることで表現する。
+これにも <em>O</em>(n) の時間がかかる。
+
+<blockquote><pre>
+s = "vacation"
+if "cat" in s:
+    print("ネコいる")
+else:
+    print("ネコいない")
+</pre></blockquote>
+
+<code>in</code>演算子はリストに対しても使える:
+<blockquote><pre>
+a = [5,9,4,0,7]
+if 4 in a:
+    print("4いる")
+else:
+    print("4いない")
+</pre></blockquote>
+(当然、これにも <em>O</em>(n) の時間がかかる。)
+
+
+<h2 id="readcsv">3. PythonでCSV形式を読み込む</h2>
+<p>
+CSV (Comma Separated Values) 形式とは、テキスト形式の一種で、
+カンマによって区切られた値を並べたものである。
+まず、テキストの各行は表の一<u>行</u> (row) に相当する。
+さらに各行のなかのカンマで囲まれた部分を
+<u>カラム</u> (column、列または欄) または <u>フィールド</u> (field) という。
+空白や特殊な文字が入ったフィールドはさらに <code>"〜"</code> で囲まれる。
+また CSVファイルは、Microsoft Excel で開くことができる:
+<blockquote><pre>
+Alice,USA,22
+Bob,UK,25
+"Yusuke Shinyama",Japan,13
+</pre></blockquote>
+<p>
+エクセルで上の CSVファイルを開くと、以下のような表が表示される:
+<div class=figure>
+<table align=center border>
+<tr><td>Alice</td><td>USA</td><td>22</td></tr>
+<tr><td>Bob</td><td>UK</td><td>25</td></tr>
+<tr><td>Yusuke Shinyama</td><td>Japan</td><td>13</td></tr>
+</table>
+</div>
+<p>
+日本語のCSVをPythonでリスト(のリスト)として読み込むには、
+以下のようにする:
+<blockquote><pre>
+import csv
+with open("<mark>ファイル名</mark>", encoding="utf-8") as fp:
+    <mark>変数名</mark> = list(csv.reader(fp))
+</pre></blockquote>
+
+<div class=notice>
+<strong>注意:</strong>
+プログラムのファイル名を <code>csv.py</code> にすると、
+<u>正しく動かない</u>ので注意。
+</div>
+
+<div class=ex>
+<div class=header>演習 5-1.</div>
+<ol type=i>
+<li> 上のテキストファイルを <code>test.csv</code> などの
+名前で保存し、Excel で開けることを確認せよ。
+<li> Python を使ってこの CSV ファイルを読み込み、
+リストのリストを表示せよ。
+</ol>
+</div>
+<p>
+Python で上の CSV ファイルを読み込むと、
+以下のような「リストのリスト」になっている:
+<blockquote><pre>
+[['Alice', 'USA', '22'], ['Bob', 'UK', '25'], ['Yusuke Shinyama', 'Japan', '13']]
+</pre></blockquote>
+(外側にある) リストの要素は、CSV (表) の各行に相当する。
+各要素はさらにリストになっており (リストのリスト)、
+その各要素は1行のカラム (列) に相当する。
+なお、すべての内容は (<code>22</code> のような数字でも)
+文字列型になっていることに注意。これを数値として正しく処理するためには、
+<code>int()</code> 関数などを使う必要がある。
+
+<h3>3.1. for文のもうひとつの使い方</h3>
+<p>
+これまではリストの要素をひとつずつ表示するのに、
+以下のようにしていた:
+<blockquote><pre>
+a = [5,9,4,0]
+for i in range(len(a)):
+    x = a[i]
+    print(x)
+</pre></blockquote>
+実は <code>for</code>文ではこうも書ける:
+<blockquote><pre>
+a = [5,9,4,0]
+for x in a:
+    print(x)
+</pre></blockquote>
+<p>
+これらは同じ原理にもとづいている。
+<code>range(<em>n</em>)</code> 関数は、
+<code>[0, 1, 2, ..., <em>n-1</em>]</code> というリスト
+(のようなもの) を返す。
+したがって、
+<blockquote><pre>
+for i in range(n):
+    ....
+</pre></blockquote>
+という文は、この中の要素ひとつひとつを変数 <code>i</code> に代入し、
+「結果として <code>i</code> が 0 から <em>n-1</em> まで
+変化しているように見えた」のである。
+
+<div class=ex>
+<div class=header>演習 5-2.</div>
+以下の zip ファイルをダウンロードし、
+その中に含まれる全国の郵便番号一覧を記した <code>.csv</code> ファイルを
+Python で読み込むと、以下のようなリストのリストができる:
+<ul>
+<li> <a href="ken_all_rome.zip">全国の郵便番号リスト (ローマ字読みつき)</a>
+</ul>
+<blockquote><pre class=small>
+['0600000', '北海道', '札幌市\u3000中央区', '以下に掲載がない場合', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'IKANIKEISAIGANAIBAAI']
+['0640941', '北海道', '札幌市\u3000中央区', '旭ケ丘', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ASAHIGAOKA']
+['0600041', '北海道', '札幌市\u3000中央区', '大通東', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ODORIHIGASHI']
+...
+</pre></blockquote>
+<p>
+この一覧の中から、<mark>東京都の郵便番号だけ</mark>を
+表示するプログラムを書くと、こうなる。
+<div class=file>
+postal.py
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 表を1行(row)ずつ処理する。</span>
+for row in table:
+    <span class=comment># 各行の0番目の要素 (郵便番号) をとりだす。</span>
+    p = row[0]
+    if p[0] == "1": 
+        <span class=comment># 東京都の番号は 1 から始まるので、それを表示。</span>
+        print(p)
+</pre>
+</div>
+
+<p>
+(ちなみに、このデータは郵便局の
+<a href="https://www.post.japanpost.jp/zipcode/download.html">郵便番号データダウンロード</a>ページから取得したものである。)
+
+<ol type=i>
+<li> 上のプログラムを変更し、コマンド引数から入力された
+  郵便番号から住所を検索できるようにせよ:
+<pre>
+$ <strong>python postal.py 1520001</strong>
+東京都目黒区中央町
+</pre>
+<li> 演習 5-1. で作成した関数 <code>find</code> を使って
+  「東京都にあって、住所に『<code>が丘</code>』が含まれる郵便番号」を
+  すべて表示させよ。
+</ol>
+
+</div>
+
+
+<h2 id="johnsnow">4. ジョン・スノウの功績</h2>
+<p>
+1854年、ロンドンで<a href="https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%BB%E3%82%B9%E3%83%88%E3%83%AA%E3%83%BC%E3%83%88%E3%81%AE%E3%82%B3%E3%83%AC%E3%83%A9%E3%81%AE%E5%A4%A7%E7%99%BA%E7%94%9F">コレラの大流行</a>が発生した。
+この原因をつきとめた人物がジョン・スノウ (John Snow) である。
+スノウの業績はいくつかの点で画期的であった。
+まず、コレラは男女・貧富の区別を問わず発生していたので、
+スノウは個人の体質や家庭環境とは別の要因があると考えた。
+当時はまだ病気が細菌によって起こるという考えは一般的ではなかったが
+(これを証明したのは 30年後の
+<a href="https://ja.wikipedia.org/wiki/%E3%83%AD%E3%83%99%E3%83%AB%E3%83%88%E3%83%BB%E3%82%B3%E3%83%83%E3%83%9B">コッホ</a>である)、
+スノウは井戸水に含まれる「何か」がコレラを引き起こしていると仮定し、
+さらに彼はコレラ患者が発生した家の位置を使って、感染源となる
+井戸 (ポンプ) を特定した。
+スノウによる尽力のおかげで、コレラの流行はおさまった。
+これは科学的な<a href="https://ja.wikipedia.org/wiki/%E7%96%AB%E5%AD%A6">疫学</a>のはしりであり、スノウは
+現代における「データ・サイエンス」の先駆者といえる。
+
+<h3>4.1. スノウの地図を描く</h3>
+<p>
+ここでは、スノウが実際に使ったデータをもとに 1854年当時の
+コレラの発生状況を見てみよう。
+まず、以下のデータをダウンロードし展開する。
+<ul>
+<li> <a href="./SnowMap.zip">SnowMap.zip</a>
+</ul>
+(これは R Project の
+<a href="https://cran.r-project.org/web/packages/HistData/index.html">HistData</a>
+に含まれているものを CSV に加工したものである)
+<p>
+いくつかのファイルが含まれているが、
+<code>Snow.deaths.csv</code> を見てほしい。
+ここには 1854年8月19日から9月30日までのあいだにコレラで亡くなった
+578人の住所 (座標) が記録されている:
+<div class=file>
+Snow.deaths.csv
+<pre>
+"","case","x","y"
+"1",1,13.58801,11.0956
+"2",2,9.878124,12.55918
+"3",3,14.65398,10.18044
+...
+</pre>
+</div>
+<p>
+最初の行は各カラムの見出しなので無視する。
+つぎの行 (1行目以降) から、各行ごとに 4つの項目が並べられている:
+<ul>
+<li> 最初の列 (0列目) は行番号を示している (無視してよい)。
+<li> 1列目は、亡くなった患者の番号である (これも今のところは無視してよい)。
+<li> 2列目および3列目は、患者の住所 (X座標とY座標) をあらわす。
+</ul>
+<p>
+この情報を使って、
+患者の一覧を座標軸上にプロットした SVG が描ける:
+<div class=file>
+deathmap.py
+<pre>
+<span class=comment># CSVファイルを読み込む。</span>
+import csv
+with open("Snow.deaths.csv", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 最初の行を削除する。</span>
+del table[0]
+
+<span class=comment># SVGを表示する。</span>
+print("&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100' height='100'&gt;")
+for row in table:
+    <span class=comment># 2列目と3列目を (x,y) 座標に変換。</span>
+    cx = <mark>float</mark>(row[2])
+    cy = <mark>float</mark>(row[3])
+    print(f"&lt;circle cx='{cx}' cy='{cy}' r='1' fill='#000000' /&gt;")
+print("&lt;/svg&gt;")
+</pre>
+</div>
+<p>
+ここで使われている <code>float()</code> 関数は新しい機能である。
+これは与えられた文字列を整数ではなく<mark>小数</mark>に変換する。
+<code>int()</code> 関数に似ているが、
+<code>int()</code> 関数は整数しか扱えないので、
+小数点「<code>.</code>」が入っていると
+エラーになってしまうためである:
+<blockquote><pre>
+&gt;&gt;&gt; <strong>int("3")</strong>
+3
+&gt;&gt;&gt; <strong>int("3.14")</strong>
+Traceback (most recent call last):
+...
+<span class=err>ValueError: invalid literal for int() with base 10: '3.14'</span>
+&gt;&gt;&gt; <strong>float("3.14")</strong>
+3.14
+</pre></blockquote>
+
+<div class=ex>
+<div class=header>演習 5-3.</div>
+<ol type=i>
+<li> 上のプログラム <code>deathmap.py</code> を実行し、
+できた図形を確認せよ。
+<li> 上のプログラムで表示される図形はちょっと小さい。
+もうすこし拡大した SVG を生成するようにプログラムを改良せよ。
+</ol>
+</div>
+
+
+<h2 id="assignments">5. 本日の課題</h2>
+
+<div class=exa>
+<div class=header>小課題5. 郵便番号検索プログラム</div>
+<ul>
+  <li> 提出期限: <u>1月13日</u> (1週間後)
+  <li> 提出するファイル: <code>search.py</code>
+</ul>
+<p>
+演習 5-2. で作成したプログラムをさらに改造し、
+コマンド引数として「住所の一部」を与えると、
+それを含むすべての住所の郵便番号を表示するプログラム
+<code>search.py</code> を書け。
+<blockquote><pre>
+$ <strong>python search.py 自由が丘</strong>
+0800848 北海道帯広市自由が丘（１、２丁目）
+0802476 北海道帯広市自由が丘（３〜７丁目）
+3100042 茨城県水戸市自由が丘
+1520035 東京都目黒区自由が丘
+5900423 大阪府泉南郡　熊取町自由が丘
+6730552 兵庫県三木市志染町　中自由が丘
+6730553 兵庫県三木市志染町　東自由が丘
+6730551 兵庫県三木市志染町　西自由が丘
+6730424 兵庫県三木市自由が丘本町
+</pre></blockquote>
+<p>
+プログラムのおおまかな構成は以下のとおりである:
+<ol>
+<li> 郵便番号ファイル <code>KEN_ALL_ROME.CSV</code> を読み込む:
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+</pre>
+<li> コマンド引数を取得する:
+<pre>
+import sys
+key = sys.argv[1]
+</pre>
+<li> 1列目 (都道府県)、2列目 (市町村)、3列目 (住所) の文字列を
+連結して、ひとつの文字列を作成する:
+<pre>
+for row in table:
+    address = row[1] + row[2] + row[3]
+</pre>
+<li> 各 <code>address</code> に対して、<code>key</code> で指定された文字列が
+  含まれているかどうか判定する:
+<pre>
+if 0 &lt;= find(address, key):
+    print(f"{row[0]} {address}")
+</pre>
+</ol>
+</div>
+
+<div class=exa>
+<div class=header>中課題2. スノウの地図の描画</div>
+<ul>
+  <li> 提出期限: <u>1月20日</u> (2週間後)
+  <li> 提出するファイル: <code>snowmap.py</code>
+</ul>
+<p>
+授業中に紹介した
+<a href="./SnowMap.zip">SnowMap.zip</a> 中のファイルを使って、
+以下のような地図をSVG形式で描画するプログラム
+<code>snowmap.py</code> を書け:
+<ul>
+  <li> SVG の大きさは各図形が見やすい程度の大きさにすること。
+  <li> <code>Snow.deaths.csv</code> に含まれる
+    各コレラ患者の発生位置をなにかの印で表示すること。(色・図形はなんでもよい)
+  <li> <code>Snow.pumps.csv</code> に含まれる
+各井戸 (ポンプ) の場所を別の印で表示し、ポンプの名前もあわせて描画すること。
+  <li> <code>Snow.streets.csv</code> に含まれる座標を利用して、
+    街路を線で表示すること。
+  <li> このプログラム自体はコマンド引数をとらない。
+    各CSVファイルは、<u>プログラムと同一のフォルダ</u>に入っているものとする。
+  <li> プログラムの各部分を適宜コメントで説明すること。
+</ul>
+
+<div class=figure>
+<a href="snowmap.png"><img src="snowmap.png" width="341" height="325" ></a><br>
+(もちろん、これよりキレイな絵にしてもらってもかまいません)
+</div>
+
+<p>
+<code>Snow.pumps.csv</code> には、各行に
+ポンプの名前 (2列目) と座標 (3列目、4列目) が記されている:
+<blockquote><pre>
+"","pump","label","x","y"
+"1",1,"Oxford Market",8.6512012,17.8915997
+"2",2,"Castle St E",10.9847803,18.5178509
+"3",3,"Oxford St #1",13.37819,17.3945408
+...
+</pre></blockquote>
+<code>Snow.streets.csv</code> はちょっと特殊で、
+ここには直線 (線分) の集合が記されている:
+<blockquote><pre>
+"","street","n","x","y"
+<div class=bg1>"1",1,2,16.7380009,18.6959991     <em>(直線番号1、頂点数2)</em>
+"2",1,2,17.6599998,18.7119999
+</div><div class=bg2>"3",2,2,14.4619999,18.6550007     <em>(直線番号2、頂点数2)</em>
+"4",2,2,16.7380009,18.6959991
+</div>...
+<div class=bg3>"40",20,3,17.4473476,17.9006481   <em>(直線番号20、頂点数3)</em>
+"41",20,3,18.7360001,18.0639992
+"42",20,3,19.5030003,18.1189995
+</div>...
+</pre></blockquote>
+<p>
+各行には線分のうちどちらか片方の点の座標のみが記録されており、
+2行でひとつの線分を表現している (たとえば直線番号1 は
+(16.738009, 18.6959991) - (17.6599998, 18.7119999) という線分を表現する)。
+線分によっては、3つの点で表現されているものもある。
+たとえば直線40は、
+(17.4473476, 17.9006481) - (18.7360001, 18.0639992) - (19.5030003, 18.1189995)
+の3つの点をつないだものである。
+これらを正しく SVG の <code>&lt;line .../&gt;</code> 要素で
+表現すると、上の図のような街路が描画できる。
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

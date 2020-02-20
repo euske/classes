@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 コンピュータサイエンス第二 (1b, 2b) 本授業について / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>コンピュータサイエンス第二 (1b, 2b) 本授業について</h1>
+<div class=nav>2019年12月2日 (月)</div>
+
+<h2>本授業で習うこと</h2>
+<p>
+最終的な目標 …
+コンピュータサイエンス的な「考え方」を学ぶこと。
+<dl>
+<dt> 【再帰】
+<dd> 再帰とは、プログラムを簡単にするための抽象的な
+  考え方のひとつである。本授業では演習を通して再帰を学習する。
+<dt> 【ソートアルゴリズム】
+<dd> ソートあるいは並べ替えをおこなう
+  プログラムを使って、再帰および計算量の理論の実例を学ぶ。
+<dt> 【計算量の理論】
+<dd> コンピュータは魔法ではないので、あらゆる
+  処理には一定の時間がかかる。ここではその感覚を学習する。
+<dt> 【図形処理】
+<dd> 図形をコンピュータで表現する
+  <a href="https://ja.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG形式</a>について学び、
+  簡単なグラフィックスおよび図形処理のやり方を学習する。
+<dt> 【計算幾何学】
+<dd> <a href="https://ja.wikipedia.org/wiki/%E3%83%9C%E3%83%AD%E3%83%8E%E3%82%A4%E5%9B%B3">ヴォロノイ図</a>について学習する。ヴォロノイ図とは、
+  あらかじめ与えられた各「センター」に
+  もっとも近い点の集合を記した図である。
+  このような図を使ってジョン・スノウが1854年に行った、
+  コレラの集団感染源を推測するシミュレーションをおこなう。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+<polygon points=" 200,19 164,47 163,43 171,0 200,0" fill="#8cd0b7" stroke="black" />
+<rect x="173" y="26" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 0,16 8,17 36,55 38,64 0,78" fill="#f68dda" stroke="black" />
+<rect x="1" y="27" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 0,100 43,157 0,169" fill="#bef19c" stroke="black" />
+<rect x="3" y="134" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 79,200 56,159 68,134 103,117 128,143 112,200" fill="#9ffcd5" stroke="black" />
+<rect x="104" y="147" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 162,65 194,89 146,110 112,96 111,76 149,65" fill="#8d829b" stroke="black" />
+<rect x="144" y="92" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 140,0 146,24 137,38 97,19 100,0" fill="#a4eb86" stroke="black" />
+<rect x="134" y="28" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 200,127 160,143 145,139 146,110 194,89 200,91" fill="#dbd6b9" stroke="black" />
+<rect x="156" y="120" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 163,43 146,24 140,0 171,0" fill="#f685d6" stroke="black" />
+<rect x="156" y="23" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 0,0 20,0 8,17 0,16" fill="#e7d180" stroke="black" />
+<rect x="4" y="4" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 8,17 20,0 39,0 36,55" fill="#cca082" stroke="black" />
+<rect x="18" y="14" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 100,0 97,19 86,51 39,65 38,64 36,55 39,0" fill="#a6b9ae" stroke="black" />
+<rect x="55" y="16" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 68,134 39,65 86,51 111,76 112,96 103,117" fill="#b7d583" stroke="black" />
+<rect x="77" y="94" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 164,47 162,65 149,65 137,38 146,24 163,43" fill="#9caae9" stroke="black" />
+<rect x="144" y="34" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 0,78 38,64 39,65 68,134 56,159 43,157 0,100" fill="#f8f796" stroke="black" />
+<rect x="31" y="113" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 200,91 194,89 162,65 164,47 200,19" fill="#dca998" stroke="black" />
+<rect x="184" y="40" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 112,200 128,143 145,139 160,143 158,200" fill="#b4f6ba" stroke="black" />
+<rect x="143" y="158" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 158,200 160,143 200,127 200,200" fill="#aae1c0" stroke="black" />
+<rect x="172" y="159" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 146,110 145,139 128,143 103,117 112,96" fill="#9981f2" stroke="black" />
+<rect x="133" y="119" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 0,169 43,157 56,159 79,200 0,200" fill="#d1ecd8" stroke="black" />
+<rect x="20" y="194" width="4" height="4" fill="black" stroke="none" />
+<polygon points=" 137,38 149,65 111,76 86,51 97,19" fill="#afa2c5" stroke="black" />
+<rect x="128" y="41" width="4" height="4" fill="black" stroke="none" />
+</svg>
+</div>
+<dt> 【データ処理・機械学習の基礎】
+<dd> <a href="https://ja.wikipedia.org/wiki/Comma-Separated_Values">CSV (カンマ区切り) 形式</a>のファイルを機械的に処理する方法を学び、
+  機械学習の入門と簡単な演習をおこなう。
+</dl>
+
+<h2>必要な知識</h2>
+<p>
+コンピュータサイエンスは、練習さえすれば誰でもできるようになります。
+逆に、説明を読むだけで実際に練習しないと、いつまでたっても理解できません。
+
+<h3>楽しく学ぶためには</h3>
+<ul>
+<li> <a href="../../y19-cs1/week1/howto.html">パソコンの基本的な使い方</a> (ファイル操作、ターミナル) をマスターする。
+<li> キーボードで記号・英数字を快適に入力できるようにする。
+<li> 数学と同じく、CS は積み重ねの学問である。
+  わからない部分があった場合、わかる所まで戻って復習すること。
+<li> (これまた数学と同じく) 練習が重要である。
+</ul>
+<p>
+教員はただ Python に慣れているだけで、別に頭が良いわけではありません。
+難しい問題は先生にとっても難しい。
+
+<h2>評価方法</h2>
+<p>
+基本的に、教員の目標はこうである:
+<ul>
+<li> やる気があり、学習に時間をかけた学生 … 高得点を与える。
+<li> やる気があるが、充分時間をかけられなかった学生 … 低得点を与える。
+<li> 時間がかけなかったが、他人の答えを写して点を取ろうとした学生 … 悪い奴なので停学させる。
+</ul>
+<p>
+本授業では試験は行わず、以下の方法で評価する。
+<ul>
+  <li> 小課題 (5点×7回)<br>
+    短いプログラムを書く。締め切りは1週間後。
+  <li> 中課題 (20点×3回)<br>
+    やや長めのプログラムを書く。締め切りは2週間後。
+  <li> オプション課題 (5点×3回)<br>
+    やる気のある人向け。締め切りは2週間後。
+</ul>
+<p>
+提出はすべて OCW-i 経由でおこなう。
+締め切り日を過ぎたものは一切受けつけない。
+ちなみに、授業の出席そのものは成績には考慮されない
+(が、授業中に課題のヒントが与えられることは多い)。
+101点以上の点数は100点に切り詰めるものとする。
+
+<h3>不正行為に関する警告</h3>
+<p>
+課題で他人の答えを写す、試験中に別の答案を見るなどの不正行為をした場合、
+その科目の点数は 0 点になる。また、単位の剥奪、停学 (最悪の場合) などがありうる。
+<ul>
+<li> やり方について友達と<u>相談する</u>のはOK。
+<li> 答えを<u>直接</u>教えたり、見たりするのはダメ。
+<li> <u>見せたほうも</u>同罪。
+  したがって、うっかり見せないよう注意すること (自分の安全のため)。
+<li> 「ただの脅し文句で、実際に罰されたりはしないだろう」と思ったら大間違い。
+  過去にそういった例があります。
+<li> 逆に課題と直接関係ない部分は、いくらでも聞いてOK。
+  むしろ、PCの使い方とかは積極的に友達や先生の技を盗むこと。
+</ul>
+<blockquote style="background: #eee; padding: 0.5em; border: 1px solid black;">
+<a href="http://www.somuka.titech.ac.jp/reiki_int/reiki_honbun/x385RG00000350.html#e000000121">東京工業大学学生の懲戒等に関する規程 本則</a>
+<p>
+第7条(定期試験等における不正行為)<br>
+学生が，定期試験等における不正行為のため懲戒処分を受けた場合は，不正行為のあったクォーター(学則第7条第2項及び大学院学則第9条第2項の規定に基づき各学期を前半と後半に分けた期間をいう。以下同じ。)に当該学生が履修した授業科目等の成績をすべて0点又は不合格とする。なお，授業科目等の履修期間が不正行為のあったクォーター以外のクォーターを含む場合も，同様とする。
+</blockquote>
+
+<h3>中課題 (20点) の採点基準</h3>
+<ol type=a>
+<li> エラーを出さずに実行する … +5点。
+<li> a. + 正しい結果を出力する … +5点。
+<li> b. + コメントで動作説明が書かれている … +5点。
+<li> c. + 解説がわかりやすい … +5点。<br>
+  (注意: 「長ければよい」というものではない)
+</ol>
+<p>
+一般に「プログラムの動作をわかりやすく解説する」のは、
+単に「正しいプログラムを書く」だけよりも難しい。
+「動くけど説明しづらいプログラム」は沢山存在するからである。
+本当に優れたプログラムは、そもそも説明しやすいように
+最初から構成を考えて書かれている。
+<p>
+また、OCWi に提出する際のコメント欄は
+ほとんど読まないので、あまり重要なことを書かないこと。
+(読みとばす危険性がある)
+<div class=figure>
+<img width="484" height="348" src="ocwi.png">
+</div>
+
+<hr>
+<address>Yusuke Shinyama</address>

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 コンピュータサイエンス第二 第2週 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+.button { padding: 2px; background: #eeeeee; border: outset 4px black; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>コンピュータサイエンス第二 第2週</h1>
+<div class=nav>2019年12月9日 (月)</div>
+
+<ol start="0">
+<li> <a href="#scores">コンピュータサイエンス第一の成績</a>
+<li> <a href="#lists">Python のリストについて</a>
+<li> <a href="#orders">計算量の理論とは</a>
+<li> <a href="#searches">逐次探索と二分探索</a>
+<li> <a href="#assignments">本日の課題</a>
+</ol>
+
+<h2>雑談</h2>
+<p>
+英語の YouTube を見ると、日本人がやってるのとレベルが全然違う:
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=MHTizZ_XcUM">Mark Rover (機械工作)</a>
+<li> <a href="https://www.youtube.com/watch?v=p_di4Zn4wz4">3blue1brown (数学の視覚化)</a>
+<li> <a href="https://www.youtube.com/watch?v=6OLVFa8YRfM">Wendover Productions (運輸業界、航空会社のしくみ)</a>
+<li> <a href="https://www.youtube.com/watch?v=RN6vGxyMcVU">Real Engineering (航空機、エンジンの原理)</a>
+<li> <a href="https://www.youtube.com/watch?v=3MqYE2UuN24">Minutes Physics (物理法則、パラドックスなど)</a>
+<li> <a href="https://www.youtube.com/watch?v=PCuyCJocJWg">Physics Girl (実験物理)</a>
+<li> <a href="https://www.youtube.com/watch?v=mXaad0rsV38">Veritasium (単位、重力波、身近な物理現象)</a>
+<li> <a href="https://www.youtube.com/watch?v=xXC6U0NfJg8">Tom Scott (世界の妙な場所、変わった実験)</a>
+<li> <a href="https://www.youtube.com/watch?v=v1BMWczn7JM">Practical Engineering (土木工学、都市工学)</a>
+<li> <a href="https://www.youtube.com/watch?v=pPdevJTGAYY">Periodic Videos (化学一般、元素)</a>
+</ul>
+<h4>いいところ</h4>
+<ul>
+<li> 個人で作っている。
+<li> ただ「面白いだけの動画」ではない。
+<li> 数式がふつうに出てくる。
+</ul>
+
+
+<h2 id="scores">0. 成績について</h2>
+
+<h3>0.1. コンピュータサイエンス第一の得点</h3>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="200" version="1.1"><polyline fill="none" stroke="black" stroke-width="2" points="5,5 5,180 395,180" /><text style="text-anchor: middle" x="340" y="195">100</text><text style="text-anchor: middle" x="235" y="195">70</text><text style="text-anchor: middle" x="130" y="195">40</text><text style="text-anchor: middle" x="25" y="195">10</text><text style="text-anchor: middle" x="375" y="195">110</text><text style="text-anchor: middle" x="270" y="195">80</text><text style="text-anchor: middle" x="165" y="195">50</text><text style="text-anchor: middle" x="305" y="195">90</text><text style="text-anchor: middle" x="200" y="195">60</text><rect fill="#ff8844" stroke="black" stroke-width="2" x="15" y="15" width="20" height="10" /><text x="40" y="25">1b</text><rect fill="#ff8844" stroke="black" stroke-width="2" x="295" y="72" width="10" height="108" /><rect fill="#ff8844" stroke="black" stroke-width="2" x="260" y="150" width="10" height="30" /><rect fill="#ff8844" stroke="black" stroke-width="2" x="330" y="5" width="10" height="175" /><rect fill="#ff8844" stroke="black" stroke-width="2" x="225" y="162" width="10" height="18" /><rect fill="#ff8844" stroke="black" stroke-width="2" x="365" y="168" width="10" height="12" /><rect fill="#ff8844" stroke="black" stroke-width="2" x="120" y="174" width="10" height="6" /><rect fill="#ff8844" stroke="black" stroke-width="2" x="15" y="174" width="10" height="6" /><rect fill="#4488ff" stroke="black" stroke-width="2" x="15" y="35" width="20" height="10" /><text x="40" y="45">2b</text><rect fill="#4488ff" stroke="black" stroke-width="2" x="270" y="114" width="10" height="66" /><rect fill="#4488ff" stroke="black" stroke-width="2" x="235" y="144" width="10" height="36" /><rect fill="#4488ff" stroke="black" stroke-width="2" x="375" y="168" width="10" height="12" /><rect fill="#4488ff" stroke="black" stroke-width="2" x="340" y="54" width="10" height="126" /><rect fill="#4488ff" stroke="black" stroke-width="2" x="305" y="96" width="10" height="84" /><rect fill="#4488ff" stroke="black" stroke-width="2" x="165" y="168" width="10" height="12" /><rect fill="#4488ff" stroke="black" stroke-width="2" x="200" y="168" width="10" height="12" /></svg>
+</div>
+<ul>
+<li> 平均は90点ちょっと。
+<li> 出席率が低い 1b クラスのほうがなぜか点数が高い!
+<ul>
+<li> 別の先生のクラスでも似たような現象があるらしい。
+</ul>
+<li> 仮説「授業に出ると『わかったつもり』になってしまい、結果として勉強しなくなるのでは」
+<li> 結論: 授業を休めば、成績が上がる。
+</ul>
+<div class=notice>
+実際には、授業の成績と「プログラミング能力」は必ずしも相関していない。
+大学入試を受けた人ならみな知っているように、
+高校の偏差値が「頭の良さ」を必ずしも測定していないのと同じである。
+テストの点数は、基本的にその人の「要領の良さ」を測定しているなのだけである。
+学生の宿命として点数を稼ぐ必要があるのは理解できるが、
+学校で本当に重要なのは点数を稼ぐことではなく「多くのことを学ぶこと」である。
+</div>
+
+<h3>0.2. 小課題1 (先週) の採点結果</h3>
+<ol>
+<li> 以下のページで、課題に提出したファイルの「ハッシュ」を計算する:
+<ul>
+  <li> <a class=button href="https://quiz.tabesugi.net/y19-cs2/hash/index.html">ハッシュの計算</a>
+(学内からのみアクセス可能)
+</ul>
+(<strong>注意:</strong>
+提出したファイルを 1文字でも書き換えてしまった場合、点数を知ることは不可能。)
+<li> 得られた 10桁のハッシュ値を、以下の表と比べる:
+<ul>
+  <li> <a href="../score/s1.txt">小課題1</a>
+    (12月08日22時までに 提出されたもの)
+</ul>
+</ol>
+
+
+<h2 id="lists">1. Python のリストについて</h2>
+
+<h3>1.1. 「参照」という考え方</h3>
+<p>
+<a href="../../y19-cs1/week7/index.html#os">第一の最後の授業</a>で、
+「文字」や「画像」といった概念がじつは幻想にすぎないことを説明した。
+実際にはコンピュータの記憶装置は箱の羅列のようなもので、
+原始的な命令で扱えるのデータは 8ビットか、せいぜい64ビットまでである。
+<ul>
+<li> 数値とか、<code>True</code> / <code>False</code> などのデータ型は 64ビットあれば扱える。
+<li> 文字列とか、リストとかは普通これよりも大きくなるので、1回の命令では扱えない。
+</ul>
+<p>
+Python を含む、ほとんどのプログラミング言語では
+この事実を微妙にごまかしている。
+
+<h4>整数型の場合</h4>
+<p>
+整数・小数型のデータは小さいので、
+これらのデータを変数に代入した場合、
+メモリ上のデータが<u>本当に</u>移動・コピーされる。
+<blockquote><pre>
+a = 3
+b = a       <span class=comment># 変数 a の値が変数 b にコピーされる。</span>
+b = b + 1   <span class=comment># b に1を足す。</span>
+print(b)    <span class=comment># "4"</span>
+print(a)    <span class=comment># "3"</span>
+</pre></blockquote>
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="140" height="100">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="10" width="50" height="30" />
+      <rect x="60" y="10" width="70" height="30" />
+      <rect x="10" y="60" width="50" height="30" />
+      <rect x="60" y="60" width="70" height="30" />
+    </g>
+    <g text-anchor="middle">
+      <text x="35" y="20" dy="0.5em">a</text>
+      <text x="35" y="70" dy="0.5em">b</text>
+      <text x="95" y="20" style="font-family:monospace;" dy="0.5em">3</text>
+      <text fill="red" x="95" y="70" style="font-family:monospace;" dy="0.5em">4</text>
+    </g>
+  </svg>
+</div>
+
+<h4>リストの場合</h4>
+<p>
+しかし文字列型やリスト型のデータは大きすぎるので、
+これらは一度、メモリ上に作成されたら動かさず、ひとつのものを共有する。
+つまりこれらのデータは<u>不動産</u>として扱われるのである。
+
+<blockquote><pre>
+a = [5,9,4,0,7,3]
+b = a        <span class=comment># 変数 a の値が変数 b にコピーされる。</span>
+b[0] = 1     <span class=comment># b[0] に 1を代入。</span>
+print(b)     <span class=comment># [1,9,4,0,7,3]</span>
+print(a)     <span class=comment># [1,9,4,0,7,3] … ???</span>
+</pre></blockquote>
+
+<p>
+リスト型の場合、変数 <code>a</code> や <code>b</code> には
+データそのものが入っているのではなく、そのデータへの<u>参照</u>
+(アドレス) が入っていると考える。実際のリストは、変数の外に存在する。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="370" height="100">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="10" width="40" height="30" />
+      <rect x="10" y="60" width="40" height="30" />
+      <rect x="50" y="10" width="50" height="30" />
+      <rect x="50" y="60" width="50" height="30" />
+      <rect x="120" y="35" width="40" height="30" />
+      <rect x="160" y="35" width="40" height="30" />
+      <rect x="200" y="35" width="40" height="30" />
+      <rect x="240" y="35" width="40" height="30" />
+      <rect x="280" y="35" width="40" height="30" />
+      <rect x="320" y="35" width="40" height="30" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <line x1="55" x2="90" y1="20" y2="35" />
+      <line x1="55" x2="90" y1="80" y2="65" />
+      </g>
+    </g>
+    <g text-anchor="middle">
+      <text x="30" y="20" dy="0.5em">a</text>
+      <text x="30" y="70" dy="0.5em">b</text>
+      <g style="font-family:monospace;">
+      <text x="140" y="50" dy="0.5em" fill="red">1</text>
+      <text x="180" y="50" dy="0.5em">9</text>
+      <text x="220" y="50" dy="0.5em">4</text>
+      <text x="260" y="50" dy="0.5em">0</text>
+      <text x="300" y="50" dy="0.5em">7</text>
+      <text x="340" y="50" dy="0.5em">3</text>
+      </g>
+    </g>
+  </svg>
+</div>
+<p>
+以下の代入文
+<blockquote><pre>
+b = a
+</pre></blockquote>
+は参照 (上の図でいえば、矢印) をコピーするだけで、
+実際のデータはコピーしない。
+「参照」は、Webサイトのアドレス (URL) のようなものである。
+あるWebサイトの URL をコピーしても、そのWebサイトが 2つになるわけではない。
+
+<div id=realestate class=rule>
+<strong>不動産の法則:</strong>
+Pythonでは、リスト (および文字列) は不動産として扱われ、
+一度作成したデータは動かない。
+</div>
+<p>
+(注意: この名前は新山が勝手に考えたもので、一般的ではない)
+
+<h4>関数呼び出しにリストを渡す場合</h4>
+<p>
+「リストの<u>参照</u>をコピーする」という考えは、
+とくに関数呼び出しのときに重要である。
+たとえば、ふつうの関数呼び出しでは引数の値 (整数) は
+コピーされるため、以下の例では関数 <code>assign()</code> 呼び出し後でも
+変数 <code>a</code> の値は変わらない:
+<blockquote><pre>
+<span class=comment># ふつうの関数</span>
+def assign(x):
+    x = 999
+    return
+
+a = 123
+assign(a)
+print(a)     <span class=comment># 123</span>
+</pre></blockquote>
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160" height="120">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="10" width="140" height="60" stroke-width="1" />
+      <rect x="20" y="30" width="50" height="30" />
+      <rect x="70" y="30" width="70" height="30" />
+      <rect x="20" y="80" width="50" height="30" />
+      <rect x="70" y="80" width="70" height="30" />
+    </g>
+    <text x="20" y="15" dy="0.5em">assign</text>
+    <g text-anchor="middle">
+      <text x="45" y="40" dy="0.5em">x</text>
+      <text x="45" y="90" dy="0.5em">a</text>
+      <text fill="red" x="105" y="40" style="font-family:monospace;" dy="0.5em">999</text>
+      <text x="105" y="90" style="font-family:monospace;" dy="0.5em">123</text>
+    </g>
+  </svg>
+</div>
+
+<p>
+ところが、以下の例では関数 <code>destroy()</code> には
+リストの<mark>参照</mark>がコピーされるだけで、リストはひとつである。
+<code>destroy()</code> は <code>x</code> で参照される
+リストの 1番目の要素に 999 を代入する。このような場合、
+関数に渡したリスト <code>a</code> の値が変わってしまう。
+このような処理を<u>破壊的な操作</u>とよぶ。
+<blockquote><pre>
+<span class=comment># 破壊的な関数</span>
+def destroy(x):
+    x[1] = 999
+    return
+
+a = [0,1,2]
+destroy(a)
+print(a)     <span class=comment># [0,999,2]</span>
+</pre></blockquote>
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="260" height="120">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="10" width="125" height="60" stroke-width="1" />
+      <rect x="20" y="30" width="50" height="30" />
+      <rect x="70" y="30" width="50" height="30" />
+      <rect x="20" y="80" width="50" height="30" />
+      <rect x="70" y="80" width="50" height="30" />
+      <rect x="130" y="80" width="40" height="30" />
+      <rect x="170" y="80" width="40" height="30" />
+      <rect x="210" y="80" width="40" height="30" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <path d="M75,45 Q140,40,140,70" />
+      <line x1="75" x2="120" y1="95" y2="95" />
+      </g>
+    </g>
+    <text x="20" y="15" dy="0.5em">destroy</text>
+    <g text-anchor="middle">
+      <text x="45" y="40" dy="0.5em">x</text>
+      <text x="45" y="90" dy="0.5em">a</text>
+      <g style="font-family:monospace;">
+      <text x="150" y="90" dy="0.5em">0</text>
+      <text fill="red" x="190" y="90" dy="0.5em">999</text>
+      <text x="230" y="90" dy="0.5em">2</text>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<div class=ex>
+<div class=header>練習問題.</div>
+<p>
+以下のプログラムの出力結果を予想せよ。
+<ol type=a>
+<li> <pre>
+x = [7,6,5]
+y = x
+x[1] = 4
+print(y[1])
+</pre>
+<li> <pre>
+a = [1,2,3,4]
+b = a
+a[3] = b[0]
+print(b)
+</pre>
+</ol>
+</div>
+
+<h4>リストを本当にコピーする</h4>
+<p>
+しかし、どうしても本当にデータをコピーしたい時もある。
+このような場合は <code>.copy()</code> を使う。
+(見慣れない構文だが、この方法は後日解説)
+
+<blockquote><pre>
+a = [5,9,4,0,7,3]
+b = a<mark>.copy()</mark> <span class=comment># 変数 a のリストが実際にコピーされる。</span>
+b[0] = 1     <span class=comment># b[0] に 1を代入。</span>
+print(b)     <span class=comment># [1,9,4,0,7,3]</span>
+print(a)     <span class=comment># [5,9,4,0,7,3]</span>
+</pre></blockquote>
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="370" height="100">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="10" width="40" height="30" />
+      <rect x="10" y="60" width="40" height="30" />
+      <rect x="50" y="10" width="50" height="30" />
+      <rect x="50" y="60" width="50" height="30" />
+      <rect x="120" y="10" width="40" height="30" />
+      <rect x="160" y="10" width="40" height="30" />
+      <rect x="200" y="10" width="40" height="30" />
+      <rect x="240" y="10" width="40" height="30" />
+      <rect x="280" y="10" width="40" height="30" />
+      <rect x="320" y="10" width="40" height="30" />
+      <rect x="120" y="60" width="40" height="30" />
+      <rect x="160" y="60" width="40" height="30" />
+      <rect x="200" y="60" width="40" height="30" />
+      <rect x="240" y="60" width="40" height="30" />
+      <rect x="280" y="60" width="40" height="30" />
+      <rect x="320" y="60" width="40" height="30" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <line x1="55" x2="110" y1="25" y2="25" />
+      <line x1="55" x2="110" y1="75" y2="75" />
+      </g>
+    </g>
+    <g text-anchor="middle">
+      <text x="30" y="20" dy="0.5em">a</text>
+      <text x="30" y="70" dy="0.5em">b</text>
+      <g style="font-family:monospace;">
+      <text x="140" y="25" dy="0.5em">5</text>
+      <text x="180" y="25" dy="0.5em">9</text>
+      <text x="220" y="25" dy="0.5em">4</text>
+      <text x="260" y="25" dy="0.5em">0</text>
+      <text x="300" y="25" dy="0.5em">7</text>
+      <text x="340" y="25" dy="0.5em">3</text>
+      <text x="140" y="75" dy="0.5em" fill="red">1</text>
+      <text x="180" y="75" dy="0.5em">9</text>
+      <text x="220" y="75" dy="0.5em">4</text>
+      <text x="260" y="75" dy="0.5em">0</text>
+      <text x="300" y="75" dy="0.5em">7</text>
+      <text x="340" y="75" dy="0.5em">3</text>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<p>
+<code>a.copy()</code> を実行すると内部で
+<code>for</code>文のようなものが実行され、
+各要素がコピーされるため、そのぶん時間がかかる。
+これは、以下のようにしてみるとわかる。
+<blockquote><pre>
+a = [0]*100000000  <span class=comment># ゼロが1億個の入ったリスト。</span>
+b = a              <span class=comment># リストの参照のコピー (一瞬で終わる)。</span>
+...
+c = a.copy()       <span class=comment># リスト全体のコピー (時間がかかる)。</span>
+</pre></blockquote>
+
+<h4>ちょっとした小技 : リストの要素のくり返し</h4>
+<p>
+Pythonの特別な書き方として、リストに代入する際
+<blockquote><pre>
+a = [0,0,0,0,0,0,0,0,0,0]
+</pre></blockquote>
+と書く代わりに、
+<blockquote><pre>
+a = [0] * 10
+</pre></blockquote>
+のように書くことができる。
+
+<h3>1.2. 二次元リスト</h3>
+<p>
+Python では、リストの中にさらにリストを入れることができる。
+この機能を使うと、あたかもリストを二次元のリスト (行列) のように扱うことができる。
+<blockquote><pre>
+m = [[5, 9, 4], [0, 7, 3]]
+a = m[0]        <span class=comment># m の 0番目の要素 (リストの参照) をaにコピー</span>
+print(a)        <span class=comment># [5,9,4]</span>
+print(a[2])     <span class=comment># 4</span>
+b = m[1]        <span class=comment># m の 1番目の要素 (リストの参照) をbにコピー</span>
+print(b)        <span class=comment># [0,7,3]</span>
+print(b[0])     <span class=comment># 0</span>
+</pre></blockquote>
+
+<p>
+さらにこれは短縮して以下のように書くことができる:
+<blockquote><pre>
+print(m[0][2])  <span class=comment># 4</span>
+print(m[1][0])  <span class=comment># 0</span>
+</pre></blockquote>
+
+<p>
+実は「リストの中にリストが入る」というのは正しくない。
+実際に入っているのは「リストの<u>参照</u>」であるので、
+正しくは「リストの中にさらに『リストの参照』が入る」というべきである。
+これを図に表すと以下のようになる:
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="350" height="100">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="10" width="40" height="30" />
+      <rect x="50" y="10" width="40" height="30" />
+      <rect x="110" y="10" width="40" height="30" />
+      <rect x="150" y="10" width="40" height="30" />
+      <rect x="80" y="60" width="40" height="30" />
+      <rect x="120" y="60" width="40" height="30" />
+      <rect x="160" y="60" width="40" height="30" />
+      <rect x="220" y="60" width="40" height="30" />
+      <rect x="260" y="60" width="40" height="30" />
+      <rect x="300" y="60" width="40" height="30" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <line x1="55" x2="100" y1="25" y2="25" />
+      <line x1="130" y1="25" x2="105" y2="55" />
+      <line x1="170" y1="25" x2="215" y2="55" />
+      </g>
+    </g>
+    <g text-anchor="middle">
+      <text x="30" y="20" dy="0.5em">m</text>
+      <g style="font-family:monospace;">
+      <text x="100" y="70" dy="0.5em">5</text>
+      <text x="140" y="70" dy="0.5em">9</text>
+      <text x="180" y="70" dy="0.5em">4</text>
+      <text x="240" y="70" dy="0.5em">0</text>
+      <text x="280" y="70" dy="0.5em">7</text>
+      <text x="320" y="70" dy="0.5em">3</text>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<p>
+参照ということは、つまり破壊的な操作が可能ということを意味する。
+たとえば
+<blockquote><pre>
+a = m[0]        <span class=comment># m の 0番目の要素 (リストの参照) をaにコピー</span>
+a[2] = 8        <span class=comment># a の 2番目の要素を 8 に変更</span>
+print(m[0][2])  <span class=comment># 8</span>
+</pre></blockquote>
+<p>
+あるいはもっと簡単に
+<blockquote><pre>
+m[0][2] = 8     <span class=comment># (m の 0番目の要素) の 2番目の要素を 8 に変更</span>
+print(m[0][2])  <span class=comment># 8</span>
+</pre></blockquote>
+
+<h4>二次元リストの初期化</h4>
+<p>
+1次元の場合は、たとえば <span class=comment>n</span>個の要素をもつリストを作成するのに
+<blockquote><pre>
+a = []
+for i in range(n):
+    a = a + [0]
+</pre></blockquote>
+などとやればよいが、二次元 <em>n</em>×<em>n</em> の場合は以下のようにする:
+<blockquote><pre>
+m = []
+for i in range(n):
+    a = []
+    for j in range(n):
+       a = a + [0]
+    m = m + [a]
+</pre></blockquote>
+あるいはもっと簡単に
+<blockquote><pre>
+m = []
+for i in range(n):
+    a = [0]*n
+    m = m + [a]
+</pre></blockquote>
+あるいはもっと簡単に
+<blockquote><pre>
+m = []
+for i in range(n):
+    m = m + [[0]*n]
+</pre></blockquote>
+<p>
+<u>注意</u>: 以下の方法はうまく動かない。なぜか考えよ。
+<blockquote><pre>
+m = [[0]*n]*n   <span class=comment># ダメ</span>
+</pre></blockquote>
+
+<div class=ex>
+<div class=header>演習 2-1.</div>
+<ol type=i>
+  <li> 以下のプログラム <code>grid.py</code> を実行せよ。
+<pre>
+<span class=comment># grid.py</span>
+m = [[0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0]]
+m[0][0] = 1
+m[1][1] = 1
+m[2][2] = 1
+m[3][3] = 1
+m[4][4] = 1
+for i in range(len(m)):
+    print(m[i])
+</pre>
+  <li> 上のプログラムを変更し、5×5のマス目に <code>1</code> を使って
+    「×」の字を描くようにせよ:
+<pre>
+[1, 0, 0, 0, 1]
+[0, 1, 0, 1, 0]
+[0, 0, 1, 0, 0]
+[0, 1, 0, 1, 0]
+[1, 0, 0, 0, 1]
+</pre>
+  <li> 上のプログラムをさらに変更し、マスの大きさを 20×20 にせよ。
+    (ヒント: 手で全部書くのはつらいので、上の方法を参考にしてループを使うべし)
+
+</ol>
+</div>
+</div>
+
+
+<h2 id="orders">2. 計算量の理論とは</h2>
+<p>
+同じく
+<a href="../../y19-cs1/week7/index.html#computer">第一の最後の授業</a>で、
+すべてのコンピュータは原始的な命令の組み合わせだけで動作することを説明した。
+コンピュータ上で「Pythonのプログラムが動く」ように見えるのも、
+じつは幻想である。本来、コンピュータでは原始的な (ネイティブ)
+命令だけを使ったプログラムしか動かない。
+Pythonのプログラムが実行されているように見えるのは、
+「Pythonプログラムを実行する」ような架空の演算装置を
+エミュレータ (仮想機械) として動かしているからである。
+このエミュレータ自身はネイティブ命令だけを使って書かれている。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="160">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>l
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="30" width="80" height="30" />
+      <rect x="10" y="60" width="80" height="30" />
+      <rect x="10" y="90" width="80" height="30" />
+      <rect x="10" y="120" width="80" height="30" />
+      <rect x="155" y="30" width="100" height="60" />
+      <line x1="90" y1="45" x2="150" y2="45" marker-end="url(#arrow)" />
+    </g>
+    <text x="260" y="150" style="font-size:120%; font-weight:bold;" text-anchor="end">ネイティブ実行</text>
+    <g text-anchor="middle">
+      <text x="50" y="20">プログラム</text>
+      <text x="50" y="50" style="font-size:80%;">命令</text>
+      <text x="50" y="80" style="font-size:80%;">...</text>
+      <text x="205" y="60">演算装置</text>
+    </g>
+  </svg>
+
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="440" height="160">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="30" width="80" height="30" />
+      <rect x="10" y="60" width="80" height="30" />
+      <rect x="10" y="90" width="80" height="30" />
+      <rect x="10" y="120" width="80" height="30" />
+      <rect x="160" y="30" width="100" height="60" stroke-dasharray="2,2" />
+      <rect x="155" y="25" width="110" height="80" />
+      <rect x="330" y="25" width="100" height="60" />
+      <line x1="90" y1="45" x2="155" y2="45" marker-end="url(#arrow)" />
+      <line x1="265" y1="45" x2="325" y2="45" marker-end="url(#arrow)" />
+    </g>
+    <text x="440" y="150" style="font-size:120%; font-weight:bold;" text-anchor="end">Pythonによる実行</text>
+    <g text-anchor="middle">
+      <text x="50" y="20">Python</text>
+      <text x="50" y="50" style="font-size:80%;">命令</text>
+      <text x="50" y="80" style="font-size:80%;">...</text>
+      <text x="210" y="55">架空の</text>
+      <text x="210" y="75">演算装置</text>
+      <text x="210" y="120" style="font-size:80%;">(プログラム)</text>
+      <text x="380" y="60">演算装置</text>
+    </g>
+  </svg>
+</div>
+<p>
+Pythonに限らず、すべてのコンピュータ上のプログラムは
+演算装置上でネイティブ命令を 1つずつ実行することにより動作する。
+<p>
+現在のコンピュータでは:
+<ul>
+<li> 動作周波数が 1GHz の場合、1秒間に約1ギガ個 (= 1,000,000,000個) の命令を実行可能。
+<li> メモリが 1Gバイト の場合、約1ギガ個 (= 1,000,000,000個) の8ビットの数値を格納できる。
+</ul>
+<p>
+計算量の理論の大原則は非常に単純である:
+<div class=rule>
+<ol>
+<li> コンピュータの速度は無限ではない。
+  プログラムの実行時間は実行した命令の個数に比例する。
+<li> コンピュータの容量は無限ではない。
+  プログラムは搭載されたメモリ容量以上の変数・リストは利用できない。
+</ol>
+</div>
+<p>
+たとえば
+<blockquote><pre>
+a = 1
+</pre></blockquote>
+と
+<blockquote><pre>
+a = 1
+b = 1
+c = 1
+d = 1
+e = 1
+f = 1
+g = 1
+h = 1
+i = 1
+j = 1
+</pre></blockquote>
+を比べた場合、後者はほぼ 10倍の実行時間がかかる。
+<p>
+同様に
+<blockquote><pre>
+a = [0] * 20
+</pre></blockquote>
+および
+<blockquote><pre>
+b = [0] * 2000
+</pre></blockquote>
+を比べた場合、後者はほぼ 100倍のメモリ容量を消費する。
+<p>
+計算量の理論で厄介なのは、じつはこうした操作に
+「<strong>隠れた</strong>」実行時間・メモリ使用量があることである。
+たとえば
+<blockquote><pre>
+b = [0] * 2000
+</pre></blockquote>
+は、最終的には原始的な命令として実行されるので、内部的には
+<blockquote><pre>
+b = []
+for i in range(2000):
+    b = b + [0]
+</pre></blockquote>
+のようになっている。
+つまりリストの要素数が 100倍になると
+100倍のメモリ容量を消費するだけでなく、
+<u>実行時間も 100倍になる</u>のである。
+<p>
+計算量の理論は、こうしたプログラムの「隠れた」実行時間・メモリ使用量を
+細かく計算し、最終的に以下のような質問に答えるのが目的である:
+<div class=rule>
+<strong>質問:</strong>
+このプログラムは、現実的な時間で答えが出せるのか?
+</div>
+<p>
+たとえば <a href="../week1/index.html#ex3">前回の 2進数 (0 と 1) の組み合わせをすべて出力する関数 combo</a> で n=100 とすると、
+これは1秒間に 1ギガ個の組み合わせを表示できたとして
+<div class=rule>
+2<sup>100</sup> ÷ 10<sup>9</sup> ÷ (60×60×24×365) = 40196936841331.48
+</div>
+つまり 400兆年かかる。
+したがってこれは現実的に「無理」で、
+何かほかの手を考えなければいけないということになる。
+
+<div class=ex>
+<div class=header>練習問題.</div>
+<p>
+以下のプログラムのうち、もっとも実行時間がかかる(と思われる)ものはどれか?
+<ol>
+<li> <pre>
+n = 0
+for i in range(10):
+    n = n + 1
+</pre>
+<li> <pre>
+n = 0
+for i in range(1000):
+    n = n + 1
+</pre>
+<li> <pre>
+n = 0
+for i in range(100):
+    for j in range(100):
+        n = n + 1
+</pre>
+</ol>
+</div>
+
+<h2 id="searches">3. 逐次探索と二分探索</h2>
+<p>
+計算量の理論の応用例のひとつが、より効率のよい計算方法 (プログラム) の開発である。
+ここでは簡単な例として、逐次探索と二分探索をとりあげる。
+
+<h3>3.1. 逐次探索とは</h3>
+<h4>問題</h4>
+<ul>
+<li> <em>n</em>個の要素のリストがあるとする。
+この中にある数 <em>x</em> が含まれているかどうか知るにはどうするか?
+</ul>
+<p>
+0番目の要素からひとつひとつ調べていく、これが<u>逐次探索</u>である。
+<blockquote><pre>
+a = [5,9,4,0,7,3, ... ]  <span class=comment># n個の要素</span>
+x = 1729                 <span class=comment># 探す数</span>
+for i in range(n):
+    if a[i] == x:
+        print(f"found {i}")
+</pre></blockquote>
+<p>
+逐次探索の問題点は、リストが大きくなればなるほど、
+それに比例して実行時間が長くなることである。
+たとえばリストの要素数が 1万倍になれば、
+実行時間も1万倍になる (実際には、実行時間の期待値が 1万倍になる)。
+
+<h3>3.2. 二分探索とは</h3>
+<p>
+いっぽうで、これとは別の計算方法である<u>二分探索</u>というものがある。
+これは次のように動作する:
+<ol>
+<li> まず、リストの要素が<strong>すべて昇順に並んでいる</strong>と仮定する。
+<li> そのリストの中央の要素を見る。
+<li> もしその要素が目標の要素 <em>x</em> より小さければ、
+  <em>x</em> はそのリストの右半分にあるということである。<Br>
+  一方、もしその要素が <em>x</em> より大きければ、
+  <em>x</em> はそのリストの左半分にあるということである。<Br>
+<li> 以後、範囲をせばめながら 2. 〜 3. をくり返す。
+<li> 最終的に対象とするリストの要素が 1個になったら、それが <em>x</em> のはずだ。
+</ol>
+<p>
+たとえば <code>a = [0, 1, 3, 4, 8, 9, 13]</code> というリストで、
+<code>x = 3</code> のケースを考えてみる。
+まず、リスト a の中央の要素は <code>4</code> である。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="55">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="20" width="40" height="30" />
+      <rect x="50" y="20" width="40" height="30" />
+      <rect x="90" y="20" width="40" height="30" fill="#88ff88" />
+      <rect x="130" y="20" width="40" height="30" fill="#ffaaaa" />
+      <rect x="170" y="20" width="40" height="30" />
+      <rect x="210" y="20" width="40" height="30" />
+      <rect x="250" y="20" width="40" height="30" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <line x1="150" x2="150" y1="0" y2="20" />
+      </g>
+    </g>
+    <g text-anchor="middle" style="font-family:monospace;">
+      <text x="30" y="35" dy="0.5em">0</text>
+      <text x="70" y="35" dy="0.5em">1</text>
+      <text x="110" y="35" dy="0.5em">3</text>
+      <text x="150" y="35" dy="0.5em">4</text>
+      <text x="190" y="35" dy="0.5em">8</text>
+      <text x="230" y="35" dy="0.5em">9</text>
+      <text x="270" y="35" dy="0.5em">13</text>
+    </g>
+  </svg>
+</div>
+<p>
+この時点で、リスト a の右側の要素はすべて「捜査対象外」であるとわかる。
+なぜなら、リスト a の要素は昇順に並んでいるからだ。
+ついでに中央の要素も対象外となるので、捜査範囲は 3つの要素となる:
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="55">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <pattern id="hatch" width="5" height="5"
+	     patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+    </pattern>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="20" width="40" height="30" />
+      <rect x="50" y="20" width="40" height="30" fill="#ffaaaa" />
+      <rect x="90" y="20" width="40" height="30" fill="#88ff88" />
+      <rect x="130" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="170" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="210" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="250" y="20" width="40" height="30" fill="url(#hatch)" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <line x1="70" x2="70" y1="0" y2="20" />
+      </g>
+    </g>
+    <g text-anchor="middle" style="font-family:monospace;">
+      <text x="30" y="35" dy="0.5em">0</text>
+      <text x="70" y="35" dy="0.5em">1</text>
+      <text x="110" y="35" dy="0.5em">3</text>
+      <text x="150" y="35" dy="0.5em">4</text>
+      <text x="190" y="35" dy="0.5em">8</text>
+      <text x="230" y="35" dy="0.5em">9</text>
+      <text x="270" y="35" dy="0.5em">13</text>
+    </g>
+  </svg>
+</div>
+<p>
+捜査対象をこの3要素に絞ったときの中央の値は <code>1</code> である。
+<em>x</em>はこれより大きいので、捜査範囲はこれよりは右側
+(しかし最初の中心よりは左側) にあることがわかる。
+するともはや対象は 1つしか残っていない。
+したがって、これが <em>x</em> だ、ということになる:
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="55">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <pattern id="hatch" width="5" height="5"
+	     patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+    </pattern>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="50" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="90" y="20" width="40" height="30" fill="#ffaaaa" />
+      <rect x="130" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="170" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="210" y="20" width="40" height="30" fill="url(#hatch)" />
+      <rect x="250" y="20" width="40" height="30" fill="url(#hatch)" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <line x1="110" x2="110" y1="0" y2="20" />
+      </g>
+    </g>
+    <g text-anchor="middle" style="font-family:monospace;">
+      <text x="30" y="35" dy="0.5em">0</text>
+      <text x="70" y="35" dy="0.5em">1</text>
+      <text x="110" y="35" dy="0.5em">3</text>
+      <text x="150" y="35" dy="0.5em">4</text>
+      <text x="190" y="35" dy="0.5em">8</text>
+      <text x="230" y="35" dy="0.5em">9</text>
+      <text x="270" y="35" dy="0.5em">13</text>
+    </g>
+  </svg>
+</div>
+<p>
+二分探索を使うと、(リストの要素があらかじめ昇順に並んでいなければならない、
+という制限はあるものの) <em>n</em>個の要素のリストに対して
+平均 log<sub>2</sub>(<em>n</em>) 回のくり返しで発見できることになる。
+これは <em>n</em>の値が大きければ大きいほど、スピードアップにつながる。
+たとえばリストの要素数が 1万倍になったとしても、
+実行回数はたかだか 14回増えるだけである (2<sup>14</sup> = 16384)。
+
+<div class=ex>
+<div class=header>演習 2-2.</div>
+<ol type=i>
+  <li> 上の例 <code>a = [0, 1, 3, 4, 8, 9, 13]</code> の場合について
+    <code>x = 13</code> のケースを考えてみよ。何回のくり返しで x を発見できるか?
+
+  <li> 別の例 <code>a = [-6, 2, 5, 7, 10, 14, 25, 37, 63, 92, 108]</code> の場合について
+    <code>x = 2</code> および <code>x = 63</code> のケースを考えてみよ。
+    何回のくり返しで x を発見できるか?
+    (範囲が偶数個のときは、どちらの値を中央としてもよい)
+
+  <li> 二分探索は再帰的な関数として実装するとわかりやすい。
+    以下の関数 <code>bsearch()</code> を使って、上にあげたリストの
+    探索を実際にやってみよ。存在しない要素を探索すると、何が起こるか?
+    またそれはなぜか?
+<pre>
+<span class=comment># bsearch.py</span>
+def bsearch(a, x, i0, i1):
+    <span class=comment>#print(f"a={a}, x={x}, i0={i0}, i1={i1}")</span>
+    i = (i0+i1) // 2
+    if a[i] == x:
+        print(f"found {i}")
+    elif a[i] &lt; x:
+        bsearch(a, x, i, i1)
+    else:  <span class=comment># x &lt; a[i]</span>
+        bsearch(a, x, i0, i)
+    return
+
+bsearch(a, x, 0, len(a))
+</pre>
+
+</ol>
+</div>
+</div>
+
+
+<h2 id="assignments">4. 本日の課題</h2>
+
+<h3>注意!</h3>
+<p>
+小課題は<u>ロボットが自動的に採点します</u>。
+これまでに (12月8日現在) 小課題1.を提出した 58人のうち
+<ul>
+<li> 正解: 56人
+<li> エラーが出て実行できない: 1人
+<li> 余計なものが表示される: 1人 (nの値を表示している、「<code>*</code>」が一個多い, etc.)
+<li> 実行できなかったり、余計なものが表示された場合は
+容赦なく不正解として扱われますので、
+心当たりがある人はもう一度チェックして再提出してください
+(締め切り日まで何度でも再提出可能)。
+</ul>
+
+<div class=exa>
+<div class=header>小課題2. リストのリストを使った図形描画</div>
+<ul>
+  <li> 提出期限: 2019年<u>12月16日</u> (1週間後)
+  <li> 提出方法: <a href="https://secure.ocw.titech.ac.jp/ocwi/index.php?module=Ocwi&action=Index">OCW-i</a> から提出。
+  <li> 提出したファイルはあとでハッシュを計算するのに使うので、残しておくこと。
+</ul>
+<p>
+二次元リストを使って、与えられた大きさ n の正方形に収まる円を描くような
+プログラム circle.py を書け。正方形の大きさはコマンド引数から与えるものとする。
+(多少いびつな円でもよい、nが偶数のときは考えなくてもよい)
+<blockquote><pre>
+$ <strong>python circle.py 3</strong>
+[0, 1, 0]
+[1, 1, 1]
+[0, 1, 0]
+
+$ <strong>python circle.py 7</strong>
+[0, 0, 0, 1, 0, 0, 0]
+[0, 1, 1, 1, 1, 1, 0]
+[0, 1, 1, 1, 1, 1, 0]
+[1, 1, 1, 1, 1, 1, 1]
+[0, 1, 1, 1, 1, 1, 0]
+[0, 1, 1, 1, 1, 1, 0]
+[0, 0, 0, 1, 0, 0, 0]
+</pre></blockquote>
+
+<h4>ヒント</h4>
+<p>
+n×n の二次元リストを作成し、円の半径を <em>r</em>、
+中心座標を (<em>cx</em>, <em>cy</em>) として
+<div class=rule>
+(<em>x</em> - <em>cx</em>)<sup>2</sup> + (<em>y</em> - <em>cy</em>)<sup>2</sup> &leq; <em>r</em><sup>2</sup>
+</div>
+が成り立つような要素を 1 にすればよい。
+おそらく典型的なプログラムは以下のようになる:
+<blockquote><pre>
+<span class=comment># circle.py</span>
+import sys
+n = int(sys.argv[1])
+<span class=comment># リストを初期化する。</span>
+m = []
+for i in range(n):
+    m = m + [[0]*n]
+
+r = n // 2   <span class=comment># 半径</span>
+for y in range(n):
+    for x in range(n):
+<div class=qqq>        ????
+
+</div>
+<span class=comment># 結果を表示する。</span>
+for i in range(n):
+    print(m[i])
+</pre></blockquote>
+</div>
+
+<div class=exa>
+<div class=header>オプション課題A. すべての組合せを表示する</div>
+<ul>
+  <li> 提出期限: 2019年<u>12月23日</u> (2週間後)
+  <li> 提出方法: <a href="https://secure.ocw.titech.ac.jp/ocwi/index.php?module=Ocwi&action=Index">OCW-i</a> から提出。
+  <li> 提出したファイルはあとでハッシュを計算するのに使うので、残しておくこと。
+</ul>
+<p>
+あるリストを与えると、その中の要素の順列すべてを
+列挙するような関数 <code>perm</code> を書け。
+この関数には対象となるリストと、その要素数を引数として
+与えるものとする。
+<h4>実行例</h4>
+<blockquote><pre>
+a = [1,2,3]
+perm(a, 3)
+</pre></blockquote>
+実行結果:
+<blockquote><pre>
+[1, 2, 3]
+[2, 1, 3]
+[2, 3, 1]
+[3, 2, 1]
+[3, 1, 2]
+[1, 3, 2]
+</pre>
+</blockquote>
+<p id="perm">
+この関数を使って、以下の結果を出力するプログラム
+<code>perm.py</code> を提出せよ。
+<blockquote><pre>
+b = ["R", "G", "B", "C", "M", "Y"]
+perm(b, 6)
+</pre></blockquote>
+<h4>実行結果 (一部)</h4>
+<blockquote><pre>
+['R', 'G', 'B', 'C', 'M', 'Y']
+['G', 'R', 'B', 'C', 'M', 'Y']
+...(中略)...
+['Y', 'G', 'C', 'R', 'B', 'M']
+['G', 'Y', 'C', 'R', 'B', 'M']
+</pre></blockquote>
+<ul>
+<li> このプログラムを実行すると、720個の組み合わせを表示して終了する。
+<li> 出力の順序は上と違っていてもよいが、すべて異なる順列でなければならない。
+</ul>
+
+<h4>ヒント</h4>
+<ul>
+<li> 再帰を使うこと。
+<li> 新山の場合は、以下のような構成にした。
+<pre>
+def perm(a, n):
+    if n == 0:
+        print(a)
+        return
+    else:
+<div class=qqq>        ????
+        ...
+</div>        return
+</pre>
+<li> より詳しいヒントは来週の授業で。
+</ul>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

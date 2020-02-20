@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 コンピュータサイエンス第二 第7週 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+dd { margin-bottom: 1em; }
+.sample { margin-left: 2em; }
+.small { font-size: 80%; }
+.box { border: 1px solid black; padding: 0.5em; }
+.def { background: #ccffcc; border: solid 1px black; padding: 1em; margin: 0.5em; text-align: center; font-size: 120%; }
+.bigscore { font-size: 200%; font-weight: bold; }
+.month { text-align: right; }
+.ndays { text-align: right; background: yellow; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>コンピュータサイエンス第二 第7週</h1>
+<div class=nav>2020年1月27日 (月)</div>
+
+<ol start="0">
+<li> <a href="#conclusion">おわりに</a>
+<li> <a href="#whatisai">人工知能とは何か?</a>
+<li> <a href="#whatisml">機械学習とは何か?</a>
+<li> <a href="#dtree">Python による決定木の学習 (探索)</a>
+<li> <a href="#training">実際のデータを使った機械学習</a>
+<li> <a href="#others">決定木以外の機械学習アルゴリズム</a>
+<li> <a href="#assignments">本日の課題</a>
+</ol>
+
+
+<h2>雑談</h2>
+<ul>
+<li> <a href="https://www.ncbi.nlm.nih.gov/nuccore/MN908947">武漢の新型ウイルスのDNAシーケンス結果</a><br>
+  最後が「aaa」になっている塩基配列は一本鎖プラス鎖RNAウイルスではよくあることらしい。
+<li> "<a href="https://cs50.harvard.edu/college/2019/fall/">CS50</a>" … おそらく世界で一番有名なコンピュータサイエンスの授業 (米ハーバード大)
+  <ul>
+    <li> <a href="https://www.youtube.com/watch?v=LahWdP8Mizw">2018年の様子</a>
+    <li> <a href="https://www.youtube.com/channel/UCcabW7890RKJzL968QWEykA">YouTubeチャンネル</a>
+  </ul>
+<li> 新山の留学生活:
+  <ul>
+    <li> <a href="https://www.nyu.edu/">New York University</a>
+      (<a href="https://www.timeshighereducation.com/world-university-rankings/2020/world-ranking">世界大学ランキング</a>によると29位)
+    <li> <a href="https://www.google.com/maps/@40.729494,-73.9931301,17.5z?hl=en">ここら辺</a>
+    <li> 宿題で徹夜するのは普通。
+  </ul>
+<li> 日本は高校教育まではすごいので、大学入学時の成績はおそらく日本人のほうが
+  アメリカ人よりも上である。しかし、この差は大学4年間で完全に逆転する。
+</ul>
+
+
+<h2 id="conclusion">0. おわりに</h2>
+<p>
+本授業を最後まで真面目に修了した学生には、ある報酬が与えられる。
+それは「プログラミングが<strong>少し</strong>できます」と控え目に言う資格である。
+本授業はおそらく他の授業と比べて提出課題が多いのだが、
+教員にとっても課題が多いと採点が大変なので苦痛である。
+それでも課題を多くしているのには理由がある:
+<ol type=a>
+  <li> 米国の大学ではそれが普通。
+  <li> 「なんとなくわかった気にさせる」のではなく、
+    「実際にできるようにさせる」のが目標。
+  <li> 外国人が日本で就職するようになると、
+    日本の大学教育ではヤバい。
+</ol>
+<p>
+コンピュータサイエンスはそれ自体でも奥が深い学問だが、
+その真の威力はコンピュータが専門ではない人が学習したときに発揮される。
+数学はよく「科学の女王 (Queen of Science) である」といわれるが、
+コンピュータサイエンスは「工学の女王」である。
+したがって、今後あらゆる工学の分野でコンピュータサイエンス的な
+知識が要求されるようになっていく。
+
+<h4>この授業で習った用語・概念</h4>
+<ul>
+<li> 再帰
+<li> 計算量とO記法
+<li> 二分探索
+<li> ソート (挿入法・マージソート)
+<li> ハッシュテーブル
+<li> 中心極限定理 (CSと関係ないけど)
+<li> ヴォロノイ図
+<li> 決定木
+</ul>
+<p>
+(これらの概念はおそらく 50年後も使われているはずである。)
+
+<h4>これからどこへ</h4>
+<ul>
+<li> ゲーム開発
+<ul>
+<li> ゲームデザイン
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342205&amp;KeiCD=22&amp;course=5&amp;KougiCD=201904843&amp;Nendo=2019&amp;lang=JA&amp;vid=03">コンピューターグラフィクス</a>
+<li> ユーザーインタフェイス
+</ul>
+<li> ウェブアプリ開発
+<ul>
+<li> HTML、CSS、JavaScript言語
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902436&amp;Nendo=2019&amp;lang=JA&amp;vid=03">コンピュータネットワーク</a>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342323&amp;KeiCD=23&amp;course=23&amp;KougiCD=201904889&amp;Nendo=2019&amp;lang=JA&amp;vid=03">先端情報セキュリティ</a>
+</ul>
+<li> システムプログラミング
+<ul>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902445&amp;Nendo=2019&amp;lang=JA&amp;vid=03">システムソフトウェア</a>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902427&amp;Nendo=2019&amp;lang=JA&amp;vid=03">アセンブリ言語</a>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902446&amp;Nendo=2019&amp;lang=JA&amp;vid=03">コンパイラ構成</a>
+</ul>
+<li> データサイエンス
+<ul>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342200&amp;KeiCD=22&amp;KougiCD=201902381&amp;Nendo=2019&amp;lang=JA&amp;vid=03">数理統計学</a>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=340000&amp;KeiCD=0&amp;KougiCD=201926658&amp;Nendo=2019&amp;lang=JA&amp;vid=03">基盤データサイエンス</a>
+</ul>
+<li> ロボットプログラミング
+</ul>
+
+
+<h2 id="whatisai">1. 人工知能とは何か?</h2>
+<p>
+はっきりした定義が存在しない。
+本来「人工知能 (Artificial Intelligence, AI)」という用語は、
+人間特有の知能の働きをコンピュータ上で実現する試みを表すはずであった…
+が、昨今はあまりにも用語が流行しすぎてて
+「コンピュータを使ってやる賢そうな処理」はなんでも人工知能と呼ばれる傾向にある。
+もともとコンピュータは人間が頭でやっていた作業を軽減するための道具であり、
+そういう意味ではつねに「人工」の知能補助具であった。
+(中国語では昔からコンピュータのことを
+「電脳 (<a href="https://zh.wikipedia.org/wiki/%E7%94%B5%E8%84%91">电脑</a>)」
+と呼んでいる)
+<p>
+たとえば、以下は消費税を計算する<strong>人工知能</strong>といえる。
+これは人間の能力を超えた計算能力をもつ:
+<blockquote><pre>
+x = input("価格?")
+print("消費税", x*0.08)
+</pre></blockquote>
+<p>
+ちなみに
+「<a href="https://www.google.co.jp/search?q=%E4%BA%BA%E5%8F%A3%E7%9F%A5%E8%83%BD+-%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD">人口知能</a>」という間違った漢字を書いている人も多数おり、
+人々が単語の意味を本当に理解しているかどうかはあやしい。
+
+<h3>1.1. 典型的な人工知能</h3>
+<p>
+古くからある「典型的な」人工知能では、
+次のような問題を扱っている:
+<ul>
+<li> <strong>物体認識</strong>:
+  画像をすべての物体の画像と比較し、もっとも近そうなものを返す。
+<li> <strong>将棋・チェス・囲碁</strong>:
+  可能なすべての手を調べ、もっとも良さそうな手を返す。
+<li> <strong>英日翻訳</strong>:
+  すべての単語の並び方を比較し、もっとも「日本語らしい」翻訳を返す。
+<li> ...
+</ul>
+<p>
+上の例からわかるように、多くの人工知能の問題は、<u>探索</u>として扱われる:
+<blockquote><pre>
+a = [すべての可能性]
+answer = なし
+for x in a:
+    <span class=comment># answer と x の「良さそう度」を比較する</span>
+    if E(answer) &lt; E(x):
+        answer = x
+print(answer)
+</pre></blockquote>
+
+<p>
+これをあまりにも大量かつ高速にやると、人間には「賢そう」に見える。
+人工知能の原理は、人間の脳が働く原理とはまったく別でもかまわない。
+(自動車が走る原理は、人間が走る原理とはまったく異なる。)
+問題は、「<code>すべての可能性</code>」を現実的にどうやって調べるか?
+ということである。普通にやると計算量が大きくなりすぎてしまうので、
+何らかの方法でサバを読む必要がある。また「良さそう度」を判定する関数
+<code>E(x)</code> はなにか、という問題もある。
+現在のほとんどの AI研究は、このような問題に対する解決策の研究である。
+
+<h3>1.2. 「意識をもった人工知能」はできうるか?</h3>
+<p>
+人工知能の研究者 <a href="https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%BC%E3%83%93%E3%83%B3%E3%83%BB%E3%83%9F%E3%83%B3%E3%82%B9%E3%82%AD%E3%83%BC">Marvin Minsky</a> は、次のように言っている:
+<blockquote>
+When intelligent machines are constructed, we should not be surprised to
+find them as confused and as stubborn as men in their convictions about mind-matter,
+consciousness, free will, and the like.
+<p>
+(もし知的な機械ができたとしたら、それが心と身体や、意識や、自由意志などについて
+人間と同じように混乱し頑固であったとしても、驚くにはあたらない。)
+</blockquote>
+<p>
+脳神経科医の <a href="https://ja.wikipedia.org/wiki/%E3%83%B4%E3%82%A3%E3%83%A9%E3%83%A4%E3%83%8C%E3%83%AB%E3%83%BBS%E3%83%BB%E3%83%A9%E3%83%9E%E3%83%81%E3%83%A3%E3%83%B3%E3%83%89%E3%83%A9%E3%83%B3">V. S. Ramachandran</a> は
+著書『脳のなかの幽霊』で、「自分の意識がある」という感覚は、
+実は人間の脳が作りだしている錯覚にすぎないのではないか、
+と述べている。
+
+<div class=ex>
+<div class=header>いきなり演習 7-1.</div>
+<p>
+リストを与えると、リストの中で「もっとも多く含まれていた要素」を返す
+関数 <code>topvote()</code> を書け。
+<blockquote><pre>
+topvote([2,1,3,1,2,3,3,2,2])  <span class=comment># 2</span>
+topvote(["miso","shoyu","tonkotsu","miso"])  <span class=comment># "miso"</span>
+</pre></blockquote>
+<p>
+<strong>ヒント:</strong>
+これとほぼ同じ処理は、コンピュータサイエンス第一の
+暗号解読の課題 (もっとも頻出する文字を見つける) でやったはず。
+ここでは Python の辞書 (ハッシュテーブル) を使うとさらに簡単。
+<blockquote><pre>
+<span class=comment># 与えられたリストでもっとも頻出の要素を返す。</span>
+def topvote(a):
+    <span class=comment># すべての要素の数を数える。</span>
+    c = {}
+    for x in a:
+<div class=bl>        ...
+
+</div>    <span class=comment># 最頻出の要素を見つける。</span>
+<div class=bl>        ...
+
+</div>    return best
+</pre></blockquote>
+<p>
+ここで作成した関数 <code>topvote()</code> は、
+あとの演習および小課題で使用する。
+</div>
+
+
+<h2 id="whatisml">2. 機械学習とは何か?</h2>
+<p>
+以下のような処理を考えよう。
+100×100ピクセルの画像 (リストのリスト) を与えられると、
+それが「どれくらい人間の顔らしいか」を判定する
+関数 <code>faceness</code> があるとする:
+<blockquote><pre>
+def faceness(image):
+    ...
+    return x
+</pre></blockquote>
+<div class=figure>
+<table align=center border>
+<tr><th>画像</th><th>顔らしさ</th></tr>
+<tr><td>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="100" height="100">
+  <g fill="none" stroke="black" stroke-width="2">
+    <circle cx="50" cy="50" r="40" />
+    <circle cx="30" cy="40" r="5" />
+    <circle cx="60" cy="40" r="5" />
+    <line x1="40" y1="70" x2="60" y2="70" />
+  </g>
+</svg>
+</td><td class=bigscore>0.95</td></tr>
+<tr><td>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="100" height="100">
+  <g fill="none" stroke="black" stroke-width="2">
+    <ellipse cx="50" cy="50" rx="40" ry="30" />
+    <line x1="30" y1="45" x2="50" y2="40" />
+    <line x1="60" y1="40" x2="80" y2="45" />
+    <line x1="40" y1="65" x2="60" y2="70" />
+    <polyline points="20,30 30,10 40,20" />
+    <polyline points="80,30 70,15 60,20" />
+  </g>
+</svg>
+</td><td class=bigscore>0.87</td></tr>
+<tr><td>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="100" height="100">
+  <g fill="none" stroke="black" stroke-width="2">
+    <circle cx="40" cy="60" r="30" />
+    <rect x="10" y="10" width="30" height="35" fill="white" />
+    <polygon points="80,80 60,50 20,70" fill="white" />
+  </g>
+</svg>
+</td><td class=bigscore>0.02</td></tr>
+</table>
+</div>
+<p>
+このような関数は頑張れば作れるかもしれないが、非常に大変である。
+判定に使う変数が極端に多い (100×100個) うえに「何が顔らしいのか」を
+論理的に規定するのが難しいからである。そこで、
+あらかじめ「顔らしい画像」と「顔らしくない画像」を大量に用意しておき、
+コンピュータを使ってこのような関数を自動的に発見させよう、
+というアイデアが <u>機械学習</u> (Machine Learning, ML) である。
+このようにして発見されたプログラムを「<u>分類器</u> (classifier)」と呼ぶ。
+機械学習は人工知能の一分野であり、現在さかんに研究されているが、
+基本的には「プログラムを発見 (作成) するプログラム」といえる。
+機械学習はおもに自然界の現象 (規則できっちり定義できないもの) を対象に使われることが多い。
+(消費税の計算をするのに機械学習を使ったりはしない)
+
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="230" height="100">
+<defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+</defs>
+<g fill="none" stroke="black" stroke-width="2">
+  <rect x="100" y="35" width="40" height="30" />
+  <g marker-end="url(#arrow)">
+    <line x1="45" y1="10" x2="100" y2="40" />
+    <line x1="45" y1="40" x2="100" y2="50" />
+    <line x1="50" y1="70" x2="100" y2="60" />
+    <line x1="140" y1="50" x2="190" y2="50" />
+  </g>
+</g>
+<g text-anchor="middle">
+<text x="120" y="80" dy="0.5em">分類器</text>
+<text x="40" y="5" dy="0.5em" text-anchor="end">素性1</text>
+<text x="40" y="35" dy="0.5em" text-anchor="end">素性2</text>
+<text x="40" y="60" dy="0.5em" text-anchor="end">...</text>
+<text x="190" y="30" dy="0.5em">結果</text>
+</g>
+</svg>
+</div>
+<p>
+機械学習には、大きく分けて 3種類ある:
+<ol type=a>
+<li> <strong>教示つき学習</strong>: あらかじめ人が集めた正解データをもとに学習する。
+<li> <strong>教示なし学習</strong>: 分類されていない生のデータのみをもとに学習する。
+<li> <strong>強化学習</strong>: データがほとんどない状態から学習する。
+</ol>
+<p>
+この授業ではもっとも簡単な教示つき学習を扱う。
+
+<h3>2.1. 機械学習の問題点</h3>
+<p>
+他の人工知能の例にもれず、機械学習もまた探索として定義される:
+<blockquote><pre>
+a = [存在しうるすべてのプログラム]
+classifier = なし
+for p in a:
+    <span class=comment># プログラム p の良さそう度を比較する。</span>
+    if E(classifier) &lt; E(p):
+        classifier = p
+print(classifier)
+</pre></blockquote>
+<p>
+教示つき機械学習においては、ある分類器 (プログラム) が
+「良いかどうか」は比較的簡単に測定できる。
+たとえば顔認識では、あらかじめ顔らしい画像とそれ以外の画像が与えられるので、
+与えられた分類器がどれくらい顔を正しく認識できるかを数えればよい:
+<blockquote><pre>
+<span class=comment># 顔判定プログラム p の「良さそう度」を計算</span>
+def E(p):
+    score = 0
+    <span class=comment># 顔を顔として判定したら得点。</span>
+    for image in [すべての顔らしい画像]:
+        if プログラム p が image を顔と判定する:
+            score = score + 1
+    <span class=comment># 顔でないものを顔でないととして判定したら得点。</span>
+    for image in [すべての顔らしくない画像]:
+        if プログラム p が image を顔でないと判定する:
+            score = score + 1
+    return score
+</pre></blockquote>
+<p>
+機械学習の一番の問題は、
+「存在しうるすべてのプログラム」は無限にあって、探索しつくせないということである。
+したがって、ふつう機械学習では「分類器」として Python のような本物のプログラムではなく、
+非常に限定された形のもののみを扱う。ここでの分類器の形式としては
+<strong>決定木</strong>、<strong>線形分類器</strong>、
+<strong>ニューラルネットワーク</strong>などが提案されているが、
+この授業では<u>決定木</u> (decision tree) を紹介する。
+
+<h3>2.2. 決定木とは</h3>
+<p>
+決定木とは、以下のような
+<code>if〜elif〜else</code>文だけからなる分類器である。
+要するに「このときはこれ」という規則の集合にすぎない。
+<blockquote><pre>
+def f(変数1, 変数2, ...):
+    if 変数 == 値1:
+        return 答えA
+    elif 変数 == 値2:
+        return 答えB
+    elif
+        ...
+</pre></blockquote>
+<p>
+たとえば「ある年のある月が全部で何日間あるか」を推定する分類器を考えてみる。
+もちろん、人間は完全な規則を知っているが、
+ここでは以下の16件の「与えられた観測結果だけ」をもとに推測させることを考える:
+<div class=figure>
+<table align=center border>
+<tr><th>年 (<code>y</code>)</th><th>月 (<code>m</code>)</th><th class=ndays>日数 (<code>n</code>)</th></tr>
+<tr><td>2016</td><td class=month> 1</td><td class=ndays>31</td></tr>
+<tr><td>2016</td><td class=month> 2</td><td class=ndays>29</td></tr>
+<tr><td>2016</td><td class=month> 4</td><td class=ndays>30</td></tr>
+<tr><td>2016</td><td class=month> 7</td><td class=ndays>31</td></tr>
+<tr><td>2016</td><td class=month> 8</td><td class=ndays>31</td></tr>
+<tr><td>2017</td><td class=month> 2</td><td class=ndays>28</td></tr>
+<tr><td>2017</td><td class=month> 4</td><td class=ndays>30</td></tr>
+<tr><td>2017</td><td class=month> 6</td><td class=ndays>30</td></tr>
+<tr><td>2017</td><td class=month> 9</td><td class=ndays>30</td></tr>
+<tr><td>2017</td><td class=month>11</td><td class=ndays>30</td></tr>
+<tr><td>2018</td><td class=month> 1</td><td class=ndays>31</td></tr>
+<tr><td>2018</td><td class=month> 2</td><td class=ndays>28</td></tr>
+<tr><td>2018</td><td class=month> 3</td><td class=ndays>31</td></tr>
+<tr><td>2018</td><td class=month>10</td><td class=ndays>31</td></tr>
+<tr><td>2020</td><td class=month> 5</td><td class=ndays>31</td></tr>
+<tr><td>2020</td><td class=month>12</td><td class=ndays>31</td></tr>
+</table>
+</div>
+<p>
+まず「日数 <code>n</code> は、
+与えられた変数 <code>y</code> と <code>m</code> だけから推測可能である」
+と仮定する。このようにヒントとなる <code>y</code> や <code>m</code> のような変数を
+<u>素性</u> (feature) とよぶ。これらの素性を使って、
+たとえば以下の2通りの分類器を作ることができる。
+<h4>分類器A (素性yを使う)</h4>
+<blockquote>
+<ul>
+<li> <code>y</code> が 2017 の場合は、30 を返す。
+<li> <code>y</code> が 2016、2018、2020 の場合は、31 を返す。
+</ul>
+</blockquote>
+<h4>分類器B (素性mを使う)</h4>
+<blockquote>
+<ul>
+<li> <code>m</code> が 2 の場合は、28 を返す。
+<li> <code>m</code> が 4、6、9、11 の場合は、30 を返す。
+<li> <code>m</code> が 1、3、5、7、8、10、12 の場合は、31 を返す。
+</ul>
+</blockquote>
+<p>
+上記の 16件のデータに対して、
+分類器 A を使った場合は 12件が正しく (正答率 75%) 、
+分類器 B を使った場合は 15件が正しい答えを推測する (正答率 94%)。
+(しかし、どちらの分類器も完璧には正しくない。
+これは分類器を単純な規則のみに限定したためで、
+決定木を使った機械学習の限界である。)
+<p>
+さて分類器 A と B のどちらがよりよいのか?
+これは、上の結果を見ただけでは判断できない。
+なぜなら機械学習の性能は、すでに結果がわかっている
+データをどれくらい覚えられるかではなく
+「<strong>未知のデータ</strong>をどれくらい正確に推測できるか (汎化)」にかかっているからである。
+(記憶と学習は違う - 入試の過去問の答えをすべて暗記したからといって、
+確実に大学合格できるとは限らない。)
+<div class=figure>
+<table align=center border>
+<tr><th>年 (<code>y</code>)</th><th>月 (<code>m</code>)</th><th class=ndays>日数 (<code>n</code>)</th><th></th><th>分類器A</th><th>分類器B</th></tr>
+<tr><td>2016</td><td class=month> 5</td><td class=ndays>31</td>
+<td></td><td><mark>31</mark></td><td><mark>31</mark></td></tr>
+<tr><td>2016</td><td class=month> 9</td><td class=ndays>30</td>
+<td></td><td>31</td><td><mark>30</mark></td></tr>
+<tr><td>2017</td><td class=month> 1</td><td class=ndays>31</td>
+<td></td><td>30</td><td><mark>31</mark></td></tr>
+<tr><td>2017</td><td class=month>12</td><td class=ndays>31</td>
+<td></td><td>30</td><td><mark>31</mark></td></tr>
+<tr><td>2018</td><td class=month> 4</td><td class=ndays>30</td>
+<td></td><td>31</td><td><mark>30</mark></td></tr>
+<tr><td>2018</td><td class=month> 6</td><td class=ndays>30</td>
+<td></td><td>31</td><td><mark>30</mark></td></tr>
+<tr><td>2020</td><td class=month> 2</td><td class=ndays>29</td>
+<td></td><td>31</td><td>28</td></tr>
+<tr><td>2020</td><td class=month>10</td><td class=ndays>31</td>
+<td></td><td><mark>31</mark></td><td><mark>31</mark></td></tr>
+</table>
+</div>
+<p>
+上記の 8件の新たなデータに対して、
+分類器 A を使った場合は 2件が正しく (正答率 25%)、
+分類器 B を使った場合は 7件が正しい推測結果を返す (正答率 88%)。
+したがって、この場合は「分類器 B のほうが明らかによい」といえる。
+このように教示つき機械学習では、学習用に必ず2種類の異なるデータを使用する。
+最初に分類器 A, B を作成 (探索) するときに使ったデータを
+<u>訓練データ</u> (training data) とよび、
+分類器の実際の性能を測定するときに使ったデータを
+<u>テストデータ</u> (test data) とよぶ。
+一般に、機械学習の精度を上げるには、
+なるべく偏りの少ない訓練データが大量に必要である。
+
+
+<h2 id="dtree">3. Python による決定木の学習 (探索)</h2>
+<p>
+さて、すべての可能な分類器 (決定木) を Python で実際にしらみつぶしに探索するには
+どうすればよいだろうか? ここでは、ひとつの決定木を Python の<u>辞書</u>として
+表すことを考える。たとえば、上の分類器 A は以下のような規則として表せる:
+<blockquote><pre>
+<span class=comment># 分類器A</span>
+rule = { "2016":"31", "2017":"30", "2018":"31", "2020":"31" }
+</pre></blockquote>
+<p>
+もっとも単純な決定木では一度に 1つの素性しか見ないので、
+ここではあらかじめ調べる素性 (ここでは変数 <code>y</code>) を決めておき、
+「素性の値 → その回答」をそれぞれ辞書のキー・バリューとしている。
+また、ここでは各素性の値は「等しいかどうか」を調べるだけで
+大小関係を考慮しないので、すべての値を文字列型として扱っている。
+(こうしておくとあとで便利。)
+<p>
+次に訓練データ、テストデータをそれぞれリストのリストとして定義する。
+(ここでは便宜上、順番を変えて、各行の最初の要素を回答にしている。)
+<blockquote><pre>
+<span class=comment># 訓練データ</span>
+train = [
+    <span class=comment>#  n    素性y   素性m</span>
+    ["31", "2016",  "1"],
+    ["29", "2016",  "2"],
+    ["30", "2016",  "4"],
+    ["31", "2016",  "7"],
+    ["31", "2016",  "8"],
+    ["28", "2017",  "2"],
+    ["30", "2017",  "4"],
+    ["30", "2017",  "6"],
+    ["30", "2017",  "9"],
+    ["30", "2017", "11"],
+    ["31", "2018",  "1"],
+    ["28", "2018",  "2"],
+    ["31", "2018",  "3"],
+    ["31", "2018", "10"],
+    ["31", "2020",  "5"],
+    ["31", "2020", "12"],
+]
+<span class=comment># テストデータ</span>
+test = [
+    <span class=comment>#  n    素性y   素性m</span>
+    ["31", "2016",  "5"],
+    ["30", "2016",  "9"],
+    ["31", "2017",  "1"],
+    ["31", "2017", "12"],
+    ["30", "2018",  "4"],
+    ["30", "2018",  "6"],
+    ["29", "2020",  "2"],
+    ["31", "2020", "10"],
+]
+</pre></blockquote>
+<p>
+上の学習用データ <code>train</code> と <code>test</code> から
+決定木を学習するには、以下のようにする。
+<ol>
+<li> まず、使用する素性を決める。ここでは素性 <code>y</code> としよう。
+訓練データ <code>train</code>中で、それぞれの <code>y</code> の値に対して現れる回答を集計する:
+<blockquote><pre>
+c = {}
+for row in train:
+    answer = row[0]  <span class=comment># 回答</span>
+    f = row[1]       <span class=comment># 素性y</span>
+    if not (f in c):
+        <span class=comment># キーが存在しないとき、空のリストから始める。</span>
+        c[f] = []
+    c[f].append(answer)
+</pre></blockquote>
+<p>
+これを実行すると、最終的に以下のような辞書ができる。
+素性 y の値に対して、複数の回答がリストとして格納されている:
+<blockquote><pre>
+c = {
+    "2016": ["31", "29", "30", "31", "31"],
+    "2017": ["28", "30", "30", "30", "30"],
+    "2018": ["31", "28", "31", "31"],
+    "2020": ["31", "31"],
+}
+</pre></blockquote>
+
+<li> それぞれの値 (辞書 <code>c</code> のキー) に対応づけられた複数の回答のうち、
+一番よく出てきたものを多数決で「正式な回答」として選ぶ。
+これは先の演習 1. で作成した関数 <code>topvote()</code> を使う。
+<blockquote><pre>
+rule = {}
+for f in c.keys():
+    rule[f] = topvote(c[f])
+</pre></blockquote>
+すると、以下のような規則ができあがる:
+<blockquote><pre>
+rule = {
+    "2016": "31",
+    "2017": "30",
+    "2018": "31",
+    "2020": "31",
+}
+</pre></blockquote>
+<p>
+この辞書 <code>rule</code> が機械学習によって得られた「分類器」である。
+これを使うには、単に素性 <code>y</code> の値をキーとして
+<code>rule</code> を検索すればよい。
+<blockquote><pre>
+print(rule["2017"])  <span class=comment># y=2017 であれば "30"</span>
+</pre></blockquote>
+
+<li> 最後に、できた規則を分類器として使うと、
+どれくらい正しい結果を返すのかを測定する。
+これにはテストデータ <code>test</code> を使う:
+<blockquote><pre>
+score = 0
+for row in test:
+    answer = row[0]  <span class=comment># 回答</span>
+    f = row[1]       <span class=comment># 素性yの値</span>
+    if (f in rule) and (rule[f] == answer):
+        <span class=comment># 規則を使った結果、正しい回答を出せれば得点。</span>
+        score = score + 1
+print(score)
+</pre></blockquote>
+
+<li> 以上 1. 〜 4. を、すべての素性
+(この場合は <code>y</code> と <code>m</code>) に対してくりかえす。
+もっとも得点が高かった分類器を学習結果とすればよい。
+
+</ol>
+
+<div class=ex>
+<div class=header>演習 7-2.</div>
+<p>
+上で説明した決定木の学習アルゴリズムを実際に実行してみよう。
+上のコードをただつなげればよい。
+<div class=file>
+learn.py
+<pre>
+<span class=comment># 訓練データ</span>
+train = [
+    ...
+]
+<span class=comment># テストデータ</span>
+test = [
+    ...
+]
+
+<span class=comment># 1番目の素性を使った決定木を作成。</span>
+c = {}
+for row in train:
+    f = row[<mark>1</mark>]  <span class=comment># 素性y</span>
+    ...
+<span class=comment># できた決定木の正しさを測定する。</span>
+score = 0
+for row in test:
+    ...
+print(score)
+
+<span class=comment># 2番目の素性を使った決定木を作成。</span>
+c = {}
+for row in train:
+    f = row[<mark>2</mark>]  <span class=comment># 素性m</span>
+    ...
+<span class=comment># できた決定木の正しさを測定する。</span>
+score = 0
+for row in test:
+    ...
+print(score)
+</pre></div>
+</div>
+
+
+<h2 id="training">4. 実際のデータを使った機械学習</h2>
+<p>
+上の例では素性が 2つしかなかったので分類器も 2種類しかできなかったが、
+次にもうすこし本格的なケースを扱う。
+<p>
+<a href="https://archive.ics.uci.edu/ml/index.html">UCI Machine Learning Repository</a> は
+機械学習の実験に使うさまざまなデータを集めたサイトである。
+この中にある
+<a href="https://archive.ics.uci.edu/ml/datasets/Mushroom">キノコのデータベース</a>
+から毒キノコを見分ける規則を学習したい。
+
+<ul>
+<li> まず <a href="https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data">agaricus-lepiota.data</a> をダウンロードする。
+</ul>
+<p>
+これは 8124件のデータが入った CSVファイルである。
+各行には 23個の値が入っており、最初の値は正解
+(毒ならば <code>p</code>、食用ならば <code>e</code>) が書かれている。
+あとの 22個はキノコを見分けるためのさまざまな素性である。
+ここでの目的は、あるキノコが食用かどうかを
+22個の素性のうちどれかを使って判定することである。
+
+<h4>キノコの素性一覧</h4>
+<div class=figure>
+<table border align=center>
+<tr><th>番号</th><th>説明</th></tr>
+<tr><td>0</td><td>正解 (<code>e</code>:食用, <code>p</code>:毒)</td></tr>
+<tr><td>1</td><td>かさの形状 (<code>b</code>:ベル状, <code>c</code>:円錐, <code>x</code>:凸型, <code>f</code>:平面, <code>k</code>:こぶ状, <code>s</code>:凹型)</td></tr>
+<tr><td>2</td><td>かさの表面 (<code>f</code>:繊維質, <code>g</code>:みぞ状, <code>y</code>:うろこ状, <code>s</code>:つるつる)</td></tr>
+<tr><td>3</td><td>かさの色 (<code>n</code>:茶色, <code>b</code>:黄褐色, <code>c</code>:肉桂色, <code>g</code>:灰色, <code>r</code>:緑色, <code>p</code>:ピンク, <code>u</code>:紫色, <code>e</code>:赤色, <code>w</code>:白色, <code>y</code>:黄色)</td></tr>
+<tr><td>4</td><td>傷の有無 (<code>t</code>:あり, <code>f</code>:なし)</td></tr>
+<tr><td>5</td><td>におい (<code>a</code>:アーモンド, <code>l</code>:アニス, <code>c</code>:クレソート, <code>y</code>:生臭い, <code>f</code>:腐敗臭, <code>m</code>:カビ臭い, <code>n</code>:無臭, <code>p</code>:刺激臭, <code>s</code>:スパイシー)</td></tr>
+<tr><td>6</td><td>ひだの付き方 (<code>a</code>:密着, <code>d</code>:下がっている, <code>f</code>:フリー, <code>n</code>:刻み目)</td></tr>
+<tr><td>7</td><td>ひだの間隔 (<code>c</code>:近い, <code>w</code>:密集, <code>d</code>:離れている)</td></tr>
+<tr><td>8</td><td>ひだの大きさ (<code>b</code>:広い, <code>n</code>:狭い)</td></tr>
+<tr><td>9</td><td>ひだの色 (<code>k</code>:黒色, <code>n</code>:茶色, <code>b</code>:黄褐色, <code>h</code>:チョコレート色, <code>g</code>:灰色, <code>r</code>:緑色, <code>o</code>:オレンジ, <code>p</code>:ピンク, <code>u</code>:紫色, <code>e</code>:赤色, <code>w</code>:白色, <code>y</code>:黄色)</td></tr>
+<tr><td>10</td><td>柄の形状 (<code>e</code>:広がっている, <code>t</code>:狭まっている)</td></tr>
+<tr><td>11</td><td>柄の先端 (<code>b</code>:球状, <code>c</code>:棒状, <code>u</code>:カップ, <code>e</code>:等幅, <code>z</code>:枝状, <code>r</code>:根っこ状, ?:欠けている)</td></tr>
+<tr><td>12</td><td>柄の表面(リングの上) (<code>f</code>:繊維質, <code>y</code>:うろこ状, <code>k</code>:すべすべ, <code>s</code>:つるつる)</td></tr>
+<tr><td>13</td><td>柄の表面(リングの下) (<code>f</code>:繊維質, <code>y</code>:うろこ状, <code>k</code>:すべすべ, <code>s</code>:つるつる)</td></tr>
+<tr><td>14</td><td>柄の色(リングの上) (<code>n</code>:茶色, <code>b</code>:黄褐色, <code>c</code>:肉桂色, <code>g</code>:灰色, <code>o</code>:オレンジ, <code>p</code>:ピンク, <code>e</code>:赤色, <code>w</code>:白色, <code>y</code>:黄色)</td></tr>
+<tr><td>15</td><td>柄の色(リングの下) (<code>n</code>:茶色, <code>b</code>:黄褐色, <code>c</code>:肉桂色, <code>g</code>:灰色, <code>o</code>:オレンジ, <code>p</code>:ピンク, <code>e</code>:赤色, <code>w</code>:白色, <code>y</code>:黄色)</td></tr>
+<tr><td>16</td><td>覆いの形状 (<code>p</code>:部分, <code>u</code>:全体)</td></tr>
+<tr><td>17</td><td>覆いの色 (<code>n</code>:茶色, <code>o</code>:オレンジ, <code>w</code>:白色, <code>y</code>:黄色)</td></tr>
+<tr><td>18</td><td>リングの数 (<code>n</code>:なし, <code>o</code>:ひとつ, <code>t</code>:ふたつ)</td></tr>
+<tr><td>19</td><td>リングの形状 (<code>c</code>:網状, <code>e</code>:減衰, <code>f</code>:派手, <code>l</code>:大型, <code>n</code>:なし, <code>p</code>:垂下, <code>s</code>:ぴったり, <code>z</code>:帯状)</td></tr>
+<tr><td>20</td><td>胞子の色 (<code>k</code>:黒色, <code>n</code>:茶色, <code>b</code>:黄褐色, <code>h</code>:チョコレート色, <code>r</code>:緑色, <code>o</code>:オレンジ, <code>u</code>:紫色, <code>w</code>:白色, <code>y</code>:黄色)</td></tr>
+<tr><td>21</td><td>個体数 (<code>a</code>:豊富, <code>c</code>:群生, <code>n</code>:おびただしい, <code>s</code>:ところどころに, <code>v</code>:数本, <code>y</code>:孤立)</td></tr>
+<tr><td>22</td><td>生育地 (<code>g</code>:芝生, <code>l</code>:葉っぱ, <code>m</code>:牧草地, <code>p</code>:道端, <code>u</code>:都市, <code>w</code>:汚物, <code>d</code>:樹木)</td></tr>
+</table>
+</div>
+
+<div class=notice>
+<u>注意:</u>
+このデータが本当に正しい保証はない。
+これを使って、実際に生育しているキノコを食べないこと。
+</div>
+
+<h3>4.1. ひとつの素性を使った決定木の学習</h3>
+<p>
+この例では素性が 22個あるが、やることは演習 2. の例とほとんど同じである。
+<p>
+まず、訓練データとテストデータを CSV ファイルから読み込む。
+ここでは 8124件のデータうち、最初の 7000件を訓練データとして、
+残りをテストデータとして使うことにする:
+<blockquote><pre>
+<span class=comment># CSVファイルを読み込む。</span>
+import csv
+with open("agaricus-lepiota.data") as fp:
+    table = list(csv.reader(fp))
+
+<span class=comment># 最初の7000件を訓練データとして使う。</span>
+train = table[:7000]
+<span class=comment># 残りをテストデータとして使う。</span>
+test = table[7000:]
+</pre></blockquote>
+
+<p>
+次に <code>for</code>文を使って、22個の素性それぞれに対し
+決定木を作成しては、その精度を測定する。
+これは演習2 のコードを変更して、 1番目ではなく
+<em>i+1</em>番目の素性を使うようにすればよい:
+
+<blockquote><pre>
+for i in range(22):
+    <span class=comment># (i+1)番目の素性を使った決定木を作成。</span>
+    c = {}
+    for row in train:
+        answer = row[0]  <span class=comment># 回答</span>
+        f = row[<mark>i+1</mark>]  <span class=comment># (i+1)番目の素性</span>
+        ...
+    <span class=comment># できた決定木の正しさを測定する。</span>
+    score = 0
+    for row in test:
+        ...
+    <span class=comment># 使った素性の番号とスコアを表示する。</span>
+    print("使った素性:", i+1, "スコア:", score)
+</pre></blockquote>
+
+<p>
+もっとも高いスコアを表示した決定木がここでの最終的な学習結果ということになる。
+
+<h4>学習に使うデータをシャッフルする</h4>
+<p>
+じつは <code>agaricus-lepiota.data</code> に一覧されているキノコの順序は
+<strong>大幅に偏っている</strong>。そこで、7000件以降のデータを
+テストデータとして使うと、偏った結果を学習してしまう。これを避けるために、
+前回の授業で作成した <code>shuffle()</code> 関数を使って、
+リスト<code>table</code> をまずシャッフルしてから使うことにする。
+
+<blockquote><pre>
+import random
+def shuffle(a):
+    n = len(a)
+    for k in range(n):
+        i = int(random.random()*n)
+        j = int(random.random()*n)
+        t = a[i]
+        a[i] = a[j]
+        a[j] = t
+    return a
+
+<span class=comment># 読み込んだCSVの行をシャッフルする。</span>
+shuffle(table)
+<span class=comment># 最初の7000件を訓練データとして使う。</span>
+train = table[:7000]
+<span class=comment># 残りをテストデータとして使う。</span>
+test = table[7000:]
+</pre></blockquote>
+
+<h3>4.2. ふたつの素性を使った決定木の学習</h3>
+<p>
+さて、ひとつの素性だけを使った決定木では正確さに限界があった。
+ここではさらに拡張して、ふたつの素性を使った決定木を作成してみる。
+これは以下のように、やや複雑な <code>if</code>文からなる規則を作成する。
+<blockquote><pre>
+def f(変数1, 変数2):
+    if 変数1 == 値1 and 変数2 == 値2:
+        return 答えA
+    elif 変数1 == 値3 and 変数2 == 値4:
+        return 答えB
+    elif
+        ...
+</pre></blockquote>
+<p>
+この場合も、アルゴリズムはさして変わらない。
+なぜなら 2つの素性を同時に比較するのは、
+2つの素性を連結したものを比較するのと同じだからである:
+<blockquote><pre>
+def f(変数1, 変数2):
+    if (変数1+","+変数2) == (値1+","+値2):
+        return 答えA
+    elif (変数1+","+変数2) == (値3+","+値4):
+        return 答えB
+    elif
+        ...
+</pre></blockquote>
+<p>
+実際のプログラムは以下のようになる。
+<code>for</code>文を2重にして (<em>i</em>, <em>j</em>) の
+組み合せをすべて試している。
+<blockquote><pre>
+<span class=comment># 2種類の素性の組み合わせをすべて試す。</span>
+for i in range(22):
+    for j in range(22):
+        <span class=comment># (i,j) と (j,i) を2度やらないように、i &lt; j のケースだけ考える。</span>
+        if i &lt; j:
+            <span class=comment># (i+1)番目と(j+1)番目の素性を使った決定木を作成。</span>
+            c = {}
+            for row in train:
+                answer = row[0]  <span class=comment># 回答</span>
+                f1 = row[<mark>i+1</mark>]  <span class=comment># (i+1)番目の素性</span>
+                f2 = row[<mark>j+1</mark>]  <span class=comment># (j+1)番目の素性</span>
+                <mark>f = f1+","+f2</mark>  <span class=comment># 連結した素性</span>
+                ...
+            <span class=comment># できた決定木の正しさを測定する。</span>
+            score = 0
+            ...
+            <span class=comment># 使った素性の番号とスコアを表示する。</span>
+            print("使った素性:", i+1, j+1, "スコア:", score)
+</pre></blockquote>
+
+<div class=ex>
+<div class=header>演習 7-3.</div>
+<ol type=i>
+<li> 4.1節および 4.2 節のコードを実際に実行せよ。
+<li> 4.2節の例では素性の組み合せが 22×21 = 462通りあり、
+  決定木も 462種類できる。これだけ多いと目で見て比較するのが大変なため、
+  各決定木のスコアを自動的に比較し、もっとも性能のよい学習結果だけを
+  表示するような処理を追加せよ。
+</ol>
+</div>
+
+
+<h2 id="others">5. 決定木以外の機械学習アルゴリズム</h2>
+
+<h3>5.1. ニューラルネットワーク</h3>
+<p>
+ニューラルネットワーク (Neural Network, NN) とは、
+分類器として以下のような「ニューロン」を多数接続したものを使う
+機械学習アルゴリズムである。
+ニューラルネットワークは、画像認識などの処理に向いているとされる。
+<blockquote><pre>
+def f(素性1, 素性2, ...):
+    s = (素性1*重み1) + (素性2*重み2) + ...
+    if 0 &lt; s:
+        return s
+    else:
+        return 0
+</pre></blockquote>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="230" height="100">
+<defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+</defs>
+<g fill="none" stroke="black" stroke-width="2">
+  <circle cx="120" cy="50" r="20" />
+  <g marker-end="url(#arrow)">
+    <line x1="45" y1="10" x2="100" y2="40" />
+    <line x1="45" y1="40" x2="100" y2="50" />
+    <line x1="50" y1="70" x2="100" y2="60" />
+    <line x1="140" y1="50" x2="190" y2="50" />
+  </g>
+</g>
+<g text-anchor="middle">
+<text x="120" y="80" dy="0.5em">ニューロン</text>
+<text x="40" y="5" dy="0.5em" text-anchor="end">素性1</text>
+<text x="40" y="35" dy="0.5em" text-anchor="end">素性2</text>
+<text x="40" y="60" dy="0.5em" text-anchor="end">...</text>
+<text x="190" y="30" dy="0.5em">出力</text>
+</g>
+</svg>
+</div>
+<p>
+各ニューロンの接続には「重み (太さのようなもの)」がつけられており、
+これを変化させることによりいろいろな計算をさせることができる。
+ニューロンを多段階にわたって接続したものは「深い (ディープな)」
+ニューラルネットワークと呼ばれており、
+深いニューラルネットワークを学習させる技術を
+「深層学習」あるいは「ディープラーニング」と呼んだりする。
+
+<h3>5.2. データマイニング</h3>
+<p>
+機械学習とよく合わせて語られるものに
+ビッグデータ (big data) とか<u>データマイニング</u> (data mining) といった
+用語がある。これは実際にやっていることは機械学習とほとんど同じだが、
+使用目的がやや異なっている。機械学習は一般に明らかに相関があると
+わかっている変数 (たとえばキノコの外見と毒性など) を対象としているが、
+データマイニングは一見、相関があるかどうかわからない変数
+(気温と商品の売り上げなど) を対象として規則を発見させる技術をいう。
+実は決定木は人間がその結果を理解しやすいので、
+データマイニングによく用いられる手法である。
+
+
+<h2 id="assignments">6. 本日の課題</h2>
+
+<div class=exa>
+<div class=header>小課題7. DNA塩基配列のパターン発見</div>
+<ul>
+  <li> 提出期限: <u>2月3日</u> (1週間後)
+  <li> 提出するファイル: <code>splice.py</code>
+</ul>
+<p>
+DNA の鎖の中には、実際にタンパク質合成に用いられる部分 (エクソン, E) と
+機能していない部分 (イントロン, I) の2種類の情報が混ざっている。
+タンパク質を合成する際に、これらの部分は必要に応じて切りつめられて使用される
+(RNAスプライシング)。
+<pre>
+...EEEEIIIIIIIIIIEEEEEEIIIIIIIIIEEEIIIIIIII...
+</pre>
+イントロン・エクソン各部分の始まりと終わりは、
+塩基配列 (AGCT) 中の特殊なパターンにより識別されているらしい。UCI のサイト
+<a href="https://archive.ics.uci.edu/ml/datasets/Molecular+Biology+%28Splice-junction+Gene+Sequences%29">Molecular Biology (Splice-junction Gene Sequences)</a>
+からダウンロードしたデータをもとに、
+機械学習をつかってこのパターンを発見せよ。
+<p>
+ここでの目的は、ある与えられたDNAのパターンが以下のどのタイプかを判定することである:
+<ol type=a>
+<li> <strong>IE</strong> … イントロン(I) → エクソン(E) に切り替わる部分。
+<li> <strong>EI</strong> … エクソン(E) → イントロン(I) に切り替わる部分。
+<li> <strong>N</strong> … そのどちらでもない部分。
+</ol>
+
+<h4>方法</h4>
+<ol>
+<li> UCI のサイトから <a href="https://archive.ics.uci.edu/ml/machine-learning-databases/molecular-biology/splice-junction-gene-sequences/splice.data">splice.data</a> をダウンロードする。
+ここには 60文字からなる塩基配列とその正解が羅列されている。
+<li> 各塩基配列に対して、異なる位置から <u>2文字ずつ</u>を切り出して素性として利用する。
+つまり <code>CCAGCT</code> なら <code>CC</code>, <code>CA</code>, <code>AG</code>,
+<code>GC</code>, <code>CT</code> の 5つの素性があり、
+60文字の塩基配列には 59個の素性が含まれていると考える。
+<li> このような素性を <u>2つ</u>使った決定木を学習する。
+</ol>
+
+<p>
+<code>splice.data</code> はやや特殊な形式をしており、
+0列目が正解、1列目はコメント(使用しない)、2列目に塩基配列が書かれている。
+列の間に余分な空白が入っているので、まずこれを以下のようにして除去する:
+<blockquote><pre>
+<span class=comment># データを読み込む。</span>
+import csv
+with open("splice.data") as fp:
+    table = list(csv.reader(fp))
+
+for row in table:
+    <span class=comment># 2列目の空白を除去。</span>
+    row[2] = row[2].strip()
+
+<span class=comment># シャッフル後、訓練データとテストデータを作成。</span>
+shuffle(table)
+train = table[:-1000]
+test = table[-1000:]
+</pre></blockquote>
+
+<p>
+次に 59個の素性のうち 2つを調べる決定木を学習する。
+<u>注意</u>: <code>row[2]</code> をまるごと素性として使うのではなく、
+その中の (i, j) 文字目から 2文字ずつを切り出して素性とするのである:
+<blockquote><pre>
+<span class=comment># 2種類の素性の組み合わせをすべて試す。</span>
+for i in range(59):
+    for j in range(59):
+        if i &lt; j:
+            <span class=comment># i文字目とj文字目の素性を使った決定木を作成。</span>
+            c = {}
+            for row in train:
+                answer = row[0]  <span class=comment># 回答</span>
+                <mark>seq = row[2]</mark>     <span class=comment># 塩基配列</span>
+                <mark>f1 = seq[i:i+2]</mark>  <span class=comment># i文字目の素性</span>
+                <mark>f2 = seq[j:j+2]</mark>  <span class=comment># j文字目の素性</span>
+                f = f1+","+f2    <span class=comment># 連結した素性</span>
+                ...
+</pre></blockquote>
+
+<p>
+このプログラムを実行すると、同じフォルダにある
+<code>splice.data</code> を読み込み
+「何文字目と何文字目を素性として利用するともっとも正しく分類できたか」を表示する:
+<blockquote><pre>
+$ <strong>python splice.py</strong>
+使った素性: 28 30 スコア: 876
+</pre></blockquote>
+<p>
+<u>注意</u>:
+<code>shuffle</code>を使っているため、
+最適な素性およびスコアは必ずしもこの値にならないことがあるが、
+上の結果と違っていても真面目に計算した結果であれば正解とする。
+</div>
+
+<div class=exa>
+<div class=header>オプション課題C. シェルピンスキーの三角形を描画する</div>
+<ul>
+  <li> 締め切り: <u>2月10日</u> (2週間後)
+  <li> 提出するファイル: <code>sierpinski.py</code>
+</ul>
+<p>
+<a href="https://en.wikipedia.org/wiki/Sierpi%C5%84ski_triangle">シェルピンスキーの三角形</a>を
+SVGで生成するプログラムを書け。シェルピンスキーの三角形とは、以下のような
+再帰的な特徴をもつ図形 (フラクタルの一種) である:
+<div class=figure>
+<table align=center><tr><td>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
+<polygon points="50,5 5,95 95,95" fill="black" stroke="none" />
+</svg>
+</td><td>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
+<g fill="none" stroke="black">
+<polygon points="50,5 27,50 73,50" />
+<polygon points="27,50 5,95 50,95" />
+<polygon points="73,50 50,95 95,95" />
+</g>
+<g fill="black" stroke="none" text-anchor="middle" style="font-size:80%;">
+<text x="50" y="40">S(n-1)</text>
+<text x="25" y="85">S(n-1)</text>
+<text x="75" y="85">S(n-1)</text>
+</g>
+</svg>
+</td></tr>
+<tr><td>(n = 0 のとき)</td>
+<td>(0 &lt; n のとき)</td></tr>
+</table>
+</div>
+<p>
+n = 0 のとき S(n) はただの三角形になり、
+0 &lt; n のとき S(n) は上のように S(n-1) を配置した図として定義される。
+プログラムは「図形のサイズ (ピクセル)」および「n の最大値」を
+コマンド引数から受け取るようにせよ。
+<p>
+たとえばサイズ 100、n = 1 のときの SVG は以下のようになる:
+<blockquote><pre>
+$ <strong>python sierpinski.py 100 1</strong>
+&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100' height='100'&gt;
+&lt;g stroke='none' fill='#000000'&gt;
+&lt;polygon points='50,0 25,50 75,50' /&gt;
+&lt;polygon points='25,50 0,100 50,100' /&gt;
+&lt;polygon points='75,50 50,100 100,100' /&gt;
+&lt;/g&gt;
+&lt;/svg&gt;
+</pre></blockquote>
+<div class=figure>
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100' height='100'>
+<g stroke='none' fill='#000000'>
+<polygon points='50,0 25,50 75,50' />
+<polygon points='25,50 0,100 50,100' />
+<polygon points='75,50 50,100 100,100' />
+</g>
+</svg>
+</div>
+<p>
+サイズ 400、n = 5 のときは以下のようになる:
+<div class=figure>
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='400' height='400'>
+<g stroke='none' fill='#000000'>
+<polygon points='199,0 193,12 205,12' />
+<polygon points='193,12 187,24 199,24' />
+<polygon points='205,12 199,24 211,24' />
+<polygon points='187,25 181,37 193,37' />
+<polygon points='181,37 175,49 187,49' />
+<polygon points='193,37 187,49 199,49' />
+<polygon points='212,25 206,37 218,37' />
+<polygon points='206,37 200,49 212,49' />
+<polygon points='218,37 212,49 224,49' />
+<polygon points='174,50 168,62 180,62' />
+<polygon points='168,62 162,74 174,74' />
+<polygon points='180,62 174,74 186,74' />
+<polygon points='162,75 156,87 168,87' />
+<polygon points='156,87 150,99 162,99' />
+<polygon points='168,87 162,99 174,99' />
+<polygon points='187,75 181,87 193,87' />
+<polygon points='181,87 175,99 187,99' />
+<polygon points='193,87 187,99 199,99' />
+<polygon points='224,50 218,62 230,62' />
+<polygon points='218,62 212,74 224,74' />
+<polygon points='230,62 224,74 236,74' />
+<polygon points='212,75 206,87 218,87' />
+<polygon points='206,87 200,99 212,99' />
+<polygon points='218,87 212,99 224,99' />
+<polygon points='237,75 231,87 243,87' />
+<polygon points='231,87 225,99 237,99' />
+<polygon points='243,87 237,99 249,99' />
+<polygon points='149,100 143,112 155,112' />
+<polygon points='143,112 137,124 149,124' />
+<polygon points='155,112 149,124 161,124' />
+<polygon points='137,125 131,137 143,137' />
+<polygon points='131,137 125,149 137,149' />
+<polygon points='143,137 137,149 149,149' />
+<polygon points='162,125 156,137 168,137' />
+<polygon points='156,137 150,149 162,149' />
+<polygon points='168,137 162,149 174,149' />
+<polygon points='124,150 118,162 130,162' />
+<polygon points='118,162 112,174 124,174' />
+<polygon points='130,162 124,174 136,174' />
+<polygon points='112,175 106,187 118,187' />
+<polygon points='106,187 100,199 112,199' />
+<polygon points='118,187 112,199 124,199' />
+<polygon points='137,175 131,187 143,187' />
+<polygon points='131,187 125,199 137,199' />
+<polygon points='143,187 137,199 149,199' />
+<polygon points='174,150 168,162 180,162' />
+<polygon points='168,162 162,174 174,174' />
+<polygon points='180,162 174,174 186,174' />
+<polygon points='162,175 156,187 168,187' />
+<polygon points='156,187 150,199 162,199' />
+<polygon points='168,187 162,199 174,199' />
+<polygon points='187,175 181,187 193,187' />
+<polygon points='181,187 175,199 187,199' />
+<polygon points='193,187 187,199 199,199' />
+<polygon points='249,100 243,112 255,112' />
+<polygon points='243,112 237,124 249,124' />
+<polygon points='255,112 249,124 261,124' />
+<polygon points='237,125 231,137 243,137' />
+<polygon points='231,137 225,149 237,149' />
+<polygon points='243,137 237,149 249,149' />
+<polygon points='262,125 256,137 268,137' />
+<polygon points='256,137 250,149 262,149' />
+<polygon points='268,137 262,149 274,149' />
+<polygon points='224,150 218,162 230,162' />
+<polygon points='218,162 212,174 224,174' />
+<polygon points='230,162 224,174 236,174' />
+<polygon points='212,175 206,187 218,187' />
+<polygon points='206,187 200,199 212,199' />
+<polygon points='218,187 212,199 224,199' />
+<polygon points='237,175 231,187 243,187' />
+<polygon points='231,187 225,199 237,199' />
+<polygon points='243,187 237,199 249,199' />
+<polygon points='274,150 268,162 280,162' />
+<polygon points='268,162 262,174 274,174' />
+<polygon points='280,162 274,174 286,174' />
+<polygon points='262,175 256,187 268,187' />
+<polygon points='256,187 250,199 262,199' />
+<polygon points='268,187 262,199 274,199' />
+<polygon points='287,175 281,187 293,187' />
+<polygon points='281,187 275,199 287,199' />
+<polygon points='293,187 287,199 299,199' />
+<polygon points='99,200 93,212 105,212' />
+<polygon points='93,212 87,224 99,224' />
+<polygon points='105,212 99,224 111,224' />
+<polygon points='87,225 81,237 93,237' />
+<polygon points='81,237 75,249 87,249' />
+<polygon points='93,237 87,249 99,249' />
+<polygon points='112,225 106,237 118,237' />
+<polygon points='106,237 100,249 112,249' />
+<polygon points='118,237 112,249 124,249' />
+<polygon points='74,250 68,262 80,262' />
+<polygon points='68,262 62,274 74,274' />
+<polygon points='80,262 74,274 86,274' />
+<polygon points='62,275 56,287 68,287' />
+<polygon points='56,287 50,299 62,299' />
+<polygon points='68,287 62,299 74,299' />
+<polygon points='87,275 81,287 93,287' />
+<polygon points='81,287 75,299 87,299' />
+<polygon points='93,287 87,299 99,299' />
+<polygon points='124,250 118,262 130,262' />
+<polygon points='118,262 112,274 124,274' />
+<polygon points='130,262 124,274 136,274' />
+<polygon points='112,275 106,287 118,287' />
+<polygon points='106,287 100,299 112,299' />
+<polygon points='118,287 112,299 124,299' />
+<polygon points='137,275 131,287 143,287' />
+<polygon points='131,287 125,299 137,299' />
+<polygon points='143,287 137,299 149,299' />
+<polygon points='49,300 43,312 55,312' />
+<polygon points='43,312 37,324 49,324' />
+<polygon points='55,312 49,324 61,324' />
+<polygon points='37,325 31,337 43,337' />
+<polygon points='31,337 25,349 37,349' />
+<polygon points='43,337 37,349 49,349' />
+<polygon points='62,325 56,337 68,337' />
+<polygon points='56,337 50,349 62,349' />
+<polygon points='68,337 62,349 74,349' />
+<polygon points='24,350 18,362 30,362' />
+<polygon points='18,362 12,374 24,374' />
+<polygon points='30,362 24,374 36,374' />
+<polygon points='12,375 6,387 18,387' />
+<polygon points='6,387 0,399 12,399' />
+<polygon points='18,387 12,399 24,399' />
+<polygon points='37,375 31,387 43,387' />
+<polygon points='31,387 25,399 37,399' />
+<polygon points='43,387 37,399 49,399' />
+<polygon points='74,350 68,362 80,362' />
+<polygon points='68,362 62,374 74,374' />
+<polygon points='80,362 74,374 86,374' />
+<polygon points='62,375 56,387 68,387' />
+<polygon points='56,387 50,399 62,399' />
+<polygon points='68,387 62,399 74,399' />
+<polygon points='87,375 81,387 93,387' />
+<polygon points='81,387 75,399 87,399' />
+<polygon points='93,387 87,399 99,399' />
+<polygon points='149,300 143,312 155,312' />
+<polygon points='143,312 137,324 149,324' />
+<polygon points='155,312 149,324 161,324' />
+<polygon points='137,325 131,337 143,337' />
+<polygon points='131,337 125,349 137,349' />
+<polygon points='143,337 137,349 149,349' />
+<polygon points='162,325 156,337 168,337' />
+<polygon points='156,337 150,349 162,349' />
+<polygon points='168,337 162,349 174,349' />
+<polygon points='124,350 118,362 130,362' />
+<polygon points='118,362 112,374 124,374' />
+<polygon points='130,362 124,374 136,374' />
+<polygon points='112,375 106,387 118,387' />
+<polygon points='106,387 100,399 112,399' />
+<polygon points='118,387 112,399 124,399' />
+<polygon points='137,375 131,387 143,387' />
+<polygon points='131,387 125,399 137,399' />
+<polygon points='143,387 137,399 149,399' />
+<polygon points='174,350 168,362 180,362' />
+<polygon points='168,362 162,374 174,374' />
+<polygon points='180,362 174,374 186,374' />
+<polygon points='162,375 156,387 168,387' />
+<polygon points='156,387 150,399 162,399' />
+<polygon points='168,387 162,399 174,399' />
+<polygon points='187,375 181,387 193,387' />
+<polygon points='181,387 175,399 187,399' />
+<polygon points='193,387 187,399 199,399' />
+<polygon points='299,200 293,212 305,212' />
+<polygon points='293,212 287,224 299,224' />
+<polygon points='305,212 299,224 311,224' />
+<polygon points='287,225 281,237 293,237' />
+<polygon points='281,237 275,249 287,249' />
+<polygon points='293,237 287,249 299,249' />
+<polygon points='312,225 306,237 318,237' />
+<polygon points='306,237 300,249 312,249' />
+<polygon points='318,237 312,249 324,249' />
+<polygon points='274,250 268,262 280,262' />
+<polygon points='268,262 262,274 274,274' />
+<polygon points='280,262 274,274 286,274' />
+<polygon points='262,275 256,287 268,287' />
+<polygon points='256,287 250,299 262,299' />
+<polygon points='268,287 262,299 274,299' />
+<polygon points='287,275 281,287 293,287' />
+<polygon points='281,287 275,299 287,299' />
+<polygon points='293,287 287,299 299,299' />
+<polygon points='324,250 318,262 330,262' />
+<polygon points='318,262 312,274 324,274' />
+<polygon points='330,262 324,274 336,274' />
+<polygon points='312,275 306,287 318,287' />
+<polygon points='306,287 300,299 312,299' />
+<polygon points='318,287 312,299 324,299' />
+<polygon points='337,275 331,287 343,287' />
+<polygon points='331,287 325,299 337,299' />
+<polygon points='343,287 337,299 349,299' />
+<polygon points='249,300 243,312 255,312' />
+<polygon points='243,312 237,324 249,324' />
+<polygon points='255,312 249,324 261,324' />
+<polygon points='237,325 231,337 243,337' />
+<polygon points='231,337 225,349 237,349' />
+<polygon points='243,337 237,349 249,349' />
+<polygon points='262,325 256,337 268,337' />
+<polygon points='256,337 250,349 262,349' />
+<polygon points='268,337 262,349 274,349' />
+<polygon points='224,350 218,362 230,362' />
+<polygon points='218,362 212,374 224,374' />
+<polygon points='230,362 224,374 236,374' />
+<polygon points='212,375 206,387 218,387' />
+<polygon points='206,387 200,399 212,399' />
+<polygon points='218,387 212,399 224,399' />
+<polygon points='237,375 231,387 243,387' />
+<polygon points='231,387 225,399 237,399' />
+<polygon points='243,387 237,399 249,399' />
+<polygon points='274,350 268,362 280,362' />
+<polygon points='268,362 262,374 274,374' />
+<polygon points='280,362 274,374 286,374' />
+<polygon points='262,375 256,387 268,387' />
+<polygon points='256,387 250,399 262,399' />
+<polygon points='268,387 262,399 274,399' />
+<polygon points='287,375 281,387 293,387' />
+<polygon points='281,387 275,399 287,399' />
+<polygon points='293,387 287,399 299,399' />
+<polygon points='349,300 343,312 355,312' />
+<polygon points='343,312 337,324 349,324' />
+<polygon points='355,312 349,324 361,324' />
+<polygon points='337,325 331,337 343,337' />
+<polygon points='331,337 325,349 337,349' />
+<polygon points='343,337 337,349 349,349' />
+<polygon points='362,325 356,337 368,337' />
+<polygon points='356,337 350,349 362,349' />
+<polygon points='368,337 362,349 374,349' />
+<polygon points='324,350 318,362 330,362' />
+<polygon points='318,362 312,374 324,374' />
+<polygon points='330,362 324,374 336,374' />
+<polygon points='312,375 306,387 318,387' />
+<polygon points='306,387 300,399 312,399' />
+<polygon points='318,387 312,399 324,399' />
+<polygon points='337,375 331,387 343,387' />
+<polygon points='331,387 325,399 337,399' />
+<polygon points='343,387 337,399 349,399' />
+<polygon points='374,350 368,362 380,362' />
+<polygon points='368,362 362,374 374,374' />
+<polygon points='380,362 374,374 386,374' />
+<polygon points='362,375 356,387 368,387' />
+<polygon points='356,387 350,399 362,399' />
+<polygon points='368,387 362,399 374,399' />
+<polygon points='387,375 381,387 393,387' />
+<polygon points='381,387 375,399 387,399' />
+<polygon points='393,387 387,399 399,399' />
+</g>
+</svg>
+</div>
+<p>
+プログラムは (当然ながら) 再帰を使って書くのが楽である:
+<div class=file>
+sierpinski.py
+<pre>
+def render(...):
+    if n == 0:
+        <span class=comment># ただの三角形を書く。</span>
+    else:
+        <span class=comment># render() を3回呼び出す。</span>
+
+<span class=comment># コマンド引数を受け取る。</span>
+import sys
+a = sys.argv
+s = int(a[1])  <span class=comment># サイズ</span>
+n = int(a[2])  <span class=comment># 最大のn</span>
+print(f"&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='{s}' height='{s}'&gt;")
+print("&lt;g stroke='none' fill='#000000'&gt;")
+<span class=comment># render() を呼び出す。</span>
+print("&lt;/g&gt;")
+print("&lt;/svg&gt;")
+</pre></div>
+
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

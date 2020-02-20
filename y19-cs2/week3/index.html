@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 コンピュータサイエンス第二 第3週 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+.sample { background: #ccffff; border: solid 1px black; padding: 0.5em; margin: 0.2em; text-align: center; font-size: 120%; }
+.def { background: #ccffcc; border: solid 1px black; padding: 1em; margin: 0.5em; text-align: center; font-size: 120%; }
+.toggle { background: #ccffff; border: solid 1px black; }
+--></style>
+<script>
+function toggle(e) {
+  for (let k in e.children) {
+    let c = e.children[k];
+    c.hidden = !c.hidden;
+  }
+}
+</script>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>コンピュータサイエンス第二 第3週</h1>
+<div class=nav>2019年12月16日 (月)</div>
+
+<ol start="0">
+<li> <a href="#scores">コンピュータサイエンス第一の成績について</a>
+<li> <a href="#orders">関数の序列</a>
+<li> <a href="#bsearch">二分探索の計算量</a>
+<li> <a href="#arrayslice">リストのスライスについて</a>
+<li> <a href="#sorting">ソート (並べ替え) アルゴリズムとは</a>
+<li> <a href="#assignments">本日の課題</a>
+</ol>
+
+<h2>雑談</h2>
+<p>
+ある大学・組織・企業が、どのくらいの金をどのように使っているかを知ることは重要だ。
+<ul>
+  <li> 「大学の設備・サービス・先生はなぜこんなにヘボいのか?」 → 「お金がないから」<br>
+    「国の設備・サービス・役所はなぜこんなにヘボいのか?」 → 「人が足りないから」 = 結局「お金がないから」<br>
+  <li> 上場企業・大学では、こうした情報はすべて公開されている:
+    <ul>
+      <li> <a href="https://www.titech.ac.jp/about/disclosure/finance.html">東京工業大学</a> (学生数:1万人, 教員:1500人):
+        <ul>
+          <li> 資産: 2200億円 (現金: 160億円 - 「流動資産」)
+          <li> 収入: 460億円 (税金: 210億円, 企業: 100億円, 学費: 40億円)
+          <li> 支出: 460億円 (人件費: 200億円, 施設費: 150億円)
+        </ul>
+      <li> <a href="https://www.waseda.jp/top/about/work/organizations/financial-affairs/financial-statements">早稲田大学</a> (学生数:5万人, 教員:5500人):
+        <ul>
+          <li> 資産: 3800億円 (現金: 370億円)
+          <li> 収入: 1500億円 (学費: 660億円, 補助金: 130億円)
+          <li> 支出: 1500億円 (人件費: 500億円, 施設費: 140億円)
+        </ul>
+    </ul>
+  <li> 秘密が多い組織 (例: <a href="https://www.dnc.ac.jp/disclosure/choutatsu_jouhou/index.html">大学入試センター</a>) などでも、
+    おカネの出入りを見ればだいたいどんなことを計画しているかわかってしまう。
+  <li> 会計に関する知識 (e.g. 日商簿記など) は持っておいて損はない。
+</ul>
+
+
+<h2>オプション課題 A. のヒント</h2>
+<p> 関数 <code>perm(a, n)</code> を、以下のように定義する:
+  <ul>
+    <li> 与えられたリスト <code>a</code> の左から <code>n</code> 要素を、1回ローテーションする:
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="320" height="80">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <pattern id="hatch" width="5" height="5"
+	       patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+      </pattern>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="70"  y="30" width="30" height="30" fill="url(#hatch)" />
+      <rect x="100"  y="30" width="30" height="30" fill="url(#hatch)" />
+      <rect x="130"  y="30" width="30" height="30" fill="url(#hatch)" />
+      <rect x="160" y="30" width="30" height="30" fill="url(#hatch)" />
+      <rect x="190" y="30" width="30" height="30" fill="url(#hatch)" />
+      <rect x="220" y="30" width="30" height="30" />
+      <rect x="250" y="30" width="30" height="30" />
+      <rect x="280" y="30" width="30" height="30" />
+    </g>
+    <g stroke="none" fill="white">
+      <rect x="140" y="25" width="10" height="40" />
+      <rect x="260" y="25" width="10" height="40" />
+    </g>
+    <rect stroke="black" fill="none" stroke-width="2" stroke-dasharray="2,2"
+          x="70" y="30" width="240" height="30" />
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M205,60 l0,15 l-120,0 l0,-10" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="1">
+      <path d="M70,25 l0,-5 l150,0 l0,5">
+    </g>
+    <g text-anchor="end">
+      <text x="60" y="40" dy="0.5em">リスト a</text>
+      <text x="145" y="10" dy="0.5em" text-anchor="middle">n</text>
+    </g>
+  </svg>
+</div>
+    <li> 各ローテーションごとに、さらに <code>perm(a, n-1)</code> を呼び出す。
+    <li> <code>n == 0</code> のときは何もせず <code>a</code> の値を表示。
+    <li> つまり、こうすれば Ok:
+<pre>
+def perm(a, n):
+    if n == 0:
+        print(a)
+        return
+    else:
+        for i in range(n):
+<div class=qqq>            左から n 要素をローテーションする。
+</div>            perm(a, n-1)
+        return
+</pre>
+  </ul>
+
+
+<h2 id="scores">0. コンピュータサイエンス第一の成績について</h2>
+<p>
+自分の点数が「異常に低い」あるいは「異常に高い」と思った方は、
+遠慮なく新山までメールしてください。
+(新山が採点ミスをしている可能性もある)
+
+
+<h2 id="orders">1. 関数の序列</h2>
+<p>
+関数には序列 (オーダー, order) というものがある。
+
+<ul>
+<li> x-1 と x<sup>2</sup> を比べると、xが正のときは x<sup>2</sup> のほうが大きくなる。
+<p> → したがって、x<sup>2</sup> のほうがオーダーが大きい。
+<li> x+100 と x<sup>2</sup> を比べると、最初は x+100 のほうが大きいが、
+x=11 以降は x<sup>2</sup> のほうが大きくなる。
+<p> → したがって、x<sup>2</sup> のほうがオーダーが大きい。
+<li> 99999x+99999 と x<sup>2</sup> を比べると、最初は 99999x+99999 のほうが大きいが、
+どこかで x<sup>2</sup> のほうが大きくなる。
+<p> → したがって、やはり x<sup>2</sup> のほうがオーダーが大きい。
+</ul>
+
+<div class=sample>
+オーダーが小さい関数は、
+オーダーが大きい関数にいつか必ず追い抜かれる。
+</div>
+
+<p>
+同様に…
+<ul>
+<li> x<sup>2</sup> と x<sup>3</sup> を比べると、
+x<sup>3</sup> のほうがオーダーが大きい。
+<li> 100x<sup>2</sup>+123x+456 と 0.01x<sup>3</sup> を比べると、
+0.01x<sup>3</sup> のほうがオーダーが大きい。
+</ul>
+
+<div class=sample>
+関数のオーダーは、その中のもっとも大きな項で決まる。
+</div>
+
+<p>
+さらに…
+<ul>
+<li> x<sup>2</sup> と 2<sup>x</sup> を比べると、
+2<sup>x</sup> のほうがオーダーが大きい。
+<li> x<sup>100</sup> と 2<sup>x</sup> を比べると、
+2<sup>x</sup> のほうがオーダーが大きい。
+<li> x<sup>なんとか</sup> と 2<sup>x</sup> を比べると、
+つねに 2<sup>x</sup> のほうがオーダーが大きい。
+</ul>
+
+関数のオーダーは通常「Big O 記法」をもちいて
+<i>O</i>(x) のように表す。
+
+<div class=sample>
+<i>O</i>(x) &lt; <i>O</i>(x<sup>2</sup>) &lt; <i>O</i>(x<sup>3</sup>) &lt; ...
+&lt; <i>O</i>(x<sup>100</sup>) &lt; ...
+&lt; <i>O</i>(2<sup>x</sup>) &lt; <i>O</i>(3<sup>x</sup>)
+</div>
+
+<p>
+ちなみに、<i>O</i>(x) より小さいオーダーの関数もある。
+<div class=sample>
+<i>O</i>(1) &lt; <i>O</i>(log x) &lt; <i>O</i>(&radic;<span style="text-decoration:overline">x</span>) &lt; <i>O</i>(x)
+</div>
+
+<p>
+数学的に厳密な定義は以下のとおり:
+<div class=def>
+lim <sub>[x &rarr; &infin;]</sub> f(x) / g(x) &leq; C ならば、f(x) は <i>O</i>(g(x)) である。
+</div>
+
+<div class=ex>
+<div class=header>練習問題.</div>
+<p>
+次の関数を、オーダーの小さい順に並べよ:
+<ol type=a>
+  <li> 3x-100
+  <li> 5
+  <li> 5<sup>x</sup>
+  <li> 0.4 x<sup>2</sup>
+</ol>
+</div>
+
+<h3>1.1. プログラムの計算量</h3>
+<p>
+Big O 記法は、あるアルゴリズム (プログラム) の計算量や
+メモリ使用量を表すのによく使われる。
+<blockquote><pre>
+def sum(n):
+    s = 0
+    for i in range(n):
+        s = s + (i+1)
+    return s
+</pre></blockquote>
+<p>
+この関数 <code>sum(n)</code> は、与えられた値 n に対して
+n回の同じ処理を繰り返すので「<i>O</i>(n) オーダーの計算量をもつ」ということができる。
+いっぽうでこの関数は変数を1つしか使っていないので、
+メモリ使用量はつねに一定 <i>O</i>(1) である。
+<blockquote><pre>
+def fill(n):
+    a = [0] * n
+    return a
+</pre></blockquote>
+この関数 <code>fill(n)</code> は、与えられた値 n に対して
+「<i>O</i>(n) の計算量」および
+「<i>O</i>(n) のメモリ使用量」が必要である。
+なぜなら、<code>[0] * n</code> の部分は内部的には
+<code>for</code>ループとして処理されているからである。
+
+<div class=ex>
+<div class=header>練習問題.</div>
+上の関数 <code>sum(n)</code> には実は<strong>隠れた</strong>計算量
+(= 一定時間だと思われているがそうではないもの) がある。
+それはどこか。
+</div>
+
+<h4>注意</h4>
+<p>
+「オーダー」という考え方は、(定数要素によって左右される) 実際の計算時間を
+考えなくてよいので便利であるが、計算量のオーダーが小さいからといって、
+<u>かならずしも実行時間が短いわけではない</u>ことに注意!
+たとえば以下の関数 <code>doit()</code> は実行時間がかかるが、
+その計算量は O(1) である。(ループの回数が入力値 n に比例しないため)
+<blockquote><pre>
+def doit(n):
+    s = n
+    for i in range(1000000000):
+        s = s + (i+1)
+    return s
+</pre></blockquote>
+
+<ul>
+<li> 注: <a href="https://ja.wikipedia.org/wiki/%E8%A8%88%E7%AE%97%E8%A4%87%E9%9B%91%E6%80%A7%E7%90%86%E8%AB%96">Wikipedia</a> では
+「計算量」「メモリ使用量」はそれぞれ
+「時間計算量」「空間計算量」と書かれているが、
+この授業ではよりカジュアルな言葉を用いることにする。
+</ul>
+
+
+<h2 id="bsearch">2. 二分探索の計算量</h2>
+<p>
+前回の二分探索の関数 <code>bsearch()</code> を
+もう一度考えてみる:
+<blockquote><pre>
+<span class=comment># bsearch.py</span>
+def bsearch(a, x, i0, i1):
+    i = (i0+i1) // 2
+    if a[i] == x:
+        print(f"found {i}")
+    elif a[i] &lt; x:
+        bsearch(a, x, i, i1)
+    else:  <span class=comment># x &lt; a[i]</span>
+        bsearch(a, x, i0, i)
+    return
+</pre></blockquote>
+<p>
+関数 <code>bsearch()</code> に渡される引数は、
+以下のようになっている:
+<ul>
+  <li> <code>a</code>: 探索する対象のリスト。
+  <li> <code>x</code>: 見つける値。
+  <li> <code>i0</code>: 探索する範囲の開始位置。
+  <li> <code>i1</code>: 探索する範囲の終了位置。
+</ul>
+<p>
+開始位置と終了位置は、以下の図のように
+リストの<strong>各要素と要素の間</strong>を指すことに決めておく。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="100">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <pattern id="hatch" width="5" height="5"
+	       patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+      </pattern>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="160" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="190" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="220" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="250" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="280" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="310" y="40" width="30" height="30" />
+      <rect x="340" y="40" width="30" height="30" />
+    </g>
+    <g stroke="none" fill="white">
+      <rect x="90"  y="35" width="20" height="40" />
+      <rect x="320" y="35" width="10" height="40" />
+      <rect x="255" y="45" width="20" height="20" />
+    </g>
+    <rect stroke="black" fill="none" stroke-width="2" stroke-dasharray="2,2"
+          x="10"  y="40" width="360" height="30" />
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="10" x2="10" y1="20" y2="35" />
+      <line x1="370" x2="370" y1="20" y2="35" />
+      <line x1="130" x2="130" y1="20" y2="35" />
+      <line x1="310" x2="310" y1="20" y2="35" />
+    </g>
+    <g text-anchor="middle">
+      <text x="190" y="85" dy="0.5em">リスト a</text>
+      <text x="10" y="10" dy="0.5em">0</text>
+      <text x="370" y="10" dy="0.5em">len(a)</text>
+      <text x="130" y="10" dy="0.5em">i0</text>
+      <text x="310" y="10" dy="0.5em">i1</text>
+      <text x="265" y="50" dy="0.5em" fill=green>x</text>
+    </g>
+  </svg>
+</div>
+<p>
+最初は <code>i0 = 0</code> および <code>i1 = len(a)</code> として呼び出す。
+つまり、<code>i0</code> から <code>i1</code> で囲まれた要素の間に
+値 <code>x</code> が存在すると仮定している。
+<p>
+次に <code>i0</code> と <code>i1</code> の中間位置 <code>i</code> を計算し、
+その要素 <code>a[i]</code> と <code>x</code> の値を比較する。
+同じであればここで探索は終了する。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="100">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+      <pattern id="hatch" width="5" height="5"
+	       patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+      </pattern>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="160" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="190" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="220" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="250" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="280" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="310" y="40" width="30" height="30" />
+      <rect x="340" y="40" width="30" height="30" />
+      <rect x="225" y="45" width="20" height="20" stroke="red" />
+    </g>
+    <g stroke="none" fill="white">
+      <rect x="90"  y="35" width="20" height="40" />
+      <rect x="320" y="35" width="10" height="40" />
+      <rect x="255" y="45" width="20" height="20" />
+    </g>
+    <rect stroke="black" fill="none" stroke-width="2" stroke-dasharray="2,2"
+          x="10"  y="40" width="360" height="30" />
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="130" x2="130" y1="20" y2="35" />
+      <line x1="310" x2="310" y1="20" y2="35" />
+      <line x1="220" x2="220" y1="20" y2="35" stroke="red" marker-end="url(#rarrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="130" y="10" dy="0.5em">i0</text>
+      <text x="310" y="10" dy="0.5em">i1</text>
+      <text x="265" y="50" dy="0.5em" fill="green">x</text>
+      <text x="220" y="10" dy="0.5em" fill="red">i</text>
+      <text x="235" y="80" dy="0.5em" fill="red">a[i]</text>
+    </g>
+  </svg>
+</div>
+<blockquote><pre>
+    i = (i0+i1) // 2
+    if a[i] == x:
+        print(f"found {i}")
+</pre></blockquote>
+<p>
+リスト <code>a</code> の各要素は昇順に並んでいるので、
+もしも <code>a[i] &lt; x</code> であれば、
+探索範囲は <code>i</code> 〜 <code>i1</code> までの間に狭めることができる。
+これが次の <code>i0</code> および <code>i1</code> となる。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="100">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+      <pattern id="hatch" width="5" height="5"
+	       patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+      </pattern>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" />
+      <rect x="160" y="40" width="30" height="30" />
+      <rect x="190" y="40" width="30" height="30" />
+      <rect x="220" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="250" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="280" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="310" y="40" width="30" height="30" />
+      <rect x="340" y="40" width="30" height="30" />
+    </g>
+    <g stroke="none" fill="white">
+      <rect x="90"  y="35" width="20" height="40" />
+      <rect x="320" y="35" width="10" height="40" />
+      <rect x="255" y="45" width="20" height="20" />
+    </g>
+    <rect stroke="black" fill="none" stroke-width="2" stroke-dasharray="2,2"
+          x="10"  y="40" width="360" height="30" />
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="310" x2="310" y1="20" y2="35" />
+      <line x1="220" x2="220" y1="20" y2="35" stroke="red" marker-end="url(#rarrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="310" y="10" dy="0.5em">i1</text>
+      <text x="265" y="50" dy="0.5em" fill="green">x</text>
+      <text x="220" y="10" dy="0.5em" fill="red">i</text>
+    </g>
+  </svg>
+</div>
+<blockquote><pre>
+    elif a[i] &lt; x:
+        bsearch(a, x, i, i1)
+</pre></blockquote>
+<p>
+一方、もし <code>x &lt; a[i]</code> であれば、
+探索範囲は <code>i0</code> 〜 <code>i</code> までの間に狭めることができる。
+これが次の <code>i0</code> および <code>i1</code> となる。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="100">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+      <pattern id="hatch" width="5" height="5"
+	       patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+      </pattern>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="160" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="190" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="220" y="40" width="30" height="30" />
+      <rect x="250" y="40" width="30" height="30" />
+      <rect x="280" y="40" width="30" height="30" />
+      <rect x="310" y="40" width="30" height="30" />
+      <rect x="340" y="40" width="30" height="30" />
+    </g>
+    <g stroke="none" fill="white">
+      <rect x="90"  y="35" width="20" height="40" />
+      <rect x="320" y="35" width="10" height="40" />
+    </g>
+    <rect stroke="black" fill="none" stroke-width="2" stroke-dasharray="2,2"
+          x="10"  y="40" width="360" height="30" />
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="130" x2="130" y1="20" y2="35" />
+      <line x1="220" x2="220" y1="20" y2="35" stroke="red" marker-end="url(#rarrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="130" y="10" dy="0.5em">i0</text>
+      <text x="220" y="10" dy="0.5em" fill="red">i</text>
+    </g>
+  </svg>
+</div>
+<blockquote><pre>
+    else:  <span class=comment># x &lt; a[i]</span>
+        bsearch(a, x, i0, i)
+</pre></blockquote>
+<p>
+プログラムから明らかなように、二分探索は再帰的な処理である。
+ある範囲における <code>bsearch()</code> は、
+そのどちらかの半分に対して再帰的に <code>bsearch()</code> を呼び出す。
+以後、これは範囲がただ 1つの要素に絞られるまで続く。
+
+<h3>2.1. 関数 <code>bsearch()</code> の計算量</h3>
+<p>
+この関数 <code>bsearch()</code> の計算量を考える。
+実際には、プログラムの動き方は入力によって変わるため、
+厳密な計算量をいう場合には「最悪計算量」「平均計算量」などという用語を使う。
+「<u>最悪計算量</u>」とは、文字どおりプログラムが
+「もっとも運の悪い動き方をした場合」にかかる計算量のことである。
+以後、この授業では計算量といえば<strong>最悪計算量</strong>のことをさす。
+ここでの最悪計算量は、<code>x</code> が存在し、
+それが最後に発見されると仮定した場合である。
+<p>
+関数 <code>bsearch()</code> が探索する範囲の大きさを
+<i>n</i> = |<i>i1</i> - <i>i0</i>| とすると、
+<i>n</i> に対する計算量 B<sub>n</sub> は以下のような漸化式で求められる:
+<ul>
+  <li> B<sub>n</sub> = 1 &nbsp; (n = 1 のとき)
+  <li> B<sub>n</sub> = 1 + B<sub>&#x230a;n/2&#x230b;</sub> &nbsp; (左半分が探索されるとき)
+  <li> B<sub>n</sub> = 1 + B<sub>&#x230a;n/2&#x230b;</sub> &nbsp; (右半分が探索されるとき)
+</ul>
+<p>
+&#x230a;n/2&#x230b; は床関数をあらわす。
+ここで f(p) = B<sub>2<sup>n</sup></sub> とおくと、
+f(p) = p であり、B<sub>n</sub> は事実上 2<sup>n</sup> の
+逆関数 log<sub>2</sub>(n) であるので、
+このプログラムの最悪計算量は O(log(n)) であるということができる。
+<ul>
+<li> 注: 厳密には O(log<sub>2</sub>(n)) だが、
+底の変換により log<sub>2</sub>(n) = C・log(n) であるので
+定数を無視するとやはり O(log(n)) である。
+</ul>
+
+<h3>2.2. さらに高速化する</h3>
+<p>
+実は <code>a[i] &lt; x</code> のとき、<code>a[i]</code> はすでに <code>x</code> と
+等しくないので、<code>a[i]</code> をふたたび探索する必要はない。
+つまり新たな範囲は <code>i+1</code> 〜 <code>i1</code> とすることができる。
+これにより、このプログラムはもう少し探索を速くできる。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="100">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+      <pattern id="hatch" width="5" height="5"
+	       patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+      </pattern>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" />
+      <rect x="160" y="40" width="30" height="30" />
+      <rect x="190" y="40" width="30" height="30" />
+      <rect x="220" y="40" width="30" height="30" />
+      <rect x="250" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="280" y="40" width="30" height="30" fill="url(#hatch)" />
+      <rect x="310" y="40" width="30" height="30" />
+      <rect x="340" y="40" width="30" height="30" />
+      <rect x="225" y="45" width="20" height="20" stroke="red" />
+    </g>
+    <g stroke="none" fill="white">
+      <rect x="90"  y="35" width="20" height="40" />
+      <rect x="320" y="35" width="10" height="40" />
+      <rect x="255" y="45" width="20" height="20" />
+    </g>
+    <rect stroke="black" fill="none" stroke-width="2" stroke-dasharray="2,2"
+          x="10"  y="40" width="360" height="30" />
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="310" x2="310" y1="20" y2="35" />
+      <line x1="250" x2="250" y1="20" y2="35" stroke="red" marker-end="url(#rarrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="310" y="10" dy="0.5em">i1</text>
+      <text x="265" y="50" dy="0.5em" fill="green">x</text>
+      <text x="250" y="10" dy="0.5em" fill="red">i+1</text>
+      <text x="235" y="80" dy="0.5em" fill="red">a[i]</text>
+    </g>
+  </svg>
+</div>
+<blockquote><pre>
+<span class=comment># bsearch.py (改良版)</span>
+def bsearch(a, x, i0, i1):
+    i = (i0+i1) // 2
+    if a[i] == x:
+        print(f"found {i}")
+    elif a[i] &lt; x:
+        bsearch(a, x, i<mark>+1</mark>, i1)
+    else:  <span class=comment># x &lt; a[i]</span>
+        bsearch(a, x, i0, i)
+    return
+</pre></blockquote>
+
+<h3>2.3. 要素が存在しない場合</h3>
+<p>
+さて、これまではリスト <code>a</code> の中に <code>x</code> が存在しない
+場合を考えてこなかった。実は関数 <code>bsearch()</code> (改良版) では
+探索範囲 i0 〜 i1 の間はだんだん縮まっていき、
+最後には <code>i0 == i1</code> となる。こうなったら、
+もはや間に要素はひとつもないので、<code>x</code> は存在しなかったということになる。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="100">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="55" width="30" height="30" />
+      <rect x="40"  y="55" width="30" height="30" />
+      <rect x="70"  y="55" width="30" height="30" />
+      <rect x="100" y="55" width="30" height="30" />
+      <rect x="130" y="55" width="30" height="30" />
+      <rect x="160" y="55" width="30" height="30" />
+      <rect x="190" y="55" width="30" height="30" />
+      <rect x="220" y="55" width="30" height="30" />
+      <rect x="250" y="55" width="30" height="30" />
+      <rect x="280" y="55" width="30" height="30" />
+      <rect x="310" y="55" width="30" height="30" />
+      <rect x="340" y="55" width="30" height="30" />
+    </g>
+    <g stroke="none" fill="white">
+      <rect x="90"  y="50" width="20" height="40" />
+      <rect x="320" y="50" width="10" height="40" />
+    </g>
+    <rect stroke="black" fill="none" stroke-width="2" stroke-dasharray="2,2"
+          x="10"  y="55" width="360" height="30" />
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="250" x2="250" y1="35" y2="50" />
+    </g>
+    <g text-anchor="middle">
+      <text x="250" y="10" dy="0.5em">i0</text>
+      <text x="250" y="25" dy="0.5em">i1</text>
+    </g>
+  </svg>
+</div>
+
+<div class=ex>
+<div class=header>演習 3-1.</div>
+<ol type=i>
+  <li> 上の関数 <code>bsearch()</code> (改良版) に
+    <code>if</code> 文をもうひとつ追加し、要素が存在しなかった場合に
+    "<code>not found</code>" と表示して終了するようにせよ。
+</ol>
+</div>
+
+<h3>2.4. このプログラムは必ず停止するのか?</h3>
+<p>
+コンピュータサイエンスの中でもっとも重要な問題のひとつが
+「このプログラムはいつか必ず停止するのか?」という問題である
+(停止性問題)。幸運にも、
+関数 <code>bsearch()</code> の場合は、
+必ず停止することが証明できる。
+<blockquote><pre>
+def bsearch(a, x, <mark>i0</mark>, <mark>i1</mark>):
+    i = (i0+i1) // 2
+    ...
+    elif a[i] &lt; x:
+        bsearch(a, x, <mark>i+1</mark>, <mark>i1</mark>)
+    else:  <span class=comment># x &lt; a[i]</span>
+        bsearch(a, x, <mark>i0</mark>, <mark>i</mark>)
+</pre></blockquote>
+<p>
+具体的には、上の各ケースにおいて、探索範囲の大きさ (<code>i1</code> - <code>i0</code>) が
+つねに減少する (単調減少) であることを証明すればよい。
+Python における <code>(i0+i1) // 2</code> は床関数
+&#x230a;(<code>i0</code>+<code>i1</code>)/2&#x230b; であるので、以下が成り立つ:
+<div class=def>
+<code>i0</code> &leq; <code>(i0+i1) // 2</code> = <code>i</code> &lt; <code>i1</code>
+</div>
+<p>
+したがって、以下のことがいえる:
+<ul>
+<li> <code>a[i] &lt; x</code> の場合 …
+  <code>i1</code> - (<code>i+1</code>) &lt; (<code>i1</code> - <code>i0</code>) であるので、
+  範囲は単調減少する。
+<li> <code>x &lt; a[i]</code> の場合 …
+  <code>i</code> - <code>i0</code> &lt; (<code>i1</code> - <code>i0</code>) であるので、
+  範囲は単調減少する。
+</ul>
+<p>
+これを繰り返していくと、最終的にこの関数は以下のどちらかの状態に到達する。
+<ol type=a>
+  <li> <code>i0 == i1</code> となり、<code>x</code> が存在しないことがわかる。
+  <li> <code>a[i] == x</code> となり、<code>x</code> が発見される。
+</ol>
+
+<div class=sample>
+<strong>結論:</strong>
+関数 <code>bsearch()</code> は、必ず停止する。
+</div>
+
+<h4>停止するかどうか不明なプログラム</h4>
+<p>
+プログラムが停止するかどうかを判断するのは、実は非常に難しい。
+たとえば以下の関数 <code>unknown()</code> は
+何の変哲もない Python の関数である:
+<blockquote><pre>
+def unknown(n):
+    while 1 &lt; n:
+        print(n)
+        if (n % 2) == 0:  <span class=comment># n が偶数の場合</span>
+           n = n // 2
+        else:             <span class=comment># n が奇数の場合</span>
+           n = n*3 + 1
+    return
+</pre></blockquote>
+<p>
+<code>unknown(10)</code> や <code>unknown(27)</code> を実行してみるとよい。
+この関数が、すべての正の整数 <i>n</i> に対して停止するかどうかは
+数学の未解決問題とされている
+(<a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%A9%E3%83%83%E3%83%84%E3%81%AE%E5%95%8F%E9%A1%8C">コラッツの問題</a>)。
+一般的には、プログラムの停止性問題は難しいのである。
+
+
+<h2 id="arrayslice">3. リストのスライスについて</h2>
+<p>
+たとえば、以下のようなリストがあるとする:
+<blockquote><pre>
+a = [5,9,4,0,7,3,1,8]
+</pre></blockquote>
+<p>
+この場合、<code>a</code>の部分列は、以下のようにして取り出せる
+(このような操作を、リストの<u>スライス</u>という) :
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="350" height="230">
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+    <rect x="130" y="10" width="40" height="40" />
+    <rect x="170" y="10" width="40" height="40" />
+    <rect x="210" y="10" width="40" height="40" />
+    <rect x="250" y="10" width="40" height="40" />
+    <rect x="290" y="10" width="40" height="40" />
+  </g>
+  <g fill="#88ff88" stroke="black">
+    <rect x="10" y="80" width="40" height="25" />
+    <rect x="290" y="80" width="40" height="25" />
+    <rect x="90" y="110" width="80" height="25" />
+    <rect x="130" y="140" width="120" height="25" />
+    <rect x="10" y="170" width="80" height="25" />
+    <rect x="210" y="200" width="120" height="25" />
+  </g>
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">5</text>
+    <text x="70" y="35">9</text>
+    <text x="110" y="35">4</text>
+    <text x="150" y="35">0</text>
+    <text x="190" y="35">7</text>
+    <text x="230" y="35">3</text>
+    <text x="270" y="35">1</text>
+    <text x="310" y="35">8</text>
+    </g>
+    <text x="10" y="70">0</text>
+    <text x="50" y="70">1</text>
+    <text x="90" y="70">2</text>
+    <text x="130" y="70">3</text>
+    <text x="170" y="70">4</text>
+    <text x="210" y="70">5</text>
+    <text x="250" y="70">6</text>
+    <text x="290" y="70">7</text>
+    <text x="330" y="70">8</text>
+    <g style="font-family: monospace;">
+      <text x="30" y="100">a[0]</text>
+      <text x="310" y="100">a[-1]</text>
+      <text x="130" y="130">a[2:4]</text>
+      <text x="190" y="160">a[3:-2]</text>
+      <text x="50" y="190">a[:2]</text>
+      <text x="270" y="220">a[5:]</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<table border>
+<tr><td><code>s[<i>i</i>]</code></td>
+<td><i>i</i> 番目の要素 (<code>i &gt;=0</code> の場合)
+<p>末尾から <i>i</i> 番目の要素 (<code>i &lt; 0</code> の場合)
+</td></tr>
+<tr><td><code>s[<i>i</i>:<i>j</i>]</code></td>
+<td>位置 <i>i</i> から位置 <i>j</i> の間にある要素
+ (このとき長さは <code>j - i</code> 要素になる)
+<p>(<i>i</i> が負の場合は末尾からの位置)
+</td></tr>
+<tr><td><code>s[<i>i</i>:]</code></td>
+<td>位置 <i>i</i> 以降の要素
+<p>(<i>i</i> が負の場合は末尾からの位置)
+</td></tr>
+<tr><td><code>s[:<i>i</i>]</code></td>
+<td>先頭から位置 <i>i</i> までの要素
+<p>(<i>i</i> が負の場合は末尾からの位置)
+</td></tr>
+</table>
+
+<p>
+なお、リストをスライスした場合、もとのリストは変化しない。
+リストのスライス内の要素はもとのリストと共有されておらず、
+<u>つねに新しいリスト</u>である。
+
+<div class=ex>
+<div class=header>練習問題.</div>
+以下のリストがあるとする:
+<pre>
+<span class=comment>#   0    1    2    3    4    5    6    7    8</span>
+s = ["H", "E", "A", "D", "A", "C", "H", "E"]
+</pre>
+<ol type=i>
+  <li> <code>s[2:6]</code> の要素を答えよ。
+  <li> <code>s[4:]</code> の要素を答えよ。
+  <li> <code>s[:2]</code> の要素を答えよ。
+  <li> <code>s[-2:]</code> の要素を答えよ。
+</ol>
+</div>
+
+<p>
+リストのスライスは、本日の課題 (マージソート) で利用すると便利である。
+
+
+<h2 id="sorting">4. ソート (並べ替え) アルゴリズムとは</h2>
+<p>
+二分探索では、リストのすべての要素はあらかじめ昇順に並んでいる必要があった。
+<u>ソーティング</u> (sorting) あるいは<u>ソート</u> (sort, 並べ替え) とは、
+文字通りランダムに並んだ要素を昇順 (あるいは降順) に並べ替える
+処理である。ソーティングは二分探索だけでなく多くのデータの集計処理で使われる、
+コンピュータの基本的な処理のひとつである。
+<ul>
+<li> ソーティング使用前: <code>[5, 9, 4, 0, 7, 3, 1, 8]</code>
+<li> ソーティング使用後: <code>[0, 1, 3, 4, 5, 7, 8, 9]</code>
+</ul>
+<p>
+結論からいうと、<strong>ソーティング処理はけっこう複雑である</strong>。
+要素が 10個程度のものであれば目視で容易に並べ替えが可能だが、
+数万〜数億要素のデータを効率よくソートするために、
+これまでいくつもの方式が提案されてきており、それぞれに一長一短がある。
+本授業では中でもわかりやすい 2つの方法 (挿入法とマージソート) を紹介する。
+
+<h3>4.1. 挿入法 (insertion sort)</h3>
+<p>
+挿入法のアイデアは単純で、これは人間が数字を並べ替えるときの方法に近い。
+まずリストの最初から、隣り合った要素が昇順に並んでいるかどうかをチェックしていく。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="80">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" />
+      <rect x="160" y="40" width="30" height="30" />
+      <rect x="190" y="40" width="30" height="30" />
+      <rect x="220" y="40" width="30" height="30" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="25" x2="25" y1="20" y2="35" />
+      <line x1="55" x2="55" y1="20" y2="35" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="2">
+      <rect x="15" y="45" width="20" height="20" />
+      <rect x="45" y="45" width="20" height="20" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25"  y="55" dy="0.5em">5</text>
+      <text x="55"  y="55" dy="0.5em">9</text>
+      <text x="85"  y="55" dy="0.5em">4</text>
+      <text x="115" y="55" dy="0.5em">0</text>
+      <text x="145" y="55" dy="0.5em">7</text>
+      <text x="175" y="55" dy="0.5em">3</text>
+      <text x="205" y="55" dy="0.5em">1</text>
+      <text x="235" y="55" dy="0.5em">8</text>
+      <text x="25"  y="10" dy="0.5em">i</text>
+      <text x="55"  y="10" dy="0.5em">i+1</text>
+    </g>
+  </svg>
+</div>
+
+<p>
+昇順になっていない (<code>a[i+1] &lt; a[i]</code> であるような)
+箇所を見つけたら、その数字を適切な場所に挿入する。
+すでに <code>a[i]</code> までの数列はソートされていると仮定しているので、
+この数字は左側のどこかの位置に入るはずである。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="100">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" />
+      <rect x="160" y="40" width="30" height="30" />
+      <rect x="190" y="40" width="30" height="30" />
+      <rect x="220" y="40" width="30" height="30" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="55" x2="55" y1="20" y2="35" />
+      <line x1="85" x2="85" y1="20" y2="35" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="2">
+      <rect x="45" y="45" width="20" height="20" />
+      <rect x="75" y="45" width="20" height="20" />
+      <path stroke-width="3" marker-end="url(#rarrow)"
+            d="M85,65 l0,20 l-80,0 l0,-20" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25"  y="55" dy="0.5em">5</text>
+      <text x="55"  y="55" dy="0.5em">9</text>
+      <text x="85"  y="55" dy="0.5em">4</text>
+      <text x="115" y="55" dy="0.5em">0</text>
+      <text x="145" y="55" dy="0.5em">7</text>
+      <text x="175" y="55" dy="0.5em">3</text>
+      <text x="205" y="55" dy="0.5em">1</text>
+      <text x="235" y="55" dy="0.5em">8</text>
+      <text x="55"  y="10" dy="0.5em">i</text>
+      <text x="85"  y="10" dy="0.5em">i+1</text>
+    </g>
+  </svg>
+</div>
+
+<p>
+挿入後、a[0] 〜 a[i] までの数列が昇順に並んでおり、
+<code>a[i+1]</code> より右側の要素はまだ変化していない。
+したがって <code>i</code> は次の値から続行する。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="80">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="40" width="30" height="30" />
+      <rect x="40"  y="40" width="30" height="30" />
+      <rect x="70"  y="40" width="30" height="30" />
+      <rect x="100" y="40" width="30" height="30" />
+      <rect x="130" y="40" width="30" height="30" />
+      <rect x="160" y="40" width="30" height="30" />
+      <rect x="190" y="40" width="30" height="30" />
+      <rect x="220" y="40" width="30" height="30" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <line x1="85" x2="85" y1="20" y2="35" />
+      <line x1="115" x2="115" y1="20" y2="35" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="2">
+      <rect x="75" y="45" width="20" height="20" />
+      <rect x="105" y="45" width="20" height="20" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25"  y="55" dy="0.5em">5</text>
+      <text x="55"  y="55" dy="0.5em">9</text>
+      <text x="85"  y="55" dy="0.5em">4</text>
+      <text x="115" y="55" dy="0.5em">0</text>
+      <text x="145" y="55" dy="0.5em">7</text>
+      <text x="175" y="55" dy="0.5em">3</text>
+      <text x="205" y="55" dy="0.5em">1</text>
+      <text x="235" y="55" dy="0.5em">8</text>
+      <text x="85"  y="10" dy="0.5em">i</text>
+      <text x="115"  y="10" dy="0.5em">i+1</text>
+    </g>
+  </svg>
+</div>
+
+<p>
+<code>i</code> がリストの終わりに到達するまでこれを続ければ、
+すべての要素が正しく並んだことになる。
+
+<p>
+以上の方法をプログラムにすると、以下のようになる
+(<kbd>...</kbd> の部分をクリックすると表示される).
+
+<blockquote><pre>
+<span class=comment># insort.py</span>
+<span class=comment># リスト a の要素を破壊的にソートする。</span>
+def insort(a):
+    for i in range(len(a)-1):
+        <span class=comment># 隣り合った要素 a[i] と a[i+1] を比べる。</span>
+        if a[i+1] &lt; a[i]:
+            <span class=comment># a[i+1] のほうが a[i] よりも小さい。</span>
+            x = a[i+1]
+            <span class=comment># したがって、x の値を、a[0]〜a[i-1] までのどこかに挿入する。</span>
+<div onclick="toggle(this);" class=toggle><div>            ...</div><div hidden>            <span class=comment># 適切な位置 p を発見する。</span>
+            <span class=comment># これは現在の i より左にある要素を見ていく。</span>
+            p = i
+            while (0 &lt; p) and (x &lt;= a[p-1]):
+                p = p - 1
+            <span class=comment># この時点で a[p] = x となるべきであるから</span>
+            <span class=comment># a[p]〜a[i] の要素をひとつずつ右にずらす。</span>
+            q = i
+            while p &lt;= q:
+                a[q+1] = a[q]
+                q = q - 1
+            <span class=comment># 最後に a[p] を x とする。</span>
+            a[p] = x
+</div></div>    return
+
+a = [5,9,4,0,7,3,1,8]
+insort(a)
+print(a)
+</pre></blockquote>
+
+<h4>挿入法の計算量</h4>
+<p>
+挿入法の最悪計算量は、たとえば <code>[5,4,3,2,1,0]</code> などのリストを
+ソートしようとしたときを想定してみるとよい。これは以下のように考える:
+<ol type=a>
+  <li> まず、n個のリストに 1個の要素を挿入することを考える。これは
+    <ol>
+      <li> 挿入すべき適切な場所を左から探していく … 最高 (n-1) 回のループ。
+      <li> 挿入したあとに後の要素をずらす … 最高 (n-1) 回のループ。
+    </ol>
+    という2つのステップなので、O(n) である。
+  <li> 最悪の場合、 a. の O(n) の過程がさらに n 回繰り返される。
+</ol>
+結局、挿入法で n要素のリストをソートするには
+<i>O</i>(n<sup>2</sup>) の計算量が必要である。
+(実際には &Sigma;n = n(n-1)/2 かもしれないが、係数を無視すると n<sup>2</sup> となる)
+
+<div class=ex>
+<div class=header>演習 3-2.</div>
+<ol type=a>
+<li> 上のプログラムを実行し、結果を確認せよ。
+  <code>print()</code> 関数を随所に入れ、何が起きているか観察せよ。
+<li> ソートする数をコマンドの引数として取れるように、プログラムを改造せよ。
+つまり、以下のように実行できるようにしたい。
+<pre>
+$ <strong>python insort.py 5 9 4 0 7</strong>
+[0, 4, 5, 7, 9]
+
+$ <strong>python insort.py 5 9 4 0 7 3 1 8 6 2</strong>
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+</pre>
+<p>
+このためには、プログラムの最後を以下のように変更すればよい:
+<pre>
+<span class=comment># コマンド引数をすべてリストにする。</span>
+import sys
+a = []
+for i in range(len(sys.argv)-1):
+    v = int(sys.argv[i+1])
+    a = a + [v]
+<span class=comment># ソートを実行し、結果を表示する。</span>
+insort(a)
+print(a)
+</pre>
+</div>
+
+<h3>4.2. マージソート (merge sort)</h3>
+<p>
+一方、マージソートはまったく異なる方法で並べ替えをおこなう。
+まず、すでにソートされている (昇順に並んでいる) 2つのリスト
+<code>p</code> と <code>q</code> を一本の昇順な列に統合する関数
+<code>merge(p, q)</code> を考える。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="150">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2" transform="translate(10,0)">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="2" transform="translate(10,40)">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="2" transform="translate(10,100)">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+      <rect x="130" y="10" width="30" height="30" />
+      <rect x="160" y="10" width="30" height="30" />
+      <rect x="190" y="10" width="30" height="30" />
+      <rect x="220" y="10" width="30" height="30" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M20,25 q-15,10,-15,50 q0,40,10,50" />
+      <path d="M20,65 q-10,10,-10,30 q0,10,5,20" />
+    </g>
+    <text x="150"  y="25" dy="0.5em">p</text>
+    <text x="150"  y="65" dy="0.5em">q</text>
+    <g text-anchor="middle">
+      <text x="35"  y="25" dy="0.5em">0</text>
+      <text x="65"  y="25" dy="0.5em">4</text>
+      <text x="95"  y="25" dy="0.5em">5</text>
+      <text x="125" y="25" dy="0.5em">9</text>
+
+      <text x="35"  y="65" dy="0.5em">1</text>
+      <text x="65"  y="65" dy="0.5em">3</text>
+      <text x="95"  y="65" dy="0.5em">7</text>
+      <text x="125" y="65" dy="0.5em">8</text>
+
+      <text x="35"  y="125" dy="0.5em">0</text>
+      <text x="65"  y="125" dy="0.5em">1</text>
+      <text x="95"  y="125" dy="0.5em">3</text>
+      <text x="125" y="125" dy="0.5em">4</text>
+      <text x="155" y="125" dy="0.5em">5</text>
+      <text x="185" y="125" dy="0.5em">7</text>
+      <text x="215" y="125" dy="0.5em">8</text>
+      <text x="245" y="125" dy="0.5em">9</text>
+    </g>
+  </svg>
+</div>
+
+<p>
+このような関数は以下のようにして作ることができる。
+まず目印となる変数 <code>i</code> と <code>j</code> を用意し、
+これを右へ右へと動かしていく。
+<code>p[i]</code> の値と <code>q[j]</code> の値を比較し、
+小さいほうを結果となるリストに足していけばよい。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="120">
+    <defs>
+      <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+      </marker>
+      <marker id="rarrow" viewBox="-5 -5 10 10" orient="auto">
+        <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+      </marker>
+    </defs>
+    <g stroke="black" fill="none" stroke-width="2" transform="translate(10,15)">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="2" transform="translate(10,55)">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+    </g>
+    <text x="150"  y="40" dy="0.5em">p</text>
+    <text x="150"  y="80" dy="0.5em">q</text>
+    <g stroke="red" fill="none" stroke-width="2">
+      <rect x="55" y="30" width="20" height="20" />
+      <rect x="25" y="70" width="20" height="20" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="3" marker-end="url(#rarrow)">
+      <line y1="15" y2="15" x1="75" x2="85" />
+      <line y1="110" y2="110" x1="45" x2="55" />
+    </g>
+    <g text-anchor="middle">
+      <text x="35"  y="40" dy="0.5em">0</text>
+      <text x="65"  y="40" dy="0.5em">4</text>
+      <text x="95"  y="40" dy="0.5em">5</text>
+      <text x="125" y="40" dy="0.5em">9</text>
+
+      <text x="35"  y="80" dy="0.5em">1</text>
+      <text x="65"  y="80" dy="0.5em">3</text>
+      <text x="95"  y="80" dy="0.5em">7</text>
+      <text x="125" y="80" dy="0.5em">8</text>
+
+      <text x="65"  y="10" dy="0.5em" fill="red">i</text>
+      <text x="35"  y="105" dy="0.5em" fill="red">j</text>
+    </g>
+  </svg>
+</div>
+
+<blockquote><pre>
+def merge(p, q):
+    i = 0
+    j = 0
+    r = []
+    while i &lt; len(p) and j &lt; len(q):
+        <span class=comment># p[i] と q[j] を比較し、</span>
+        <span class=comment># 小さいほうを r に加える。</span>
+        <span class=comment># その後、i または j をひとつ進める。</span>
+        ...
+    return r
+</pre></blockquote>
+
+<p>
+リスト <code>p</code> と <code>q</code> がともに n要素あったとすると、
+関数 <code>merge()</code> 内のループ繰り返しはたかだか 2n回である。
+つまり計算量は <i>O</i>(n) である。
+<p>
+<code>merge()</code> ができたら、それを使ってマージソートをおこなう。
+これは再帰的なプログラムとして定義される。
+
+<ol>
+<li> まず、最初の 8個の要素を二等分し、それぞれに対してマージソートを開始する。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="50">
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+
+      <rect x="140" y="10" width="30" height="30" />
+      <rect x="170" y="10" width="30" height="30" />
+      <rect x="200" y="10" width="30" height="30" />
+      <rect x="230" y="10" width="30" height="30" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25"  y="25" dy="0.5em">5</text>
+      <text x="55"  y="25" dy="0.5em">9</text>
+      <text x="85"  y="25" dy="0.5em">4</text>
+      <text x="115" y="25" dy="0.5em">0</text>
+
+      <text x="155" y="25" dy="0.5em">7</text>
+      <text x="185" y="25" dy="0.5em">3</text>
+      <text x="215" y="25" dy="0.5em">1</text>
+      <text x="245" y="25" dy="0.5em">8</text>
+    </g>
+  </svg>
+</div>
+<li> 各4個のリストはさらに二等分され、それぞれに対してマージソートが開始される。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="50">
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+
+      <rect x="80"  y="10" width="30" height="30" />
+      <rect x="110" y="10" width="30" height="30" />
+
+      <rect x="160" y="10" width="30" height="30" />
+      <rect x="190" y="10" width="30" height="30" />
+
+      <rect x="230" y="10" width="30" height="30" />
+      <rect x="260" y="10" width="30" height="30" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25"  y="25" dy="0.5em">5</text>
+      <text x="55"  y="25" dy="0.5em">9</text>
+
+      <text x="95"  y="25" dy="0.5em">4</text>
+      <text x="125" y="25" dy="0.5em">0</text>
+
+      <text x="175" y="25" dy="0.5em">7</text>
+      <text x="205" y="25" dy="0.5em">3</text>
+
+      <text x="245" y="25" dy="0.5em">1</text>
+      <text x="275" y="25" dy="0.5em">8</text>
+    </g>
+  </svg>
+</div>
+<li> さらに二等分する。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="50">
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="50"  y="10" width="30" height="30" />
+
+      <rect x="90"  y="10" width="30" height="30" />
+      <rect x="130" y="10" width="30" height="30" />
+
+      <rect x="180" y="10" width="30" height="30" />
+      <rect x="220" y="10" width="30" height="30" />
+
+      <rect x="260" y="10" width="30" height="30" />
+      <rect x="300" y="10" width="30" height="30" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25"  y="25" dy="0.5em">5</text>
+      <text x="65"  y="25" dy="0.5em">9</text>
+
+      <text x="105"  y="25" dy="0.5em">4</text>
+      <text x="145" y="25" dy="0.5em">0</text>
+
+      <text x="195" y="25" dy="0.5em">7</text>
+      <text x="235" y="25" dy="0.5em">3</text>
+
+      <text x="275" y="25" dy="0.5em">1</text>
+      <text x="315" y="25" dy="0.5em">8</text>
+    </g>
+  </svg>
+</div>
+<li> ここで、要素が1つだけのリストは<u>すでにソートされている</u>。
+あとはこれを <code>merge()</code> して一本に統一すればよい。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="50">
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+
+      <rect x="80"  y="10" width="30" height="30" />
+      <rect x="110" y="10" width="30" height="30" />
+
+      <rect x="160" y="10" width="30" height="30" />
+      <rect x="190" y="10" width="30" height="30" />
+
+      <rect x="230" y="10" width="30" height="30" />
+      <rect x="260" y="10" width="30" height="30" />
+    </g>
+    <g text-anchor="middle" fill="red">
+      <text x="25"  y="25" dy="0.5em">5</text>
+      <text x="55"  y="25" dy="0.5em">9</text>
+
+      <text x="95"  y="25" dy="0.5em">0</text>
+      <text x="125" y="25" dy="0.5em">4</text>
+
+      <text x="175" y="25" dy="0.5em">3</text>
+      <text x="205" y="25" dy="0.5em">7</text>
+
+      <text x="245" y="25" dy="0.5em">1</text>
+      <text x="275" y="25" dy="0.5em">8</text>
+    </g>
+  </svg>
+</div>
+<li> 各2要素のソートされたリストはさらに <code>merge()</code> され、
+  4要素ずつのソートされたリストとなる。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="50">
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+
+      <rect x="140" y="10" width="30" height="30" />
+      <rect x="170" y="10" width="30" height="30" />
+      <rect x="200" y="10" width="30" height="30" />
+      <rect x="230" y="10" width="30" height="30" />
+    </g>
+    <g text-anchor="middle" fill="red">
+      <text x="25"  y="25" dy="0.5em">0</text>
+      <text x="55"  y="25" dy="0.5em">4</text>
+      <text x="85"  y="25" dy="0.5em">5</text>
+      <text x="115" y="25" dy="0.5em">9</text>
+
+      <text x="155" y="25" dy="0.5em">1</text>
+      <text x="185" y="25" dy="0.5em">3</text>
+      <text x="215" y="25" dy="0.5em">7</text>
+      <text x="245" y="25" dy="0.5em">8</text>
+    </g>
+  </svg>
+</div>
+<li> 最終的に 4要素のリストが <code>merge()</code> され、マージソートが完成する。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="50">
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10"  y="10" width="30" height="30" />
+      <rect x="40"  y="10" width="30" height="30" />
+      <rect x="70"  y="10" width="30" height="30" />
+      <rect x="100" y="10" width="30" height="30" />
+      <rect x="130" y="10" width="30" height="30" />
+      <rect x="160" y="10" width="30" height="30" />
+      <rect x="190" y="10" width="30" height="30" />
+      <rect x="220" y="10" width="30" height="30" />
+    </g>
+    <g text-anchor="middle" fill="red">
+      <text x="25"  y="25" dy="0.5em">0</text>
+      <text x="55"  y="25" dy="0.5em">1</text>
+      <text x="85"  y="25" dy="0.5em">3</text>
+      <text x="115" y="25" dy="0.5em">4</text>
+      <text x="145" y="25" dy="0.5em">5</text>
+      <text x="175" y="25" dy="0.5em">7</text>
+      <text x="205" y="25" dy="0.5em">8</text>
+      <text x="235" y="25" dy="0.5em">9</text>
+    </g>
+  </svg>
+</div>
+</ol>
+
+<p>
+以上の処理を実際の関数 <code>mergesort()</code> として実装すると、
+おおむね以下のようになる。
+<code>注意:</code>
+挿入法の関数 <code>insort()</code> は与えられたリストを破壊的に
+変更してソートしたのに対して、<code>mergesort()</code> は
+新しいリストを作成して返す、いわゆる「普通の関数」になっている。
+
+<blockquote><pre>
+def mergesort(a):
+    n = len(a)
+    if n == 1:
+        <span class=comment># 長さ 1 のリストはすでにソートされている。</span>
+        return a
+    else:
+        <span class=comment># 最初の半分を切り取ってソートする。</span>
+        p = mergesort(a[:n//2])
+        <span class=comment># 残りの半分を切り取ってソートする。</span>
+        q = mergesort(a[n//2:])
+        <span class=comment># 結果を統合し、一本のソートされたリストを返す。</span>
+        return merge(p, q)
+</pre></blockquote>
+
+<h4>マージソートの計算量</h4>
+<p>
+関数 <code>mergesort()</code> に与えられる要素の数は、
+呼び出しごとに半分ずつになっていくため、もともとのリストの各要素に対して
+<code>mergesort()</code> は約 <i>O</i>(log(n)) 回呼び出されることになる。
+この中で <i>O</i>(n) の計算量をもつ関数 <code>merge()</code> を実行するので、
+したがって、全体の計算量をあわせると <i>O</i>(n・log(n)) ということになる。
+これは、挿入法の計算量よりもオーダーが少なく、n の値が大きいときに
+より効率的であるといえる。
+<p>
+挿入法と違い、マージソートはどのようなリストに対しても同じ回数で処理するので
+必ず <i>O</i>(n・log(n)) の時間がかかり、最悪計算量と平均計算量の差が存在しない。
+いっぽう関数 <code>merge()</code> は毎回、新しいリストを作成しなければならないため、
+これは n要素の入力に対して <i>O</i>(n) 要素分の追加メモリ容量を必要とする。
+挿入法では、追加のメモリ容量は必要とされない。
+<p>
+まとめると、どちらの方式も一長一短があることがわかる:
+<ul>
+  <li> 挿入法 … 最悪計算量 <i>O</i>(n<sup>2</sup>)、追加メモリ必要なし。
+  <li> マージソート … 最悪計算量 <i>O</i>(n・log(n))、追加メモリが <i>O</i>(n) だけ必要。
+</ul>
+
+
+<h2 id="assignments">本日の課題</h2>
+
+<div class=exa>
+<div class=header>小課題3. 挿入法の改良</div>
+<ul>
+  <li> 提出期限: 2019年<u>12月23日</u> (1週間後)
+  <li> 提出するファイル: 改良した <code>insort.py</code>
+  <li> 提出したファイルは後でハッシュを計算するのに使うので、残しておくこと。
+</ul>
+<p>
+以下は演習 3-2. で説明した挿入法のソートプログラムの再掲である:
+<blockquote><pre>
+<span class=comment># insort.py</span>
+
+def insort(a):
+    for i in range(len(a)-1):
+        <span class=comment># 隣り合った要素 a[i] と a[i+1] を比べる。</span>
+        if a[i+1] &lt; a[i]:
+            <span class=comment># a[i+1] のほうが a[i] よりも小さい。</span>
+            x = a[i+1]
+            <span class=comment># したがって、x の値を、a[0]〜a[i-1] までのどこかに挿入する。</span>
+            <span class=comment># 適切な位置 p を発見する。</span>
+            <span class=comment># これは現在の i より左にある要素を見ていく。</span>
+            p = i
+            <mark>while</mark> (0 &lt; p) and (x &lt;= a[p-1]):
+                p = p - 1
+            <span class=comment># この時点で a[p] = x となるべきであるから</span>
+            <span class=comment># a[p]〜a[i] の要素をひとつずつ右にずらす。</span>
+            q = i
+            <mark>while</mark> p &lt;= q:
+                a[q+1] = a[q]
+                q = q - 1
+            <span class=comment># 最後に a[p] を x とする。</span>
+            a[p] = x
+    return
+
+<span class=comment># コマンド引数をすべて配列にする。</span>
+import sys
+a = []
+for i in range(len(sys.argv)-1):
+    v = int(sys.argv[i+1])
+    a = a + [v]
+<span class=comment># ソートを実行し、結果を表示する。</span>
+insort(a)
+print(a)
+</pre></blockquote>
+<p>
+このプログラムには実は無駄な部分がある。途中に 2つの <code><mark>while</mark></code>文があるが、
+本来、「適切な挿入位置 p の発見」と「要素をずらす処理」は、
+ひとつの <code>while</code>文中で同時におこなうことができるはずである。
+このプログラムを <code>while</code>文をひとつだけ使ったバージョンに
+改良して提出せよ。(外側の <code>for</code>文はそのままでよい。)
+ソートする数をコマンド引数から指定できるようにすること。
+</div>
+
+<div class=exa>
+<div class=header>中課題1. マージソートの実装</div>
+<ul>
+  <li> 提出期限: 2019年<u>12月30日</u> (2週間後)
+  <li> 提出するファイル: 完成した <code>mergesort.py</code>
+  <li> 提出したファイルは後でハッシュを計算するのに使うので、残しておくこと。
+</ul>
+<p>
+授業中に説明したマージソートをおこなうプログラムを完成させ、提出せよ。
+<code>insort.py</code> と同じく、このプログラムもリストの内容を
+コマンド引数で指定できるようにすること。
+さらに、各関数の適切な場所にコメントを入れ、
+以下のことを説明すること。
+<ul>
+  <li> 各関数がどのように動くか。
+  <li> マージソート全体の計算量が <i>O</i>(n・log(n)) になっている理由。
+</ul>
+
+<div class=notice>
+<strong>注意:</strong>
+関数 <code>merge(p, q)</code> を書くとき、
+リスト p と q が同じ長さとは限らないので注意すること
+(例: <code>[0,2,4]</code> と <code>[1]</code>) など。
+</div>
+
+<p>
+提出するプログラムは以下のような構成になっていることが望ましい:
+<blockquote><pre>
+<span class=comment># mergesort.py</span>
+import sys
+
+<span class=comment># merge(p, q): あらかじめソートされたリスト p と q をまとめる。</span>
+def merge(p, q):
+    ...
+
+<span class=comment># mergesort(a): リスト a をマージソートしたものを返す。</span>
+def mergesort(a):
+    ...
+
+<span class=comment># コマンド引数をすべてリストにする。</span>
+a = []
+for i in range(len(sys.argv)-1):
+    v = int(sys.argv[i+1])
+    a = a + [v]
+<span class=comment># ソートを実行し、結果を表示する。</span>
+print(mergesort(a))
+</pre></blockquote>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

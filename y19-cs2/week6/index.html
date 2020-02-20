@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 コンピュータサイエンス第二 第6週 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+dd { margin-bottom: 1em; }
+.sample { margin-left: 2em; }
+.small { font-size: 80%; }
+.box { border: 1px solid black; padding: 0.5em; }
+.def { background: #ccffcc; border: solid 1px black; padding: 1em; margin: 0.5em; text-align: center; font-size: 120%; }
+.mark { background: #ffffcc; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>コンピュータサイエンス第二 第6週</h1>
+<div class=nav>2020年1月20日 (月)</div>
+
+<ol start="0">
+<li> <a href="#programming">プログラミングが苦手な人へ</a>
+<li> <a href="#hashtable">ハッシュテーブルとは</a>
+<li> <a href="#dictionary">Python のハッシュテーブル (辞書)</a>
+<li> <a href="#voronoi">ヴォロノイ図とは何か?</a>
+<li> <a href="#assignments">本日の課題</a>
+</ol>
+<p>
+<strong>注意:</strong>
+本日は、内容が多いです。
+
+<h2>雑談</h2>
+<p>
+知っておくとネタにできる心理学の有名な実験:
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=TYIh4MkcfJA">アッシュの協調実験</a><br>
+  人は (あきらかに間違っていても) 他人の意見に同調してしまう。
+<li> <a href="https://www.youtube.com/watch?v=y6GxIuljT3w">ミルグラム実験</a><br>
+  「偉い人」に命令されると、人は残酷な命令でも従ってしまう。
+<li> <a href="https://www.youtube.com/watch?v=760lwYmpXbc">スタンフォード監獄実験</a><br>
+  単に制服を変えただけで、人格が変わってしまう。
+<li> モンスター実験<br>
+  批判的な環境のもとでは誰もが失敗するようになる。
+<li> <a href="https://www.youtube.com/watch?v=QX_oy9614HQ">マシュマロ実験</a><br>
+  辛抱づよい子供は、大人になっても成功する。
+<li> <a href="https://www.youtube.com/watch?v=8PRuxMprSDQ">ロバーズ・ケイブにおける実験</a><br>
+  「ただ物理的に離れている」だけで敵意が生まれる。
+<li> <a href="https://www.youtube.com/watch?v=1mcCLm_LwpE">青い目・茶色の目実験</a><br>
+  自分がダメだと思わされていると、本当にダメになる。
+<li> 学習的無力感の実験<br>
+  「自分はこの状況から抜け出せる」と思っているだけで、症状が軽減する。
+<li> <a href="https://www.youtube.com/watch?v=vJG698U2Mvo">選択的注意実験</a><br>
+  人はボールが何回パスされたかを数えられるか?
+</ul>
+
+
+<h2 id="programming">0. プログラミングが苦手な人へ</h2>
+<p>
+有名な格言:
+<div class=def>
+「プログラムは思ったように動かないが、書いたようには動く」
+</div>
+<ol>
+<li> <strong>「自分ならどうするか」を考える</strong><br>
+  たとえば「東工大の利用者 (学生・職員含む) はどれくらいの割合で
+  あの大岡山の信号を無視しているのか?」を調査するとしたら、どうすればいいだろうか。
+  おそらくいくつか方法はあるだろうが、それぞれ手間 (= 計算時間) と精度に
+  違いがある。それらの中から最適と思われる方法を自分なりに考えて実行する必要がある。
+
+<li> <strong>「何」ではなく「どうやって」に集中する</strong><br>
+  たとえばCS第一でやった掛け算プログラムを考えてみよう:
+<pre>
+<span class=comment># 加減算のみを使って p×q を計算する。</span>
+def multiple(p, q):
+    a = 0
+    while 0 &lt; q:  <span class=comment># q回、p を足す。</span>
+        a = a + p
+        q = q - 1
+    return a
+</pre>
+  ここで「掛け算ではなく、割り算を計算するプログラムを書け」と言われたらどうするだろうか。
+  「掛け算と割り算は逆だから、逆にすりゃいいだろう」と思って、
+  単純に <code>+</code> を <code>-</code> 演算子にするだけでは<u>動かない</u>:
+<pre>
+<span class=comment># 加減算のみを使って p÷q を計算する。</span>
+def divide(p, q):
+    a = 0
+    while 0 &lt; q:
+        a = a <mark>-</mark> p
+        q = q <mark>+</mark> 1
+    return a
+</pre>
+  上の関数は <code>divide</code> と名前がついている
+  (し、コメントにも ÷ と書いてある) が、本当に割り算をしているわけではない。
+  割り算をさせるには、見よう見真似でプログラムを「逆」にするだけではだめで、
+  実際に割り算をさせる手順を書かないとだめなのである。
+  しかし上のような表面的な置換を「プログラミング」と勘違いしている人は時々いる。
+
+<li> <strong>やることを自分の言葉で説明できなければ、プログラムは書けない</strong><br>
+  繰り返すが、プログラミングに特別な能力は何も必要ない。
+  「自分のやらせたいことを、ひたすら書く」だけである。
+  しかし実は「自分のやらせたいこと」を
+  日本語で具体的に説明すること自体が簡単ではない。
+  これができるようになれば、あとはその説明を特定の
+  プログラミング言語に変換するだけの機械的な作業である。
+
+</ol>
+<p>
+繰り返し:
+<div class=def>
+「プログラムは思ったように動かないが、書いたようには動く」
+</div>
+
+
+<h2 id="hashtable">1. ハッシュテーブルとは</h2>
+<p>
+第5回の授業でやった以下の問題を考える:
+郵便番号を入力すると、その住所を表示するプログラムを作りたい。
+<blockquote><pre>
+$ <strong>python postal.py 1520001</strong>
+東京都目黒区中央町
+</pre></blockquote>
+<p>
+このように、ある情報 (e.g. 郵便番号) を別の情報 (e.g. 住所) に関連づける処理は、
+業務用コンピュータの代表的な利用例である。数学的には、
+これは2つの集合 <span class=key>K</span> から
+<span class=value>V</span> への写像 <span class=key>K</span> →
+<span class=value>V</span> として定義される。
+このとき、集合 <span class=key>K</span> の要素を
+「<u>キー</u> (key)」、集合 <span class=value>V</span> の要素を
+「<u>バリュー</u> (value)」と呼ぶ。
+<ul>
+<li> <strong>成績管理システム:</strong>
+  <span class=key>学籍番号</span> → <span class=value>氏名、履修科目、点数</span>
+<li> <strong>商品管理システム:</strong>
+  <span class=key>商品名</span> → <span class=value>メーカー、価格、在庫数</span>
+<li> <strong>チケット予約システム:</strong>
+  <span class=key>予約番号</span> → <span class=value>氏名、場所、日時、人数</span>
+<li> ...
+</ul>
+
+<h3>1.1. 逐次探索</h3>
+<p>
+今回の例では<span class=key>郵便番号</span> (<code>row[0]</code>) がキー、
+<span class=value>住所</span> (<code>row[1]+row[2]+row[3]</code>)
+がバリューということになる。
+<blockquote><pre>
+import sys
+key = sys.argv[1]
+...
+for row in table:
+    if row[0] == key:
+        <span class=comment># キーに対応するバリューを表示する。</span>
+        value = row[1]+row[2]+row[3]
+        print(value)
+</pre></blockquote>
+<p>
+郵便番号データ (<code>KEN_ALL_ROME.CSV</code>) は 12万行以上あるので、
+逐次探索をすると毎回 (最悪) 12万回のループを実行することになり、
+効率が悪い。<em>n</em>件のデータに対して、<em>O</em>(<em>n</em>) の計算量が必要である。
+<p>
+二分探索を使えば、最悪 <em>O</em>(log <em>n</em>) の計算量ですむが、
+データをあらかじめキーが昇順になるようにソートしておく必要がある。
+またキーを新しく追加・更新するたびに正しく並べ直さなければならない。
+
+<h3>1.2. 逐次探索・改</h3>
+<p>
+郵便番号は <code>0</code>〜<code>9</code> の数字から始まるので、
+まずキーを「最初の1文字」で分類し、10個のリストに分割するという手がある。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="350" height="320">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g transform="translate(25,10)">
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="0" y="0" width="50" height="30" />
+    <rect x="0" y="30" width="50" height="30" />
+    <rect x="0" y="60" width="50" height="30" />
+    <rect x="0" y="90" width="50" height="30" />
+    <rect x="0" y="120" width="50" height="30" />
+    <rect x="0" y="150" width="50" height="30" />
+    <rect x="0" y="180" width="50" height="30" />
+    <rect x="0" y="210" width="50" height="30" />
+    <rect x="0" y="240" width="50" height="30" />
+    <rect x="0" y="270" width="50" height="30" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrow)"
+       transform="translate(0,15)">
+      <path d="M25,0 l50,0" />
+      <path d="M25,30 l50,0" />
+      <path d="M25,60 l50,0" />
+      <path d="M25,90 l50,0" />
+      <path d="M25,120 l50,0" />
+      <path d="M25,150 l50,0" />
+      <path d="M25,180 l50,0" />
+      <path d="M25,210 l50,0" />
+      <path d="M25,240 l50,0" />
+      <path d="M25,270 l50,0" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="80" y="5" width="60" height="20" />
+    <rect x="140" y="5" width="60" height="20" />
+    <rect x="80" y="35" width="60" height="20" />
+    <rect x="140" y="35" width="60" height="20" />
+    <rect x="200" y="35" width="60" height="20" />
+    <rect x="260" y="35" width="60" height="20" />
+    <rect x="80" y="65" width="60" height="20" />
+    <rect x="140" y="65" width="60" height="20" />
+    <rect x="80" y="95" width="60" height="20" />
+    <rect x="140" y="95" width="60" height="20" />
+    <rect x="200" y="95" width="60" height="20" />
+    <rect x="80" y="125" width="60" height="20" />
+    <rect x="140" y="125" width="60" height="20" />
+    <rect x="80" y="155" width="60" height="20" />
+    <rect x="140" y="155" width="60" height="20" />
+    <rect x="80" y="185" width="60" height="20" />
+    <rect x="140" y="185" width="60" height="20" />
+    <rect x="200" y="185" width="60" height="20" />
+    <rect x="80" y="215" width="60" height="20" />
+    <rect x="140" y="215" width="60" height="20" />
+    <rect x="80" y="245" width="60" height="20" />
+    <rect x="140" y="245" width="60" height="20" />
+    <rect x="80" y="275" width="60" height="20" />
+    </g>
+    <g text-anchor="middle" transform="translate(-15,20)"
+       style="font-family: monospace;">
+    <text x="0" y="0">"0"</text>
+    <text x="0" y="30">"1"</text>
+    <text x="0" y="60">"2"</text>
+    <text x="0" y="90">"3"</text>
+    <text x="0" y="120">"4"</text>
+    <text x="0" y="150">"5"</text>
+    <text x="0" y="180">"6"</text>
+    <text x="0" y="210">"7"</text>
+    <text x="0" y="240">"8"</text>
+    <text x="0" y="270">"9"</text>
+    </g>
+    <g transform="translate(85,20)" style="font-size: 75%;">
+    <text x="0" y="0">0010201</text>
+    <text x="60" y="0">0020853</text>
+    <text x="120" y="0">...</text>
+    <text x="0" y="30">1006001</text>
+    <text x="60" y="30">1057044</text>
+    <text x="120" y="30">1310045</text>
+    <text x="180" y="30">1630207</text>
+    <text x="240" y="30">...</text>
+    <text x="0" y="60">2010016</text>
+    <text x="60" y="60">2260027</text>
+    <text x="120" y="60">...</text>
+    <text x="0" y="90">3002638</text>
+    <text x="60" y="90">3114206</text>
+    <text x="120" y="90">3390082</text>
+    <text x="180" y="90">...</text>
+    <text x="0" y="120">4093423</text>
+    <text x="60" y="120">4420029</text>
+    <text x="120" y="120">...</text>
+    <text x="0" y="150">5012561</text>
+    <text x="60" y="150">5180464</text>
+    <text x="120" y="150">...</text>
+    <text x="0" y="180">6028151</text>
+    <text x="60" y="180">6308343</text>
+    <text x="120" y="180">6570032</text>
+    <text x="180" y="180">...</text>
+    <text x="0" y="210">7038258</text>
+    <text x="60" y="210">7320001</text>
+    <text x="120" y="210">...</text>
+    <text x="0" y="240">8030815</text>
+    <text x="60" y="240">"8120892</text>
+    <text x="120" y="240">...</text>
+    <text x="0" y="270">9000006</text>
+    <text x="60" y="270">...</text>
+    </g>
+  </g>
+</svg>
+</div>
+これは人間が紙の辞書をひくとき、実際にやっている方法でもある。
+Python のプログラムでこれを実現するには、まず以下のようにする。
+<blockquote><pre>
+<span class=comment># まず 10個の (空のリストからなる) リストを作成。</span>
+index = [[], [], [], [], [], [], [], [], [], []]
+for row in table:
+    key = row[0]
+    value = row[1]+row[2]+row[3]
+    <span class=comment># キーの0文字目を数値に直す。</span>
+    i = int(key[0])
+    <span class=comment># i番目のリストにキーとバリューの組を追加する。</span>
+    a = index[i]
+    a.append([key, value])
+</pre></blockquote>
+<p>
+ここで作られたリストのリストを「索引」あるいは
+「<u>インデックス</u> (index)」とよぶ。
+インデックスを使って検索をする処理 <code>lookup()</code> は以下のようになる:
+<blockquote><pre>
+def lookup(index, key):
+    <span class=comment># キーの0文字目を数値に直す。</span>
+    i = int(key[0])
+    <span class=comment># i番目のリストをとりだす。</span>
+    a = index[i]
+    <span class=comment># そのリストに対して逐次探索をおこなう。</span>
+    for pair in a:
+        <span class=comment># キーとバリューの組をとりだす。</span>
+        k = pair[0]
+        v = pair[1]
+        if k == key:
+            print(v)
+            return
+    <span class=comment># 見つからなかった。</span>
+    print("not found")
+    return
+</pre></blockquote>
+<p>
+このようにリストを10個に分割すると、
+検索時間は約 1/10 に短縮されると思われる、が…
+
+<div class=ex>
+<div class=header>演習 6-1.</div>
+<ol type=i>
+  <li> 上の方法で実際に郵便番号をキーとしたインデックスを作成し、
+    各リストにいくつの要素が追加されるかを表示せよ。
+  <li> 実際には、ここでの検索時間は厳密に 1/10 にはならない。その理由を説明せよ。
+  <li> この方法の計算量を Big-O 記法で答えよ。
+</ol>
+</div>
+
+<p>
+この例では、最初のインデックスを作成するのに
+ある程度の時間がかかるので、
+合計の実行時間はそれほど速くならない。
+しかし検索が何度も実行される場合には速度の向上が期待できる。
+
+<h3>1.3. ハッシュテーブル</h3>
+<p>
+上の方法のインデックスをより一般化したものが
+<u>ハッシュテーブル</u> (hash table) である。
+これはインデックス作成時にキーの最初の1文字を使うかわりに、
+<u>ハッシュ関数</u> (hash function) が返す値を使う。
+ハッシュ関数とは、任意の文字列をなんらかの値 (ハッシュ) に
+変換するような関数である:
+<ul>
+<li> <code>h("7038258")</code> = <code>0</code>
+<li> <code>h("7320001")</code> = <code>15731</code>
+<li> <code>h("4420029")</code> = <code>602</code>
+<li> ...
+</ul>
+<p>
+ハッシュ関数 <em>h</em>(x) はどんな関数でもよいが、
+<u>同じ文字列に対してはつねに同じ値を返す</u>ように設計しなければならない。
+また、2つの異なる文字列が<strong>できるだけ異なる値になる</strong>ように
+設計することが望ましい。一般的なハッシュ関数の例として考えられるのは、
+与えられたキー (文字列) に含まれる文字コードをすべて足す、
+などの方法である。
+<p>
+ハッシュ関数ができたら、これを使って何番目のリストを使うべきか決定する。
+全体的な流れは以下のようになる:
+<ol>
+<li> まず <em>k</em>個のリストを用意する。
+<li> ハッシュ関数 h(<em>x</em>) が、与えられた文字列 <em>x</em> を整数に変換する。
+<li> インデックス作成時および検索時には、<code>h(<em>x</em>) % k</code> 番目の
+  リストを使用する。
+</ol>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="320" height="220">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g transform="translate(30,10)">
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="0" y="0" width="50" height="30" />
+    <rect x="0" y="30" width="50" height="30" />
+    <rect x="0" y="60" width="50" height="30" />
+    <rect x="0" y="90" width="50" height="30" />
+    <rect x="0" y="120" width="50" height="30" />
+    <rect x="0" y="170" width="50" height="30" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrow)"
+       transform="translate(0,15)">
+      <path d="M25,0 l50,0" />
+      <path d="M25,30 l50,0" />
+      <path d="M25,60 l50,0" />
+      <path d="M25,90 l50,0" />
+      <path d="M25,120 l50,0" />
+      <path d="M25,170 l50,0" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="80" y="5" width="60" height="20" />
+    <rect x="140" y="5" width="60" height="20" />
+    <rect x="200" y="5" width="60" height="20" />
+    <rect x="80" y="35" width="60" height="20" />
+    <rect x="140" y="35" width="60" height="20" />
+    <rect x="200" y="35" width="60" height="20" />
+    <rect x="80" y="65" width="60" height="20" />
+    <rect x="140" y="65" width="60" height="20" />
+    <rect x="200" y="65" width="60" height="20" />
+    <rect x="80" y="95" width="60" height="20" />
+    <rect x="140" y="95" width="60" height="20" />
+    <rect x="200" y="95" width="60" height="20" />
+    <rect x="80" y="125" width="60" height="20" />
+    <rect x="140" y="125" width="60" height="20" />
+    <rect x="200" y="125" width="60" height="20" />
+    <rect x="80" y="175" width="60" height="20" />
+    <rect x="140" y="175" width="60" height="20" />
+    <rect x="200" y="175" width="60" height="20" />
+    </g>
+    <g text-anchor="middle" transform="translate(-15,20)">
+    <text x="0" y="0">0</text>
+    <text x="0" y="30">1</text>
+    <text x="0" y="60">2</text>
+    <text x="0" y="90">3</text>
+    <text x="0" y="120">4</text>
+    <text x="0" y="140">...</text>
+    <text x="190" y="140">...</text>
+    <text x="0" y="170">k-1</text>
+    </g>
+    <g transform="translate(85,20)" style="font-size: 75%;">
+    <text x="0" y="0">7038258</text>
+    <text x="60" y="0">5012561</text>
+    <text x="120" y="0">1630207</text>
+    <text x="180" y="0">...</text>
+    <text x="0" y="30">7320001</text>
+    <text x="60" y="30">1057044</text>
+    <text x="120" y="30">1310045</text>
+    <text x="180" y="30">...</text>
+    <text x="0" y="60">4420029</text>
+    <text x="60" y="60">6308343</text>
+    <text x="120" y="60">9000006</text>
+    <text x="180" y="60">...</text>
+    <text x="0" y="90">6570032</text>
+    <text x="60" y="90">6028151</text>
+    <text x="120" y="90">3390082</text>
+    <text x="180" y="90">...</text>
+    <text x="0" y="120">0020853</text>
+    <text x="60" y="120">1006001</text>
+    <text x="120" y="120">8030815</text>
+    <text x="180" y="120">...</text>
+    <text x="0" y="170">2260027</text>
+    <text x="60" y="170">4093423</text>
+    <text x="120" y="170">3114206</text>
+    <text x="180" y="170">...</text>
+    </g>
+  </g>
+</svg>
+</div>
+<p>
+ひとたびハッシュテーブルができれば、
+関数 <code>lookup()</code> は従来とほぼ同じ方法で検索がおこなえる:
+<blockquote><pre>
+def lookup(index, key):
+    k = len(index)
+    <span class=comment># キーをハッシュに変換し、k の剰余をとる。</span>
+    <mark>i = h(key) % k</mark>
+    <span class=comment># i番目のリストをとりだす。</span>
+    a = index[i]
+    <span class=comment># そのリストに対して逐次探索をおこなう。</span>
+    for pair in a:
+        <span class=comment># キーとバリューの組をとりだす。</span>
+        k = pair[0]
+        v = pair[1]
+        if k == key:
+            print(v)
+            return
+    <span class=comment># 見つからなかった。</span>
+    print("not found")
+    return
+</pre></blockquote>
+
+<p>
+ハッシュテーブルの検索時間は二分探索ほど速くないが、
+キーの追加や変更の処理が簡単なため広く利用されている。
+また、ハッシュテーブルによる検索時間は k の値に調整できるところも有利である。
+(k = 1 の場合は完全な逐次探索と同じになる)。
+
+<div class=notice>
+<u>注意</u>:
+ハッシュテーブルを使うと現実の検索時間は短縮されるが、
+計算量が 1/k になるだけで、Big-O 記法ではあいかわらず
+<em>O</em>(n) のままである。
+</div>
+
+<p>
+前節の「郵便番号の最初の数字を 0 〜 9 の整数に変換する」処理は、ある意味
+ハッシュ関数の一例であるが、郵便番号にしか使えないし、ハッシュの値は
+0 から 9 までに固定されている。さらに、得られる値が一様に分布していない。
+どのような文字列に対しても一様に分布するハッシュ関数を
+設計するのは意外に難しく、これは現在でもさかんに研究されている
+テーマのひとつである。ちなみに最悪のハッシュ関数とは、
+どんな文字列に対しても同じ値を返す関数である。
+これではすべての文字に対して同じリストを使うことになってしまい、
+事実上、逐次探索と変わらない:
+<blockquote><pre>
+# 最悪のハッシュ関数
+def h(x):
+    return 123
+</pre></blockquote>
+
+<h4>ハッシュ関数の応用</h4>
+<p>
+ハッシュ値はどんなデータに対しても適用できる。
+これを応用したものが本授業で公開している課題の採点結果で、
+これは提出されたファイルをキーとしてハッシュ値を計算したものである。
+これは、ハッシュ関数の以下のような特性を利用している:
+<ol type=a>
+<li> もし2つのハッシュ値が違っていれば、元のデータ (キー) は<u>確実に</u>違っている。
+<li> 元のデータ (キー) が違っていても、2つのハッシュ値が違うとは<u>限らない</u>。
+  偶然に同じハッシュになるということもありうる。(ただし、その可能性は小さい。)
+</ol>
+<p>
+さらに、この場合はもうひとつの特性があって:
+<ol type=a start="3">
+<li> ハッシュ値 (たとえば <code>3dc3b6dedc</code>) がわかっても
+  もとのファイルは復元できないし、だれが提出したのかもわからない。
+</ol>
+
+<h2 id="dictionary">2. Python のハッシュテーブル (辞書)</h2>
+<p>
+上で説明したように、
+「あるデータ (<u>キー</u>) に対応する、別のデータ (<u>バリュー</u>)」を
+検索する処理は多くのプログラムで使われる基本的な処理である。
+そのため、Python には実はハッシュテーブルを
+簡単に使う機能がすでに備わっている。
+
+<blockquote><pre>
+d = {}
+d["abc"] = "def"
+d["xyz"] = "123"
+print(d["abc"])  <span class=comment># def</span>
+print(d["xyz"])  <span class=comment># 123</span>
+</pre></blockquote>
+
+<p>
+ここで使われているハッシュテーブル <code>d</code> は
+ひとつの<u>データ型</u>である。リストなどと同様に、
+まるごとひとつの変数に入れることができる。
+なお Python の用語ではハッシュテーブルとは呼ばず、
+<u>辞書</u> (dictionary) という
+(言語によっては「連想リスト」とも呼ばれる)。
+ここでも <code>d[ ]</code> の中に入る値をキー (key) と呼び、
+それに対応する値をバリュー (value) と呼ぶ。
+<p>
+なお、リストと同じく、辞書もメモリ使用量が
+大きくなる可能性があるので、
+<a href="../week2/index.html#realestate">不動産の法則</a> が成り立っている。
+(変数 <code>d</code> は辞書そのものではなく<u>辞書への参照</u>である。)
+
+
+<dl>
+<dt> 構文
+<dd> <pre>
+d = {}            <span class=comment># 空の辞書を変数 d に入れる。</span>
+d["abc"] = "def"  <span class=comment># キー "abc" に対応するバリュー "def" を d に格納する。</span>
+v = d["abc"]      <span class=comment># キー "abc" に対応するバリューを得る。</span>
+d["abc"] = "xyz"  <span class=comment># バリューを書き換える。</span>
+</pre>
+<p>
+キーはいくつでも追加することができ、
+バリューはあとから書き換えることもできる。
+
+<dt> 文字のかわりに数値を使う
+<dd> キーやバリューとして文字列のかわりに数値を使うこともできる。
+(一見するとリストのように見えるが、リストではない。)
+<pre>
+p = {}
+p[123] = 456      <span class=comment># キー 123 に対応するバリュー 456 を p に格納する。</span>
+print(p[123])     <span class=comment># キー 123 に対応するバリューを得る。</span>
+</pre>
+<p>
+<strong>注意:</strong> ただし Python では<u>リスト型はキーとしては使えない</u>。
+
+<dt> 辞書の直接定義
+<dd> リストと同様、辞書の中身を直接プログラムに書くこともできる。
+<pre>
+price = {"chocolate": 100, "cookie": 150 }
+print(price["chocolate"])
+</pre>
+
+<dt> 存在しないキー
+<dd> 存在しないキーのバリューを参照しようとすると、エラーが発生する。
+<pre>
+price = {"chocolate": 100, "cookie": 150 }
+print(price["ramen"])
+<span class=err>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+KeyError: 'ramen'</span>
+</pre>
+
+<dt> キーの存在確認
+<dd> あるキーが辞書中に存在するかどうかを調べるには、
+文字列・リストと同じ <code>in</code> 演算子を使う。
+<pre>
+price = {"chocolate": 100, "cookie": 150 }
+if "ramen" in price:
+    print("ラーメンいる")
+else:
+    print("ラーメンいない")
+</pre>
+
+<dt> キーの一覧
+<dd> ある辞書に含まれているキーの一覧を表示するには <code>.keys()</code> メソッドを使う。
+<pre>
+price = {"chocolate": 100, "cookie": 150 }
+for k in price.keys():
+    print(k, price[k])
+</pre>
+これは以下のように表示される。
+<pre>
+chocolate 100
+cookie 150
+</pre>
+<p>
+<strong>注意:</strong> <u>キーが表示される順序はランダム</u>である。
+あとから代入されたキーが最初に出てくる場合がある。
+
+<dt> キーの個数
+<dd> リストと同じく、ある辞書に含まれているキー・バリュー対の個数を表示するには
+<code>len()</code> 関数を使う。
+<pre>
+price = {"chocolate": 100, "cookie": 150 }
+print(len(price))  <span class=comment># 2</span>
+</pre>
+
+<dt> キーの削除
+<dd> 辞書からキー・バリュー対を削除するには、
+リストのときと同じように <code>del</code> 文を使う。
+<pre>
+d = {"X": 1, "Y": 2, "Z": 3 }
+del d["Y"]
+print(d)    <span class=comment># {'X': 1, 'Z': 3}</span>
+</pre>
+
+</dl>
+
+<div class=ex>
+<div class=header>演習 6-2.</div>
+<ol type=i>
+<li> 前回の <code>postal.py</code> を Pythonの辞書を使って書け。
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 郵便番号 → 住所に対応させるハッシュテーブル(辞書)を作成。</span>
+postal = {}
+for row in table:
+    key = <span class=bl>            </span>
+    value = <span class=bl>            </span>
+    postal[key] = value
+<span class=comment># 実際に検索する (キーに対するバリューを取得する)。</span>
+import sys
+key = sys.argv[1]
+value = <span class=bl>            </span>
+print(value)
+</pre>
+<li> Pythonでは、リストを辞書のキーとして使うと「ある不都合」が起こるので、
+意図的にリストは辞書のキーにはできなくしてある。その不都合とは何か考えよ。
+<pre>
+k = [1,2,3]
+d = {}
+d[k] = "abc"  <span class=comment># エラー</span>
+k.append(4)
+</pre>
+</ol>
+</div>
+
+<h2 id="voronoi">3. ヴォロノイ図とは何か?</h2>
+<p>
+<a href="https://ja.wikipedia.org/wiki/%E3%83%9C%E3%83%AD%E3%83%8E%E3%82%A4%E5%9B%B3">ヴォロノイ図</a> (voronoi diagram) とは
+「複数個の “センター” (母点) に対して、それにもっとも近い点の集合を示した図」のことである。
+<p>
+たとえば、ある街の人が買い物に行く「ショッピングセンター」を考える。
+ショッピングセンターが街に1つしかない場合、その利用者は
+街のすべての人である。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<rect x="1" y="1" width="98" height="98" fill="#88ffff" stroke="black" />
+<rect x="38" y="38" width="4" height="4" fill="red" stroke="black" />
+</svg>
+</div>
+<p>
+しかしショッピングセンターが街に2つあるとすると、
+街の利用者は 2つに分けられる。ショッピンセンター A に行く人と、
+ショッピンセンター B に行く人である。
+各住人は、自分の家から<u>もっとも近い</u>ショッピングセンターに行くと仮定すると、
+街は「A に行く人のエリア」と「B に行く人のエリア」に二分される。
+エリア A とエリア B の境界は、ショッピングセンター A と B の
+中間に位置する垂直二等分線となる。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+<polygon points=" 1,1 74,1 25,99 1,99" fill="#88ffff" stroke="black" />
+<rect x="28" y="38" width="4" height="4" fill="red" stroke="black" />
+<text x="28" y="38" text-anchor="middle" dy="1.1em">A</text>
+<polygon points=" 25,99 74,1 99,1 99,99" fill="#ffff88" stroke="black" />
+<rect x="68" y="58" width="4" height="4" fill="red" stroke="black" />
+<text x="68" y="58" text-anchor="middle" dy="1.1em">B</text>
+</svg>
+</div>
+<p>
+さらにショッピングセンターが 3つある場合、
+これらは3つのエリアに区分けされる:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+<polygon points=" 1,1 99,1 99,13 52,51 1,25" fill="#88ffff" stroke="black" />
+<rect x="38" y="18" width="4" height="4" fill="red" stroke="black" />
+<text x="38" y="18" text-anchor="middle" dy="1.1em">A</text>
+<polygon points=" 1,25 52,51 44,99 1,99" fill="#ff88ff" stroke="black" />
+<rect x="18" y="58" width="4" height="4" fill="red" stroke="black" />
+<text x="18" y="58" text-anchor="middle" dy="1.1em">C</text>
+<polygon points=" 44,99 52,51 99,13 99,99" fill="#ffff88" stroke="black" />
+<rect x="78" y="68" width="4" height="4" fill="red" stroke="black" />
+<text x="78" y="68" text-anchor="middle" dy="1.1em">B</text>
+</svg>
+</div>
+<p>
+ここで3つのエリア (領域) は、それを代表する
+「各センター A, B, C にもっとも近い点の集合 (領域)」を示している。
+これが 3つの点 A, B, C からなる<u>ヴォロノイ図</u>である。
+<div class=def>
+ヴォロノイ図 …
+「複数個のセンターに対して、それにもっとも近い点の集合を示した図」
+</div>
+<p>
+ヴォロノイ図の各領域 (エリア) は、そのセンターを含む凸型の
+(へこんだ部分がない) 多角形で表される。各領域の辺は、必ず
+隣接する2点の垂直二等分線になっている。ヴォロノイ図は、
+自然界に存在する物体の構造や生物の分布などによく現れる。
+また、材料工学や都市設計などでも利用されている。
+
+<h3>3.1. ヴォロノイ図の用途</h3>
+<p>
+前回の中課題でやったスノウの地図を見ると、
+コレラ患者の発生は Broad Street のポンプの周囲に集中しているが、
+その分布は奇妙な形をしていた。
+<div class=figure>
+<a href="../week5/snowmap.png"><img src="../week5/snowmap.png" width="341" height="325" ></a>
+</div>
+スノウはこれを説明するために
+「各住人は、自分の家から<u>もっとも近い</u>ポンプを使う」という仮説を立てた:
+<ul>
+<li> 世界にポンプがひとつしかなければ、全員そのポンプを使うはずである。
+<li> 世界にポンプが2つあれば、2つのポンプを使う人が分かれるはずだ。
+<li> 世界にポンプが3つあれば、さらに3つのポンプを使う人に分かれるはずだ。
+<li> ...
+</ul>
+
+<p>
+この仮説を検証してみよう。
+前回の <code>deathmap.py</code> を改造して、
+各患者を「もっとも近いポンプ」によって色分けすることを考える:
+<div class=file>
+deathmap.py
+<pre>
+import csv
+with open("Snow.deaths.csv", encoding="utf-8") as fp:
+    deaths = list(csv.reader(fp))
+del deaths[0]
+
+print("&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='1000' height='1000'&gt;")
+for row in deaths:
+    x = float(row[2])  <span class=comment># X座標</span>
+    y = float(row[3])  <span class=comment># Y座標</span>
+    print(f"&lt;circle cx='{x*10}' cy='{y*10}' r='1' fill='#000000' /&gt;")
+print("&lt;/svg&gt;")
+</pre>
+</div>
+<p>
+現在のところ、色は黒 (<code>#000000</code>) に固定されている。
+これを「(x,y) にもっとも近いポンプ」によって毎回変えたいのだが、
+まずその下準備として、
+「与えられた座標 (x0,y0) にもっとも近いポンプの名前を返す」関数
+<code>get_nearest_pump()</code> を考えよう:
+
+<blockquote><pre>
+<mark>import math</mark>  <span class=comment># math.sqrt()を使うのに必要。</span>
+
+<span class=comment># ポンプの一覧を読み込む。</span>
+with open("Snow.pumps.csv") as fp:
+    pumps = list(csv.reader(fp))
+del pumps[0]
+
+<span class=comment># 座標 (x0,y0) にもっとも近いポンプの名前を返す関数。</span>
+def get_nearest_pump(x0, y0):
+    <span class=comment># まず、「もっとも近いポンプ」として仮の値を記録しておく。</span>
+    near_dist = 9999        <span class=comment># もっとも近いポンプまでの距離。</span>
+    near_name = 'unknown'   <span class=comment># もっとも近いポンプの名前。</span>
+    for row in pumps:
+        n1 = row[2]         <span class=comment># 各ポンプの名前。</span>
+        x1 = float(row[3])  <span class=comment># X座標。</span>
+        y1 = float(row[4])  <span class=comment># Y座標。</span>
+        <span class=comment># (x0,y0) からの距離を計算する。</span>
+        d1 = <mark>math.sqrt</mark>((x1-x0)**2 + (y1-y0)**2)
+        if d1 &lt; near_dist:
+            <span class=comment># 「もっとも近いポンプ」の記録を更新する。</span>
+            near_dist = d1
+            near_name = n1
+    <span class=comment># ポンプの名前を返す。</span>
+    return near_name
+</pre></blockquote>
+<p>
+ここで使っている <code>math.sqrt()</code> は
+平方根を計算する関数である。
+(実際には、距離の二乗を比較しても答えは同じなので、これはなくてもよい)
+たとえば以下のようにすると、座標 (10,10) にもっとも近いポンプの名前を表示する。
+<blockquote><pre>
+print(get_nearest_pump(10,10))  <span class=comment># "Warwick"</span>
+</pre></blockquote>
+<p>
+この関数を使って、先程の地図を色分けしてみよう。
+ただし <code>get_nearest_pump()</code> はポンプの名前を返すだけなので、
+これをハッシュテーブルを使って、色の文字列に変換する。
+<div class=file>
+nearest.py
+<pre>
+<span class=comment># 患者の一覧を読み込む。</span>
+import csv
+with open("Snow.deaths.csv", encoding="utf-8") as fp:
+    deaths = list(csv.reader(fp))
+del deaths[0]
+
+<span class=comment># ポンプの名前と色の対応づけを定義する。</span>
+PUMP_COLORS = {
+    "Oxford Market": "#000000",
+    "Castle St E": "#888888",
+    "Oxford St #1": "#ffff00",
+    "Oxford St #2": "#ff00ff",
+    "Gt Marlborough": "#00ffff",
+    "Crown Chapel": "#ff0000",
+    "Broad St": "#00ff00",
+    "Warwick": "#0000ff",
+    "Briddle St": "#88ff00",
+    "So Soho": "#ff8888",
+    "Dean St": "#0088ff",
+    "Coventry St": "#8800ff",
+    "Vigo St": "#88ff88",
+}
+
+<span class=comment># SVGを描画。</span>
+print("&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='800' height='800'&gt;")
+for row in deaths:
+    x = float(row[2])
+    y = float(row[3])
+    name = get_nearest_pump(x, y)  <span class=comment># もっとも近いポンプを探す。</span>
+    color = <mark>PUMP_COLORS[name]</mark>      <span class=comment># ポンプの名前に対応する色を取得。</span>
+    print(f"&lt;circle cx='{x*40}' cy='{y*40}' r='2' fill='{color}' /&gt;")
+print("&lt;/svg&gt;")
+</pre>
+</div>
+
+<div class=ex>
+<div class=header>練習問題</div>
+<ul>
+  <li> 上のプログラム <code>nearest.py</code> を実行し、
+    生成される図を確認せよ。
+</ul>
+</div>
+
+<p>
+上の例では、各患者を「もっとも近いポンプ」で色分けしている。
+つまり、これらの患者はポンプを使うエリアごとに分類したことになる。
+ヴォロノイ図を使うと、これらのエリアを厳密に図形で示すことができる。
+
+<h3>3.2. ヴォロノイ図を描画する</h3>
+<p>
+では実際にヴォロノイ図を生成するプログラムを作ってみよう。
+これは以下のような手順でおこなう:
+
+<ol>
+<li> まず、何もない平面を考え、ここにセンターをひとつずつ追加する:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+</svg>
+</div>
+
+<li> 毎回、新しく追加されるセンターは「矩形の領域をもっている」と仮定する。
+センターが1つだけである場合、これは何もしなくても正しいヴォロノイ図である。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<rect x="1" y="1" width="98" height="98" fill="#88ffff" stroke="black" />
+<rect x="48" y="48" width="4" height="4" fill="red" stroke="black" />
+</svg>
+</div>
+
+<li> それ以外のセンターがすでに存在する場合、
+新しく追加される矩形を各センターとの垂直二等分線によって「切り取る」。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<circle cx="50" cy="50" r="16" fill="#88ffff" stroke="none" />
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+<rect x="48" y="48" width="4" height="4" fill="red" stroke="black" />
+<rect x="8" y="28" width="4" height="4" fill="black" stroke="black" />
+<rect x="68" y="88" width="4" height="4" fill="black" stroke="black" />
+<rect x="78" y="38" width="4" height="4" fill="black" stroke="black" />
+<rect x="18" y="78" width="4" height="4" fill="black" stroke="black" />
+<path d='M50,0 L10,78' fill='none' stroke='black' />
+<path d='M50,50 L10,30' fill='none' stroke='black' stroke-dasharray="2,2" />
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<circle cx="50" cy="50" r="16" fill="#88ffff" stroke="none" />
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+<rect x="48" y="48" width="4" height="4" fill="red" stroke="black" />
+<rect x="8" y="28" width="4" height="4" fill="black" stroke="black" />
+<rect x="68" y="88" width="4" height="4" fill="black" stroke="black" />
+<rect x="78" y="38" width="4" height="4" fill="black" stroke="black" />
+<rect x="18" y="78" width="4" height="4" fill="black" stroke="black" />
+<path d='M50,0 L76,80' fill='none' stroke='black' />
+<path d='M50,50 L80,40' fill='none' stroke='black' stroke-dasharray="2,2" />
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<circle cx="50" cy="50" r="16" fill="#88ffff" stroke="none" />
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+<rect x="48" y="48" width="4" height="4" fill="red" stroke="black" />
+<rect x="8" y="28" width="4" height="4" fill="black" stroke="black" />
+<rect x="68" y="88" width="4" height="4" fill="black" stroke="black" />
+<rect x="78" y="38" width="4" height="4" fill="black" stroke="black" />
+<rect x="18" y="78" width="4" height="4" fill="black" stroke="black" />
+<path d='M90,55 L20,88' fill='none' stroke='black' />
+<path d='M50,50 L70,90' fill='none' stroke='black' stroke-dasharray="2,2" />
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<circle cx="50" cy="50" r="16" fill="#88ffff" stroke="none" />
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+<rect x="48" y="48" width="4" height="4" fill="red" stroke="black" />
+<rect x="8" y="28" width="4" height="4" fill="black" stroke="black" />
+<rect x="68" y="88" width="4" height="4" fill="black" stroke="black" />
+<rect x="78" y="38" width="4" height="4" fill="black" stroke="black" />
+<rect x="18" y="78" width="4" height="4" fill="black" stroke="black" />
+<path d='M10,40 L60,90' fill='none' stroke='black' />
+<path d='M50,50 L20,80' fill='none' stroke='black' stroke-dasharray="2,2" />
+</svg>
+
+<li> 矩形をすべての二等分線で切り取ったあとの形状は、正しい領域になっている。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<polygon points=' 50,0 71,64 46,76 23,53 50,0' fill='#88ffff' stroke='black' />
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+<rect x="48" y="48" width="4" height="4" fill="red" stroke="black" />
+<rect x="8" y="28" width="4" height="4" fill="black" stroke="black" />
+<rect x="68" y="88" width="4" height="4" fill="black" stroke="black" />
+<rect x="78" y="38" width="4" height="4" fill="black" stroke="black" />
+<rect x="18" y="78" width="4" height="4" fill="black" stroke="black" />
+</svg>
+</div>
+
+<li> これをすべての領域にたいして行うと、
+最終的にヴォロノイ図が完成する。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+<polygon points=' 50,0 71,64 46,76 23,53 50,0' fill='none' stroke='black' />
+<polygon points=' 0,0 50,0 23,53 0,58' fill='none' stroke='black' />
+<polygon points=' 42,100 46,76 71,64 100,70 100,100' fill='none' stroke='black' />
+<polygon points=' 100,70 71,64 50,0 100,0' fill='none' stroke='black' />
+<polygon points=' 0,58 23,53 46,76 42,100 0,100' fill='none' stroke='black' />
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+<rect x="48" y="48" width="4" height="4" fill="black" stroke="black" />
+<rect x="8" y="28" width="4" height="4" fill="black" stroke="black" />
+<rect x="68" y="88" width="4" height="4" fill="black" stroke="black" />
+<rect x="78" y="38" width="4" height="4" fill="black" stroke="black" />
+<rect x="18" y="78" width="4" height="4" fill="black" stroke="black" />
+</svg>
+</div>
+
+</ol>
+<p>
+以上を Python のプログラムで大ざっぱに表してみると、こうなる:
+<div class=file>
+voronoi.py (未完成版)
+<pre>
+<span class=comment># センターの一覧が C に入っているとする。</span>
+C = [センター0, センター1, ... ]
+
+centers = []
+for c1 in C:
+    <span class=comment># センターをひとつ追加する。</span>
+    for c0 in centers:
+        <span class=comment># すでに存在する各センターに対して、</span>
+        <span class=comment># c0--c1の垂直二等分線で切り取る。</span>
+        ???
+    centers.append(c1)
+</pre>
+</div>
+<p>
+問題は「領域」をどうやって扱うのかということである。
+ヴォロノイ図の領域とは、凸型の多角形 (polygon) であるから、
+ここでは多角形の点を<u>時計回り</u> (clockwise) に並べたリストを使うことを考える。
+各点はさらに2要素のリスト (<code>[<em>x</em>, <em>y</em>]</code>) で表すことにする。
+たとえば:
+<blockquote><pre>
+[[30,20], [60,30], [80,60], [40,80], [10,60]]
+</pre></blockquote>
+は、以下のような多角形を表現している (最後の点は最初の点に接続している):
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="100" height="100">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+<rect x="1" y="1" width="98" height="98" fill="none" stroke="black" />
+<g stroke-width="2" fill="none" stroke="black"  marker-end="url(#arrow)">
+<path d="M30,20 L55,27" />
+<path d="M60,30 L77,55" />
+<path d="M80,60 L45,77" />
+<path d="M40,80 L15,63" />
+<path d="M10,60 L28,25" />
+</g>
+<rect x="28" y="18" width="4" height="4" fill="red" stroke="black" />
+<rect x="58" y="28" width="4" height="4" fill="red" stroke="black" />
+<rect x="78" y="58" width="4" height="4" fill="red" stroke="black" />
+<rect x="38" y="78" width="4" height="4" fill="red" stroke="black" />
+<rect x="8" y="58" width="4" height="4" fill="red" stroke="black" />
+</svg>
+</div>
+<p>
+以上をふまえてもうすこし具体的なプログラムにすると、次のようになる:
+<div class=file>
+voronoi.py (まだ未完成版)
+<pre>
+<span class=comment># センターの一覧が C に入っているとする。</span>
+C = [センター0, センター1, ... ]
+
+centers = []
+polygons = []
+for c1 in C:
+    <span class=comment># センターをひとつ追加する。</span>
+    <span class=comment># 最初に矩形の領域 (0,0)-(100,100) を仮定する。</span>
+    poly = [[0,0], [100,0], [100,100], [0,100]]
+    for c0 in centers:
+        <span class=comment># すでに存在する各センターに対して、</span>
+        <span class=comment># poly を c0--c1の垂直二等分線で切り取る。</span>
+        poly = cut_polygon(poly)
+    centers.append(c1)
+    polygons.append(poly)
+</pre>
+</div>
+
+<p>
+実際には、追加するセンターの多角形だけでなく、
+すでに存在している多角形も切り取られるので、双方に適用する:
+<div class=file>
+voronoi.py (まだまだ未完成版)
+<pre>
+<span class=comment># センターの一覧が C に入っているとする。</span>
+C = [センター0, センター1, ... ]
+
+centers = []
+polygons = []
+for c1 in C:
+    <span class=comment># センターをひとつ追加する。</span>
+    <span class=comment># 最初に矩形の領域 (0,0)-(100,100) を仮定する。</span>
+    poly = [[0,0], [100,0], [100,100], [0,100]]
+    for c0 in centers:
+        <span class=comment># すでに存在する各センターに対して、</span>
+        <span class=comment># poly を c0--c1の垂直二等分線で切り取る。</span>
+        poly = cut_polygon(poly)
+<div class=mark>    for i in range(len(centers)):
+        <span class=comment># すでに存在する領域も同様に切り取られる。</span>
+        polygon[i] = cut_polygon(polygons[i])
+</div>    centers.append(c1)
+    polygons.append(poly)
+</pre>
+</div>
+
+<h4>垂直二等分線を求める関数</h4>
+<p>
+実際の関数 <code>cut_polygon</code> には「切りとるための直線」を与える必要がある。
+これは、2つのセンター間の垂直二等分線である。そこで、まずこれを求める関数を書く。
+この関数は、直線を2要素のリスト (さらに各要素は2要素のベクトル) で
+返すようになっている。
+<blockquote><pre>
+<span class=comment># get_bisector(c0, c1)</span>
+<span class=comment>#   c0--c1 間の垂直二等分線を求める。</span>
+def get_bisector(c0, c1):
+    <span class=comment># c0--c1間のベクトルを求める。</span>
+    vx = c1[0] - c0[0]
+    vy = c1[1] - c0[1]
+    <span class=comment># c0--c1間の中点を求める。</span>
+    px = (c1[0]+c0[0])/2
+    py = (c1[1]+c0[1])/2
+    <span class=comment># 垂直二等分線は q0--q1 を通る直線。</span>
+    q0 = [px-vy, py+vx]
+    q1 = [px+vy, py-vx]
+    return [q0, q1]
+</pre></blockquote>
+
+<div class=ex>
+<div class=header>練習問題</div>
+<p>
+関数 <code>get_bisector()</code> を使って、以下の2点の垂直二等分線を求めよ:
+<ol type=i>
+<li> <code>(0,0)</code> と <code>(1,0)</code>
+<li> <code>(0,0)</code> と <code>(1,1)</code>
+</ol>
+</div>
+<p>
+最終的には、以下のようなプログラムができあがる:
+<div class=file>
+voronoi.py (いちおう完成版?)
+<pre>
+<span class=comment># センターの一覧が C に入っているとする。</span>
+C = [センター0, センター1, ... ]
+
+centers = []
+polygons = []
+for c1 in C:
+    <span class=comment># センターをひとつ追加する。</span>
+    <span class=comment># 最初に矩形の領域 (0,0)-(100,100) を仮定する。</span>
+    poly = [[0,0], [100,0], [100,100], [0,100]]
+    for c0 in centers:
+        <span class=comment># すでに存在する各センターに対して、</span>
+        <span class=comment># poly を c0--c1の垂直二等分線で切り取る。</span>
+        q = get_bisector(c0, c1)
+        poly = cut_polygon(poly, q)
+    for i in range(len(centers)):
+        <span class=comment># すでに存在する領域も同様に切り取られる。</span>
+        q = get_bisector(centers[i], c1)
+        polygon[i] = cut_polygon(polygons[i], q)
+    centers.append(c1)
+    polygons.append(poly)
+</pre>
+</div>
+<p>
+しかし、ここではまだ関数
+<code>cut_polygon()</code> が定義されていない。
+次にそれを考える。
+
+
+<h3>3.3. 多角形を切り取る</h3>
+<p>
+まず下準備として、ひとつの関数を用意する。
+このような複雑な処理は、いくつかのより細かい「部品」に分けて考えるのが楽である。
+
+<h4>直線の交点を求める関数</h4>
+<p>
+つぎに、2本の線分 (正確には、1本の線分と1本の直線) の交点を計算する関数
+<code>get_intersection()</code> を考える。
+<blockquote><pre>
+<span class=comment># get_intersect(p0, p1, q0, q1):</span>
+<span class=comment>#   線分 p0--p1 と直線 q0--q1 の交点を求める。</span>
+<span class=comment>#   直線が交差しない場合は、空のリストを返す。</span>
+def get_intersect(p0, p1, q0, q1):
+    <span class=comment># 直線 p,q の方向ベクトル(vpx,vpy)および(vqx,vqy)を求める。</span>
+    vpx = p1[0] - p0[0]
+    vpy = p1[1] - p0[1]
+    vqx = q1[0] - q0[0]
+    vqy = q1[1] - q0[1]
+    <span class=comment># 行列式 d を求める。0 の場合は並行なので交差しない。</span>
+    d = vpy*vqx - vpx*vqy
+    if d == 0:
+        return []
+    <span class=comment># 交点を t と s で媒介変数表示する:</span>
+    <span class=comment>#   p0[0] + t*vpx == q0[0] + s*vqx</span>
+    <span class=comment>#   p0[1] + t*vpy == q0[1] + s*vqy</span>
+    <span class=comment># 以上を t と s に対して解く:</span>
+    t = (vqy*(p0[0]-q0[0]) - vqx*(p0[1]-q0[1])) / d
+    s = (vpy*(p0[0]-q0[0]) - vpx*(p0[1]-q0[1])) / d
+    <span class=comment># 求めた点 t が線分 p0--p1 の範囲外にあるときは交差しない。</span>
+    if t &lt; 0 or 1 &lt;= t:
+        return []
+    <span class=comment># tを使って交点の座標を求める。</span>
+    return [p0[0]+t*vpx, p0[1]+t*vpy]
+</pre></blockquote>
+
+<div class=ex>
+<div class=header>演習 6-3.</div>
+<p>
+上の関数 <code>get_intersect()</code> を使って、以下の線分の交点を求めよ:
+<ol type=i>
+<li> <code>(-1,0)--(1,0)</code> および <code>(0,-1)--(0,1)</code>
+<li> <code>(0,0.5)--(1,0.5)</code> および <code>(0,0)--(1,1)</code>
+<li> <code>(0,0)--(1,0)</code> および <code>(0,1)--(1,1)</code>
+<li> <code>(0,0)--(4,0)</code> および <code>(2,-1)--(2,1)</code>
+<li> <code>(0,1)--(2,1)</code> および <code>(1,-2)--(1,0)</code>
+</ol>
+</div>
+
+<h4>多角形を切り取る関数</h4>
+<p>
+上の関数を使って、
+多角形を切り取る関数 <code>cut_polygon()</code> を書く:
+<div class=file>
+cut_polygon (不完全版)
+<pre>
+<span class=comment># cut_polygon(c0, poly, q):</span>
+<span class=comment>#   点 c0 をセンターとする領域 poly を、直線 q でカットする。</span>
+def cut_polygon(c0, poly, q):
+    <span class=comment># 多角形 poly の線分のうち、q と交差するものを列挙する。</span>
+    interpoint = []
+    interline = []
+    n = len(poly)
+    for i in range(n):
+        <span class=comment># 線分 p0--p1 と直線 q の交点を求める。</span>
+        p0 = poly[i]
+        p1 = poly[(i+1) % n]
+        p2 = get_intersect(p0, p1, q[0], q[1])
+        if len(p2) == 2:
+            <span class=comment># 交差している場合は、その交点および</span>
+            <span class=comment># 「何番目の線分が交差しているか」を記録する。</span>
+            interpoint.append(p2)
+            interline.append(i)
+    <span class=comment># poly と q の交点が 2個の場合、</span>
+    <span class=comment># それらの交点で polyを切り取る。</span>
+    if len(interpoint) == 2:
+        t0 = interpoint[0]  <span class=comment># 交点0</span>
+        t1 = interpoint[1]  <span class=comment># 交点1</span>
+        i0 = interline[0]
+        i1 = interline[1]
+        <span class=comment># poly[i0+1] 〜 poly[i1] の点を [t0, t1] で置き換える。</span>
+        poly = poly[:i0+1] + [t0,t1] + poly[i1+1:]
+    return poly
+</pre>
+</div>
+
+<div class=ex>
+<div class=header>練習問題</div>
+<ul>
+<li> 関数 <code>cut_polygon()</code> を使って、
+中心 <code>[5,5]</code> の正方形 <code>[[0,0], [10,0], [10,10], [0,10]]</code> を
+直線 <code>[[5,0], [7,10]]</code> でカットした多角形を求めよ。
+</ul>
+</div>
+
+<p>
+実は上の練習問題は<u>正しくない</u>。
+なぜなら、多角形を直線でカットした正解には2通りあるからだ。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
+<rect x="20" y="20" width="60" height="60" fill="none" stroke="black" />
+<polygon points="20,20 50,20 65,80 20,80" stroke="black" fill="#ff88ff" stroke-width="2" />
+<g fill="red" stroke="black">
+<rect x="18" y="18" width="4" height="4" />
+<rect x="78" y="18" width="4" height="4" />
+<rect x="78" y="78" width="4" height="4" />
+<rect x="18" y="78" width="4" height="4" />
+<rect x="48" y="18" width="4" height="4" />
+<rect x="63" y="78" width="4" height="4" />
+</g>
+<rect x="48" y="48" width="4" height="4" fill="black" stroke="none" />
+<g text-anchor="middle" style="font-size:75%;">
+<text x="20" y="15">poly[0]</text>
+<text x="80" y="15">poly[1]</text>
+<text x="80" y="80" dy="1em">poly[2]</text>
+<text x="20" y="80" dy="1em">poly[3]</text>
+</g>
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
+<rect x="20" y="20" width="60" height="60" fill="none" stroke="black" />
+<polygon points="80,20 50,20 65,80 80,80" stroke="black" fill="#ff88ff" stroke-width="2" />
+<g fill="red" stroke="black">
+<rect x="18" y="18" width="4" height="4" />
+<rect x="78" y="18" width="4" height="4" />
+<rect x="78" y="78" width="4" height="4" />
+<rect x="18" y="78" width="4" height="4" />
+<rect x="48" y="18" width="4" height="4" />
+<rect x="63" y="78" width="4" height="4" />
+</g>
+<rect x="48" y="48" width="4" height="4" fill="black" stroke="none" />
+<g text-anchor="middle" style="font-size:75%;">
+<text x="20" y="15">poly[0]</text>
+<text x="80" y="15">poly[1]</text>
+<text x="80" y="80" dy="1em">poly[2]</text>
+<text x="20" y="80" dy="1em">poly[3]</text>
+</g>
+</svg>
+</div>
+<p>
+どちらを選ぶべきなのか?
+ヴォロノイ図においては、これはつねに「センターが含まれている方」である。
+さらに、今回の取り決めでは多角形の点の順序が必ず<u>時計回り</u>になるよう
+交点を配置せねばならない。
+これをやるためには、<code>cut_polygon</code> の最後の部分を
+さらに修正する必要がある:
+<blockquote><pre>
+    ...
+    <span class=comment># 「polyのどっち側を残すのか」を決定する。</span>
+    <span class=comment># まずセンター c0 から両方の交点 t0, t1 へのベクトル r0, r1 を計算し</span>
+    <span class=comment># r0 が r1 に対して時計回りの関係にあるかどうかを計算する。</span>
+    r0 = [t0[0]-c0[0], t0[1]-c0[1]]
+    r1 = [t1[0]-c0[0], t1[1]-c0[1]]
+    if 0 &lt; r0[0]*r1[1] - r0[1]*r1[0]:
+        <span class=comment># 時計回りであれば、交点 [t0, t1] は poly と同じ順序であるはずなので</span>
+        <span class=comment># poly[i0+1] 〜 poly[i1] の点を [t0, t1] で置き換える。</span>
+        poly = poly[:i0+1] + [t0,t1] + poly[i1+1:]
+    else:
+        <span class=comment># そうでなければ、交点 [t0, t1] は poly と逆の順序なので</span>
+        <span class=comment># poly[i0] 以前の点, poly[i1+1] 以降の点を [t1, t0] で置き換える。</span>
+        poly = [t1,t0] + poly[i0+1:i1+1]
+    ...
+</pre></blockquote>
+<p>
+以上でようやく <code>cut_polygon()</code> が完成した。
+あとはこれらをすべて組み合わせれば、ヴォロノイ図が描けることになる。
+
+
+<h2 id="assignments">4. 本日の課題</h2>
+
+<div class=exa>
+<div class=header>小課題6. もっとも郵便番号が多い都道府県はどこか?</div>
+<ul>
+  <li> 提出期限: <u>1月27日</u> (1週間後)
+  <li> 提出するファイル: <code>vote.py</code>
+</ul>
+<p>
+前回の小課題5 でも使った郵便番号ファイル (<code>KEN_ALL_ROME.CSV</code>) の中から、
+もっともよく現れる都道府県を集計し表示するプログラムを書け。
+これは、今回学習したハッシュテーブルを使って「投票」をおこなうプログラムを作ればよい:
+<div class=file>
+vote.py
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 都道府県名 → 投票数に対応させるハッシュテーブルを作成。</span>
+vote = {}
+for row in table:
+    <span class=comment># キーは都道府県名</span>
+    key = row[1]
+    if key in vote:
+        <span class=comment># もしハッシュテーブルにすでに含まれていたら、1票を加える。</span>
+        vote[key] = vote[key] + 1
+    else:
+        <span class=comment># そうでなければ、最初の 1票とする。</span>
+        vote[key] = 1
+<span class=comment># 得票結果を表示する。</span>
+print(vote)
+</pre>
+</div>
+<p>
+上のプログラムではすべての都道府県の結果を表示するが、
+これを変更して、最大票を得た都道府県名だけを表示するようにせよ。
+(表示するのは名前だけでよい。)
+</div>
+
+<div class=exa>
+<div class=header>中課題3. ヴォロノイ図の描画</div>
+<ul>
+  <li> 提出期限: <u>2月3日</u> (2週間後)
+  <li> 提出するファイル: <code>voronoi.py</code>
+</ul>
+<p>
+本日学習した方法を使って、スノウの地図の各ポンプをセンターとした
+ヴォロノイ図を作成せよ。その上にコレラ患者の一覧をプロットし、
+各患者がどのエリアに属するか見えるようにすること。
+(街路やポンプの名前は描かなくてもよい。)
+<div class=figure>
+<a href="voronoi.png"><img src="voronoi.png" width="306" height="306" ></a>
+</div>
+<h4>採点基準</h4>
+<ul>
+<li> プログラムは正しく動くか? (10点)
+<li> ヴォロノイ図が見やすく出力されているか? (5点)
+<li> コメントで動作原理を説明しているか? (5点)
+</ul>
+<h4>ヒント・プログラムのおおまかな構造</h4>
+<p>
+基本的には、いままで習った各部分をすべて組み合わせればよい。
+プログラムは長くなるが、それほど複雑な部分はないはずである。
+ただし、一部をスノウの地図に合わせて修正せねばならないので、
+全体を理解しておく必要はある。
+<blockquote><pre>
+<span class=comment># ポンプの一覧を読み込む。</span>
+import csv
+with open("Snow.pumps.csv", encoding="utf-8") as fp:
+    pumps = list(csv.reader(fp))
+del pumps[0]
+
+<span class=comment># get_bisector(c0, c1)</span>
+<span class=comment>#   c0--c1 間の垂直二等分線を求める。</span>
+def get_bisector(c0, c1):
+    ...
+
+<span class=comment># get_intersect(p0, p1, q0, q1):</span>
+<span class=comment>#   線分 p0--p1 と直線 q0--q1 の交点を求める。</span>
+def get_intersect(p0, p1, q0, q1):
+    ...
+
+<span class=comment># cut_polygon(c0, poly, q):</span>
+<span class=comment>#   点 c0 をセンターとする領域 poly を、直線 q でカットする。</span>
+def cut_polygon(c0, poly, q):
+    ...
+
+<span class=comment># pumpsの各座標をセンターとしてヴォロノイ図を作成。</span>
+centers = []
+polygons = []
+for row in pumps:
+    x = float(row[3])
+    y = float(row[4])
+
+<span class=comment># show_poly(poly)</span>
+<span class=comment>#   多角形を指定された色で表示する。</span>
+def show_poly(poly, color):
+    s = ""
+    for p in poly:
+        s = s + f" {p[0]},{p[1]}"
+    print(f'&lt;polygon points="{s}" fill="{color}" stroke="black" /&gt;')
+    return
+
+<span class=comment># 各領域をSVGで描画。</span>
+print("&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='800' height='800'&gt;")
+for poly in polygons:
+    show_poly(poly, 'none')
+print("&lt;/svg&gt;")
+</pre></blockquote>
+
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

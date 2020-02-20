@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 コンピュータサイエンス第一 第1週 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+.bin { font-family: Courier New, Courier, monospace; font-style: italic; font-weight: 900; color: blue; }
+.dec { font-family: serif; font-style: italic; font-weight: 900; color: red; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>コンピュータサイエンス第一 第1週</h1>
+<div class=nav>2019年9月30日 (月)</div>
+
+<ul>
+<li> 日時: 月曜日
+  <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=7&amp;KamokuCD=110800&amp;KougiCD=201907201&amp;Nendo=2019&amp;vid=03">1-2限 (1b)</a>、
+  および
+  <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=7&amp;KamokuCD=110800&amp;KougiCD=201907203&amp;Nendo=2019&amp;vid=03">3-4限 (2b)</a>
+<li> 場所: S4 演習室1 (3F)
+</ul>
+
+
+<h2>3. コンピュータの原理</h2>
+<p>
+おそろしく単純な動作 (後述) を大量に組み合わせて、複雑な処理をおこなう。
+<ul>
+<li> 単純な操作 × 膨大な数 = 複雑な処理
+</ul>
+
+<h3>3.1. コンピュータの4大要素</h3>
+<p>
+すべてのコンピュータは
+以下の4つの部分から成り立っている。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="130">
+    <g stroke="black" stroke-width="2" fill="none">
+      <rect x="10" y="10" width="80" height="40" />
+      <rect x="120" y="10" width="80" height="40" />
+      <rect x="230" y="10" width="80" height="40" />
+      <rect x="120" y="80" width="80" height="40" />
+      <line x1="90" y1="30" x2="120" y2="30" />
+      <line x1="200" y1="30" x2="230" y2="30" />
+      <line x1="160" y1="50" x2="160" y2="80" />
+    </g>
+    <g style="dominant-baseline:central;" text-anchor="middle">
+      <text x="50" y="30">入力装置</text>
+      <text x="160" y="30">演算装置</text>
+      <text x="270" y="30">出力装置</text>
+      <text x="160" y="100">記憶装置</text>
+    </g>
+  </svg>
+</div>
+<ol>
+<li> 入力装置 … マウス、キーボードなど
+<li> 出力装置 … 画面、スピーカなど
+<li> 記憶装置 … メモリ、ハードディスクなど
+<li> 演算装置
+</ol>
+
+<p>
+スマートフォンも炊飯器もエレベータも、
+コンピュータにしてみれば、やっていることは一緒。
+入力装置から来た情報を演算装置であれこれ処理して、出力装置に渡しているにすぎない。
+(人間さえ、コンピュータからみれば単なる外部装置のひとつにすぎない。)
+
+<div class=ex>
+<div class=header>練習問題</div>
+<ol type=a>
+<li> 炊飯器をコンピュータで制御する場合、その入力装置・出力装置を答えよ。
+<li> エレベータをコンピュータで制御する場合、その入力装置・出力装置を答えよ。
+</ol>
+</div>
+
+<h3>3.2. 情報とは何か?</h3>
+<p>
+コンピュータ上の情報は、
+<u>2種類の異なる状態</u>の組み合わせで表される。
+<ul>
+<li> スイッチの入／切
+<li> <span class=bin>0</span> と <span class=bin>1</span>
+</ul>
+<p>
+数字、文字、画像、音声などをコンピュータで扱うためには、
+これらの情報をすべて <span class=bin>0</span> と <span class=bin>1</span> だけで表す必要がある。
+
+
+<h3>3.3. プログラムとは何か</h3>
+
+<p>
+コンピュータがおこなう処理 (計算過程、プロセス) を
+いくつかの<u>命令</u>の列によって表現し、
+それを<u>実行</u>することにより処理する。
+命令の列は、記憶装置に入れておく。
+プログラムも情報である。
+
+<ul>
+<li> 2つの値を足す。
+<li> メモリ上のある値を別の場所にコピーする。
+<li> 繰り返し処理をおこなう。
+<li> …
+</ul>
+
+<p>
+(注意: これは実際には数値の列なのだが、
+現代は文字によって表せるようになっているので、
+この授業ではもっぱらプログラミング言語を使って表現する)
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="180">
+    <g stroke="black" stroke-width="2" fill="none">
+      <rect x="10" y="10" width="100" height="160" />
+      <rect x="210" y="10" width="100" height="160" />
+      <rect x="220" y="70" width="80" height="40" />
+      <rect x="220" y="120" width="80" height="40" />
+      <line x1="110" y1="90" x2="210" y2="90" stroke-width="8" />
+    </g>
+    <g text-anchor="middle">
+      <text x="60" y="40">演算装置</text>
+      <text x="260" y="40">メモリ</text>
+      <text x="260" y="90" style="font-size:80%;">プログラム</text>
+      <text x="260" y="140" style="font-size:80%;">データ</text>
+    </g>
+  </svg>
+</div>
+
+<h4>プログラミング言語 Python</h4>
+<ul>
+  <li> 1990年に開発。
+  <li> コメディ番組 "Monty Python's Flying Circus" にちなんで名付けられた。
+  <li> 簡単な計算、データの処理、および繰り返し処理が可能。
+</ul>
+
+
+<h2>4. Python プログラムの基礎</h2>
+
+<h3>4.1. 最初の Python プログラム</h3>
+<ol>
+<li> 「ターミナル」を起動する。
+<li> デスクトップ上にフォルダをひとつ作成する
+<li> そのフォルダに <code>cd</code> する。
+<li> IDLE を使って <code>hello.py</code>
+  というテキストファイルを作成する。<br>
+(<u>注意</u>: 大文字・小文字の区別は正確に!)
+<pre>
+$ <strong>cd Desktop</strong>
+$ <strong>mkdir cs1</strong>
+$ <strong>cd cs1</strong>
+$ <strong>idle hello.py</strong>
+</pre>
+
+<div class=file>
+hello.py
+<pre>
+print("Hello, World!")
+</pre>
+</div>
+
+<li> プログラム
+<code>hello.py</code> を実行する。
+<pre>
+$ <strong>python hello.py</strong>
+Hello, World!
+</pre>
+</ol>
+<p>
+以下、この <code>hello.py</code> をいろいろなファイルに
+変えることで演習・課題をおこなう。
+
+<h3>4.2. 変数の使用</h3>
+<ol>
+<li> 「ターミナル」を起動する。
+<li> 先ほど作成したフォルダに <code>cd</code> する。
+<li> IDLE を使って <code>greetings.py</code>
+  というテキストファイルを作成する。<Br>
+  <u>1文字</u>も間違えないように!
+
+<div class=file>
+greetings.py
+<pre>
+print("What is your name?")
+x = input("name=")
+print(f"Good morning {x}!")
+</pre>
+</div>
+<li> Python で <code>greetings.py</code> を実行する。
+<pre>
+$ <strong>python greetings.py</strong>
+What is your name?
+name=<strong>euske</strong>
+Good morning euske!
+</pre>
+</ol>
+
+<div class=ex>
+<div class=header>演習1-1.</div>
+<ul>
+<li> 上のプログラムを入力し、実行せよ。
+</ul>
+</div>
+
+<h3>4.3. 文とは</h3>
+<p>
+プログラム中の各行を、それぞれ<u>文</u> (statement) とよぶ。
+各文は、書かれたとおりの順序で実行される。
+<table border align=center>
+<tr><td>文1</td><td><code>print("What is your name?")</code></td></tr>
+<tr><td>文2</td><td><code>x = input("name=")</code></td></tr>
+<tr><td>文3</td><td><code>print(f"Good morning {x}!")</code></td></tr>
+</table>
+
+<div class=ex>
+<div class=header>演習1-2.</div>
+<ul>
+<li> 上のプログラムの 2行目と3行目を入れかえると、何が起こるか確認せよ。
+</ul>
+</div>
+
+<div class=ex>
+<div class=header>演習1-3.</div>
+<ul>
+<li> 上のプログラムの 3行目を10個繰り返し (コピーを使う)、
+<code>「Good morning <em>名前</em> !」</code>が
+10回表示されるようにせよ。
+</ul>
+</div>
+
+<h4>ふたたび、コンピュータサイエンスとは何か?</h4>
+<p>
+コンピュータサイエンスとは、
+「手順 (プロセス)」をあつかう学問である。
+<p>
+プログラムにおいて、実行順序はきわめて重要である。
+ある意味、カレーの作り方もプログラムである。(実行順序が重要)
+<div class=figure>
+<a href="curry.jpg"><img width="400" src="curry.jpg"></a>
+</div>
+
+<h3>4.4. 関数・変数・代入とは</h3>
+<p>
+各文のなかの <code>print(...)</code>、<code>input(...)</code> のような部分を
+<u>関数</u> (function) とよぶ。
+<p>
+また、<code>x</code> のような部分を<u>変数</u> (variable) とよび、
+<code>x = input("name=")</code> という文全体を
+<u>代入文</u> (assignment) という。
+
+<p>
+変数は、いくつでも定義することができる。
+<blockquote class=file>
+greetings2.py
+<pre>
+print("What is your name?")
+x = input("name1=")
+y = x
+print(f"Good morning {x} and {y}!")
+</pre>
+</blockquote>
+
+<div class=ex>
+<div class=header>演習1-4.</div>
+<ul>
+<li> 上のプログラムの文 <code>y = x</code> で <code>input()</code> 関数を使い、
+実際に 2人目の名前を尋くようにせよ。
+</ul>
+</div>
+
+<h4>変数の上書き</h4>
+<p>
+さらに、一度変数に代入された値は、別の代入文で上書きすることができる。
+<blockquote class=file>
+greetings3.py
+<pre>
+x = input("name1=")
+y = input("name2=")
+x = y
+print(f"Good morning {x} and {y}!")
+</pre>
+</blockquote>
+
+<div class=ex>
+<div class=header>演習1-5.</div>
+<ul>
+<li> 上のプログラムがどう動くか、<u>実行する前に</u>予測せよ。
+</ul>
+</div>
+
+<h4>変数の入れ替え</h4>
+<p>
+代入文をある順序で書くと、
+2つの変数の内容を入れ替えることができる。
+
+<blockquote class=file>
+swap.py
+<pre>
+x = "john"
+y = "mary"
+<div class=qqq>  ???
+  ???
+  ???
+</div>print(f"x={x}, y={y}")
+</pre>
+</blockquote>
+
+<div class=ex>
+<div class=header>演習1-6.</div>
+<ul>
+<li> 上のプログラム中の [???] 部分に代入文をいくつか書き、
+変数 <code>x</code> と <code>y</code> の値を入れ替えるようにせよ。<Br>
+(ヒント: <code>x</code> と <code>y</code> 以外に
+もうひとつの変数が必要。)
+<pre>
+$ <strong>python swap.py</strong>
+x=mary, y=john
+</pre>
+</ul>
+</div>
+
+<h3>4.5. 条件分岐とは</h3>
+<p>
+変数の値によって、プログラムに異なる動きをさせることができる。
+このような機能を <u>条件分岐</u> (conditional branch) という。
+
+<blockquote class=file>
+conditional.py
+<pre>
+print("What is your name?")
+x = input("name=")
+if x == "euske":
+    print("You are awesome!")
+else:
+    print("You are not awesome!")
+</pre>
+</blockquote>
+
+<p>
+このプログラムを実行すると、以下のように動く。
+<blockquote><pre>
+$ <strong>python greetings.py</strong>
+What is your name?
+name=<strong>euske</strong>
+You are awesome!
+
+$ <strong>python greetings.py</strong>
+What is your name?
+name=<strong>john</strong>
+You are not awesome!
+</pre></blockquote>
+
+<p>
+Python における <code>if</code>文は、
+変数の値によって 2種類の異なる動作をさせることができる。
+<blockquote><pre>
+if <em>変数名</em> == <em>値</em>:
+    <em>等しい場合の動作</em>
+else:
+    <em>等しくない場合の動作</em>
+</pre></blockquote>
+
+<p>
+<code>if</code>の内部では、
+必ず<u>インデント</u> (indentation、字下げ) が必要である。
+たとえば上の例を以下のようにすると動作しない:
+<blockquote class=file>
+エラーになる例:
+<pre>
+print("What is your name?")
+x = input("name=")
+if x == "euske":
+print("You are awesome!")
+else:
+print("You are not awesome!")
+</pre>
+</blockquote>
+
+<p>
+IDLE では、<code>if</code>文を書くと自動的に
+インデントが行われる。または <kbd>Tab</kbd> キーを押しても
+半角スペース4個が挿入される。
+
+<h4>if文の使用例</h4>
+<ul>
+<li> 標準的な使用例:
+<pre>
+if x == "foo":
+    print("x is foo.")
+else:
+    print("x is not foo.")
+</pre>
+<li> 2つの変数の内容を比較することもできる:
+<pre>
+if x == y:
+    print("x is y.")
+else:
+    print("x is not y.")
+</pre>
+<li> 分岐の中に複数の文を入れることもできる:
+<pre>
+if x == "euske":
+    print("You are awesome.")
+    print("And handsome, too.")
+else:
+    print("You are not awesome.")
+    print("Or handsome, either.")
+</pre>
+<li> <code>else</code>節は省略可能である。
+こうすると、等しくない場合は何も実行されない:
+<pre>
+if day == "sunday":
+    print("There is no class.")
+</pre>
+<li> <code>if</code>文の中に
+さらに<code>if</code>文を入れることもできる。
+この場合は、2重に字下げする:
+<pre>
+if a == "2":
+    if b == "3":
+        print("Correct!")
+    else:
+        print("Incorrect!")
+else:
+    print("Incorrect!")
+</pre>
+</ul>
+
+<h4>Pythonでインデントする際の注意</h4>
+<p>
+実際にはインデントは (一貫しているかぎり)
+何マス空けてもよいが、通常は <u>半角スペース4個</u>
+(<code>&nbsp;&nbsp;&nbsp;&nbsp;</code>) を使う慣例である。
+ここに、半角スペース以外の文字を使うと動かない。
+たとえば以下の例は正しく見えるが、実際にはエラーとなる:
+
+<blockquote class=file>
+動かない例:
+<pre>
+print("What is your name?")
+x = input("name=")
+if x == "euske":
+　　print("You are awesome!")
+else:
+　　print("You are not awesome!")
+</pre>
+</blockquote>
+
+<div class=ex>
+<div class=header>演習 1-6.</div>
+<ul>
+<li> 上の例を IDLE 上にコピーし、実際に動かないことを確認せよ。
+なぜ動かないのか原因をつきとめ、正しいコードに修正せよ。
+</ul>
+</div>
+
+
+<div class=exa>
+<div class=header>本日の小課題 1. 変数の内容の入れ替え</div>
+<ul>
+  <li> 提出期限: <u>10月14日</u> (2週間後)
+  <li> 提出方法: <a href="https://secure.ocw.titech.ac.jp/ocwi/index.php?module=Ocwi&action=Index">OCW-i</a> から提出。
+  <li> 演習 1-5. 再掲: 以下のプログラム中の [???] 部分に代入文を書き、
+変数 <code>x</code> と <code>y</code> の値を入れ替えるようにせよ。<Br>
+(ヒント: <code>x</code> と <code>y</code> 以外に
+もうひとつの変数が必要。)
+<blockquote class=file>
+swap.py
+<pre>
+x = "john"
+y = "mary"
+<div class=qqq>???
+y = x
+???
+</div>print(f"x={x}, y={y}")
+</pre>
+</blockquote>
+</ul>
+</div>
+
+<p>
+なお、OCW-i に提出する際のコメント欄はほとんど読まないので、
+あまり重要なことは書かないこと。(読みとばす危険性がある)
+<div class=figure>
+<img width="484" height="348" src="../week1/ocwi.png">
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

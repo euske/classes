@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2019年度 コンピュータサイエンス第一 (1b, 2b) 試験問題サンプル / 新山 祐介</title>
+<style>
+h1 { border-bottom: solid 4px black; }
+h2 { border-bottom: solid 2px black; }
+li { margin-bottom: 1.5em; }
+table { border-collapse: collapse; }
+table tr td { padding: 0.5em; }
+table { margin: 1em; }
+pre { margin: 0.5em; width: 30em; padding: 4px; font-size: 125%; }
+.blank { border: 1px solid black; color: transparent; font-size: 150%; }
+</style>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>2019年度 コンピュータサイエンス第一 (クラス 1b, 2b)<br>
+試験問題サンプル</h1>
+
+<p>
+おおむねこんな問題が出題されます。<br>
+(回答は、空欄の中の文字を選択してコピー・ペーストすると表示されます)
+
+<h2>fact.py</h2>
+<ol>
+<li> 与えられた数 <em>n</em> の階乗 <em>n</em>! を
+  計算する関数 <code>fact</code> を書きたい。以下の空欄を埋めよ。
+<pre>
+def fact(n):
+    x = 1
+    for i in range(n):
+        x = <span class=blank>x * (i + 1)</span>
+    return x
+</pre>
+
+<li> 同じ関数を、<code>while</code>文を使った別の書き方をするとどうなるか。
+  以下の空欄を埋めよ。
+<pre>
+def fact(n):
+    x = 1
+    while 0 &lt; n:
+        x = x * n
+<div class=blank>        n = n - 1
+</div>    return x
+</pre>
+
+<li> 上の関数 <code>fact</code> を改良して、
+  <em>n</em>! ではなく <em>n</em>! ÷ (<em>n</em>-<em>r</em>)! を<u>効率よく</u>
+  計算する関数 <code>fact2</code> を作りたい。
+  以下の空欄を埋めよ。
+<pre>
+def fact2(n, r):
+    x = 1
+<div class=blank>    while 0 &lt; r:
+        x = x * n
+        n = n - 1
+        r = r - 1
+</div>    return x
+</pre>
+
+</ol>
+
+<h2>calendar.py</h2>
+
+<ol>
+<li> 以下のプログラムは2019年11月の簡単なカレンダーを表示する。
+  実行結果の<u>最初の5行</u>を書け。
+<pre>
+a = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+for i in range(30):
+    d = i + 1
+    w = (d + 4) % 7
+    print(d, ":", a[w])
+</pre>
+<p>
+実行結果 (最初の5行のみ):
+<pre><div class=blank>1 : Fri
+2 : Sat
+3 : Sun
+4 : Mon
+5 : Tue
+</div></pre>
+
+<li> このプログラムを改良して、週の変わり目
+  (<code>Sat</code> → <code>Sun</code> に変わる間) に
+  横線 <code>---</code> だけの行を表示させたい。
+  以下の空欄を埋めよ。
+<pre>
+a = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+for i in range(30):
+    d = i + 1
+    w = (d + 4) % 7
+    print(d, ":", a[w])
+<div class=blank>    if w == 6:
+        print("---")
+</div></pre>
+
+<li> このカレンダーを12月用に変更する場合、
+  上のプログラム中のどの数字を書き換える必要があるか。
+  「<em>x</em> → <em>y</em>」のような形ですべて書け。
+  なお、2019年12月1日は日曜日である。
+<pre><div class=blank>30 → 31
+4 → 6
+</div></pre>
+
+</ol>
+
+<h2>bar.py</h2>
+
+<ol>
+<li> 以下のプログラムは何を表示するか。
+<pre>
+for i in range(5):
+    y = 5-i
+    s = str(y)+":"
+    for x in range(4):
+        s = s + "X"
+    print(s)
+</pre>
+<p>
+実行結果:
+<pre><div class=blank>5:XXXX
+4:XXXX
+3:XXXX
+2:XXXX
+1:XXXX
+</div></pre>
+
+<li> 与えられた配列を使って、
+  縦の棒グラフを表示する関数 <code>bar</code> を書きたい。
+  プログラム中の空欄を埋めよ。
+<pre>
+def bar(a):
+    for i in range(5):
+        y = 5-i
+        s = ""
+        for x in range(len(a)):
+            n = a[x]
+<div class=blank>            if y &lt;= n:
+                s = s + "X"
+            else:
+                s = s + " "
+</div>        print(s)
+    return
+
+bar([4, 1, 0, 3])
+</pre>
+<p>
+  上のプログラムを実行すると、以下のように表示されるものとする:
+<pre>
+X
+X  X
+X  X
+XX X
+</pre>
+
+<li> このプログラムには、明らかな制限がある。それはなにか。
+<pre><div class=blank>1. 棒グラフの高さは5行まで。
+2. 表現できるのは整数の値のみ。
+</div></pre>
+
+</ol>
+
+<hr>
+<address>Yusuke Shinyama</address>

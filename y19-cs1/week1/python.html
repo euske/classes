@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>Ruby と Python の違い / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+pre { outline: 1px solid black; padding: 4px; font-size: 125%; }
+table tr td { padding: 0.5em; }
+table { margin: 1em; }
+td, th { outline: 2px solid black; }
+.ruby { background: #ffdddd; }
+.python { background: #ddddff; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>Ruby と Python の違い</h1>
+
+<p>
+本授業で扱う範囲では、Ruby と Python はほとんど同じだが、
+微妙な構文上の違いがある。
+
+<table border>
+<tr><th></th>
+<th class=ruby style="width:20em;">Ruby</th>
+<th class=python style="width:20em;">Python</th>
+</tr><tr>
+
+<td>実行方法</td>
+<td class=ruby>
+普通にターミナルから実行する。
+<pre>
+$ <strong>ruby sample.rb</strong>
+</pre>
+</td>
+<td class=python>
+普通にターミナルから実行する。
+<pre>
+$ <strong>python sample.<mark>py</mark></strong>
+</pre>
+</td>
+</tr><tr>
+
+<td>構文</td>
+<td class=ruby>
+Rubyでは、
+関数定義 / <code>if</code> / <code>while</code> / <code>for</code> で
+コロン <code>:</code> が必要ない。
+各文の終わりには<code>end</code>が必要。
+関数呼び出しにはカッコ <code>()</code> をつける必要はない。
+プログラム中のコメントは <code>#</code> で始める。
+<pre>
+# 0からn-1までの数を表示する。
+def f(n)
+    for i in 0..(n-1)
+        puts i
+        if i % 2 == 0
+            puts "even"  # 偶数
+        else
+            puts "odd"   # 奇数
+        end
+    end
+end
+</pre></td>
+<td class=python>
+Pythonでは、
+関数定義 / <code>if</code> / <code>while</code> / <code>for</code> で
+コロン <code>:</code> が必要。
+文の終わりはインデントにより表現される。
+関数呼び出しにはカッコ <code>()</code> が必要。
+プログラム中のコメントは <code>#</code> で始める。
+<pre>
+# 0からn-1までの数を表示する。
+def f(n)<mark>:</mark>
+    for i in range(n)<mark>:</mark>
+        print(i)
+        if i % 2 == 0<mark>:</mark>
+            print("even")  # 偶数
+        else:
+            print("odd")   # 奇数
+</pre></td>
+</tr><tr>
+
+<td>字下げ</td>
+<td class=ruby>
+Rubyでは、字下げ(インデント) は必要ない。
+たとえば、以下のプログラムは正しく動く。
+<pre>
+def f(n)
+for i in 0..n
+puts i
+if i % 2 == 0
+puts "even"
+else
+puts "odd"
+end
+end
+end
+</pre></td>
+<td class=python>
+Pythonでは、字下げ(インデント) が必要。
+以下のプログラムは<u>動かない</u>。
+インデントは、普通スペース 4個分ずつおこなう。
+<pre>
+def f(n):
+for i in range(n):
+print(i)
+if i % 2 == 0:
+print("even")
+else:
+print("odd")
+</pre></td>
+</tr><tr>
+
+<td>基本的な計算</td>
+<td class=ruby>
+<pre>
+a = 2
+b = a + 3
+c = (a * b) % 5
+</pre>
+割り算は、対象が整数の場合は整数となり (商)、
+対象が実数の場合は実数となる。
+<pre>
+14 <mark>/</mark> 5      # 2
+14.0 <mark>/</mark> 5.0  # 2.8
+</pre></td>
+<td class=python>
+<pre>
+a = 2
+b = a + 3
+c = (a * b) % 5
+</pre>
+割り算は、<code>//</code>演算子を使った場合は整数となり (商)、
+<code>/</code>演算子を使った場合は実数となる。
+<pre>
+14 <mark>//</mark> 5   # 2
+14 <mark>/</mark> 5    # 2.8
+</pre></td>
+</tr><tr>
+
+<td>配列</td>
+<td class=ruby>
+<pre>
+a = [5,9,4,0]
+a[3] = 7
+x = a[0]
+n = <mark>a.length</mark>
+</pre></td>
+<td class=python>
+<pre>
+a = [5,9,4,0]
+a[3] = 7
+x = a[0]
+n = <mark>len(a)</mark>
+</pre></td>
+</tr><tr>
+
+<td>文字列の表示</td>
+<td class=ruby>
+<pre>
+w = "donkey ears"
+puts "King Midas has "+w+" !"
+</pre></td>
+<td class=python>
+<pre>
+w = "donkey ears"
+print("King Midas has "+w+" !")
+または
+print("King Midas has", w, "!")
+</pre>
+Pythonでは、カンマで文字列の間にスペースが入る。
+</td>
+</tr><tr>
+
+<td>文字列の入力</td>
+<td class=ruby>
+<pre>
+puts "name?"
+name = gets()
+</pre></td>
+<td class=python>
+<pre>
+name = input("name?")
+</pre></td>
+</tr><tr>
+
+<td>文字列←→整数</td>
+<td class=ruby>
+<pre>
+"123".to_i
+456.to_s
+</pre></td>
+<td class=python>
+<pre>
+int("123")
+str(456)
+</pre></td>
+</tr><tr>
+
+<td>文字←→文字コード</td>
+<td class=ruby>
+<pre>
+"A".ord
+65.chr
+</pre></td>
+<td class=python>
+<pre>
+ord("A")
+chr(65)
+</pre></td>
+</tr><tr>
+
+<td>if文</td>
+<td class=ruby>
+<pre>
+if n &lt; 0
+    puts "negative"
+<mark>elsif</mark> 0 &lt; n
+    puts "positive"
+else
+    puts "zero"
+end
+</pre></td>
+<td class=python>
+<pre>
+if n &lt; 0<mark>:</mark>
+    print("negative")
+<mark>elif</mark> 0 &lt; n<mark>:</mark>
+    print("positive")
+else<mark>:</mark>
+    print("zero")
+</pre></td>
+</tr><tr>
+
+<td>while文</td>
+<td class=ruby>
+<pre>
+n = 0
+x = 16
+while 0 &lt; x
+   n = n + 1
+   x = x / 2
+end
+</pre></td>
+<td class=python>
+<pre>
+n = 0
+x = 16
+while 0 &lt; x<mark>:</mark>
+   n = n + 1
+   x = x <mark>//</mark> 2
+</pre></td>
+</tr><tr>
+
+<td>for文</td>
+<td class=ruby>
+<pre>
+a = [5,9,4,0]
+for i in <mark>0..3</mark>
+  puts a[i]
+end
+</pre></td>
+<td class=python>
+<pre>
+a = [5,9,4,0]
+for i in <mark>range(4)</mark>:
+    print(a[i])
+</pre></td>
+</tr><tr>
+
+</table>
+
+<hr>
+<address>Yusuke Shinyama</address>

@@ -521,7 +521,7 @@ for i in range(n):
 その中に含まれる全国の郵便番号一覧を記した <code>.csv</code> ファイルを
 Python で読み込むと、以下のようなリストのリストができる:
 <ul>
-<li> <a href="ken_all_rome.zip">全国の郵便番号リスト (ローマ字読みつき)</a>
+<li> <a href="../../data/ken_all_rome.zip">全国の郵便番号リスト (ローマ字読みつき)</a>
 </ul>
 <blockquote><pre class=small>
 ['0600000', '北海道', '札幌市\u3000中央区', '以下に掲載がない場合', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'IKANIKEISAIGANAIBAAI']
@@ -542,7 +542,7 @@ with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
 for row in table:
     <span class=comment># 各行の0番目の要素 (郵便番号) をとりだす。</span>
     p = row[0]
-    if p[0] == "1": 
+    if p[0] == "1":
         <span class=comment># 東京都の番号は 1 から始まるので、それを表示。</span>
         print(p)
 </pre>
@@ -590,7 +590,7 @@ $ <strong>python postal.py 1520001</strong>
 コレラの発生状況を見てみよう。
 まず、以下のデータをダウンロードし展開する。
 <ul>
-<li> <a href="./SnowMap.zip">SnowMap.zip</a>
+<li> <a href="../../data/SnowMap.zip">SnowMap.zip</a>
 </ul>
 (これは R Project の
 <a href="https://cran.r-project.org/web/packages/HistData/index.html">HistData</a>
@@ -732,7 +732,7 @@ if 0 &lt;= find(address, key):
 </ul>
 <p>
 授業中に紹介した
-<a href="./SnowMap.zip">SnowMap.zip</a> 中のファイルを使って、
+<a href="../../data/SnowMap.zip">SnowMap.zip</a> 中のファイルを使って、
 以下のような地図をSVG形式で描画するプログラム
 <code>snowmap.py</code> を書け:
 <ul>

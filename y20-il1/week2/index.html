@@ -1,0 +1,560 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2019年度 情報リテラシ第一 第2週 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { width: 50vw; }
+.figure { padding: 4px; border: 1px solid black; }
+.counter { margin: 1em; padding: 1em; border: 2pt solid black; font-size: 150%; font-style: bold; }
+--></style>
+<script src="counter.js"></script>
+<script>
+var counter = null;
+function setupCounter() {
+  counter = new Counter(document.getElementById("divCounter"),
+                        document.getElementById("divDecimal"));
+  counter.setBaseSelector(document.getElementById("baseSelector"));
+  counter.setRunningBox(document.getElementById("checkRun"));
+  counter.setVisibleBox(document.getElementById("checkVis"));
+}
+</script>
+<script>
+function toggle(e) {
+  for (let k in e.children) {
+    let c = e.children[k];
+    c.hidden = !c.hidden;
+  }
+}
+</script>
+</head>
+<body onload="setupCounter();">
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>情報リテラシ第一 第2週</h1>
+<div class=nav>2019年4月11日 (木) 1-2限</div>
+
+<ol start="0">
+<li> <a href="#prev">前回の宿題</a>
+<li> <a href="#grading">本授業の成績について</a>
+<li> <a href="#repasswd">パスワードの再設定</a>
+<li> <a href="#register">姓名読み登録</a>
+<li> <a href="#howtoportal">ポータルサイトでできること</a>
+<li> <a href="#howtomac">超基本的な Mac の使い方</a>
+<li> <a href="#computer">コンピュータの基本原理</a>
+<li> <a href="#units">よく使われる単位</a>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<li> <a href="#nextweek">来週の予定</a>
+</ol>
+
+
+<h3>雑談</h3>
+<p>
+英語の YouTube を見ると、日本人がやってるのとレベルが全然違う:
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=MHTizZ_XcUM">Mark Rover (元NASAエンジニア)</a>
+<li> <a href="https://www.youtube.com/watch?v=3MqYE2UuN24">Minutes Physics (身近な物理学)</a>
+<li> <a href="https://www.youtube.com/watch?v=p_di4Zn4wz4">3blue1brown (数学の視覚化)</a>
+<li> <a href="https://www.youtube.com/watch?v=mXLzfAHl4-k">Simone Giertz (おバカなロボット製作)</a>
+<li> <a href="https://www.youtube.com/watch?v=GeyDf4ooPdo">Veritasium (身近な物理現象)</a>
+</ul>
+<h4>いいところ</h4>
+<ul>
+<li> 個人で作っている。
+<li> ただ「面白いだけの動画」ではない。
+<li> 数式がふつうに出てくる。
+</ul>
+<p>
+結論: 英語ができれば、良質な教材がタダで手に入る。
+
+
+<h2 id="prev">0. 前回の宿題</h2>
+<ul>
+  <li> 教育用システムとポータルサイト用<u>両方</u>に使うための、
+    <u>強力な</u>パスワードを考える。
+  <li> それを記憶する。
+</ul>
+
+
+<h2 id="grading">1. 本授業の成績について</h2>
+<ul>
+  <li> 本学の成績は点数制 (0〜100点) です。
+  <li> 本授業の内訳 (単位取得には60点が必要):
+    <ul>
+      <li> 履修: 10点
+      <li> 授業参加: 5点×7回 = 35点 (当てられたら質問に答える)
+      <li> 小テスト: 5点×5回 = 25点
+      <li> 課題提出: 10点×3回 = 30点
+    </ul>
+</ul>
+
+
+<h2 id="repasswd">2. パスワードの再設定</h2>
+<ul>
+  <li> あれほど「パスワードは同じものを使うな」といいましたが…
+    <ul>
+      <li> 教育用パソコン・ポータルサイトで<u>同じパスワード</u>を使ってよい。
+      <li> ただし、<u>推測されにくい</u> (=強い) ものにすること。
+        (自信がない場合は紙に書きましょう。)
+    </ul>
+  <li> 手順:
+    <ol>
+      <li> <s>まず教育用パソコンに前回決めた(暫定的な)パスワードでログインする。</s>
+      <li> <s>教育用パソコンのパスワードを変更する。</s>
+      <li> ポータルサイトを開き、<a href="https://portal.titech.ac.jp/ezguide/pwchange.html">パスワードを変更する</a>。
+      <li> <s>教育用パソコンを再起動して、再度ログインする。</s>
+    </ol>
+</ul>
+
+<h3><s>2.1. キーチェーンのダイアログに対処する</s></h3>
+<p>
+パスワードを変更して再度ログインした場合、
+「<a href="http://www.edu.gsic.titech.ac.jp/index.php?%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E6%99%82%E3%81%AB%E3%82%AD%E3%83%BC%E3%83%81%E3%82%A7%E3%83%BC%E3%83%B3%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%8C%E8%A1%A8%E7%A4%BA%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99">ログインキーチェーンのロックを解除できませんでした</a>」という
+ウィンドウが表示されることがある。
+<p>
+このような場合は「<code>新しいキーチェーンの作成</code>」をクリックすること。
+
+<h3>2.2. パスワードを忘れた場合</h3>
+<ul>
+  <li> 教育用パソコンのパスワードを忘れた場合 …<br>
+    "<code>portal</code>" / "<code>portal</code>" でログインして、やり直す。
+  <li> ポータルサイトのパスワードを忘れた場合 …<br>
+    封筒に書いてある PIN番号を使って、西8号館1階の教務課でリセットしてもらう。<br>
+    <a href="https://portal.titech.ac.jp/faq/faq_trouble.html">Tokyo Tech Portal - 困ったときは</a>
+</ul>
+
+<h3>2.3. おすすめのパスワードマネージャ</h3>
+<ul>
+<li> 複数のサイトで異なるパスワードを全部覚えておくのは大変!
+<li> 解決策1. ブラウザのパスワード管理機能を使う。<br>
+  → スマートフォンとPCを両方使うときに不便。
+<li> 解決策2. <strong>パスワードマネージャ</strong>を使うと便利:
+<ul>
+  <li> 複数のサイトのパスワードを登録しておく。
+  <li> ログインするときにパスワードをコピー・ペーストする。
+  <li> 「マスターパスワード」を1つ覚えておけばOK。
+</ul>
+<li> 有料のもの: 
+  <a href="https://www.dashlane.com/">Dashlane</a>,
+  <a href="https://www.keepersecurity.com/">Keeper</a>,
+  <a href="https://1password.com/">1Password</a>
+<li> 無料のもの: <a href="https://bitwarden.com/">Bitwarden</a> (英語)
+  <div class=figure><a href="bitwarden.png"><img src="bitwarden.png"></a></div>
+</ul>
+
+
+<h2 id="register">3. 姓名読み登録</h2>
+<p>
+姓名読み登録をすると、大学のメールアドレスが使えるようになります。
+<ul>
+  <li> ローマ字で Yusuke Shinyama のように登録する (名・姓の順。1文字目は大文字。)<br>
+    <a href="https://portal.titech.ac.jp/ezguide/namereg.html">姓名読み登録</a>
+  <li> これを登録すると、電子メールが使えるようになる。
+  <li> <u>一度しか入力できない</u>ので、絶対に間違えないこと!
+    <ul>
+      <li> 万が一、間違えた場合… 教務課で手続き。
+    </ul>
+</ul>
+
+
+<h2 id="howtoportal">4. ポータルサイトでできること</h2>
+<div class=figure>
+  <img src="portal.png">
+</div>
+<ul>
+  <li> 「Tokyo Tech Mail」 (電子メール)
+  <li> 「パスワード変更」 (<u>ポータルサイトの</u>パスワード変更)
+  <li> 「教育用電子計算機システム」 (<u>教育用パソコンの</u>パスワード変更)
+  <li> 「教務Webシステム」 (授業の履修申告・成績の閲覧)
+  <li> 「TOKYO TECH OCW-i」 (授業の資料閲覧・課題提出)
+</ul>
+
+<h3><s>4.1. 学内Wifiの使い方</s></h3>
+<ol>
+  <li> "TokyoTech" ネットワークに接続する。
+  <li> あるパスワード (固定) を入力する。
+  <li> うまくいかない場合はブラウザのアドレス欄に
+    "<code>www.example.com</code>" を入力する。
+</ol>
+
+<h3>4.2. 注意・アカウントを他人に使わせない</h3>
+<ul>
+  <li> 間違い: 「自分なんて誰からも狙われないだろう」
+  <li> 犯罪者の考えることはみな同じ。<br>
+    「自分では直接手を出さない → 他人に罪をかぶせる」
+  <li> 自分のパスワード・銀行口座等を人に使わせると、
+    なりすましの温床になります。
+  <li> 犯罪に使われる、コードを盗まれる、「いいね」を売る<br>
+    (<a href="https://krebsonsecurity.com/2012/10/the-scrap-value-of-a-hacked-pc-revisited/">ハックされたPCの価値</a>)
+</ul>
+
+<h3>4.3. 教務WebシステムとOCW-i</h3>
+<ul>
+  <li> おそらく一番重要。授業の履修申告をする。<br>
+    (大学では、履修申告しないと授業を受けたことになりません)
+  <li> OCW-i で授業のスライドを見たり、課題を提出したりする。<br>
+    (授業によって使う場合とそうでない場合があります)
+  <li> 第1クォータ (1Q) の履修申告締め切りは <u>4月19日</u>。
+    第2クォータ (2Q) の授業は、あとからでも追加できます。
+  <li> 2Q におこなう情報リテラシ<u>第二</u>の履修をぜひともおすすめします。
+  <li> 成績の閲覧もここでおこないます。
+</ul>
+
+
+<h2 id="howtomac">5. 超基本的な Mac の使い方</h2>
+<ul>
+  <li> ブラウザ = "Safari" (最初のうちは、ほとんどこれしか使わない)
+  <li> ポータルサイトを開くには、右側のアイコンをダブルクリックする。
+  <li> 「1アプリ = 1メニュー」 ウィンドウではない。
+  <li> エクスプローラ = "Finder"
+  <li> Windows と違って、ファイルをコピー・ペーストできない。
+  <li> Altキー = Command (&#8984;) キー
+  <li> 異なるキー操作:
+    <ul>
+      <li> ウィンドウを閉じる: &#8984; + W
+      <li> アプリの終了: &#8984; + Q
+      <li> ファイルの保存: &#8984; + S
+    </ul>
+</ul>
+
+
+<h2 id="computer">6. コンピュータの基本原理</h2>
+<ul>
+  <li> すべてのコンピュータは4つの装置から成り立っている:
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="130">
+    <g stroke="black" stroke-width="2" fill="none">
+      <rect x="10" y="10" width="80" height="40" />
+      <rect x="120" y="10" width="80" height="40" />
+      <rect x="230" y="10" width="80" height="40" />
+      <rect x="120" y="80" width="80" height="40" />
+      <line x1="90" y1="30" x2="120" y2="30" />
+      <line x1="200" y1="30" x2="230" y2="30" />
+      <line x1="160" y1="50" x2="160" y2="80" />
+    </g>
+    <g text-anchor="middle">
+      <text x="50" y="30">入力装置</text>
+      <text x="160" y="30">演算装置</text>
+      <text x="270" y="30">出力装置</text>
+      <text x="160" y="100">記憶装置</text>
+    </g>
+  </svg>
+</div>
+  <li> Raspberry Pi : 4000円程度の「パソコン」
+  <li> <a href="https://www.youtube.com/watch?v=PF7EpEnglgk">Kids React to Old Computers</a>
+</ul>
+
+<div class=ex>
+<div class=header>演習 2-1.</div>
+<p>
+コンピュータで制御しているエレベータ、炊飯器、ロケットについて、
+それぞれ入力装置、出力装置、記憶装置の例を挙げよ。
+</div>
+
+<h3>6.1. コンピュータの原理</h3>
+<ul>
+  <li> コンピュータにとって、地球上のすべての機械は
+    ただの入出力装置である (人間を含む)。
+    <ul>
+      <li> 炊飯器の場合: 入力装置・出力装置は?
+      <li> エレベータの場合: 入力装置・出力装置は?
+    </ul>
+  <li> 装置の間で渡されるあらゆる情報 (= 文字・画像・音声・動画など) は、
+    すべて <u>2種類の異なる状態</u>の組み合わせで表される:
+    <ul>
+      <li> 電圧の高(5V)／低(0V)
+      <li> 0 と 1
+    </ul>
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       version="1.1" width="600" height="100">
+    <symbol id="unit" viewBox="-20 -30 40 30" stroke="black" fill="none">
+      <path d="M-18,0 l5,-28 l26,0 l5,28 Z" />
+    </symbol>
+    <g stroke-width="2" transform="translate(20,30)">
+      <use xlink:href="#unit" x="0" y="0" width="40" height="30" />
+      <use xlink:href="#unit" x="100" y="0" width="40" height="30" />
+      <use xlink:href="#unit" x="250" y="0" width="40" height="30" />
+      <use xlink:href="#unit" x="300" y="0" width="40" height="30" />
+      <line x1="-20" y1="30" x2="400" y2="30" stroke="black" />
+    </g>
+      <g text-anchor="middle" transform="translate(40,80)">
+	<text x="0" y="0">1</text>
+	<text x="50" y="0">0</text>
+	<text x="100" y="0">1</text>
+	<text x="150" y="0">0</text>
+	<text x="200" y="0">0</text>
+	<text x="250" y="0">1</text>
+	<text x="300" y="0">1</text>
+	<text x="350" y="0">0</text>
+      </g>
+    </g>
+  </svg>
+</div>
+</ul>
+</div>
+
+<h3>6.2. 数値 (整数) を 0 と 1で表すには</h3>
+<ul>
+  <li> 10種類の数字を使う: 10進数 (ふつうの数)
+  <li> 8種類の数字のみ使う: 8進数
+  <li> 2種類の数字のみ使う: 2進数 … 0 と 1 のみで数を表現する。<br>
+  n桁の2進数 = 2<sup>n</sup>通りの数を表現可能。
+<div class=counter>
+  <select id="baseSelector">
+    <option>選択</option>
+    <option value="10">10進数</option>
+    <option value="8">8進数</option>
+    <option value="2">2進数</option>
+    <option value="16">16進数</option>
+  </select> &nbsp;
+  <label><input id="checkRun" type=checkbox checked> 動作中</label>
+  <label><input id="checkVis" type=checkbox> 10進数を表示</label>
+  <div id="divCounter" style="position:relative; height:2em;">
+   <div id="divDecimal" style="position:absolute; top:0; left:200px;">
+   </div>
+  </div>
+</div>
+</ul>
+
+<h3>6.3. 文字を 0 と 1で表すには</h3>
+<ul>
+  <li> 1文字 = 1つの数値で表わす。<br>
+    数値を並べれば文章が表現できる。
+    <table border class=figure align=center>
+      <tr><td>H</td><td>E</td><td>L</td><td>L</td><td>O</td></tr>
+      <tr><td>72</td><td>69</td><td>76</td><td>76</td><td>79</td></tr>
+    </table>
+</ul>
+
+<h3>6.4. 画像を 0 と 1で表すには</h3>
+<ul>
+  <li> 白と黒だけの場合…単に 0 と 1 を並べればよい。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="340" height="164">
+  <g style="font-family: monospace;" transform="translate(170,20)">
+    <text x="0" y="0">00000000</text>
+    <text x="0" y="20">00011000</text>
+    <text x="0" y="40">00100100</text>
+    <text x="0" y="60">01000010</text>
+    <text x="0" y="80">01111110</text>
+    <text x="0" y="100">01000010</text>
+    <text x="0" y="120">01000010</text>
+    <text x="0" y="140">01000010</text>
+  </g>
+  <g fill="none" stroke="black" transform="translate(1,1) scale(2,2)">
+    <line x1="0" y1="0" x2="0" y2="80" />
+    <line x1="10" y1="0" x2="10" y2="80" />
+    <line x1="20" y1="0" x2="20" y2="80" />
+    <line x1="30" y1="0" x2="30" y2="80" />
+    <line x1="40" y1="0" x2="40" y2="80" />
+    <line x1="50" y1="0" x2="50" y2="80" />
+    <line x1="60" y1="0" x2="60" y2="80" />
+    <line x1="70" y1="0" x2="70" y2="80" />
+    <line x1="80" y1="0" x2="80" y2="80" />
+    <line x1="0" y1="0" x2="80" y2="0" />
+    <line x1="0" y1="10" x2="80" y2="10" />
+    <line x1="0" y1="20" x2="80" y2="20" />
+    <line x1="0" y1="30" x2="80" y2="30" />
+    <line x1="0" y1="40" x2="80" y2="40" />
+    <line x1="0" y1="50" x2="80" y2="50" />
+    <line x1="0" y1="60" x2="80" y2="60" />
+    <line x1="0" y1="70" x2="80" y2="70" />
+    <line x1="0" y1="80" x2="80" y2="80" />
+  </g>
+  <g fill="black" stroke="none" transform="translate(1,1) scale(2,2)">
+    <rect x="10" y="60" width="10" height="10" />
+    <rect x="10" y="50" width="10" height="10" />
+    <rect x="10" y="40" width="10" height="10" />
+    <rect x="10" y="30" width="10" height="10" />
+    <rect x="20" y="20" width="10" height="10" />
+    <rect x="30" y="10" width="10" height="10" />
+    <rect x="40" y="10" width="10" height="10" />
+    <rect x="50" y="20" width="10" height="10" />
+    <rect x="60" y="30" width="10" height="10" />
+    <rect x="60" y="40" width="10" height="10" />
+    <rect x="60" y="50" width="10" height="10" />
+    <rect x="60" y="60" width="10" height="10" />
+    <rect x="20" y="40" width="10" height="10" />
+    <rect x="30" y="40" width="10" height="10" />
+    <rect x="40" y="40" width="10" height="10" />
+    <rect x="50" y="40" width="10" height="10" />
+  </g>
+</svg>
+</div>
+<p>
+ひとつの点 = 「<strong>ピクセル</strong>」
+</ul>
+
+<h3>6.5. 色を 0 と 1で表すには</h3>
+<ul>
+<li> 色とは何か?
+<div class=figure>
+<a href="https://en.wikipedia.org/wiki/File:Spectrum4websiteEval.png"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spectrum4websiteEval.png"></a><br>
+<a href="https://en.wikipedia.org/wiki/File:Cone-response-en.png"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Cone-response-en.png"></a>
+</div>
+<ul>
+<li> 桿体細胞 (明るさを認識する)
+<li> 錐体細胞 (色を認識する -
+<span style="color:red;">赤</span>、
+<span style="color:green;">緑</span>、
+<span style="color:blue;">青</span>のあたりにピークがある)
+<li>
+<span style="color:red;">R</span>,
+<span style="color:green;">G</span>,
+<span style="color:blue;">B</span>
+の各成分をそれぞれ 256段階の数値で表す
+= 256×256×256種類の色が表現可能<br>
+これをピクセルの数だけ並べれば画像が表現できる。
+</ul>
+<table border class=figure align=center>
+<tr>
+<td style="background:#cc8855; width:1em; height:1em;"></td>
+<td style="background:#aaaa44; width:1em; height:1em;"></td>
+<td style="background:#88cc44; width:1em; height:1em;"></td>
+<td style="background:#66cc88; width:1em; height:1em;"></td>
+<td style="background:#3388cc; width:1em; height:1em;"></td>
+<td style="width:1em;">...</td>
+</tr>
+<tr>
+<td style="background:#cc88ee; width:1em; height:1em;"></td>
+<td style="width:1em;">...</td>
+</tr>
+</table>
+</ul>
+
+<h3>6.6. 音声を 0 と 1で表す</h3>
+<ul>
+<li> 音とは何か?
+<div class=figure>
+<svg width="400" height="160"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:svg="http://www.w3.org/2000/svg">
+  <g transform="translate(20,0)">
+  <g fill="none" stroke="black">
+    <path d="m55,192.98218c25.28706,-49.47075 56.62101,-46.49506 87.40526,-0.37196c30.78423,46.12309 55.52156,42.77545 79.70918,-0.74391c24.18762,-43.51938 28.03564,-34.96429 40.67917,5.95135c12.64352,40.91565 1.64917,75.50797 14.29269,-1.48784c12.64352,-76.99581 12.64352,-101.5452 21.43903,-41.28761c8.7955,60.2576 16.49155,60.62956 26.93619,37.93997c10.44467,-22.68959 12.64355,-11.90274 17.591,-3.7196l4.94748,8.18314" transform="translate(-40,-100)" stroke-width="2" />
+    <line x1="0" y1="100" x2="320" y2="100" />
+    <line x1="10" y1="30" x2="10" y2="160" />
+  </g>
+  <g fill="none" stroke="gray">
+    <rect x="10" y="90" width="10" height="10" />
+    <rect x="20" y="75" width="10" height="25" />
+    <rect x="30" y="65" width="10" height="35" />
+    <rect x="40" y="60" width="10" height="40" />
+    <rect x="50" y="55" width="10" height="45" />
+    <rect x="60" y="60" width="10" height="40" />
+    <rect x="70" y="65" width="10" height="35" />
+    <rect x="80" y="75" width="10" height="25" />
+    <rect x="90" y="90" width="10" height="10" />
+    <rect x="100" y="100" width="10" height="2" />
+    <rect x="110" y="100" width="10" height="10" />
+    <rect x="120" y="100" width="10" height="20" />
+    <rect x="130" y="100" width="10" height="25" />
+    <rect x="140" y="100" width="10" height="28" />
+    <rect x="150" y="100" width="10" height="25" />
+    <rect x="160" y="100" width="10" height="15" />
+    <rect x="170" y="100" width="10" height="5" />
+    <rect x="180" y="85" width="10" height="15" />
+    <rect x="190" y="70" width="10" height="30" />
+    <rect x="200" y="65" width="10" height="35" />
+    <rect x="210" y="75" width="10" height="25" />
+    <rect x="220" y="100" width="10" height="10" />
+    <rect x="230" y="100" width="10" height="30" />
+    <rect x="240" y="60" width="10" height="40" />
+    <rect x="250" y="25" width="10" height="75" />
+    <rect x="260" y="80" width="10" height="20" />
+    <rect x="270" y="100" width="10" height="5" />
+    <rect x="280" y="90" width="10" height="10" />
+    <rect x="290" y="80" width="10" height="20" />
+    <rect x="300" y="85" width="10" height="15" />
+  </g>
+  </g>
+</svg>
+</div>
+<li> 波形の形を数値の列によって表す:
+<br> 10, 25, 35, 40, 45, 40, 35, ...
+<li> 人間の可聴領域: 20Hz 〜 20,000Hz。
+</ul>
+
+
+<h2>7. よく使われる単位</h2>
+<ul>
+  <li> ビット (bit) … 1つの 0 または 1 (で表される情報)。
+  <li> バイト (byte) … 8つの 0 または 1 (=8ビット)。
+  <li> ヘルツ (Hz) … 「1秒間に何回実行可能か」をあらわす単位。
+  <li> bps (bits per second) … 「1秒間に何ビット送信するか」をあらわす単位。
+</ul>
+
+<h3>7.1. 接頭語</h3>
+<ul>
+<li> K (<nobr><span class=bl>キロ</span></nobr>) = 10<sup>3</sup> = 1,000
+<li> M (<nobr><span class=bl>メガ</span></nobr>) = 10<sup>6</sup> = 1,000,000
+<li> G (<nobr><span class=bl>ギガ</span></nobr>) = 10<sup>9</sup> = 1,000,000,000
+<li> T (<nobr><span class=bl>テラ</span></nobr>) = 10<sup>12</sup> = 1,000,000,000,000
+<li> P (<nobr><span class=bl>ペタ</span></nobr>) = 10<sup>15</sup> = 1,000,000,000,000,000
+</ul>
+<div>小さな数の場合:</div>
+<ul>
+<li> m (<nobr><span class=bl>ミリ</span></nobr>) = 10<sup>-3</sup> = 0.001
+<li> μ (<nobr><span class=bl>マイクロ</span></nobr>) = 10<sup>-6</sup> = 0.000 001
+<li> n (<nobr><span class=bl>ナノ</span></nobr>) = 10<sup>-9</sup> = 0.000 000 001
+</ul>
+
+<div>
+コンピュータの世界では、2<sup>10</sup> = 1024 &approx; 1000 なので、
+接頭語を以下のように微妙に変えて使うことがある:
+</div>
+<ul>
+<li> Ki (キロ) = 2<sup>10</sup> = 1,024
+<li> Mi (メガ) = 2<sup>20</sup> = 1,048,576
+<li> Gi (ギガ) = 2<sup>30</sup> = 1,073,741,824
+</ul>
+</div>
+
+<h3>7.2. いろいろな量のめやす</h3>
+<ul>
+<li> 一般的なパソコンの動作周波数 … 1GHz。
+<li> 1回の処理にかかる時間 … 1ナノ秒。
+<li> メモリの容量 … 4Gバイト。
+<li> ハードディスクの容量 … 200Gバイト。
+<li> 日本から欧米までのネットワーク遅延 … 150ミリ秒。<br>
+(コンピュータが命令を実行する時間を 1秒とすると、これは約12年に相当する。)
+<li> <a href="https://gist.github.com/hellerbarde/2843375">参考資料1</a>,
+  <a href="https://www.prowesscorp.com/computer-latency-at-a-human-scale/">参考資料2</a>
+</ul>
+
+
+<h2 id="summary">8. 本日のまとめ・小課題</h2>
+<ol>
+  <li> 教育用パソコン・ポータルサイト両方で使えるパスワードを設定した。
+  <li> ポータルサイトの基本的な使い方。
+  <li> Macの超基本的な使い方。
+  <li> コンピュータの基本原理。
+</ol>
+<div class=ex>
+<div class=header>演習 2-2. (本日の課題)</div>
+<ul>
+<li> <a href="https://quiz.tabesugi.net/y20-il1/quiz1/index.html">Quiz 1</a> に答えよ。
+<li> 締め切り: 5月18日 (1週間後)
+</ul>
+</div>
+
+
+<h2 id="nextweek">9. 来週の予定</h2>
+<ul>
+  <li> ネットワークのしくみ。
+  <li> 電子メールの使い方。
+  <li> 中間課題。
+</ul>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

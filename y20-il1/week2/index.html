@@ -3,12 +3,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="../common.css">
-<title>2019年度 情報リテラシ第一 第2週 / 新山 祐介</title>
+<title>2020年度 情報リテラシ第一 第2週 / 新山 祐介</title>
 <style><!--
 u { color: red; font-weight: bold; }
-img { width: 50vw; }
+img { max-width: 80vw; height: auto; }
 .figure { padding: 4px; border: 1px solid black; }
-.counter { margin: 1em; padding: 1em; border: 2pt solid black; font-size: 150%; font-style: bold; }
+.counter { margin: 0.5em; padding: 1em; background: #ccffff; border: 2pt solid black; font-size: 150%; font-style: bold; }
 --></style>
 <script src="counter.js"></script>
 <script>
@@ -36,17 +36,16 @@ function toggle(e) {
 </div>
 
 <h1>情報リテラシ第一 第2週</h1>
-<div class=nav>2019年4月11日 (木) 1-2限</div>
+<div class=nav>2020年5月11日 (月) 1-2限</div>
 
 <ol start="0">
-<li> <a href="#prev">前回の宿題</a>
 <li> <a href="#grading">本授業の成績について</a>
 <li> <a href="#repasswd">パスワードの再設定</a>
 <li> <a href="#register">姓名読み登録</a>
 <li> <a href="#howtoportal">ポータルサイトでできること</a>
-<li> <a href="#howtomac">超基本的な Mac の使い方</a>
-<li> <a href="#computer">コンピュータの基本原理</a>
-<li> <a href="#units">よく使われる単位</a>
+<li> <a href="#howtomac">Mac の超基本的な使い方</a>
+<li> <a href="#bits">コンピュータは情報をどのように扱っているか</a>
+<li> <a href="#units">情報量の単位</a>
 <li> <a href="#summary">本日のまとめ・小課題</a>
 <li> <a href="#nextweek">来週の予定</a>
 </ol>
@@ -72,28 +71,29 @@ function toggle(e) {
 結論: 英語ができれば、良質な教材がタダで手に入る。
 
 
-<h2 id="prev">0. 前回の宿題</h2>
+<h2 id="grading">0. 本授業の成績について</h2>
 <ul>
-  <li> 教育用システムとポータルサイト用<u>両方</u>に使うための、
-    <u>強力な</u>パスワードを考える。
-  <li> それを記憶する。
-</ul>
-
-
-<h2 id="grading">1. 本授業の成績について</h2>
-<ul>
-  <li> 本学の成績は点数制 (0〜100点) です。
+  <li> 東工大では、成績は点数 (0〜100点) によってつけられます。
   <li> 本授業の内訳 (単位取得には60点が必要):
     <ul>
       <li> 履修: 10点
       <li> 授業参加: 5点×7回 = 35点 (当てられたら質問に答える)
-      <li> 小テスト: 5点×5回 = 25点
-      <li> 課題提出: 10点×3回 = 30点
+      <li> 小課題: 5点×5回 = 25点 (本日も小課題があります)
+      <li> 中課題: 10点×3回 = 30点
     </ul>
 </ul>
 
 
-<h2 id="repasswd">2. パスワードの再設定</h2>
+<h2 id="repasswd">1. パスワードの再設定</h2>
+<div class=ex>
+<div class=header>(前回の宿題) 演習 1-4. </div>
+<ol>
+  <li> 教育用システムとポータルサイト用両方に使うための、
+    <u>強力な</u>パスワードを考えよ。
+  <li> それを記憶せよ。
+</ol>
+</div>
+
 <ul>
   <li> あれほど「パスワードは同じものを使うな」といいましたが…
     <ul>
@@ -108,9 +108,11 @@ function toggle(e) {
       <li> ポータルサイトを開き、<a href="https://portal.titech.ac.jp/ezguide/pwchange.html">パスワードを変更する</a>。
       <li> <s>教育用パソコンを再起動して、再度ログインする。</s>
     </ol>
+  <li> パスワードは何度でも変更できます。
+    自分のパスワードに自信がない(?)場合は、より強そうなパスワードに変更すべし。
 </ul>
 
-<h3><s>2.1. キーチェーンのダイアログに対処する</s></h3>
+<h3><s>1.1. キーチェーンのダイアログに対処する</s></h3>
 <p>
 パスワードを変更して再度ログインした場合、
 「<a href="http://www.edu.gsic.titech.ac.jp/index.php?%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E6%99%82%E3%81%AB%E3%82%AD%E3%83%BC%E3%83%81%E3%82%A7%E3%83%BC%E3%83%B3%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%8C%E8%A1%A8%E7%A4%BA%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99">ログインキーチェーンのロックを解除できませんでした</a>」という
@@ -118,16 +120,18 @@ function toggle(e) {
 <p>
 このような場合は「<code>新しいキーチェーンの作成</code>」をクリックすること。
 
-<h3>2.2. パスワードを忘れた場合</h3>
+<h3>1.2. パスワードを忘れた場合</h3>
 <ul>
   <li> 教育用パソコンのパスワードを忘れた場合 …<br>
     "<code>portal</code>" / "<code>portal</code>" でログインして、やり直す。
   <li> ポータルサイトのパスワードを忘れた場合 …<br>
     封筒に書いてある PIN番号を使って、西8号館1階の教務課でリセットしてもらう。<br>
     <a href="https://portal.titech.ac.jp/faq/faq_trouble.html">Tokyo Tech Portal - 困ったときは</a>
+  <li> <strong>注意</strong>:
+    いまは大学が閉鎖されているため、パスワードを忘れると戻す手段がありません。
 </ul>
 
-<h3>2.3. おすすめのパスワードマネージャ</h3>
+<h3>1.3. おすすめのパスワードマネージャ</h3>
 <ul>
 <li> 複数のサイトで異なるパスワードを全部覚えておくのは大変!
 <li> 解決策1. ブラウザのパスワード管理機能を使う。<br>
@@ -142,12 +146,12 @@ function toggle(e) {
   <a href="https://www.dashlane.com/">Dashlane</a>,
   <a href="https://www.keepersecurity.com/">Keeper</a>,
   <a href="https://1password.com/">1Password</a>
-<li> 無料のもの: <a href="https://bitwarden.com/">Bitwarden</a> (英語)
-  <div class=figure><a href="bitwarden.png"><img src="bitwarden.png"></a></div>
+<li> 無料のもの: <a href="https://bitwarden.com/">Bitwarden</a>
+  <div class=figure><a href="bitwarden.png"><img width="467" height="364" src="bitwarden.png"></a></div>
 </ul>
 
 
-<h2 id="register">3. 姓名読み登録</h2>
+<h2 id="register">2. 姓名読み登録</h2>
 <p>
 姓名読み登録をすると、大学のメールアドレスが使えるようになります。
 <ul>
@@ -161,9 +165,9 @@ function toggle(e) {
 </ul>
 
 
-<h2 id="howtoportal">4. ポータルサイトでできること</h2>
+<h2 id="howtoportal">3. ポータルサイトでできること</h2>
 <div class=figure>
-  <img src="portal.png">
+  <img width="231" height="361" src="portal.png">
 </div>
 <ul>
   <li> 「Tokyo Tech Mail」 (電子メール)
@@ -173,7 +177,7 @@ function toggle(e) {
   <li> 「TOKYO TECH OCW-i」 (授業の資料閲覧・課題提出)
 </ul>
 
-<h3><s>4.1. 学内Wifiの使い方</s></h3>
+<h3><s>3.1. 学内Wifiの使い方</s></h3>
 <ol>
   <li> "TokyoTech" ネットワークに接続する。
   <li> あるパスワード (固定) を入力する。
@@ -181,7 +185,7 @@ function toggle(e) {
     "<code>www.example.com</code>" を入力する。
 </ol>
 
-<h3>4.2. 注意・アカウントを他人に使わせない</h3>
+<h3>3.2. 注意・アカウントを他人に使わせない</h3>
 <ul>
   <li> 間違い: 「自分なんて誰からも狙われないだろう」
   <li> 犯罪者の考えることはみな同じ。<br>
@@ -192,7 +196,7 @@ function toggle(e) {
     (<a href="https://krebsonsecurity.com/2012/10/the-scrap-value-of-a-hacked-pc-revisited/">ハックされたPCの価値</a>)
 </ul>
 
-<h3>4.3. 教務WebシステムとOCW-i</h3>
+<h3>3.3. 教務WebシステムとOCW-i</h3>
 <ul>
   <li> おそらく一番重要。授業の履修申告をする。<br>
     (大学では、履修申告しないと授業を受けたことになりません)
@@ -205,24 +209,26 @@ function toggle(e) {
 </ul>
 
 
-<h2 id="howtomac">5. 超基本的な Mac の使い方</h2>
+<h2 id="howtomac">4. Mac の超基本的な使い方</h2>
 <ul>
   <li> ブラウザ = "Safari" (最初のうちは、ほとんどこれしか使わない)
+  <li> エクスプローラ = "Finder"
   <li> ポータルサイトを開くには、右側のアイコンをダブルクリックする。
   <li> 「1アプリ = 1メニュー」 ウィンドウではない。
-  <li> エクスプローラ = "Finder"
-  <li> Windows と違って、ファイルをコピー・ペーストできない。
-  <li> Altキー = Command (&#8984;) キー
-  <li> 異なるキー操作:
-    <ul>
-      <li> ウィンドウを閉じる: &#8984; + W
-      <li> アプリの終了: &#8984; + Q
-      <li> ファイルの保存: &#8984; + S
-    </ul>
+  <li> <kbd>Alt</kbd>キー = <kbd>Command (&#8984;)</kbd> キー:
+<table border>
+<tr><th>動作</th><th>Windows</th><th>Mac</th></tr>
+<tr><td>切り取り (カット)</td><td><kbd>Ctrl</kbd> + <kbd>X</kbd></td><td><kbd>&#8984;</kbd> + <kbd>X</kbd></td></tr>
+<tr><td>コピー</td><td><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td><kbd>&#8984;</kbd> + <kbd>C</kbd></td></tr>
+<tr><td>貼り付け (ペースト)</td><td><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td><kbd>&#8984;</kbd> + <kbd>V</kbd></td></tr>
+<tr><td>ウィンドウを閉じる</td><td><kbd>Alt</kbd> + <kbd>F4</kbd></td><td><kbd>&#8984;</kbd> + <kbd>W</kbd></td></tr>
+<tr><td>アプリを終了</td><td><kbd>Alt</kbd> + <kbd>F4</kbd></td><td><kbd>&#8984;</kbd> + <kbd>Q</kbd></td></tr>
+<tr><td>ファイルの保存</td><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td><kbd>&#8984;</kbd> + <kbd>S</kbd></td></tr>
+</table>
 </ul>
 
 
-<h2 id="computer">6. コンピュータの基本原理</h2>
+<h2 id="bits">5. コンピュータは情報をどのように扱っているか</h2>
 <ul>
   <li> すべてのコンピュータは4つの装置から成り立っている:
 <div class=figure>
@@ -251,11 +257,16 @@ function toggle(e) {
 <div class=ex>
 <div class=header>演習 2-1.</div>
 <p>
-コンピュータで制御しているエレベータ、炊飯器、ロケットについて、
+コンピュータで制御している以下の機器について、
 それぞれ入力装置、出力装置、記憶装置の例を挙げよ。
+<ul>
+<li> スマートフォン
+<li> 炊飯器
+<li> エレベータ
+</ul>
 </div>
 
-<h3>6.1. コンピュータの原理</h3>
+<h3>5.1. コンピュータの原理</h3>
 <ul>
   <li> コンピュータにとって、地球上のすべての機械は
     ただの入出力装置である (人間を含む)。
@@ -299,7 +310,7 @@ function toggle(e) {
 </ul>
 </div>
 
-<h3>6.2. 数値 (整数) を 0 と 1で表すには</h3>
+<h3>5.2. 数値 (整数) を 0 と 1で表すには</h3>
 <ul>
   <li> 10種類の数字を使う: 10進数 (ふつうの数)
   <li> 8種類の数字のみ使う: 8進数
@@ -322,7 +333,7 @@ function toggle(e) {
 </div>
 </ul>
 
-<h3>6.3. 文字を 0 と 1で表すには</h3>
+<h3>5.3. 文字を 0 と 1で表すには</h3>
 <ul>
   <li> 1文字 = 1つの数値で表わす。<br>
     数値を並べれば文章が表現できる。
@@ -332,7 +343,7 @@ function toggle(e) {
     </table>
 </ul>
 
-<h3>6.4. 画像を 0 と 1で表すには</h3>
+<h3>5.4. 画像を 0 と 1で表すには</h3>
 <ul>
   <li> 白と黒だけの場合…単に 0 と 1 を並べればよい。
 <div class=figure>
@@ -393,12 +404,12 @@ function toggle(e) {
 ひとつの点 = 「<strong>ピクセル</strong>」
 </ul>
 
-<h3>6.5. 色を 0 と 1で表すには</h3>
+<h3>5.5. 色を 0 と 1で表すには</h3>
 <ul>
 <li> 色とは何か?
 <div class=figure>
-<a href="https://en.wikipedia.org/wiki/File:Spectrum4websiteEval.png"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spectrum4websiteEval.png"></a><br>
-<a href="https://en.wikipedia.org/wiki/File:Cone-response-en.png"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Cone-response-en.png"></a>
+<a href="https://en.wikipedia.org/wiki/File:Spectrum4websiteEval.png"><img width="600" height="72" src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spectrum4websiteEval.png"></a><br>
+<a href="https://en.wikipedia.org/wiki/File:Cone-response-en.png"><img width="550" height="346" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Cone-response-en.png"></a>
 </div>
 <ul>
 <li> 桿体細胞 (明るさを認識する)
@@ -430,7 +441,7 @@ function toggle(e) {
 </table>
 </ul>
 
-<h3>6.6. 音声を 0 と 1で表す</h3>
+<h3>5.6. 音声を 0 と 1で表す</h3>
 <ul>
 <li> 音とは何か?
 <div class=figure>
@@ -484,7 +495,7 @@ function toggle(e) {
 </ul>
 
 
-<h2>7. よく使われる単位</h2>
+<h2 id="units">6. 情報量の単位</h2>
 <ul>
   <li> ビット (bit) … 1つの 0 または 1 (で表される情報)。
   <li> バイト (byte) … 8つの 0 または 1 (=8ビット)。
@@ -492,7 +503,7 @@ function toggle(e) {
   <li> bps (bits per second) … 「1秒間に何ビット送信するか」をあらわす単位。
 </ul>
 
-<h3>7.1. 接頭語</h3>
+<h3>6.1. 接頭語</h3>
 <ul>
 <li> K (<nobr><span class=bl>キロ</span></nobr>) = 10<sup>3</sup> = 1,000
 <li> M (<nobr><span class=bl>メガ</span></nobr>) = 10<sup>6</sup> = 1,000,000
@@ -518,12 +529,12 @@ function toggle(e) {
 </ul>
 </div>
 
-<h3>7.2. いろいろな量のめやす</h3>
+<h3>6.2. いろいろな量のめやす</h3>
 <ul>
-<li> 一般的なパソコンの動作周波数 … 1GHz。
-<li> 1回の処理にかかる時間 … 1ナノ秒。
+<li> 一般的なパソコンの動作周波数 … 1GHz = 10<sup>9</sup>回の処理/秒。
+<li> 1回の処理にかかる時間 … 1ナノ秒 = 10<sup>-9</sup>秒。
 <li> メモリの容量 … 4Gバイト。
-<li> ハードディスクの容量 … 200Gバイト。
+<li> ハードディスクの容量 … 500Gバイト。
 <li> 日本から欧米までのネットワーク遅延 … 150ミリ秒。<br>
 (コンピュータが命令を実行する時間を 1秒とすると、これは約12年に相当する。)
 <li> <a href="https://gist.github.com/hellerbarde/2843375">参考資料1</a>,
@@ -531,15 +542,15 @@ function toggle(e) {
 </ul>
 
 
-<h2 id="summary">8. 本日のまとめ・小課題</h2>
+<h2 id="summary">7. 本日のまとめ・小課題</h2>
 <ol>
-  <li> 教育用パソコン・ポータルサイト両方で使えるパスワードを設定した。
+  <li> <s>教育用パソコン</s>・ポータルサイト両方で使えるパスワードを設定した。
   <li> ポータルサイトの基本的な使い方。
   <li> Macの超基本的な使い方。
-  <li> コンピュータの基本原理。
+  <li> コンピュータはすべての情報を 0 と 1 の羅列で扱っている。
 </ol>
 <div class=ex>
-<div class=header>演習 2-2. (本日の課題)</div>
+<div class=header>演習 2-2. (本日の小課題)</div>
 <ul>
 <li> <a href="https://quiz.tabesugi.net/y20-il1/quiz1/index.html">Quiz 1</a> に答えよ。
 <li> 締め切り: 5月18日 (1週間後)
@@ -547,11 +558,11 @@ function toggle(e) {
 </div>
 
 
-<h2 id="nextweek">9. 来週の予定</h2>
+<h2 id="nextweek">8. 来週の予定</h2>
 <ul>
   <li> ネットワークのしくみ。
   <li> 電子メールの使い方。
-  <li> 中間課題。
+  <li> 中課題。
 </ul>
 
 <hr>

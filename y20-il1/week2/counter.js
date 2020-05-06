@@ -103,7 +103,7 @@ Counter.prototype.setDigit = function (i, v)
 Counter.prototype.setValue = function (v)
 {
   if (this.decimal) {
-    this.decimal.innerHTML = Math.floor(v+0.1);
+    this.decimal.innerHTML = "("+Math.floor(v+0.1)+")";
   }
   for (var i = 0; i < this.digits0.length; i++) {
     var vb = Math.floor(v/this.base);

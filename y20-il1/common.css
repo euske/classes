@@ -27,5 +27,6 @@ dt { text-decoration: underline; font-weight: bold; }
 .file { outline: 1px solid black; margin: 1em; padding: 4px; }
 .file > pre { margin: 0; outline: 2px solid black; padding: 1em; }
 .bl { outline: 1px solid black; padding: 2px; font-size: 120%; color: transparent; }
+.spacy li { margin-bottom: 0.5em; }
 .qqq { outline: 1px solid black; background: #ccffff; }
 .err { background: red; color: white; }

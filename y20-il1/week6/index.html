@@ -58,12 +58,23 @@ u { color: red; font-weight: bold; }
 </ul>
 
 
-<h2>授業アンケート提出のお願い</h2>
+<h2>連絡事項</h2>
 
 <div class=ex style="background:#aaffff;">
 <div class=header>授業アンケート提出方法</div>
 <p>
 (ここは授業中に説明します)
+</div>
+
+<div class=ex style="background:#aaffff;">
+<div class=header>第2Qの履修申告</div>
+<p>
+<ul>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=7&amp;KamokuCD=110800&amp;KougiCD=202007182&amp;Nendo=2020&amp;vid=03">情報リテラシ第二 (2Q)</a>
+<li> 追加申告は <u>7/6 まで</u>可能。
+<li> <u>1a</u> クラスの人は、2Q でも同じ <u>1a</u> クラスを選んでください。
+<li> <a href="https://www.titech.ac.jp/enrolled/life/pdf/undergraduate_timetables/R2S/03.pdf">履修および履修申告について</a>
+</ul>
 </div>
 
 
@@ -631,20 +642,102 @@ u { color: red; font-weight: bold; }
 <li> 電子メールでも使われる:<br>
   <code>dareka.aaa@<u>m.titech.ac.jp</u></code><br>
   (メールサーバのIPアドレス)
+<li> IPアドレスが見つからない場合はエラー。
+  <ul>
+    <li> 例: <code>oosamanomimiharobanomimi.com</code>
+    <li> 例: <code>www.igakubu.titech.ac.jp</code>
+  </ul>
 </ul>
 
-<h3>4.7. ウェブブラウザの動き</h3>
+<div class=ex>
+<div class=header>演習 6-5. pingコマンドを使ったサーバ検査実験</div>
+<p>
+パソコンには、インターネット上にある特定のサーバが
+本当に応答しているか否かを検査するプログラム "<code>ping</code>" が附属している。
+ここではそれを使って、実際にいくつかのサーバの応答を検査してみる。
+<ol>
+<li> パソコンで「<code>コマンド プロンプト</code>」
+(Mac の場合は、「<code>ユーティリティ</code>」フォルダ内にある「<code>ターミナル</code>」)
+アプリを起動せよ。
+<li> 以下のコマンドを入力し、<kbd>Enter</kbd> を押せ:<br>
+  (コマンドが無反応になった場合は、<code>Ctrl</code> + <code>C</code> を押して止める。)
+  <ol type=a>
+    <li> <code>ping 127.0.0.1</code><br>
+      (自分自身の PC の応答をチェックする)
+    <li> <code>ping 198.41.0.4</code><br>
+      (世界にあるルートサーバの 1つをチェックする)
+    <li> <code>ping a.root-servers.net</code><br>
+      (b. と同じサーバをチェックするが、IPアドレスではなく名前で指定する)
+  </ol>
+<li> アプリの実行方法がわからない場合は、ウェブサイト
+<a href="https://pingtool.org/">https://pingtool.org/</a> を使ってもよい。
+</ol>
+</div>
+
+<h3>4.7. World Wide Web (WWW) の動き</h3>
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="510" height="140"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="arrow2" viewBox="-5 -5 10 10" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M-5,-5 L5,0 L-5,5" stroke="black" fill="none" stroke-width="2" />
+    </marker>
+    <g id="computer" fill="white" stroke="black" stroke-width="2">
+      <rect x="10" y="10" width="30" height="20" />
+      <polygon points="10,32 0,40 50,40 40,32" />
+    </g>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+  </defs>
+  <use x="0" y="40" xlink:href="#user" />
+  <use x="50" y="40" xlink:href="#computer" />
+  <g stroke="black" stroke-width="3" fill="none">
+    <rect x="200" y="10" width="80" height="60" />
+    <rect x="400" y="10" width="100" height="120" />
+    <line x1="100" x2="190" y1="40" y2="40" marker-end="url(#arrow)" />
+    <line x1="280" x2="390" y1="40" y2="40" marker-end="url(#arrow)" />
+    <line x1="400" x2="100" y1="100" y2="100" marker-end="url(#arrow)" />
+  </g>
+    <g text-anchor="middle">
+      <text x="80" y="40" dy="0.0em">1.</text>
+      <text x="150" y="35" dy="0.0em">2.</text>
+      <text x="330" y="35" dy="0.0em">3.</text>
+      <text x="250" y="115" dy="0.0em">4.</text>
+      <text x="80" y="120" dy="0.0em">5.</text>
+      <text x="240" y="40" dy="0.0em">DNS</text>
+      <text x="240" y="40" dy="1.0em">サーバ</text>
+      <text x="450" y="60" dy="0.0em">WWW</text>
+      <text x="450" y="60" dy="1.0em">(ウェブ)</text>
+      <text x="450" y="60" dy="2.0em">サーバ</text>
+      <text x="80" y="85" dy="0.5em">PC</text>
+      <text x="25" y="100" dy="0.5em">自分</text>
+    </g>
+  </svg>
+</div>
+
 <ol>
 <li> ブラウザに URL "<code>https://www.titech.ac.jp/</code>" が入力される。
-<li> クライアント (PC) が DNS を使って、この名前を IPアドレス (131.112.244.84) に変換する。
-<li> クライアントが指定されたIPアドレスのサーバにパケットを送る。
-<li> HTTPを使って通信し、HTMLファイルがサーバからクライアントに送られる。
+<li> クライアント (PC) が DNS サーバを使って、この名前を IPアドレス (131.112.244.84) に変換する。
+<li> クライアントが指定されたIPアドレスの WWW サーバにパケットを送る。(HTTP)
+<li> HTMLファイルがサーバからクライアントに送られる:
+<blockquote><pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;title&gt;東京工業大学&lt;/title&gt;
+&lt;a href="/entrance_information/"&gt;入試情報&lt;/a&gt;
+&lt;a href="/maps/index.html"&gt;アクセス&lt;/a&gt;
+...
+</pre></blockquote>
 <li> ブラウザがデータを画面上に表示する。
-<li> ユーザがリンクをクリックする → 1. に戻る。
+<li> ユーザがリンクをクリックすると、そのリンク先の URL を使って 2. に戻る。
 </ol>
 
 <div class=ex>
-<div class=header>演習 6-5. ウェブブラウザの動き</div>
+<div class=header>演習 6-6. ウェブブラウザの動作</div>
 <p>
 以下の質問について ○ か × かを答えよ。
 <ol type=a>
@@ -659,7 +752,7 @@ u { color: red; font-weight: bold; }
 <li> URL の形式がおかしい。
   <br>例: <code>moo://w4i&hearts;zqs&#x266a;x&gt;よ-\o/-</code>
 <li> 名前から IPアドレスが変換できない。
-  <br>例: <code>http://nonexistent.dom/</code>
+  <br>例: <code>http://oosamanomimiharobanomimi.com/</code>
 <li> ケーブルが切れている・パケットが到達できない。
   <br>例: <code>http://10.10.10.10/</code>
 <li> サーバの電源が切れている。
@@ -669,13 +762,16 @@ u { color: red; font-weight: bold; }
 <li> サーバのデータがうまく解釈できない。
 </ol>
 
-<p>
-ウェブサイトの「障害検出」サイト:
+<div class=ex>
+<div class=header>ワンポイント</div>
+インターネット上の有名なサイトが止まっている場合は、
+上のような <code>ping</code> コマンドを使って検査する以外にも、
+以下のような「障害チェック」サイトを使って調べることもできる。
 <ul>
 <li> <a href="https://downdetector.jp">Downdetector</a>
 <li> <a href="https://livemap.pingdom.com/">Pingdom</a>
 </ul>
-
+</div>
 
 <h2 id="summary">5. 本日のまとめ・小課題</h2>
 <ul>
@@ -685,9 +781,13 @@ u { color: red; font-weight: bold; }
 </ul>
 
 <div class=ex>
-<div class=header>演習 6-6. (本日の小課題)</div>
+<div class=header>演習 6-7. (本日の小課題)</div>
 <ul>
-  <li> <a href="https://quiz.tabesugi.net/y20-il1/quiz4/index.html">Quiz 4</a>
+  <li> 通信料を気にしている友人にメールを送ることを考える。
+    100ページの文章 (文字のみ) を送るのと、
+    10枚の写真を送るのとでは、どちらも標準的な品質を仮定すると、
+    どちらがより相手の通信料を消費するか。またそれはなぜか答えよ。
+  <li> 回答は <a href="https://quiz.tabesugi.net/y20-il1/quiz4/index.html">Quiz 4</a> に提出せよ。
   <li> 締め切り: <u>6月15日</u> (1週間後)
 </ul>
 </div>

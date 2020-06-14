@@ -1,0 +1,587 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../common.css" />
+<title>2020年度 情報リテラシ第一 第7回 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+.figure { padding: 4px; border: 1px solid black; }
+.green { color: green; font-weight: bold; }
+.yay { font-size: 120%; border: 2px solid black; padding: 0.5em; margin: 0.5em; background: #88ff88; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>情報リテラシ第一 第7回</h1>
+<div class=nav>2020年6月15日 (月) 1-2限</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#security">情報セキュリティ</a>
+<li> <a href="#literacy">情報リテラシ</a>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<li> <a href="#assignment">クラス共通課題3の説明</a>
+<li> <a href="#nextweek">情報リテラシ第二の予告</a>
+</ol>
+
+
+<h3>雑談:</h3>
+<ol>
+<li> 次の日本語を英訳せよ:
+<ul>
+<li> どうぶつの森 … <span class=bl>Animal Crossing</span>
+<li> たぬきち … <span class=bl>Tom Nook</span>
+<li> マリオ … <span class=bl>Mario</span>
+<li> クッパ … <span class=bl>Bowser</span>
+<li> (ポケモンの) サトシ … <span class=bl>Ash</span>
+<li> カビゴン … <span class=bl>Snorlax</span>
+<li> スーパーサイヤ人 … <span class=bl>Super Sayan</span>
+<li> 成歩堂龍一 … <span class=bl>Phoenix Wright</span>
+</ul>
+<li> 次の英語を和訳せよ:
+<div class=figure>
+"Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo Buffalo."
+</div>
+<ul>
+<li> buffalo (名詞) …
+  <a href="https://en.wikipedia.org/wiki/American_bison">バッファロー (牛みたいなやつ)</a>
+<li> buffalo (動詞) …
+  <a href="https://en.wiktionary.org/wiki/buffalo">いぢめる</a>
+<li> Buffalo (固有名詞) …
+  <a href="https://en.wikipedia.org/wiki/Buffalo%2C_New_York">米国ニューヨーク州バッファロー市</a>。
+</ul>
+<li> <strong>お詫び</strong>: "anti-" の発音は「あんてぃ」もアリだった。(おもに UK 英語)<br>
+  証拠: <a href="https://youglish.com/">YouTube動画を使ってネイティブ英語の発音を確認できるサイト</a>。
+</ol>
+
+
+<h2>連絡事項</h2>
+
+<div class=ex style="background:#aaffff;">
+<div class=header>第2Qの履修申告</div>
+<p>
+<ul>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=7&amp;KamokuCD=110800&amp;KougiCD=202007182&amp;Nendo=2020&amp;vid=03">情報リテラシ第二 (2Q)</a>
+<li> 追加申告は <u>7/6 まで</u>可能。
+<li> <u>1a</u> クラスの人は、2Q でも同じ <u>1a</u> クラスを選んでください。
+<li> <a href="https://www.titech.ac.jp/enrolled/life/pdf/undergraduate_timetables/R2S/03.pdf">履修および履修申告について</a>
+</ul>
+</div>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> コンピュータ上のデータは、すべて 0 と 1 で表される。
+<li> データ圧縮技術のおかげで、通信料金が節約できる。
+<li> インターネットはややこしい。
+</ul>
+
+<div class=ex>
+<div class=header>演習 7-1. (前回の復習)</div>
+<ol type=a>
+<li> IPアドレスとは何か?
+<li> 次のうちもっとも多く通信料を使うサイトはどれか:
+  Twitter、YouTube、Wikipedia、Instagram
+<li> 「サーバ」と「クライアント」の違いを説明せよ。
+</ol>
+</div>
+
+
+<h2 id="security">1. 情報セキュリティ</h2>
+<ul>
+<li> セーフティ (safety) … 安全。災害や事故から守ること。
+<li> セキュリティ (security) … 保安。悪い人間から守ること。
+</ul>
+
+<div class=ex>
+<div class=header>演習 7-2. セーフティかセキュリティか?</div>
+<ol type=a>
+<li> 信号機
+<li> <a href="https://www.google.co.jp/search?q=%E3%81%AF%E3%81%84%E3%81%A3%E3%81%A6%E3%81%AF%E3%81%84%E3%81%91%E3%81%BE%E3%81%9B%E3%82%93&source=lnms&tbm=isch">「はいってはいけません」の看板</a>
+<li> 金庫
+<li> <a href="https://www.amazon.co.jp/s?k=%E7%9B%A3%E8%A6%96%E3%82%AB%E3%83%A1%E3%83%A9+%E3%83%80%E3%83%9F%E3%83%BC">ダミー監視カメラ</a>
+</ol>
+</div>
+<p>
+おまけ: <a href="https://i.imgur.com/Yffu60C.gifv">アホな錠前</a>
+
+<h3>1.1. 情報セキュリティとは</h3>
+<p>
+以下の 3つのものを守るのが情報セキュリティである。
+<ul>
+<li> 秘匿性 (秘密を守れる) … 知られたくないことを知られたら ×。
+<li> 正真性 (内容が正しい) … 勝手にデータを改竄・なりすまされたら ×。
+<li> 可用性 (必要なときに使える) … いざ必要なときに動かなかったら ×。
+</ul>
+
+<h4>安全対策・セキュリティ対策の種類</h4>
+<p>
+<ol type=a>
+<li> <strong>予防</strong> (抑制) … 事件・事故が起こる原因そのものを減らす。
+<li> <strong>防止</strong> (保護) … 事件・事故を起こりにくくする。
+<li> <strong>封じ込め</strong> (緩和) … 万が一、事件・事故が起きた後のダメージを少なくする。
+</ol>
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="110"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g stroke="black" stroke-width="3" fill="none">
+    <rect x="100" y="10" width="40" height="80" />
+    <g stroke-width="8" marker-end="url(#arrow)">
+      <line x1="10" x2="80" y1="50" y2="50" />
+      <line x1="145" x2="220" y1="50" y2="50" />
+    </g>
+  </g>
+    <g text-anchor="middle">
+      <text x="40" y="35" dy="0.0em">予防</text>
+      <text x="120" y="35" dy="0.0em">防止</text>
+      <text x="180" y="35" dy="0.0em">緩和</text>
+    </g>
+  </svg>
+</div>
+
+<ul>
+<li> 火事の場合 …
+  <ol type=a>
+    <li> <strong>予防</strong> … 火をなるべく使わない。
+    <li> <strong>防止</strong> … 燃えにくい素材を使う。
+    <li> <strong>封じ込め</strong> … 消火器を用意する。避難訓練をする。
+  </ol>
+<li> 自動車事故の場合 …
+  <ol type=a>
+    <li> <strong>予防</strong> … なるべく車に乗らない。安全運転を心がける。
+    <li> <strong>防止</strong> … 頑丈なクルマに乗る。
+    <li> <strong>緩和</strong> … エアバッグ等の装備。保険をかける。
+  </ol>
+<li> 財布の盗難の場合 …
+  <ol type=a>
+    <li> <strong>予防</strong> … 貴重品はなるべく持ち歩かない。
+    <li> <strong>防止</strong> … 出しにくい所に入れる。
+    <li> <strong>緩和</strong> … 現金を小分けにして複数箇所に入れておく。
+  </ol>
+</ul>
+
+<div class=ex>
+<div class=header>演習 7-3. 対策の種類</div>
+<ol>
+<li> コロナウイルス感染症について、
+  <strong>予防</strong>・<strong>防止</strong>・<strong>封じ込め</strong>の手段を答えよ。
+<li> パスワード漏洩について、
+  <strong>予防</strong>・<strong>防止</strong>・<strong>封じ込め</strong>の手段を答えよ。
+</ol>
+</div>
+
+<h3>1.2. セキュリティが破られるとき</h3>
+<ul>
+<li> コンピュータが悪い場合:
+<ul>
+  <li> 機械の停電・故障・ケーブル切断。
+  <li> ソフトウェアの欠陥 (バグ)。
+</ul>
+<li> 人間が悪い場合:
+<ul>
+  <li> パスワードを推測される。
+  <li> まちがった操作をする。
+  <li> 特に、<u>あやしいプログラム</u>を実行してしまう。
+    <ul>
+      <li> プログラムは、ある処理が人間にとって害があるかどうかは判断できない。
+      <li> 自分のデータを勝手に消されてしまう、どこかに送信されてしまう、etc.
+    </ul>
+</ul>
+</ul>
+
+<h4>完璧な世界では...</h4>
+<ul>
+<li> もし完璧な (= 欠陥のまったくない) ソフトウェアができれば、
+  それを悪用されてハッキングされることはない。
+  <ul>
+    <li> 「完璧なソフトウェア」
+      =「どんな物理法則の宇宙でも完璧に動くロケットを設計せよ」
+  </ul>
+<li> 実際には、機械が完璧でも人間はつねに騙される。
+</ul>
+
+<h3>1.3. 人間にできること</h3>
+<ul>
+  <li> 間違い: 「自分なんて誰からも狙われないだろう」
+    <ul>
+      <li> 犯罪者の考えることはみな同じ。<br>
+        「自分では直接手を出さない → 他人に罪をかぶせる」
+      <li> 自分のパスワード・銀行口座等を人に使わせると、
+        なりすましの温床になる。
+      <li> 犯罪に使われる、コードを盗まれる、「いいね」を売る
+        (<a href="https://krebsonsecurity.com/2012/10/the-scrap-value-of-a-hacked-pc-revisited/">ハックされたPCの価値</a>).
+      <li> <u>対策</u>: パスワードはきちんとつける。
+    </ul>
+  <li> ウイルスの 99% は既知の欠陥 (バグ) を悪用したもの。
+    <ul>
+      <li> 例: <a href="https://www.youtube.com/watch?v=KJ3o8Qxd49o">ブラウザであるページを開くだけで、
+        あやしいプログラムが勝手に実行されてしまうバグ</a>。
+      <li> <u>対策</u>: ソフトウェアはつねに最新のバージョン (=バグが少ない) に更新する。
+    </ul>
+  <li> 世の中、信頼できない情報が多い。
+    <ul>
+      <li> 記事の作者は信用できるか?
+      <li> メールの差出人は信用できるか?
+      <li> ウェブページのサーバは信用できるか?
+      <li> <u>対策</u>: 鍵マークを確認する。(とくに支払いや暗証番号を送る場合)
+        <table border>
+          <tr><td>暗号化なし</td>
+            <td><a href="http://www.cs.titech.ac.jp/"><img src="unencrypted.png"></a></td></tr>
+          <tr><td>暗号化あり</td>
+            <td><a href="https://www.titech.ac.jp/"><img src="encrypted.png"></a></td></tr>
+          <tr><td>暗号化 + 実世界との対応<br>
+              (第三者機関によって正しいと証明されている)</td>
+            <td><a href="https://portal.titech.ac.jp/"><img src="verified.png"></a></td></tr>
+        </table>
+    </ul>
+</ul>
+
+<h3>1.4. 暗号 = 安全とは限らない</h3>
+
+<div class=ex>
+<div class=header>演習 7-4. 偽物を探せ</div>
+<p>
+以下のウェブサイトは、どの有名企業のものか答えよ:
+<ol type=a>
+<li> <a href="http://www.nissan.com">nissan.com</a>
+<li> <a href="http://www.apple-support.com">apple-support.com</a>
+</ol>
+</div>
+
+<ul>
+<li> サーバの名前がそれっぽいからといって信用してはダメ!<br>
+<li> 悪人でも暗号は使える。(中間者攻撃)
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="600" height="200"
+       transform="scale(1,1)">
+    <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+    <g id="baddie" fill="black" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+    </defs>
+    <use xlink:href="#user" x="10" y="20" />
+    <use xlink:href="#baddie" x="260" y="20" />
+    <use xlink:href="#user" x="510" y="20" />
+    <image x="180" y="110" width="195" height="150" href="instagram.png" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="80" x2="240" y1="40" y2="40" />
+      <line x1="240" x2="80" y1="60" y2="60" />
+      <line x1="330" x2="490" y1="40" y2="40" />
+      <line x1="490" x2="330" y1="60" y2="60" />
+    </g>
+    <g style="font-size: 70%;" text-anchor="middle">
+      <text x="35" y="100">自分</text>
+      <text x="285" y="100">悪人</text>
+      <text x="535" y="100">相手</text>
+    </g>
+  </svg>
+</div>
+<li> 「本当に正しい相手と通信している」ことを
+  どうやったら証明できるのか?<br>
+  → 第三者機関に証明してもらう。
+<li> では第三者機関はどうやって信頼するのか???<br>
+  → じつは最初から特定の機関を信頼するように機械が作られている。
+</ul>
+
+<div class=ex>
+<div class=header>演習 7-5. どうやって信頼するか?</div>
+<p>
+自宅に警察から「落とし物が届けられたので取りに来てほしい」という連絡があった。
+これが本当に警察からの電話で、詐欺でないことを確認するにはどうすればよいか?
+</div>
+
+<p>
+おまけ:
+<a href="https://www.nagoyatv.com/clubyanagase/news/?id=001359">詐欺と疑われた例</a>
+
+<h3>1.5. 企業 = 安全とは限らない</h3>
+<ul>
+  <li> 自分がネットを見るとき、自分もまた
+    <a href="https://www.whatismyip.com/">ネットから見られている</a>。
+  <li> なぜ Google・Facebook・Twitter はタダなのか? …
+    <a href="https://support.google.com/adwords/topic/3121935?hl=ja&amp;ref_topic=3119122,3181080,3126923,">広告を売っている</a>ため。
+    <ul>
+      <li> Googleの本当の客は我々ではなく、広告主である。
+        Google検索のユーザは、利用するための「動物」のようなもの。
+      <li> 広告の原理: 対象を絞り込むほど価値があがる。
+      <li> たとえ自分の携帯電話に年齢・性別・職業・趣味・友達一覧を
+        入力していなくても、Google にはほぼすべて知られている。
+        <ul>
+          <li> 検索キーワードから漏れる情報:
+            <br>年齢、性別、家族構成、地域、収入、趣味、etc.
+          <li> 位置情報を見れば、どんな生活をしているかがわかるし (会社員・学生)、
+            誰と一緒にいるかもわかる。
+          <li> 起きた時刻・電話した時刻・ゲームをやった時刻などを見れば、
+            一日の生活リズムがわかる。
+          <li> 写真に映っている景色からも位置が推測できる。
+          <li> マウスの動き・スクロールを検出し、ページのどの部分を熱心に見ているかがわかる。
+        </ul>
+    </ul>
+  <li> Facebook幹部が語った話 …
+    「10〜20代の若者が不安になったり、感動したり、嫉妬したり、劣等感をもつ瞬間を検出できる」
+    <ul>
+      <li> そのタイミングで趣味に合った広告を出せば売れる。
+      <li> Google や Facebook が得た情報は、別の会社にも利用されている。
+        その会社が何をしているか、Google や Facebook は責任を持たなくてよい。
+      <li> これらのデータの一部は警察に提供されたり、
+        <a href="https://courrier.jp/news/archives/86209/?ate_cookie=1591831624">2016年の米国大統領選に影響を与えている</a>。
+    </ul>
+  <li> Amazon の場合 … 買う品物で住所・性別・職業・趣味、
+    妊娠しているか否かなどがわかる。
+    <ul>
+      <li> Amazon Echo と Google Home … 家での会話を録音している。<br>
+        その一部は、<a href="https://www.itmedia.co.jp/news/articles/1904/12/news075.html">数千人のスタッフによって聞かれている</a>。
+      <li> これらのデバイスには過去にいくつもの欠陥 (バグ) が発見されており、
+        ハックされれば悪意のある目的に使われる危険がある。
+    </ul>
+  <li> Pok&eacute;mon Go … 「人間を遠隔操作する実験」。
+    <ul>
+      <li> <A href="https://nianticlabs.com/sponsoredlocations/">あなたのお店の客足を伸ばします!</a>
+    </ul>
+  <li> すべての監視・盗聴処理は、可能なかぎり人間に気づかれないように作られている。
+    <ul>
+      <li> 監視されないようにネットワークに接続しないようにしたら? → 作動しなくなる。
+    </ul>
+  <li> 機械はなるべくタダで売る → 本当の価値はデータである。
+    <ul>
+      <li> なぜ Android のほうが iPhone より安いのか?
+      <li> <a href="https://www.amazon.co.jp/s?i=amazon-devices">なぜ Amazon のデバイスはあんなに安いのか?</a>
+    </ul>
+</ul>
+
+<h3>1.6. セキュリティ - まとめ</h3>
+<ul>
+<li> <u>パスワード</u>はきちんとつける。
+<li> つねに<u>最新のバージョン</u> (=バグが少ない) に更新する。
+<li> <u>信頼できない情報</u>に注意する。
+</ul>
+
+
+<h3>雑談 その2</h3>
+<p>
+プロモーションビデオは、音楽が非常に重要:
+<ul>
+  <li> 東京工業大学広報映像2014 ハイライト:
+    <a href="https://www.youtube.com/watch?v=BJy1CjaFcaM">オリジナル</a>,
+    <a href="https://youtu.be/ZEylTjgrtPQ">音楽を変えてみた</a>
+  <li> TSUBAME3.0ビデオ 一般向け:
+    <a href="https://www.gsic.titech.ac.jp/node/969">オリジナル</a>,
+    <a href="https://youtu.be/VaOVD1M5uNc">音楽を変えてみた</a>
+</ul>
+</ul>
+
+
+<h2 id="literacy">2. 情報リテラシ</h2>
+
+<h3>2.1. 結局、情報リテラシとは何だったのか?</h3>
+<ul>
+<li> 「パソコンが使えること」では<u>ない</u>。
+<li> 「情報」を正しく使えること:
+<ul>
+<li> 情報がどのように処理されるかを知っている。
+<li> 欲しい情報を検索・入手できる。
+<li> <u>ウソ</u>を見抜く。
+</ul>
+</ul>
+
+<h3>2.2. 作られた真実</h3>
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=iYhCn0jf46U">Dove Evolution</a>
+<li> <a href="https://www.youtube.com/watch?v=ohmajJTcpNk">Face2Face: Real-time Face Capture and Reenactment of RGB Videos</a>
+<li> <a href="https://www.youtube.com/watch?v=JMPEagWVAHU">スマートフォンをドローン化する</a> (← インチキ)
+  <ul>
+    <li> <a href="https://www.youtube.com/watch?v=LEZCxxKp0hM">Mark Roberによる暴露</a>
+  </ul>
+</ul>
+
+<h3>2.3. マスコミは「中立」か?</h3>
+<ul>
+  <li> <a href="http://www.asahi.com/news/editorial.html">朝日新聞</a> … 憲法改正反対、安倍政権に批判的。
+  <li> <a href="https://www.sankei.com/column/newslist/editorial-n1.html">産経新聞</a> … 憲法改正賛成、安倍政権に好意的。
+  <li> <a href="http://gohoo.org">GoHoo</a> - 日本のマスコミの間違いを指摘。
+  <li> <a href="http://retractiondatabase.org">Retraction Database</a> - 不正な学術研究 (論文) を検索可能。
+</ul>
+
+<h4>データも間違える</h4>
+<ul>
+<li> 2016年 米国大統領選挙
+  <ul>
+    <li> 予想では<a href="https://www.huffingtonpost.com/entry/polls-hillary-clinton-win_us_5821074ce4b0e80b02cc2a94">98%の確率でヒラリーが勝つ</a>と思われていた。
+    <li> トランプ陣営は自分たちが「はめられて」いると主張していた。
+  </ul>
+</ul>
+
+<h4>陰謀論</h4>
+<p>
+マスコミが信用できないからといって、ネットの言うことを全部信用すると…
+    <ul>
+      <li> <a href="https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%9D%E3%83%AD%E8%A8%88%E7%94%BB%E9%99%B0%E8%AC%80%E8%AB%96">地球は実は球体ではなく平面で、アポロ11号の月着陸はウソだった</a>。
+      <li> <a href="https://en.wikipedia.org/wiki/Misinformation_related_to_the_COVID-19_pandemic#Conspiracy_theories">エイズウイルス・新型コロナウイルスは生物兵器として開発された</a>。
+      <li> <a href="https://ja.wikipedia.org/wiki/%E5%9C%B0%E7%90%83%E6%B8%A9%E6%9A%96%E5%8C%96%E3%81%AB%E5%AF%BE%E3%81%99%E3%82%8B%E6%87%90%E7%96%91%E8%AB%96">地球温暖化は実は起きておらず、科学者・政治家が世界を支配するために作られたウソである</a>。
+      <li> 東工大の本館 (あるいは百年記念館) はいざというときにロボットに変形する。
+      <li> ...
+    </ul>
+<p>
+また、ネットの記事はあとからこっそり
+改竄されたり削除されたりするので注意。
+
+<h4>Wikipedia 編集合戦</h4>
+<ul>
+<li> 「ジョージ・フロイドの死」なのか
+<li> 「<a href="https://en.wikipedia.org/wiki/Killing_of_George_Floyd">ジョージ・フロイドの殺害</a>」なのか?
+  <li> 2003年のイラク戦争を
+    「アメリカのイラク侵略」と呼ぶか
+    「アメリカのイラク解放」と呼ぶか?
+</ul>
+
+<h3>2.4. 科学的議論 vs. 感情論</h3>
+<ul>
+<li> 科学的議論: 事実や統計をもとに議論する。
+<li> 感情論: 恐怖あるいは怒りに訴える極端な事例のみを取り上げる。
+<li> <strong>注意</strong>:
+  「科学的議論 = つねに正しい」「感情論 = つねに間違っている」とは限らない。
+</ul>
+
+<h4>マスコミもしょせんは商売である</h4>
+<p>
+科学的な議論は凡庸であり、退屈だ。
+マスコミが儲けるためには、人が読みたがる記事を書く必要がある:
+<ul>
+  <li> 不安を煽るような記事 (災害、犯罪、病気、戦争)
+  <li> 怒りを煽るような記事 (政治家、芸能人の不祥事)
+  <li> 羨望を煽るような記事 (金持ち、芸能人、東大生)
+  <li> スポーツ関連、趣味関連、ほっこり系 (動物ネタ)、他。
+</ul>
+
+<div class=ex>
+<div class=header>演習 7-6. 扇情的な記事とは</div>
+<p>
+次の新聞記事のうち、不安または怒りに訴えているものを挙げよ:
+<ol type=a>
+<li> 自粛が続く中でパチンコ店がいまだに営業
+<li> ネットの中傷が原因でアイドルが自殺
+<li> 内閣支持率が過去最低に
+<li> 北朝鮮が核兵器の開発を加速
+<li> 千葉県で震度4
+</ol>
+</div>
+
+<h3>2.7. 結局、どうすればいいのか?</h3>
+<ul>
+<li> 100% 正しい情報なんてありえない - 「半分ぐらい信じる」
+<ul>
+<li> 複数の情報源にあたる。
+<li> 異なる立場から物事を見てみる。
+<li> 自分の経験と合致するかどうか確かめる。
+</ul>
+<li> 情報リテラシ =
+  <u>ほどほどに疑ってかかること</u>。
+</ul>
+
+<h4>インチキな議論 (<a href="https://ja.wikipedia.org/wiki/%E8%A9%AD%E5%BC%81">詭弁</a>) の例</h4>
+<ul>
+<li> 権威に訴える議論 (「有名なあの人が言ってるから正しい」)
+<li> 十把ひとからげ (「バカな東工大生がいた」 → 「東工大生はみなバカである」)
+<li> 藁人形論法 (「A氏は東工大が世界最悪の大学だといっているが…」)
+<li> ニセの二者択一 (「Aを否定するなら、つまりBということか!」)
+<li> 相関と因果関係 (「アイスを食べる人が増えると、エアコンが売れる」)
+<li> そっちこそどうなんだ論法 (「もっとひどいことをやってる人がいる」)
+</ul>
+
+<h4>外国人の視点で日本を見てみる</h4>
+<p>
+すべての報道には真実と、そうでない話が混じっている。
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=8ThPuKK0mks">日本伝統の釣り「江戸和竿」</a>
+<li> <a href="https://www.youtube.com/watch?v=z7YETRPILaQ">日本のトラック装飾文化</a>
+<li> <a href="https://www.youtube.com/watch?v=s1m_yhi9oqA">日本にしか存在しない29のもの</a>
+<li> <a href="https://www.youtube.com/watch?v=qBfyIQbxXPs">日本の中にある北朝鮮</a>
+<li> <a href="https://www.youtube.com/watch?v=bcQWq86ysHI">戦争にあこがれる日本の子供</a>
+  (参考: <a href="https://www.youtube.com/watch?v=Zak_e_QB4OU">海兵隊の3日間ブートキャンプに参加するYouTuber</a>)
+<li> <a href="https://www.youtube.com/watch?v=IHJsoCAREsg">右傾化する日本と「新しい歴史教科書」</a>
+<li> <a href="https://www.youtube.com/watch?v=0NcIGBKXMOE">商品化される日本の女子高生</a>
+</ul>
+<p>
+日本に対する批判はすべて「嘘」あるいは「誇張」で、海外の陰謀だと思いこむのは
+科学的な態度だろうか?
+
+
+<h2 id="summary">3. 本日のまとめ・小課題</h2>
+
+<div>大学入学おめでとうございます。</div>
+<ul>
+<li> なぜ学校なんかに行くのか?
+<ul>
+<li> 高校 - 怒られたくないのでやる。
+<li> 大学 - やりたいからやる。
+</ul>
+<li> 大学のほうからは何もしてくれない。
+<li> 自分で考えて結論を出さなければいけない。
+<li> 先生 = 道具である。
+  役に立つかどうかは使い方次第。
+</ul>
+
+<div class=ex>
+<div class=header>演習 7-7. (本日の小課題)</div>
+<p>
+産経新聞の 2018年の記事
+<a href="https://www.sankei.com/west/news/180502/wst1805020020-n1.html">「訪日外国人のレンタカー死傷事故、３年で３倍に」</a>
+を見ると、訪日外国人による自動車事故が大きな問題となっているように読める。
+しかし、この記事には訪日外国人がここ最近で急速に増えているという事実が記されていない。
+過去5年間 (2013年〜2018年) の訪日外国人の数をネットで調べ、
+この記事のいう問題が本当に「問題」なのかどうか考察せよ。
+また、記事中のグラフの描き方についても問題点を指摘せよ。
+  <li> 回答は <a href="https://quiz.tabesugi.net/y20-il1/quiz5/index.html">Quiz 5</a> に提出せよ。
+  <li> 締め切り: <u>6月22日</u> (1週間後)
+</ul>
+</div>
+
+
+<h2 id="assignment">4. クラス共通課題3の説明</h2>
+<p>
+クラス共通課題は、全クラス共通の (やや大変な?) 課題です。
+
+<div class=ex>
+<div class=header>クラス共通課題3</div>
+<ul>
+  <li> 締め切り: <u>6月22日</u> (1週間後)
+  <li> 以下のページを開く:<br>
+    <a href="https://titechcomp.github.io/y20-il1j/7q-quiz.html">クラス共通課題(3)</a>
+</ul>
+</div>
+
+
+<h2 id="nextweek">5. 情報リテラシ第二の予告</h2>
+<p>
+6月22日(来週月曜日)より開始。
+<ul>
+  <li> <u>パソコンが必要</u>です。 (Windows あるいは Mac)
+  <li> パソコン上におけるデータ処理の方法。
+  <li> 数式・グラフを使ったレポートの書き方。
+  <li> プレゼン作法。 (バイトの面接に有利かも)
+  <li> プログラミングはやりません。
+    (コンピュータサイエンス第一を履修のこと)
+  <li> …その他、雑学や新山の体験談など。
+</ul>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

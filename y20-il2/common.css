@@ -1,0 +1,32 @@
+body { font-family: sans-serif; }
+@media print {
+    .nop { display: none; }
+}
+@media screen {
+    .bl { color: transparent; }
+    body { line-height: 1.5; }
+}
+h1 { border-bottom: solid 4px #000080; }
+h2 { border-bottom: solid 2px #000080; }
+h3 { border-bottom: solid 1px #000080; }
+table { border-collapse: collapse; }
+td { padding: 4px; }
+kbd { outline: 1px solid black; padding: 2px; }
+pre { outline: 1px solid black; padding: 4px; overflow: auto; }
+pre, code { background: #ddd; font-size: 150%; }
+dt { text-decoration: underline; font-weight: bold; }
+.figure { text-align: center; }
+.comment { color: #008800; }
+.notice { font-size: 100%; font-weight: bold; background: #ffff88; outline: 2px solid black; padding: 0.5em; margin: 0.5em; }
+.rule { font-size: 100%; background: #88ff88; outline: 1px solid black; padding: 0.5em; margin: 1em 3em 1em 3em; }
+.banner { font-size: 150%; background: #ffff88; outline: 2px solid black; padding: 1em; margin: 1em; text-align: center; }
+.ex { outline: 2px solid black; padding: 1em; margin: 1em; }
+.ex .header { font-size: 120%; font-weight: bold; border-bottom: solid 1px black; }
+.exa { outline: 2px solid black; padding: 1em; margin: 1em; background: #ccffcc; }
+.exa .header { font-size: 120%; font-weight: bold; border-bottom: solid 1px black; }
+.file { outline: 1px solid black; margin: 1em; padding: 4px; }
+.file > pre { margin: 0; outline: 2px solid black; padding: 1em; }
+.bl { outline: 1px solid black; padding: 2px; font-size: 120%; color: transparent; }
+.spacy li { margin-bottom: 0.5em; }
+.qqq { outline: 1px solid black; background: #ccffff; }
+.err { background: red; color: white; }

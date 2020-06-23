@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<!-- 合言葉: 「王様の耳はロバの耳」 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2020年度 情報リテラシ第二 (1a) 第2回 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+.spacy li { margin-bottom: 1.0em; }
+.figure { padding: 4px; border: 1px solid black; }
+.quote { margin: 2em; padding: 1em; outline: 4px double gray; }
+.quote .author { text-align: right; }
+--></style>
+<script>
+function toggle(e) {
+  for (let k in e.children) {
+    let c = e.children[k];
+    c.hidden = !c.hidden;
+  }
+}
+</script>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>情報リテラシ第二 (1a) 第2回</h1>
+<div class=nav>2020年6月29日 (月) 1-2限</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#textfile">テキスト形式について (つづき)</a>
+<li> <a href="#terminals">「ターミナル (コマンド プロンプト)」とは何か?</a>
+<li> <a href="#filesystem">ファイルとフォルダ (つづき)</a>
+<li> <a href="#matplotlib">matplotlib入門</a>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<li> <a href="#nextweek">次回予告</a>
+</ol>
+
+
+<h3>雑談</h3>
+<p>
+<strong>前回の教訓</strong>:
+雑談に時間をかけすぎないこと。
+<ul>
+<li> アポロ11号計画 1969年7月16日〜24日 (UTC)
+<li> <a href="https://apolloinrealtime.org/11/">当時の音声がすべて聴けるサイト</a>
+</ul>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> 授業の目的と、データ管理の重要性について説明した。
+<li> ファイル形式、拡張子、およびパス名について説明した。
+<li> テキストエディタの使い方を学習した。
+</ul>
+
+<div class=ex>
+<div class=header>演習 2-1. (前回の復習)</div>
+<ol>
+<li> ファイル名とは何か?
+<li> ファイル形式とは何か?
+<li> ファイル形式は何によって決まるか?
+<li> 各ファイルがもっている情報には
+  (ファイル名とファイル形式以外に) どんなものがあるか?
+<li> パス名とは何か?
+<li> テキストエディタとは何か?
+</ol>
+</div>
+
+
+<h2 id="textfile">1. テキスト形式について (つづき)</h2>
+<ul>
+<li> 拡張子が<code>.txt</code>以外の「テキスト形式」:
+<ul>
+  <li> HTML形式: <code>.htm</code> (<code>.html</code>)
+  <li> CSV形式: <code>.csv</code>
+  <li> TeX形式: <code>.tex</code>
+  <li> ...
+</ul>
+<li> これらの形式はすべてテキストエディタ (メモ帳・テキストエディット) で開ける。
+<li> この授業で究極的にやること:<br>
+  「テキスト形式のファイルをうまいこと作成し、それを提出する」
+</ul>
+
+<div class=ex>
+<div class=header>演習2-2. テキスト形式として開く</div>
+<ol type=a>
+<li> この授業スライドのページ (HTMLファイル) をブラウザで開き、ファイルとして保存せよ。
+<li> 保存したファイルが置かれている位置 (パス名) を答えよ。
+<li> HTMLファイルをテキストエディタで開き、中に隠されている合言葉を発見せよ。<br>
+  (なお、HTMLファイルを普通にダブルクリックするとブラウザが開いてしまうので、
+  テキストエディタを開いておいて、そこにドラッグ・ドロップするとよい。)
+</ol>
+</div>
+
+
+<h2 id="terminals">2. 「ターミナル (コマンド プロンプト)」とは何か?</h2>
+
+<h3>2.1. ターミナルを起動する</h3>
+
+<h4>Windowsの場合</h4>
+<ul>
+  <li> スタートメニューから <kbd>Windows システムツール</kbd> → 
+    <kbd>コマンド プロンプト</kbd> を選ぶ。
+</ul>
+
+<h4>Macの場合</h4>
+<ul>
+  <li> Finder のメニューから <kbd>表示</kbd> → 
+    <kbd>ユーティリティ</kbd> を選び、
+    <code>ターミナル</code> のアイコンを開く。
+</ul>
+
+<h3>2.2. ターミナルの使い方・超基本</h3>
+
+<ol>
+  <li> <u>コマンド</u>を入力して <kbd>Enter</kbd> を押す。
+  <li> コマンドには、実行するアプリの<u>パス名</u>を入力する。
+  <li> そのアプリが実行され、結果が表示される。
+  <li> → 1. に戻る。
+</ol>
+
+<h4>文字入力するときの注意</h4>
+<ul>
+<li> 2種類の英字に注意。<img src="zenhan.png">
+  <ul>
+    <li> 全角: Ｇｏｄｚｉｌｌａ．
+    <li> 半角: Godzilla.
+  </ul>
+<li> コマンドは必ず<u>半角</u> (英数字モード) で入力すること!
+<li> じつは世界には似たような文字が一杯ある。
+<li> <span style="letter-spacing:0.5em;">AＡΑАĄ</span><br>
+<div>文字コード: <input id="ct" size="2"> <span id="ch"></span></div>
+<script>
+document.getElementById('ct').oninput = function (e) {
+ let c = e.target.value;
+ document.getElementById('ch').innerHTML = (c)? c.charCodeAt(c.length-1) : '';
+}
+</script>
+</ul>
+</div>
+
+<div class=ex>
+<div class=header>演習2-3. コマンドを入力する</div>
+<p>
+アプリの<u>パス名</u>をコマンドとして入力すると、そのアプリが実行される。
+<ul>
+<li> <strong>Windowsの場合</strong>:<br>
+  コマンド・プロンプトを開き、以下のコマンドを<u>半角で</u>入力せよ:
+  <ul>
+    <li> <kbd>C:\Windows\System32\notepad.exe</kbd>
+  </ul>
+<li> <strong>Macの場合</strong>:<br>
+  ターミナルを開き、以下のコマンドを<u>半角で</u>入力せよ:
+  <ul>
+    <li> <kbd>/System/Applications/TextEdit.app/Contents/MacOS/TextEdit</kbd>
+  </ul>
+</ul>
+</div>
+
+<h3>2.3. ターミナルの便利な機能</h3>
+<ul>
+  <li> <strong>スクロール機能</strong>
+  <li> <strong>履歴機能</strong>: 
+    以前に入力したコマンドに <kbd>↑</kbd> と <kbd>↓</kbd> キーで戻れる。
+  <li> <strong>補完機能</strong>:
+<pre>→ /Sys <kbd>Tab</kbd>
+→ /System/App <kbd>Tab</kbd>
+→ /System/Applications/Tex <kbd>Tab</kbd>
+→ /System/Applications/TextEdit.app/Con <kbd>Tab</kbd>
+...
+</pre>
+</ul>
+</div>
+
+<div class=ex>
+<div class=header>演習2-4. ターミナルの補完機能を使う</div>
+補完機能を使って、
+以下のコマンドを<u>20回以下</u>のキー入力で入力せよ。
+<ul>
+<li> <strong>Windowsの場合</strong>:<br>
+  <ul>
+    <li> <kbd>C:\Windows\System32\mspaint.exe</kbd>
+  </ul>
+<li> <strong>Macの場合</strong>:<br>
+  <ul>
+    <li> <kbd>/Applications/Safari.app/Contents/MacOS/Safari</kbd>
+  </ul>
+</ul>
+</div>
+
+<h3>2.4. なぜターミナルがいいのか?</h3>
+<ol type=a>
+  <li> 「やること」を言葉で書ける。<br>
+    アイコンやウィンドウを使った入力方式を GUI (Graphical User Interface) と呼ぶ。
+    これは、直感的ではあるが指示しにくい。
+    <div class=figure><img src="gui.png" width="300">
+      「ここをクリックして、あれをドラッグして…」</div>
+
+  <li> より細かく条件・処理を指定できる。<br>
+    例. 「東工大のウェブサイトにあるPDF形式のファイル」をすべて検索:<br>
+    Google検索: <a href="https://www.google.com/search?q=site%3Atitech.ac.jp+filetype%3Apdf"><kbd>site:titech.ac.jp &nbsp; filetype:pdf</kbd></a>
+
+  <li> より厳密に書ける:
+    <ul>
+      <li> 「1から始まるn個の奇数を2乗したものをすべて足した数」
+      <li> &Sigma;<sub>i=1...n</sub> (2i - 1)<sup>2</sup>
+    </ul>
+</ol>
+
+<h4>科学における再現性とは</h4>
+<ul>
+<li> 再現性 = 「誰がやっても、同じようにやれば同じ結果になること」<br>
+  <sub>(物理実験・化学実験は??)</sub>
+<li> きちんとした手順を<u>言葉で</u>書き残しておくことが重要。
+</ul>
+
+
+<h2 id="filesystem">3. ファイルとフォルダ (つづき)</h2>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g text-anchor="end">
+      <text x="300" y="50">ディスク</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+    </g>
+    <g style="font-family: monospace;">
+      <text x="400" y="50">C:</text>
+    </g>
+  </g>
+</svg>
+</div>
+<ul>
+<li> パソコン上のすべてのファイル・フォルダの位置は、<u>パス名</u>で表せる:
+  <ul>
+    <li> <kbd>/B/K</kbd>
+    <li> <kbd>/A/E/X</kbd>
+  </ul>
+</ul>
+</div>
+
+<div class=ex>
+<div class=header>演習2-5. lsコマンド・dirコマンド</div>
+<p> 
+以下のコマンドを入力し、結果を確認せよ。
+<ul>
+<li> <strong>Windowsの場合</strong>:
+<ol>
+  <li> <kbd>dir C:\Windows\System32</kbd>
+  <li> <kbd>dir /w C:\Windows\System32</kbd>
+</ol>
+<p>
+Windows では、<kbd>dir</kbd> コマンドを使うと、
+指定されたパス名のファイル一覧を表示できる。
+短縮表示するには <kbd>dir /w</kbd> を使う。
+<li> <strong>Macの場合</strong>:
+<ol>
+  <li> <kbd>ls /Applications/Utilities</kbd>
+  <li> <kbd>ls -l /Applications/Utilities</kbd>
+</ol>
+<p>
+Mac では、<kbd>ls</kbd> コマンドを使うと、
+指定されたパス名のファイル一覧を表示できる。
+詳細表示するには <kbd>ls -l</kbd> を使う。
+</ul>
+</div>
+
+<h3>3.1. カレント・フォルダ</h3>
+<ul>
+  <li> パス名を使うことの問題: いくらでも長くなりうる!<br>
+    <code>/Applications/Safari.app/Contents/MacOS/...</code>
+  <li> いちいちパス名を入力するのは面倒。簡単にできないか?<br>
+    → <u>いま注目している</u> (カレント, current) フォルダという考え。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレント・フォルダ</text>
+    </g>
+  </g>
+</svg>
+</div>
+</div>
+</ul>
+
+<div class=ex>
+<div class=header>演習2-5. カレントフォルダの変更</div>
+<p> 
+以下のコマンドを順に実行し、何が起きたのか観察せよ:
+<ul>
+<li> <strong>Windowsの場合</strong>:
+<ol>
+  <li> <kbd>cd</kbd>
+  <li> <kbd>dir</kbd>
+  <li> <kbd>cd \Windows</kbd>
+  <li> <kbd>cd</kbd>
+  <li> <kbd>dir</kbd>
+</ol>
+<li> <strong>Macの場合</strong>:
+<ol>
+  <li> <kbd>pwd</kbd>
+  <li> <kbd>ls</kbd>
+  <li> <kbd>cd /Applications</kbd>
+  <li> <kbd>pwd</kbd>
+  <li> <kbd>ls</kbd>
+</ol>
+</ul>
+</div>
+
+<p>
+現在の「注目しているフォルダ」のことを
+「カレント・フォルダ」あるいは
+「カレント・ディレクトリ」と呼ぶ。
+(もともとフォルダはディレクトリと呼ばれていた。
+用語としては、ディレクトリのほうが古い。)
+
+<h4>Windowsの場合</h4>
+<ul>
+  <li> <kbd>cd</kbd> <sub>(Change Directory)</sub> コマンド:<br>
+    カレント・フォルダのパス名を表示する。
+  <li> <kbd>cd <em>パス名</em></kbd> <sub>(Change Directory)</sub> コマンド:<br>
+    カレント・フォルダを指定した<em>パス名</em>に変更できる。
+  <li> <kbd>ls</kbd> コマンド:<br>
+    パス名を省略して実行すると、
+    カレント・フォルダのファイル一覧を表示する。
+</ul>
+</ul>
+
+<h4>Macの場合</h4>
+<ul>
+  <li> <kbd>pwd</kbd> <sub>(Print Working Directory)</sub> コマンド:<br>
+    カレント・フォルダのパス名を表示する。
+  <li> <kbd>cd <em>パス名</em></kbd> <sub>(Change Directory)</sub> コマンド:<br>
+    カレント・フォルダを指定した<em>パス名</em>に変更できる。
+  <li> <kbd>ls</kbd> コマンド:<br>
+    パス名を省略して実行すると、
+    カレント・フォルダのファイル一覧を表示する。
+</ul>
+</ul>
+
+<div class=ex>
+<div class=header>演習2-6. コマンドを使ったファイルの確認</div>
+<ol type=a>
+<li> 自分のデスクトップ (フォルダ) のパス名を確認せよ。
+<li> <kbd>cd</kbd> コマンドを使って、
+  現在の注目フォルダを自分のデスクトップフォルダに変更せよ。
+<li> テキストエディタを使って、デスクトップ上にテキストファイルを作成せよ。
+<li> <kbd>pwd</kbd> または <kbd>ls</kbd> コマンドを使って、
+  いま作成したファイル名が現れていることを確認せよ。
+</ol>
+</div>
+
+
+<h3>雑談・その2</h3>
+<ul>
+<li> <a href="https://mainichi.jp/articles/20180617/k00/00e/040/177000c">京大論文不正 PCデータに改ざんの痕跡 認定の決め手に</a><br>
+  「ハードディスクのデータを復元」… そんなことできんの?
+<p>
+実は、削除したファイルの 0 と 1 は、(上書きされない限り)
+まだディスク上に残っている。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="620" height="80">
+  <g stroke="black" fill="none" stroke-width="2">
+    <rect x="10" y="10" width="600" height="60" />
+  </g>
+  <g stroke="black" stroke-width="1">
+    <rect x="100" y="15" width="40" height="50" fill="#00ff00" />
+    <rect x="180" y="15" width="70" height="50" fill="#4444ff" />
+    <rect x="330" y="15" width="50" height="50" fill="#ffff00" />
+    <rect x="400" y="15" width="20" height="50" fill="#00ffff" />
+    <rect x="500" y="15" width="80" height="50" fill="#ff44ff" />
+  </g>
+  <g text-anchor="middle">
+    <text x="120" y="35" dy="0.5em">K</text>
+    <text x="215" y="35" dy="0.5em">H</text>
+    <text x="355" y="35" dy="0.5em">C</text>
+    <text x="410" y="35" dy="0.5em">K</text>
+    <text x="540" y="35" dy="0.5em">C</text>
+  </g>
+</svg>
+<p>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="620" height="80">
+  <g stroke="black" fill="none" stroke-width="2">
+    <rect x="10" y="10" width="600" height="60" />
+  </g>
+  <g stroke="black" stroke-width="1">
+    <rect x="100" y="15" width="40" height="50" fill="#00ff00" />
+    <rect x="180" y="15" width="70" height="50" fill="none" stroke-dasharray="2,2" />
+    <rect x="330" y="15" width="50" height="50" fill="#ffff00" />
+    <rect x="400" y="15" width="20" height="50" fill="#00ffff" />
+    <rect x="500" y="15" width="80" height="50" fill="#ff44ff" />
+  </g>
+  <g text-anchor="middle">
+    <text x="120" y="35" dy="0.5em">K</text>
+    <text x="215" y="35" dy="0.5em">H</text>
+    <text x="355" y="35" dy="0.5em">C</text>
+    <text x="410" y="35" dy="0.5em">K</text>
+    <text x="540" y="35" dy="0.5em">C</text>
+  </g>
+</svg>
+</div>
+</ul>
+
+
+<h2 id="matplotlib">4. matplotlib入門</h2>
+
+<h3>4.1. matplotlib とは?</h3>
+<ul>
+<li> グラフを描画するための機能。科学論文でよく使われる。
+<li> 2通りの方法で利用できる:
+  <ol type=a>
+    <li> <a href="https://colab.research.google.com/">Google Colaboratory</a> に
+      ログインして使う。
+    <li> 自分の PC にインストールする場合、
+      Jupyter Notebook アプリを使う。<br>
+      (これは、Anaconda システムの一部として付属する。)<br>
+      <a href="https://www.anaconda.com/products/individual">Anacondaシステムのダウンロード</a> 
+  </ol>
+</ul>
+<p>
+本授業では、おもに a. の方法を利用するが、
+b. を使ってもよい (結果は同じである)。
+
+<h4>Google Colaboratory を使う場合</h4>
+<ol>
+  <li> <kbd>File</kbd> メニューから <kbd>New Notebook</kbd> を選ぶ。
+  <li> 以下のような画面が出る。この枠内に文字を入力する。
+    <div class=figure><img src="colab0.png"></div>
+</ol>
+
+<h4>Anaconda を使う場合</h4>
+<ol>
+  <li> <kbd>Jupyter Notebook</kbd> を起動する。
+  <li> <kbd>New Notebook (Python3)</kbd> を選ぶ。
+  <li> 以下のような画面が出る。この枠内に文字を入力する。
+    <div class=figure><img src="jupyter0.png"></div>
+</ol>
+
+<h3>4.2. グラフを描画する</h3>
+
+<div class=ex>
+<div class=header>演習2-7. 最初のグラフを描画する</div>
+<p>
+Google Colaboratory (あるいは Jupyter Notebook) で
+以下のプログラムを入力し、
+<kbd>再生</kbd> (あるいは <kbd>Run</kbd>) ボタンを押して実行せよ。
+(キーボードの <kbd>Ctrl</kbd> + <kbd>Enter</kbd> でも実行できる。)
+<blockquote><pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(0, 10, 100)
+
+plt.plot(x, np.sin(x), label="sin(x)")
+
+plt.xlabel("x label")
+plt.ylabel("y label")
+plt.title("Simple Plot")
+plt.legend()
+plt.show()
+</pre></blockquote>
+</div>
+
+<p>
+正しく動作していれば、以下のような画面が表れるはずである:
+<div class=figure><img src="colab1.png"></div>
+
+<p>
+時間に余裕があれば、以下もやってみよう:
+
+<div class=ex>
+<div class=header>演習2-8. いろいろなグラフを描く</div>
+<ol>
+<li> 上のプログラムの中で、以下の行
+<blockquote><pre>
+plt.plot(x, np.sin(x), label="sin(x)")
+</pre></blockquote>
+を次のように書き換え、結果を観察せよ。
+<blockquote><pre>
+plt.plot(x, x, label="linear")
+plt.plot(x, x**2, label="quadratic")
+plt.plot(x, x**3, label="cubic")
+</pre></blockquote>
+<li> プログラム中の "〜" で囲まれている部分
+  (<code>"Simple Plot"</code>, <code>"x label"</code>, <code>"linear"</code> など) を
+  書き換え、結果を観察せよ。
+</ol>
+</div>
+
+<h3>4.3. グラフを画像ファイルとして保存する</h3>
+<p>
+上のプログラムに以下の一行を追加すると、
+描画したグラフを実際にファイルとして保存 (ダウンロード) することができる。
+<blockquote><pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(0, 10, 100)
+
+plt.plot(x, np.sin(x), label="sin(x)")
+
+plt.xlabel("x label")
+plt.ylabel("y label")
+plt.title("Simple Plot")
+plt.legend()
+<mark>plt.savefig("sinx.png")</mark>
+plt.show()
+</pre></blockquote>
+
+<p>
+<strong>注意</strong>:
+<code>plt.savefig(...)</code> の部分は
+必ず <code>plt.show()</code> の前に書くこと。
+
+<h4>Google Colaboratory を使う場合</h4>
+<p>
+Google Colaboratory は、内部にファイルを持っている。
+上のプログラムが正しく動作すると、
+<code>sinx.png</code> ファイルが生成される。
+これを自分の PC にダウンロードするには、以下のようにする。
+<ol>
+<li> 画面の左側の「フォルダ」アイコンをクリックする。
+<li> 初期化にしばらく時間がかかるので、10秒ぐらい待つ。
+<li> <code>sinx.png</code> というファイルが表示されるので、
+  右クリックして <kbd>Download</kbd> を選ぶ。
+  <div class=figure><img src="colab2.png"></div>
+<li> ダウンロードしたファイルを PC 上に保存する。
+</ol>
+
+<h4>Jupyter Notebook を使う場合</h4>
+<p>
+Juypter Notebook では、
+画像ファイルは自分のホームフォルダ内に保存されている。
+フォルダを開いて <code>sinx.png</code> が生成されていることを確認する。
+<p>
+(なお、作成した Notebook 自体もホームフォルダ内に保存されている。)
+
+
+<h2 id="summary">5. 本日のまとめ・小課題</h3>
+<ul>
+<li> <u>ターミナル</u>の使い方を学習した。
+  <ul>
+    <li> <kbd>dir</kbd> / <kbd>ls</kbd> コマンド
+    <li> <kbd>cd</kbd> コマンド
+    <li> <kbd>pwd</kbd> コマンド
+  </ul>
+<li> 長いパス名を省略する方法として、
+  <u>カレント・フォルダ</u>という考え方を学習した。
+<li> matplotlib を使ってグラフを描いてみた。
+</ul>
+
+<div class=ex>
+<div class=header>演習2-9. グラフの画像を保存する (本日の小課題)</div>
+<ul>
+<li> 締め切り: <u>7月6日</u> (1週間後)
+<li> 上で説明した方法を使って、なんらかのグラフを描画し、
+  その画像ファイルを OCW-i から提出せよ。
+<li> ファイル名はなんでもよいが、拡張子は <code>.png</code> であること。
+</ul>
+</div>
+
+
+<h2 id="nextweek">6. 次回予告</h2>
+<ul>
+<li> コマンドの使い方つづき。
+<li> 絶対パス名と相対パス名。
+<li> matplotlib の使い方つづき。
+</ul>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

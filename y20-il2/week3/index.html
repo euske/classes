@@ -31,7 +31,7 @@ img { max-width: 80vw; height: auto; }
 
 
 <h3>雑談</h3>
-<p> 
+<p>
 政治とは何か?
 <ul>
   <li> 「限られた資源 (物資・場所・時間) を複数の人で分ける」こと = <u>政治</u>
@@ -596,6 +596,7 @@ plt.plot(a[:,0], a[:,1], label="data1", color="blue")
 a = np.genfromtxt("./data1.txt")
 plt.bar(a[:,0], a[:,1], label="data1", color="red")
 
+plt.title("Simple Plot")
 plt.xlabel("x label")
 plt.ylabel("y label")
 plt.legend()
@@ -634,10 +635,11 @@ plt.plot(a[:,0], a[:,1], label="<mark>data1</mark>", color="<mark>blue</mark>")
 a = np.genfromtxt("<mark>./data1.txt</mark>")
 plt.<u>bar</u>(a[:,0], a[:,1], label="<mark>data1</mark>", color="<mark>red</mark>")
 </pre></blockquote>
-最後に、X軸、Y軸の表示を
-それぞれ「<code>x label</code>」「<code>y label</code>」に設定し、
+最後に、グラフの題名を「<code>Simple Plot</code>」、
+X軸、Y軸の表示をそれぞれ「<code>x label</code>」「<code>y label</code>」に設定し、
 完成したグラフを <code>plot1.png</code> というファイル名で保存する。
 <blockquote><pre>
+plt.title("<mark>Simple Plot</mark>")
 plt.xlabel("<mark>x label</mark>")
 plt.ylabel("<mark>y label</mark>")
 plt.legend()
@@ -647,7 +649,7 @@ plt.show()
 
 <h4>Excel と matplotlib の違い</h4>
 <ul>
-  <li> Excel: 人間の操作によってグラフの描き方が変わる。
+  <li> Excel: データが与えられたあと、グラフの描き方を決めるのは人間 (の操作)。
 <div class=figure>
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -765,6 +767,9 @@ plt.show()
   <li> 次に <a href="https://drive.google.com/">Google Drive</a> を開き、
     ここに取り出した <code>kadai-plot-data</code> フォルダをドラッグ・ドロップする。
     これにより、フォルダの中身が Google Drive にアップロード (送信) される。
+    <strong>注意:</strong>
+    zipファイルの中から直接 kadai-plot-data をドラッグ・ドロップしないこと。
+    必ず一度、デスクトップ上に出してからでないと、うまく動かない。
     <div class=figure><img src="gdrive.png"></div>
 
   <li> ふたたび <a href="https://colab.research.google.com/">Google Colab</a> を開き、

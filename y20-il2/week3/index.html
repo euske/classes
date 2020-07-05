@@ -600,7 +600,7 @@ plt.title("Simple Plot")
 plt.xlabel("x label")
 plt.ylabel("y label")
 plt.legend()
-plt.savefig("plot1.png")
+plt.savefig("./plot1.png")
 plt.show()
 </pre></blockquote>
     正しく動いていれば、以下のようなグラフが表示されるはずである:
@@ -637,13 +637,14 @@ plt.<u>bar</u>(a[:,0], a[:,1], label="<mark>data1</mark>", color="<mark>red</mar
 </pre></blockquote>
 最後に、グラフの題名を「<code>Simple Plot</code>」、
 X軸、Y軸の表示をそれぞれ「<code>x label</code>」「<code>y label</code>」に設定し、
-完成したグラフを <code>plot1.png</code> というファイル名で保存する。
+完成したグラフを <code>./plot1.png</code> というファイル名で保存する。
+このときのファイル名も実は相対パス名である。
 <blockquote><pre>
 plt.title("<mark>Simple Plot</mark>")
 plt.xlabel("<mark>x label</mark>")
 plt.ylabel("<mark>y label</mark>")
 plt.legend()
-plt.savefig("<mark>plot1.png</mark>")
+plt.savefig("<mark>./plot1.png</mark>")
 plt.show()
 </pre></blockquote>
 

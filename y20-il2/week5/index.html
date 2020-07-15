@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2020年度 情報リテラシ第二 (1a) 第5回 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+.spacy li { margin-bottom: 1.0em; }
+.figure { padding: 4px; border: 1px solid black; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>情報リテラシ第二 (1a) 第5回</h1>
+<div class=nav>2020年7月20日 (月) 1-2限</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#latex">LaTeX の基礎</a>
+<li> <a href="#zipfile">Zipファイルとは?</a>
+<li> <a href="#kadai2">中課題2 の説明</a>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<li> <a href="#nextweek">次回予告</a>
+</ol>
+
+
+<h3>雑談</h3>
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=u8I6qt_Z0Cg">プリンタを使ってロッキーのテーマを演奏する</a>
+<li> <a href="https://www.youtube.com/watch?v=LdgzsF_O7oI">フロッピーディスクドライブを使ってスターウォーズのテーマを演奏する</a>
+</ul>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> matplotlib の課題を遂行した。
+<li> LaTeX (Overleaf) を使ってみた。
+</ul>
+
+
+<h2 id="latex">1. LaTeX の基礎</h2>
+
+<h3>1.1. Word と LaTeX の違い</h3>
+<ul>
+  <li> Word: 人間の操作によって文書のレイアウトが決まる。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="180">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="user" width="50" height="50">
+      <g fill="none" stroke="black" stroke-width="3">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+      </g>
+    </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+    <symbol id="file2" width="75" height="75">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"
+         transform="scale(0.75)">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(0.5,0.5)">
+    <use x="10" y="10" xlink:href="#user" />
+    <use x="0" y="100" xlink:href="#file2" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="70" y1="50" x2="150" y2="80" />
+      <line x1="70" y1="130" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+  <li> LaTeX: コマンド (=プログラム) が文書のレイアウトを決める。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="180">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="user" width="50" height="50">
+      <g fill="none" stroke="black" stroke-width="3">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+      </g>
+    </symbol>
+    <symbol id="file2" width="75" height="75">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"
+         transform="scale(0.75)">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(0.5,0.5)">
+    <use x="0" y="10" xlink:href="#file2" />
+    <use x="0" y="100" xlink:href="#file2" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="70" y1="50" x2="150" y2="80" />
+      <line x1="70" y1="130" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+</ul>
+
+<h3>1.2. お約束</h3>
+<ul>
+  <li> 最初の1行はかならずコレ:
+<pre>
+\documentclass[a4j,11pt]{jarticle}
+</pre>
+  <li> 文書全体を <code>\begin{document}</code> 〜 <code>\end{document}</code> で囲む:
+<pre>
+\begin{document}
+...
+\end{document}
+</pre>
+  <li> 「<code>%</code>」以降はコメントとして無視される。
+  <li> すべてのコマンドは「<code>\command</code>」などのように
+    バックスラッシュ (<code>\</code>) のあとに書いた英単語で表される。
+  <li> コマンドによっては後にくる文字を <code>{〜}</code> で
+    囲む必要がある<u>場合もある</u>。
+  <li> コマンドは数百種類もあるので、
+    基本的には他人の技をパクって覚える。
+</ul>
+
+<div class=ex>
+<div class=header>演習5-1. LaTeXの基礎</div>
+<ol>
+  <li> 以下のファイルをダウンロードせよ:
+    <a href="https://titechcomp.github.io/y20-il2j/2/sample.tex">sample.tex</a>
+  <li> Overleaf で、新しいプロジェクトを作成せよ (前回の hello プロジェクトを開いてもよい)。
+    <br>
+    (自分のPCにLaTeXをインストールする場合は、新しいフォルダを作成する。)
+  <li> 画面左上にある「アップロード」ボタンをクリックし、
+    ダウンロードした sample.tex を Overleaf 上にアップロードせよ。
+<div class=figure><img src="ov_upload.png"></div>
+  <li> <code>sample.tex</code> ファイルをクリックして <kbd>リコンパイル</kbd> し、
+    正しく文書が表示されることを確認せよ。
+<div class=figure><img src="ov_sample.png"></div>
+  <li> <code>\author</code> の中身を自分の名前に書き換えよ。
+  <li> 見よう見真似で <code>\section</code> コマンドを使って、
+    文書の最後に「<code>おわりに</code>」という節を追加せよ。
+</ol>
+</div>
+
+
+<h3>1.3. LaTeX コマンドいろいろ</h3>
+
+<h4>参考資料</h4>
+<ul>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y20-il2j/latex/">LaTeX サポートサイト</a>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y20-il2j/theme2.html">科学技術文書執筆</a>
+  <li> <a href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
+</ul>
+
+<h4>技術1. 段落を変える</h4>
+<ul>
+  <li> LaTeX では、ただ改行しても改行にならない。
+    <pre class=example>王様の
+耳は
+ロバの耳。</pre>
+  <li> 1行あけると、次の段落になる。
+    <pre class=example>下の文章のいっていることは本当です。
+
+上の文章がいっていることはウソです。</pre>
+</ul>
+
+<h4>技術2. 数式の埋め込み</h4>
+<ul>
+<li> 文章中に埋め込む: <code>$ 〜 $</code>
+  <pre class=example>以下が成り立つ: $(a+b)^2 = a^2 + 2ab + b^2$</pre>
+<li> ひとつの段落として表示: <code>\[ 〜 \]</code>
+  <pre class=example>以下が成り立つ: \[ (a+b)^2 = a^2 + 2ab + b^2 \]</pre>
+</ul>
+
+<h4>技術3. 図の埋め込み</h4>
+<p>
+以下のコマンドを使うと、
+文書中に画像ファイル (.png あるいは .pdf ファイル) を埋め込むことができる。
+<blockquote><pre class=example>
+\begin{figure}
+\includegraphics[width=0.80\linewidth]{<mark>ファイル名</mark>}
+\caption{<mark>図のキャプション</mark>}
+\end{figure}
+</pre></blockquote>
+
+<div class=ex>
+<div class=header>演習5-2. 図の埋め込み練習</div>
+<ol>
+  <li> 演習 5-1 のプロジェクトに、
+    以前 matplotlib で作成した論文 図2 の
+    画像ファイル (<code>fig2.png</code>) をアップロードせよ。
+    (ファイル名は違っていてもかまわない)
+  <li> <code>sample.tex</code> の中に、以下の内容を追加せよ:
+<pre class=example>
+\begin{figure}
+\includegraphics[width=0.80 \linewidth] {<mark>fig2.png</mark>}
+\caption{<mark>ネットワークの解析に要した時間の時系列遷移</mark>}
+\end{figure}
+</pre>
+  <li> <kbd>リコンパイル</kbd>し、正しく図が埋めこまれていることを確認せよ。
+    (LaTeX の判断により、図が勝手に次ページに送られることがある)
+</ol>
+</div>
+
+
+<h2 id="zipfile">2. Zipファイルとは?</h2>
+<ul>
+  <li> ファイルまとめ機能 + 圧縮機能:
+    <ul>
+      <li> 複数のファイル・フォルダをひとつのファイルにまとめる。
+      <li> 0・1 の羅列のうち、繰り返されている部分を発見し省く:
+        <code>011011011011011</code> → <code>011</code>×5
+    </ul>
+  <li> 特殊用途のデータ圧縮技術は何だったか?
+    <ul>
+      <li> 画像用
+      <li> 音声(音楽)用
+    </ul>
+</ul>
+
+<div class=ex>
+<div class=header>問.</div>
+<ol type=a>
+  <li> 以前にダウンロードした
+    <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a>
+    ファイルは何バイトあるか?
+  <li> この zip ファイルを展開したフォルダの容量は合計何バイトあるか?
+  <li> Zip ファイルの圧縮はいくらか?
+</ol>
+</div>
+
+<h4>雑談</h4>
+<ul>
+<li> Zipファイルの中には、展開するとサイズがメチャクチャ増えて迷惑なものがある。
+  これを「Zip爆弾」という。たとえば <a href="https://unforgettable.dk/">42.zip</a> という
+  42Kバイトの圧縮ファイルを全部展開すると、
+  計 4,503,599,626,321,920 (4.5Pバイト) のファイルになる。
+  <u>決してマネしてはいけません。</u>
+</ul>
+
+
+<h2 id="kadai2">3. 中課題2 の説明</h2>
+<ul>
+<li> 締め切り: <u>8月3日</u> (2週間後)。時間がかかるので、いまから始める。
+<li> やること:
+  <ol>
+    <li> LaTeX でこれを作る:
+      「<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」
+    <li> 元の文書と同じになるように、 main.tex に足りない部分を追加する。
+    <li> matplotlib で作成した図2 〜 図6を挿入する。
+    <li> 完成したプロジェクトをまるごと zip ファイルにまとめ、
+      OCW-i から提出する。
+  </ol>
+</ul>
+
+<div class=ex>
+<div class=header>演習5-3. 中課題2 の準備</div>
+<ol>
+  <li> まず材料となるファイルをダウンロードする:<br>
+    <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+  <li> Overleaf の最初の画面に戻り、
+    <kbd>新規プロジェクト</kbd> → <kbd>プロジェクトのアップロード</kbd> を選ぶ。
+  <li> ダウンロードした zip ファイルをアップロードする。
+    <div class=figure><img src="ov_upload2.png"></div>
+  <li> 「kadai-latex-overleaf」プロジェクトができるので、
+    またもや画面左上のメニューから設定の
+    「コンパイラ」を <kbd>LaTeX</kbd> に変更。
+    <div class=figure><img src="../week4/ov_menu.png"></div>
+  <li> <kbd>リコンパイル</kbd> し、正しく文書が表示されることを確認する。
+</ol>
+</div>
+
+
+<h2 id="summary">4. 本日のまとめ・小課題</h2>
+<ul>
+  <li> LaTeX 演習をおこなった。
+    <ul>
+      <li> 節の追加 (<code>\section</code>コマンド)
+      <li> 図の埋め込み。
+    </ul>
+  <li> Zipファイルの使い方について学習した。
+  <li> 中課題 2. の準備をした。
+</ul>
+
+<div class=ex>
+<div class=header>演習5-4. 図を埋め込んだ文書を提出する (小課題5)</div>
+<ul>
+  <li> 締め切り: <u>7月27日</u> (1週間後)
+  <li> 本日の演習 5-2.で作成したPDFファイルと、
+    それを生成するのに必要な以下のファイル
+    すべてをzip形式でひとつにまとめ、提出せよ。
+    (図のファイル名は fig2.png でなくてもよい)
+    <ul>
+      <li> <code>sample.pdf</code>
+      <li> <code>sample.tex</code>
+      <li> <code>fig2.png</code>
+    </ul>
+</ul>
+</div>
+
+
+<h2 id="nextweek">5. 次回予告</h2>
+<ul>
+<li> LaTeX 演習つづき。
+<li> Zoom / breakout room の使い方練習。
+</ul>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

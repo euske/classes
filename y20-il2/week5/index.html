@@ -9,7 +9,7 @@
 u { color: red; font-weight: bold; }
 img { max-width: 80vw; height: auto; }
 .spacy li { margin-bottom: 1.0em; }
-.figure { padding: 4px; border: 1px solid black; }
+.figure { padding: 4px; outline: 1px solid black; margin: 4px; }
 --></style>
 </head>
 <body>
@@ -31,9 +31,22 @@ img { max-width: 80vw; height: auto; }
 
 
 <h3>雑談</h3>
+
 <ul>
-<li> <a href="https://www.youtube.com/watch?v=u8I6qt_Z0Cg">プリンタを使ってロッキーのテーマを演奏する</a>
-<li> <a href="https://www.youtube.com/watch?v=LdgzsF_O7oI">フロッピーディスクドライブを使ってスターウォーズのテーマを演奏する</a>
+  <li> ハイブリッド自動車・電気自動車は、
+    従来のガソリン自動車に比べてはるかに静かである。
+  <li> <strong>静かすぎてヤバい</strong>。
+    音に頼る視覚障害者 (+ スマホを見ながら歩いてる晴眼者) は、車の存在を検知できない。
+  <li> したがって、現在の電気自動車は、わざと「クルマっぽい」音を出している。
+    <ul>
+      <li> 周囲の人に存在を知らせなくてはいけない。
+      <li> 運転者には心地よい音でなくてはいけない。
+      <li> 静かすぎる・うるさすぎてはいけない。
+    </ul>
+  <li> <a href="https://www.youtube.com/watch?v=W3JEvecS_fI">日産リーフの音は作曲家が作っている</a>。
+  <li> <a href="https://www.youtube.com/watch?v=gB0apslghXU">BMW M4 のアクティブサウンド機能</a>
+  <li> <a href="https://www.youtube.com/watch?v=Okk1w-3X3mE">自動車の音切り替えシステム</a>。
+  <li> <a href="https://www.youtube.com/watch?v=rZOpDve8ARA">掃除機は静かすぎると「弱い」と思われるため、わざと音を出している</a>。
 </ul>
 
 
@@ -170,7 +183,7 @@ img { max-width: 80vw; height: auto; }
   <li> Overleaf で、新しいプロジェクトを作成せよ (前回の hello プロジェクトを開いてもよい)。
     <br>
     (自分のPCにLaTeXをインストールする場合は、新しいフォルダを作成する。)
-  <li> 画面左上にある「アップロード」ボタンをクリックし、
+  <li> 画面左上にある <kbd>アップロード</kbd> ボタンをクリックし、
     ダウンロードした sample.tex を Overleaf 上にアップロードせよ。
 <div class=figure><img src="ov_upload.png"></div>
   <li> <code>sample.tex</code> ファイルをクリックして <kbd>リコンパイル</kbd> し、
@@ -265,7 +278,7 @@ img { max-width: 80vw; height: auto; }
     <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a>
     ファイルは何バイトあるか?
   <li> この zip ファイルを展開したフォルダの容量は合計何バイトあるか?
-  <li> Zip ファイルの圧縮はいくらか?
+  <li> Zip ファイルの圧縮率 (圧縮後サイズ ÷ 圧縮前のサイズ) は何パーセントか?
 </ol>
 </div>
 
@@ -274,14 +287,16 @@ img { max-width: 80vw; height: auto; }
 <li> Zipファイルの中には、展開するとサイズがメチャクチャ増えて迷惑なものがある。
   これを「Zip爆弾」という。たとえば <a href="https://unforgettable.dk/">42.zip</a> という
   42Kバイトの圧縮ファイルを全部展開すると、
-  計 4,503,599,626,321,920 (4.5Pバイト) のファイルになる。
+  計 4,503,599,626,321,920 (4.5Pバイト、約1000億倍) のファイルになる。
   <u>決してマネしてはいけません。</u>
+<li> <a href="https://www.youtube.com/watch?v=u8I6qt_Z0Cg">プリンタを使ってロッキーのテーマを演奏する</a>
+<li> <a href="https://www.youtube.com/watch?v=LdgzsF_O7oI">フロッピーディスクドライブを使ってスターウォーズのテーマを演奏する</a>
 </ul>
 
 
 <h2 id="kadai2">3. 中課題2 の説明</h2>
 <ul>
-<li> 締め切り: <u>8月3日</u> (2週間後)。時間がかかるので、いまから始める。
+<li> 締め切り: <u>8月3日</u> (2週間後)。時間がかかるので、いまから始めたほうがよい。
 <li> やること:
   <ol>
     <li> LaTeX でこれを作る:
@@ -329,7 +344,8 @@ img { max-width: 80vw; height: auto; }
   <li> 本日の演習 5-2.で作成したPDFファイルと、
     それを生成するのに必要な以下のファイル
     すべてをzip形式でひとつにまとめ、提出せよ。
-    (図のファイル名は fig2.png でなくてもよい)
+    (図のファイル名は fig2.png でなくてもよい、
+    latexmkrc は入れなくてもよい)
     <ul>
       <li> <code>sample.pdf</code>
       <li> <code>sample.tex</code>

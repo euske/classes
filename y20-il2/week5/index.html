@@ -181,8 +181,13 @@ img { max-width: 80vw; height: auto; }
   <li> 以下のファイルをダウンロードせよ:
     <a href="https://titechcomp.github.io/y20-il2j/2/sample.tex">sample.tex</a>
   <li> Overleaf で、新しいプロジェクトを作成せよ (前回の hello プロジェクトを開いてもよい)。
-    <br>
-    (自分のPCにLaTeXをインストールする場合は、新しいフォルダを作成する。)
+    前回と同じように <code>latexmkrc</code> を作成すること:
+<pre>
+$latex = 'platex';
+$bibtex = 'pbibtex';
+$dvipdf = 'dvipdfmx %O -o %D %S';
+</pre>
+    (自分のPCにLaTeXをインストールした場合は、新しいフォルダを作成する。)
   <li> 画面左上にある <kbd>アップロード</kbd> ボタンをクリックし、
     ダウンロードした sample.tex を Overleaf 上にアップロードせよ。
 <div class=figure><img src="ov_upload.png"></div>
@@ -252,8 +257,24 @@ img { max-width: 80vw; height: auto; }
 </pre>
   <li> <kbd>リコンパイル</kbd>し、正しく図が埋めこまれていることを確認せよ。
     (LaTeX の判断により、図が勝手に次ページに送られることがある)
+  <li> <strong>注意:</strong> 図を埋め込むためには、
+    文書の最初 (<code>\documentclass</code> のあと) に以下の1行が必要である:
+    (<code>sample.tex</code> にはすでに入っている)
+<pre>
+\usepackage [dvipdfmx]{graphicx}
+</pre>
 </ol>
 </div>
+
+<h3>1.4. エラーが出る場合のチェックリスト</h3>
+<ol type=a>
+<li> <code>latexmkrc</code> は正しく作ったか? (<code>latexmkrc.tex</code> ではダメ)
+<li> 「コンパイラ」を <kbd>pdfLaTeX</kbd> から <kbd>LaTeX</kbd> に変更したか?
+<li> 文書の先頭に <code>\documentclass</code> が正しく書かれているか?
+<li> 文章が正しく
+  <code>\begin{document}</code> 〜 <code>\end{document}</code> で囲まれているか?
+<li> コマンドやファイル名が正しく (全角ではなく) 半角文字で入力されているか?
+</ol>
 
 
 <h2 id="zipfile">2. Zipファイルとは?</h2>
@@ -351,6 +372,8 @@ img { max-width: 80vw; height: auto; }
       <li> <code>sample.tex</code>
       <li> <code>fig2.png</code>
     </ul>
+  <li> <code>sample.tex</code> ファイルは、
+    メモ帳やテキストエディットで作成すること。(Overleafからコピー・ペーストする)
 </ul>
 </div>
 

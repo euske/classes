@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2020年度 情報リテラシ第二 (1a) 第6回 / 新山 祐介</title>
+<style><!--
+u { color: red; font-weight: bold; }
+img { max-width: 80vw; height: auto; }
+.spacy li { margin-bottom: 1.0em; }
+.figure { padding: 4px; outline: 1px solid black; margin: 4px; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>情報リテラシ第二 (1a) 第6回</h1>
+<div class=nav>2020年7月27日 (月) 1-2限</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#kadai2">中課題2 の説明 (つづき)</a>
+<li> <a href="#latex">LaTeX の高度な技</a>
+<li> <a href="#breakout">Zoom の練習</a>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<li> <a href="#nextweek">次回予告</a>
+</ol>
+
+
+<h3>雑談</h3>
+
+<ul>
+  <li> 前回の授業アンケート結果。
+    <ul>
+      <li> 教訓: 雑談は最初よりも途中でやったほうがよい。<br>
+        (リアルで授業をやったときには、遅刻する学生を待つ意味で
+        授業の最初に雑談を入れていた。しかし Zoom になってからは、
+        遅刻する学生が少ない)
+    </ul>
+  <li> ネットで見るリアルタイムな世界:
+    <ul>
+      <li> <a href="https://zoom.earth/">(ほぼリアルタイム) 衛星画像</a>
+      <li> <a href="https://earth.nullschool.net/">大気と海流</a>
+      <li> <a href="https://earthquake.usgs.gov/earthquakes/map/">地震</a>
+      <li> <a href="https://www.flightradar24.com/airport/hnd">飛行機</a>
+      <li> <a href="http://www.emojitracker.com/">絵文字</a>
+    </ul>
+  <li> <a href="https://www.falstad.com/circuit/circuitjs.html">Webブラウザによる電子回路シミュレータ</a>
+</ul>
+
+
+<h2>連絡事項</h2>
+
+<div class=ex style="background:#aaffff;">
+<div class=header>授業アンケート提出方法</div>
+<p>
+(ここは授業中に説明します)
+</div>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+  <li> LaTeX 演習をおこなった。
+    <ul>
+      <li> 節の追加 (<code>\section</code>コマンド)
+      <li> 図の埋め込み。
+    </ul>
+  <li> Zipファイルの使い方について学習した。
+</ul>
+
+<div class=ex>
+<div class=header>演習 6-1. (前回の復習)</div>
+<ol type=a>
+<li> Zipファイル形式は普通のファイルと比べて何が違うのか?
+  2つあげよ。
+<li> LaTeX で、文書の最後に必ず書かねばならないものは?
+  <code>\<span class=bl>end</span>{<span class=bl>document</span>}</code>
+<li> なぜ画像を記録するのに PDF, JPEG, PNG など違う
+  形式がいくつも存在するのか?
+</ol>
+</div>
+
+
+<h2 id="kadai2">1. 中課題2 の説明 (つづき)</h2>
+
+<div class=ex>
+<div class=header>中課題2. LaTeXによる論文の再現</div>
+<ul>
+  <li> 提出期限: <u>8月3日</u>
+  <li> <a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a> を
+    LaTeX で印刷するのに必要なファイル一式を Zip 形式で OCW-i に提出せよ。(計20点)
+  <li> やりかた:
+<ol>
+  <li> 材料となるファイル
+      <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+      をダウンロードする。
+  <li> ダウンロードしたフォルダ中に含まれている <code>hints.pdf</code> を見る。
+  <li> <code>main.tex</code> を修正して (<kbd>空欄</kbd> の部分を埋める)、
+    <code>goal.pdf</code> と同じになるように加筆する。
+  <li> matplotlib で作成した図2 〜 図6を挿入する。
+  <li> 完成したプロジェクトをまるごと zip ファイルにまとめ、
+    OCW-i から提出する。
+</ol>
+  <li> 採点基準:
+<ol type=a>
+  <li> すべてのファイルが揃っており、リコンパイル時にエラーが出なければ 5点。
+  <li> 表がきちんとできていれば +5点。
+  <li> 数式の埋め込みがきちんとできていれば +5点。
+  <li> <code>\cite</code> や <code>\ref</code> を使った引用ができていれば +5点。
+</ol>
+</ul>
+</div>
+
+<h4>参考資料</h4>
+<ul>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y20-il2j/latex/">LaTeX サポートサイト</a>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y20-il2j/theme2.html">科学技術文書執筆</a>
+  <li> <a href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
+</ul>
+
+
+<h2 id="latex">2. LaTeX の高度な技</h2>
+
+<h3>2.1. 表の埋め込み</h3>
+<ul>
+<li> <code>\begin{tabular} 〜 \end{tabular}</code> を使う:
+<pre class=example>
+\begin{center}
+\begin{tabular}{lrr}
+品名 &amp; 値段 &amp; 数量 \\
+チョコレート &amp; 10 &amp; 300 \\
+クッキー &amp; 150 &amp; 20 \\
+アイスクリーム &amp; 200 &amp; 4 \\
+\end{tabular}
+\end{center}</pre>
+<li> 欄の数・書式は、ここで決まる:
+<pre class=example>\begin{tabular}{<mark>lrr</mark>}</pre>
+<kbd>l</kbd>…左寄せ, <kbd>r</kbd>…右寄せ, <kbd>c</kbd>…中央寄せ。
+<li> 縦の罫線を入れるには:
+<pre class=example>\begin{tabular}{<mark>|l|r|r|</mark>}</pre>
+<li> 横の罫線を入れるには:
+<pre class=example>\hline</pre>
+</ul>
+
+<div class=ex>
+<div class=header>演習6-2. 表の作成</div>
+<ul>
+  <li> 以下の表を LaTeX で作成せよ:
+<table class=figure border>
+  <tr><td class=l>City</td><td class=r>Highest ℃</td><td class=r>Lowest ℃</td></tr>
+  <tr><td class=l>Tokyo</td><td class=r>31</td><td class=r>1</td></tr>
+  <tr><td class=l>Honolulu</td><td class=r>32</td><td class=r>19</td></tr>
+  <tr><td class=l>Yakutsk</td><td class=r>26</td><td class=r>-42</td></tr>
+</table>
+<li> <code>.tex</code>の最初の部分:
+<pre class=example>\documentclass[a4j,11pt]{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\begin{document}
+\begin{center}
+\begin{tabular}...</pre>
+</ul>
+</div>
+
+<h3>2.2. 図表へのリンク</h3>
+<ul>
+  <li> 図や表が30枚ぐらい入っている文章を考える:
+    <div class="example gray">詳しくは、表.17 (第6章) を参照のこと。</div>
+    <em>…どこなのよ?</em>
+  <li> LaTeX では、図・表・節に名前 (ラベル) をつけておき、
+    別の場所からリンクできる。
+  <li> 図を参照する:
+<pre class=example>図 \ref{fig:neuman time diff} を参照せよ。</pre>
+これが、こうなる:
+<div class=example>図 1 を参照せよ。</div>
+  <li> 図にラベルをつける:
+<pre class=example>\begin{figure}
+\begin{center}
+\includegraphics[width=0.80\linewidth]
+    {fig2-cnm-joins-time-series.pdf}
+\caption{ネットワークの解析に要した時間の時系列遷移}
+\label{<mark>fig:neuman time diff</mark>}
+\end{center}
+\end{figure}</pre>
+  <li> 図を参照する:
+<pre class=example>図 \ref{<mark>fig:neuman time diff</mark>} を参照せよ。</pre>
+  <li> 表にラベルをつける場合:
+<pre class=example>\begin{table}
+\label{tbl:hyo1}
+...
+\end{table}</pre>
+  <li> 節にラベルをつける場合:
+<pre class=example>\section{節の名前}
+\label{sect:nanka}
+...</pre>
+</ul>
+
+<div class=ex>
+<div class=header>演習6-3. 図表へのリンク</div>
+<ol type=a>
+  <li> 演習6-2. で作成した表に
+    見出し「<code>各都市の気温</code>」、
+    およびラベル <code>tbl:temp</code> をつけよ:
+<pre class=example>
+\caption{各都市の気温}
+\label{tbl:temp}
+</pre>
+  <li> 同じく演習6-2. の表を matplotlib で棒グラフとして描画し、
+    <code>fig:temp</code> というラベルをつけよ。
+<div class=figure><img src="temp.png"></div>
+<pre class=example>
+\label{fig:temp}
+</pre>
+棒グラフを描画するには以下のようにする:
+<pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.bar(['Tokyo','Honolulu','Yakutsk'], [31,32,26], label="Highest", color="red")
+plt.bar(['Tokyo','Honolulu','Yakutsk'], [1,19,-42], label="Lowest", color="blue")
+
+plt.xlabel("City")
+plt.ylabel("Temperature")
+plt.legend()
+plt.savefig("./temp.png")
+plt.show()
+</pre>
+  <li> 上の a. と b. を配置した文書を作成し、
+    以下のような文を入れよ:
+<pre class=example>
+表 \ref{tbl:temp} および
+図 \ref{fig:temp} を参照のこと。
+</pre>
+  <li> 上の文章に正しく番号が挿入されることを確認せよ:
+<pre class=example>
+表 1 および図 1 を参照のこと。
+</pre>
+</ol>
+</div>
+
+<h3>2.3. 論文の引用</h3>
+<ul>
+  <li> 論文を参照する:
+<pre class=example>\cite{kumar-1999-trawling-the-web-for-<br>emerging-cyber-communities}
+は特によく知られている。</pre>
+これが、こうなる:
+<div class=example>[6] は特によく知られている。<br>
+...<br>
+<sub>[6] Ravi Kumar, Prabhakar Raghavan, Sridhar Rajagopalan and Andrew Tomkins,
+Trawling the Web for emerging cyber-communities.</sub>
+</div>
+  <li> これらの対応関係は <code>references.bib</code> ファイルに記載されているので、
+    このファイルを <code>.tex</code> と同じフォルダに置いておけば自動的に利用される。
+</ul>
+
+
+<h2 id="breakout">3. Zoom の練習</h2>
+<p>
+Zoom の Breakout Room 機能を使って、
+各グループに分かれて作業する練習をおこなう。
+
+
+<h2 id="summary">4. 本日のまとめ・小課題</h2>
+<ul>
+  <li> 中課題 2. の説明をした。
+  <li> LaTeX 演習をおこなった。
+    <ul>
+      <li> 表の埋め込み。
+      <li> 図表へのリンク。
+      <li> 論文の引用。
+    </ul>
+</ul>
+
+<div class=ex>
+<div class=header>演習6-4. LaTeXおまけ演習 (本日の小課題)</div>
+<ul>
+  <li> 締め切り: <u>8月3日</u> (1週間後)
+  <li> 演習6-3. で作成した
+    <code>.tex</code>ファイルを OCW-i から提出せよ。
+    ここには「各都市の気温」表と棒グラフの図がどちらも含まれており、
+    各図表に正しい番号がふられていること。
+    (なお、提出するのは .texファイルのみでよい)
+</ul>
+</div>
+
+<div class=ex>
+<div class=header>演習6-5. 宿題その2 (提出の必要なし)</div>
+<ul>
+<li> プレゼンで自分が話したいことを考えてくること。
+<li> (PowerPoint を使ってプレゼンしたい人のみ)
+  Office 365 をインストールしておくこと。<br>
+  Portal から「Office 365 アカウント (テスト公開中)」を選ぶとダウンロードできる。
+  <div class=figure><img src="o365.png"></div>
+</ul>
+</div>
+
+
+<h2 id="nextweek">5. 次回予告</h2>
+<ul>
+<li> 8月3日: プレゼンテーション練習
+  <ul>
+    <li> 演習1: 自分が話したいことをスライド1枚にまとめ、
+      グループ内で発表する。(10点)
+    <li> 演習2: 他人の発表に質問する。(10点)
+  </ul>
+<li> <u>注意:</u> 遅刻しないこと!<br>
+  参加できないと点数になりません。
+</ul>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

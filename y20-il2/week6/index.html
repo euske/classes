@@ -23,6 +23,9 @@ img { max-width: 80vw; height: auto; }
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
 <li> <a href="#kadai2">中課題2 の説明 (つづき)</a>
+  <ul>
+    <li> <a href="#macissues">Mac でうまくコンパイルできない場合</a>
+  </ul>
 <li> <a href="#latex">LaTeX の高度な技</a>
 <li> <a href="#breakout">Zoom の練習</a>
 <li> <a href="#summary">本日のまとめ・小課題</a>
@@ -84,7 +87,8 @@ img { max-width: 80vw; height: auto; }
 <ol>
   <li> 材料となるファイル
       <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
-      をダウンロードする。
+      をダウンロードする。<br>
+      (注意: Macを使っている場合は、上のリンクを<u>直接クリックしない</u>こと! <a href="#macissues">以下参照</a>)
   <li> ダウンロードしたフォルダ中に含まれている <code>hints.pdf</code> を見る。
   <li> <code>main.tex</code> を修正して (<kbd>空欄</kbd> の部分を埋める)、
     <code>goal.pdf</code> と同じになるように加筆する。
@@ -110,6 +114,36 @@ img { max-width: 80vw; height: auto; }
   <li> クラス共通: <a href="https://titechcomp.github.io/y20-il2j/theme2.html">科学技術文書執筆</a>
   <li> <a href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
 </ul>
+
+<h3 id="macissues">Mac でうまくコンパイルできない場合</h3>
+<p>
+Mac を使っていて Overleaf でうまくコンパイルできない場合は、
+以下のことを試してみる:
+<ol class=spacy>
+<li> まず上の
+  <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+  をダウンロードするときに、リンクを<u>直接クリックしない</u>こと。
+  こうすると Mac は zipファイルを勝手に展開・削除してしまう。
+  これを防ぐためにはリンクを右クリック (あるいは <kbd>Control</kbd>+クリック) して
+  メニューを開き、<kbd>リンク先のファイルをダウンロード</kbd> を選ぶ。
+  こうすると zipファイルがそのまま保存されるので、
+  これを Overleaf にアップロードすればよい。
+<div class=figure><img src="downloadzip.png"></div>
+<li> Overleaf にプロジェクトをアップロードするときは、
+  ダウンロードしたzipファイルを<u>そのまま</u>アップロードすること。
+  一度、展開したフォルダを再度 zip 圧縮してはならない。
+  こうすると以下のようなエラーが出てしまう。
+  (具体的には、Overleaf の画面左上に「kada-latex-overleaf」という余計な
+  フォルダができてしまっている、
+  こうすると latexmkrc が Overleaf に正しく認識されず、エラーとなる) :
+<div class=figure>
+<img src="overleaf-ok.png"><br>
+正常な場合
+<p>
+<img src="overleaf-ng.png"><br>
+ダメな場合
+</div>
+</ol>
 
 
 <h2 id="latex">2. LaTeX の高度な技</h2>
@@ -150,7 +184,8 @@ img { max-width: 80vw; height: auto; }
 \usepackage[dvipdfmx]{graphicx}
 \begin{document}
 \begin{center}
-\begin{tabular}...</pre>
+\begin{tabular}
+...</pre>
 </ul>
 </div>
 
@@ -171,19 +206,24 @@ img { max-width: 80vw; height: auto; }
 \includegraphics[width=0.80\linewidth]
     {fig2-cnm-joins-time-series.pdf}
 \caption{ネットワークの解析に要した時間の時系列遷移}
-\label{<mark>fig:neuman time diff</mark>}
+<mark>\label{fig:neuman time diff}</mark>
 \end{center}
 \end{figure}</pre>
   <li> 図を参照する:
-<pre class=example>図 \ref{<mark>fig:neuman time diff</mark>} を参照せよ。</pre>
+<pre class=example>図 <mark>\ref{fig:neuman time diff}</mark> を参照せよ。</pre>
   <li> 表にラベルをつける場合:
-<pre class=example>\begin{table}
-\label{tbl:hyo1}
+<pre class=example><mark>\begin{table}</mark>
+\begin{center}
+\begin{tabular}{lrr}
 ...
-\end{table}</pre>
+\end{tabular}
+\end{center}
+<mark>\caption{各都市の気温}
+\label{tbl:temp}
+\end{table}</mark></pre>
   <li> 節にラベルをつける場合:
 <pre class=example>\section{節の名前}
-\label{sect:nanka}
+<mark>\label{sect:nanka}</mark>
 ...</pre>
 </ul>
 
@@ -194,13 +234,17 @@ img { max-width: 80vw; height: auto; }
     見出し「<code>各都市の気温</code>」、
     およびラベル <code>tbl:temp</code> をつけよ:
 <pre class=example>
+\begin{table}
+...
 \caption{各都市の気温}
 \label{tbl:temp}
+\end{table}
 </pre>
   <li> 同じく演習6-2. の表を matplotlib で棒グラフとして描画し、
     <code>fig:temp</code> というラベルをつけよ。
 <div class=figure><img src="temp.png"></div>
 <pre class=example>
+\caption{各都市の気温}
 \label{fig:temp}
 </pre>
 棒グラフを描画するには以下のようにする:

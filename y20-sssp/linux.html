@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="./common.css">
+<title>Linux Fundamentals</title>
+</head>
+<body>
+
+<h1>Linux Fundamentals</h1>
+
+
+<h2>Filesystem Basics</h2>
+
+<p>
+A filesystem is a way to <em>hierarchically</em> organize a number
+of <u>files</u> into different <u>folders</u> (<u>directories</u>).
+In a Linux system, every user is assigned with its own <u>home directory</u>.
+The location of each file or directory is described by a (relative or absolute)
+<u>pathname</u>. Each component of a pathname is separated with <code>/</code> (slash).
+
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+    </g>
+    <g text-anchor="end">
+      <text x="300" y="50">Root</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">Current directory</text>
+    </g>
+    <g style="font-family: monospace;">
+      <text x="400" y="50">/</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<div class=exercise>
+<div class=header>Exercise</div>
+Suppose that the current directory is indicated by the
+<span style="outline:2px solid red; padding:2px;">red box</span>.
+Answer the following questions:
+<ol type=a>
+  <li> The absolute pathname to <u>directory X</u>?
+  <li> The absolute pathname to <u>file H</u>?
+  <li> The absolute pathnames to <u>file C</u>? (multiple)
+  <li> The relative pathname to <u>directory A</u>?
+  <li> The relative pathname to <u>file H</u>?
+  <li> The relative pathnames to <u>file K</u>? (multiple)
+</ol>
+</div>
+
+
+<h2>Shell Basics</h2>
+<p>
+A <u>shell</u> is the main interface where you interact with
+a Unix/Linux system. You type a command in, and the system
+prints its result. The <u>command line</u> has the following syntax:
+<pre>
+$ <strong>command arg1 arg2 ...</strong>
+</pre>
+<ul>
+<li> Command prompt: <code>$</code>
+<li> Each <u>argument</u> is separated by a blank character.
+<li> Use the Arrow keys to reuse/modify the previous commands.
+<li> Use the <kbd>Tab</kbd> key to complete file names.
+</ul>
+
+<div class=exercise>
+<div class=header>Exercise</div>
+<ol type=a>
+  <li> In the following command line,
+    what is the command and its arguments?
+<pre>$ <strong>ls -la ~/</strong></pre>
+  <li> Write a command line that executes
+    "<code>find</code>" with three arguments, "<code>.</code>",
+    "<code>-type</code>" and "<code>f</code>".
+  <li> At your home directory, type "<code>ls .</code>"
+    and then press the <kbd>Tab</kbd>. What would happen?
+</ol>
+</div>
+
+
+<h2>Linux Commands</h2>
+<ul>
+<li> <code>ls</code> (Show the listings)
+<pre>
+$ <strong>ls</strong>       <span class=comment>(Shows the current directory)</span>
+$ <strong>ls ~/</strong>    <span class=comment>(Shows the home directory)</span>
+$ <strong>ls ..</strong>    <span class=comment>(Shows the parent directory)</span>
+$ <strong>ls <em>path</em></strong>  <span class=comment>(Shows the specific directory)</span>
+</pre>
+<li> <code>echo</code> (Show strings / variables)
+<pre>
+$ <strong>echo hello</strong>  <span class=comment>(Shows "hello")</span>
+$ <strong>echo $PATH</strong>  <span class=comment>(Shows the PATH variable)</span>
+</pre>
+<li> <code>pwd</code> (Show the current directory)
+<pre>
+$ <strong>pwd</strong>
+</pre>
+<li> <code>cd</code> (Change the current directory)
+<pre>
+$ <strong>cd</strong>       <span class=comment>(Go to the home directory)</span>
+$ <strong>cd ..</strong>    <span class=comment>(Go to the parent directory)</span>
+$ <strong>cd <em>path</em></strong>  <span class=comment>(Go to the specific directory)</span>
+</pre>
+<li> <code>mkdir</code> (Create a directory)
+<pre>
+$ <strong>mkdir <em>dirname</em></strong>  <span class=comment>(Create a new directory)</span>
+</pre>
+<li> <code>cat</code> (Display/concatenate file contents)
+<pre>
+$ <strong>cat <em>filename</em></strong>     <span class=comment>(Show the content of the file)</span>
+$ <strong>cat <em>file1</em> <em>file2</em></strong>  <span class=comment>(Show the content of file1 and then file2)</span>
+</pre>
+<li> <code>less</code> (Page file contents)
+<pre>
+$ <strong>less <em>filename</em></strong>  <span class=comment>(Show the content of the file)</span>
+(Press <kbd>q</kbd> to quit.)
+</pre>
+<li> <code>cp</code> (Copy files)
+<pre>
+$ <strong>cp <em>source</em> <em>destination</em></strong>  <span class=comment>(Copy the file)</span>
+</pre>
+<li> <code>mv</code> (Move/rename files)
+<pre>
+$ <strong>mv <em>source</em> <em>destination</em></strong>  <span class=comment>(Move or rename the file)</span>
+</pre>
+<li> <code>git</code> (Clone a code repository on local PC)
+<pre>
+$ <strong>git clone https://github.com/<em>username</em>/<em>project</em></strong>  <span class=comment>(Fetch project files)</span>
+</pre>
+</ul>
+
+<h3>Remote commands</h3>
+<p>
+The following commands can be also used in Windows.
+<ul>
+<li> <code>ssh-keygen</code> (Generate a public/private key pair)
+<pre>
+$ <strong>ssh-keygen</strong>
+(Type a passphrase)
+</pre>
+Then upload the generated public key (<code>id_rsa.pub</code>)
+to a remote server.
+<li> <code>ssh</code> (Remote login)
+<pre>
+$ <strong>ssh <em>username</em>@login.t3.gsic.titech.ac.jp</strong>
+</pre>
+<li> <code>scp</code> (Remote file copy)
+<pre>
+$ <strong>scp <em>username</em>@login.t3.gsic.titech.ac.jp:<em>filename</em>  .</strong>
+  <span class=comment>(Copy the remote file to the local current directory)</span>
+</pre>
+</ul>
+
+
+<h2>TSUBAME Commands</h2>
+
+<ul>
+<li> <code>qsub</code> (Submit a task)
+<li> <code>qstat</code> (Show the task status)
+<li> <code>qdel</code> (Abort a submitted task)
+<li> <code>qrsh</code> (Log into a computation machine)
+</ul>
+
+
+<hr>
+<address>Yusuke Shinyama</address>

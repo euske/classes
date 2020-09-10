@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2020年度 コンピュータサイエンス第一 (5a) 第1回 -
+パソコンの使い方、Python プログラムの基礎 /
+新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第1回 - パソコンの使い方、Python プログラムの基礎</h1>
+<div class=nav>2020年10月1日</div>
+
+<ol start="0">
+<li> <a href="#fun">本授業を楽しく受けるために</a>
+<li> <a href="#typing">パソコンの基礎: タイピング能力を鍛える</a>
+<ul>
+  <li> <a href="#shortcuts">キーボード・ショートカットを覚える</a>
+</ul>
+<li> <a href="#filesystem">パソコンの基礎: ファイル・フォルダを理解する</a>
+<ul>
+  <li> <a href="#folders">フォルダとは?</a>
+  <li> <a href="#pathname">パス名とは?</a>
+  <li> <a href="#filetypes">ファイルの「形式」とは?</a>
+  <li> <a href="#metadata">「メタデータ」とは?</a>
+</ul>
+<li> <a href="#shell">パソコンの基礎: コマンド プロンプト (ターミナル) を使う</a>
+<ul>
+  <li> <a href="#launch">コマンド プロンプト (ターミナル) を起動する</a>
+  <li> <a href="#basics">コマンド プロンプト (ターミナル) の使い方・超基本</a>
+  <li> <a href="#current">カレント・フォルダという考え方</a>
+</ul>
+<li> <a href="#python">Python プログラムの基礎</a>
+<ul>
+  <li> <a href="#install">Python をインストールする</a>
+  <li> <a href="#first">最初の Python プログラムを書く</a>
+  <li> <a href="#variables">変数を使う</a>
+  <li> <a href="#statements">文とは?</a>
+  <li> <a href="#syntax">関数・変数・代入とは?</a>
+</ul>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+</ol>
+
+
+<h2 id="fun">0. 本授業を楽しく受けるために</h2>
+<p>
+本授業を楽しく受けるためには、
+<ol>
+  <li> プログラムを入力する。
+  <li> プログラムを実行する。
+</ol>
+この 2つをとにかく効率よく繰り返すことが重要である。
+そのためには
+<ul>
+  <li> 優れたタイピング能力
+  <li> パソコンに関する基本的な理解
+  <li> テキストエディタを使いこなせること
+</ul>
+が必要不可欠である。
+そこで、最初にパソコンの基礎についてすこし説明する。
+
+
+<h2 id="typing">1. パソコンの基礎: タイピング能力を鍛える</h2>
+<p>
+キーボードを使った文字入力は、
+これからの学生生活・社会人生活において
+<strong>絶対に必要</strong>なスキルである。
+ここでいう「タイピング」とは、ただ単にキーを
+打つだけではなく、PC上におけるカーソルの移動や
+コピー・ペースト機能の活用も含まれる。
+
+<div class=exercise>
+<div class=header>演習1-1. タイピングの練習</div>
+<p>
+以下の文章を (コピー・ペースト等の機能を活用して)
+改行・空白まで含めて正確にタイプせよ:
+<blockquote>
+<img src="typing.png" height="178">
+</blockquote>
+<p>
+練習欄:
+<script>
+var start = 0;
+function countdown() {
+ function tick() {
+  let typ = document.getElementById('typ');
+  let time = document.getElementById('time');
+  if (!typ.value) {
+   start = Date.now();
+  }
+  time.innerHTML = Math.floor((Date.now()-start)/1000);
+ }
+ if (start == 0) {
+  start = Date.now();
+  window.setInterval(tick, 100);
+ }
+}
+</script>
+<blockquote>
+<textarea oninput="countdown()" id="typ" cols="80" rows="8"></textarea>
+<div style="color:red; font-weight: bold;" id="time"></div>
+</blockquote>
+<p>
+
+<ol type=a>
+<li> 60秒以下 … チョー速い。何もいうことなし。
+<li> 60秒〜120秒 … 標準。
+<li> 180秒以上 … もう少し練習しましょう。
+</ol>
+</div>
+
+<h3 id="shortcuts">1.1. キーボード・ショートカットを覚える</h3>
+<p>
+パソコンにおける文字入力では、(マウスを使わずとも)
+キーボードだけで様々な操作がおこなえるようになっている。
+文字を選択したりコピー・ペーストするときに、
+マウスとメニューを使って行っていると非常にのろいので、
+基本的なキーボードによる操作を覚えるようにしよう。
+<table border><tr>
+<th>機能</th><th>Windows</th><th>Mac</th>
+</tr><tr>
+<td>入力位置 (カーソル) の移動</td>
+<td colspan="2"><kbd>←</kbd> / <kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd></td>
+</tr><tr>
+<td>行頭/行末に移動</td>
+<td><kbd>&#8984; Command</kbd> + <kbd>←</kbd> / <kbd>→</kbd></td>
+<td><kbd>Home</kbd> / <kbd>End</kbd></td>
+</tr><tr>
+<td>文字の選択</td>
+<td colspan="2"><kbd>Shift</kbd> +
+  <kbd>←</kbd> / <kbd>↑</kbd> / <kbd>→</kbd> / <kbd>↓</kbd></tr>
+</tr><tr>
+<td>選択した文字の削除</td>
+<td><kbd>Delete</kbd></td>
+<td><kbd>Backspace</kbd></td>
+</tr><tr>
+<td>切り取り</td>
+<td><kbd>&#8984; Command</kbd> + <kbd>X</kbd></td>
+<td><kbd>Ctrl</kbd> + <kbd>X</kbd></td>
+</tr><tr>
+<td>コピー</td>
+<td><kbd>&#8984; Command</kbd> + <kbd>C</kbd></td>
+<td><kbd>Ctrl</kbd> + <kbd>C</kbd></td>
+</tr><tr>
+<td>ペースト</td>
+<td><kbd>&#8984; Command</kbd> + <kbd>V</kbd></td>
+<td><kbd>Ctrl</kbd> + <kbd>V</kbd></td>
+</tr><tr>
+<td>ひとつ戻す (Undo)</td>
+<td><kbd>&#8984; Command</kbd> + <kbd>Z</kbd></td>
+<td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+</tr><tr>
+<td>すべての文字を選択</td>
+<td><kbd>&#8984; Command</kbd> + <kbd>A</kbd></td>
+<td><kbd>Ctrl</kbd> + <kbd>A</kbd></td>
+</tr><tr>
+<td>選択した文字の置き換え</td>
+<td colspan="2">
+文字を選択したまま新しい文字を入力する。
+</td>
+</tr><table>
+
+<h4>参考</h4>
+<ul>
+<li> <a href="https://support.microsoft.com/ja-jp/help/12445/windows-keyboard-shortcuts">Windows のキーボード ショートカット</a>
+<li> <a href="https://support.apple.com/ja-jp/HT201236">Mac のキーボードショートカット</a>
+</ul>
+
+
+<h2 id="filesystem">2. パソコンの基礎: ファイル・フォルダを理解する</h2>
+<p>
+本授業 (および、その他パソコンを使うすべての授業) では、
+ファイルとフォルダの扱いに関する理解が必須である。
+
+<div class=exercise>
+<div class=header>演習1-2. ファイルとフォルダのパス名</div>
+<p>
+以下のようなフォルダ構造を考える。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g text-anchor="end">
+      <text x="300" y="50">ディスク</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+    </g>
+    <g style="font-family: monospace;">
+      <text x="400" y="50">/</text>
+    </g>
+  </g>
+</svg>
+</div>
+<p>
+以下の問に答えよ。
+パスの区切り文字は「<code>/</code> (スラッシュ)」とする。
+<ol type=a>
+  <li> <u>フォルダ X</u> へのパス名 を答えよ。
+  <li> <u>ファイル H</u> へのパス名を答えよ。
+  <li> <u>ファイル C</u> へのパス名 (複数) をすべて答えよ。
+</ol>
+</div>
+
+<h3 id="folders">2.1. フォルダとは?</h3>
+<ul>
+<li> 問題: ファイルが多すぎる!<br>
+  現在のパソコンでは、扱うファイルの数は数万〜数百万にのぼる。
+<li> フォルダ = ファイルを分類するための容れ物。
+<li> フォルダの中には、<u>ファイル</u>または<u>フォルダ</u>を入れることができる。
+<li> 同一フォルダ内に、同じ名前のファイルまたはフォルダが存在してはならない。
+</ul>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g text-anchor="end">
+      <text x="300" y="50">ディスク</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<h4>実際のファイル・フォルダは何でできているのか?</h4>
+<p>
+コンピュータ上の記憶装置 (ディスク) はつねに一定容量であり、
+一定個数の「0」または「1」が書き込まれている。
+これらの個数は変化しないため、
+実際には「空き容量」などというものは存在しない。
+また「フォルダ」という実体も存在せず、「削除」などというものもありえない。
+(なぜなら、0 と 1 の数は変化しないからである。)
+これらは、すべてソフトウェアによる「見せかけ」である。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="620" height="80">
+  <g stroke="black" fill="none" stroke-width="2">
+    <rect x="10" y="10" width="600" height="60" />
+  </g>
+  <g stroke="black" stroke-width="1">
+    <rect x="100" y="15" width="40" height="50" fill="#00ff00" />
+    <rect x="180" y="15" width="70" height="50" fill="#4444ff" />
+    <rect x="330" y="15" width="50" height="50" fill="#ffff00" />
+    <rect x="400" y="15" width="20" height="50" fill="#00ffff" />
+    <rect x="500" y="15" width="80" height="50" fill="#ff44ff" />
+  </g>
+  <g text-anchor="middle">
+    <text x="120" y="35" dy="0.5em">K</text>
+    <text x="215" y="35" dy="0.5em">H</text>
+    <text x="355" y="35" dy="0.5em">C</text>
+    <text x="410" y="35" dy="0.5em">K</text>
+    <text x="540" y="35" dy="0.5em">C</text>
+  </g>
+</svg>
+</div>
+
+<h3 id="pathnames">2.2. パス名とは?</h3>
+<ul>
+<li> 同じファイル名が<em>異なる</em>フォルダに存在しうるため、
+  ファイル名だけでは「どのファイルか」を厳密に特定できない。
+<li> そこで、ファイルまたはフォルダの位置を<u>パス名</u> (path name) というものであらわす。
+<li> パス名とは、あるフォルダまたはファイルに到達するまでの道程 (path) である。
+これは途中で通過するフォルダ名を区切り文字でつなげたものである:
+
+<ul class=spacy>
+<li> <strong>Windowsの場合</strong> …
+  区切り文字として <code>\</code>(<u>バックスラッシュ</u>) を使う。
+  なお、日本のパソコンではバックスラッシュが「<code>&#xa5;</code>」に見えることがある。
+<br>
+<code class=example>C:\<mark>フォルダ名1</mark>\<mark>フォルダ名2</mark>\…\<mark>ファイル名</mark></code>
+<li> <strong>Macの場合</strong> …
+  区切り文字として <code>/</code>(<u>スラッシュ</u>) を使う。
+<br>
+<code class=example>/<mark>フォルダ名1</mark>/<mark>フォルダ名2</mark>/…/<mark>ファイル名</mark></code>
+</ul>
+</ul>
+
+<div class=exercise>
+<div class=header>演習1-3. パス名の確認</div>
+<ol type=a>
+<li> 自分のホームフォルダを開き、<u>パス名</u>を確認せよ。
+<li> デスクトップもフォルダである。<u>パス名</u>を確認せよ。
+</ol>
+</div>
+
+<h3 id="filetypes">2.3. ファイルの「形式」とは?</h3>
+<p>
+コンピュータ上の情報 (データ) は、
+すべて「0」と「1」の組み合わせで表される:
+<ul>
+  <li> 数値
+  <li> 文字(列) / テキスト
+  <li> 画像・音声・動画
+  <li> その他 (日付や金額など)
+</ul>
+<p>
+パソコン上では、データはすべて <u>ファイル</u> (file) に保存される。
+さらに各ファイルには <u>ファイル名</u> がついている。
+ファイルの中には 0 と 1 の羅列が特定の規則により並べられている。
+コンピュータは、これらをどのように解釈するかがわからないと、
+ファイルの内容を正しく表示できない。
+この 0 と 1 の並び方をファイルの
+<u>形式</u> あるいは <u>タイプ</u> (type) という。
+<p>
+現代のパソコンでは、
+ファイルの形式はファイル名のあとにつく
+<u>拡張子</u> (extension) によって表される:
+<blockquote>
+<code>myfile<mark>.txt</mark></code>
+</blockquote>
+
+<h4>ファイル拡張子を表示させる (Windows)</h4>
+<p>
+Windowsでは、ファイルの拡張子はふだんは表示されない設定になっている。
+これを変更するには、以下のようにする:
+<ol>
+  <li> エクスプローラーから <kbd>フォルダー オプション</kbd>ウィンドウを開く。
+  <li> <kbd>表示</kbd> タブをクリックし、<kbd>登録されている拡張子は表示しない</kbd> の
+    チェックをはずす。
+    <div class=figure><img src="showexts-win.png"></div>
+</ol>
+
+<h4>ファイル拡張子を表示させる (Mac)</h4>
+<p>
+Macでは、ファイルの拡張子はふだんは表示されない設定になっている。
+これを変更するには、以下のようにする:
+<ol>
+  <li> Finderをクリックし、メニューから <kbd>環境設定...</kbd> を選ぶ。
+  <li> <kbd>詳細</kbd> タブをクリックし、
+    <kbd>すべてのファイル名拡張子を表示</kbd> にチェックを入れる。
+    <div class=figure><img src="showexts-mac.png"></div>
+</ol>
+
+<h4>よく見かけるファイル形式</h4>
+<table border align=center>
+<tr><th>ファイル形式</th><th>拡張子</th></tr>
+<tr><td>テキストファイル</td><td><code>.txt</code></td></tr>
+<tr><td>HTMLファイル</td><td><code>.html</code> または <code>.htm</code></td></tr>
+<tr><td>JPEG画像ファイル</td><td><code>.jpeg</code> または <code>.jpg</code></td></tr>
+<tr><td>音声ファイル</td><td><code>.mp3</code> など</td></tr>
+<tr><td>動画ファイル</td><td><code>.mp4</code>, <code>.mov</code> など</td></tr>
+<tr><td>圧縮ファイル</td><td><code>.zip</code></td></tr>
+<tr><td>実行可能ファイル(アプリ)</td><td><code>.app</code>, <code>.exe</code></td></tr>
+</table>
+</div>
+
+<h3 id="metadata">2.4. 「メタデータ」とは?</h3>
+<p>
+実際のファイルには、そのファイルの内容だけでなく、
+以下のような情報も付随している:
+<ul>
+<li> そのファイルは誰によって作られたか。
+<li> そのファイルはいつ修正されたか。
+<li> そのファイルの大きさ (ファイルサイズ) はどのくらいか。
+</ul>
+このような情報、つまり <strong>情報に関する情報</strong> のことを
+<u>メタデータ</u> (metadata) という。
+ちなみに、ファイルの名前や拡張子といった情報も、
+ファイルの内容本体ではなく、「ファイルに関する情報」なので、
+メタデータの一種である。
+
+<div class=exercise>
+<div class=header>演習1-4. ファイル形式を調べる</div>
+<ol type=a>
+<li> インターネットから、
+  <u>テキスト形式</u>のファイルと、
+  <u>画像形式</u>のファイルをそれぞれ 1つずつダウンロードせよ。
+  <ul>
+    <li> <a href="http://www.gutenberg.org/browse/scores/top">Project Gutenberg</a>
+    <li> <a href="https://www.reddit.com/r/EarthPorn/">reddit</a>
+  </ul>
+<li> ダウンロードしたファイルの<u>拡張子</u>を確認せよ。
+<li> 各ファイルのアイコンを右クリックし、
+  <ul>
+    <li> Windows の場合 … <kbd>プロパティ...</kbd> を実行
+    <li> Mac の場合 … <kbd>情報を見る</kbd> を実行
+  </ul>
+  して、そのファイルの大きさと更新日時を調べよ。
+<li> 以下のフォルダを探索し、
+  その中にあるJPEG画像ファイル (拡張子 <code>.jpg</code>) を発見せよ。
+  また、その<u>パス名</u>を答えよ。
+  <ul>
+    <li> Window の場合 … C: ドライブの中の「<code>Windows</code>」フォルダ
+    <li> Mac の場合 … Macintosh HD の中の「<code>ライブラリ</code>」フォルダ
+  </ul>
+</ol>
+</div>
+
+
+<h2 id="shell">3. パソコンの基礎: コマンド プロンプト (ターミナル) を使う</h2>
+<p>
+<u>コマンド プロンプト</u> (Mac では <u>ターミナル</u>) とは、
+文字入力を使ってパソコンを制御するためのアプリである。
+本授業では、コマンド プロンプトを使ってほとんどの演習をおこなう。
+
+<h3 id="launch">3.1. コマンド プロンプト (ターミナル) を起動する</h3>
+
+<h4>Windowsの場合</h4>
+<ul>
+  <li> スタートメニューから <kbd>Windows システムツール</kbd> →
+    <kbd>コマンド プロンプト</kbd> を選ぶ。
+</ul>
+
+<h4>Macの場合</h4>
+<ul>
+  <li> Finder のメニューから <kbd>表示</kbd> →
+    <kbd>ユーティリティ</kbd> を選び、
+    <kbd>ターミナル</kbd> のアイコンを開く。
+</ul>
+
+<h3 id="basics">3.2. コマンド プロンプト (ターミナル) の使い方・超基本</h3>
+<ol>
+  <li> <u>コマンド</u>を入力して <kbd>Enter</kbd> を押す。
+  <li> コマンドには、実行するアプリの<u>パス名</u>を入力する。
+  <li> そのアプリが実行され、結果が表示される。
+  <li> → 1. に戻る。
+</ol>
+
+<h4>文字入力するときの注意</h4>
+<ul>
+<li> 2種類の英字に注意。 <img src="zenhan.png">
+  <ul>
+    <li> 全角: Ｇｏｄｚｉｌｌａ．
+    <li> 半角: Godzilla.
+  </ul>
+<li> コマンドは必ず<strong>半角</strong> (英数字モード) で入力すること!
+<li> じつは世界には似たような文字が一杯ある。
+<li> <span style="letter-spacing:0.5em;">AＡΑАĄ</span><br>
+<div>文字コード: <input id="ct" size="2"> <span id="ch"></span></div>
+<script>
+document.getElementById('ct').oninput = function (e) {
+ let c = e.target.value;
+ document.getElementById('ch').innerHTML = (c)? c.charCodeAt(c.length-1) : '';
+}
+</script>
+</ul>
+</div>
+
+<div class=exercise>
+<div class=header>演習1-5. コマンドを入力する</div>
+<p>
+コマンド プロンプト (ターミナル) では、
+アプリのパス名をコマンドとして入力すると、そのアプリが実行される。
+<ul>
+<li> <strong>Windowsの場合</strong>:<br>
+  コマンド プロンプトを開き、以下のコマンドを<strong>半角で</strong>入力せよ:
+  <ul>
+    <li> <kbd>C:\Windows\System32\notepad.exe</kbd>
+  </ul>
+<li> <strong>Macの場合</strong>:<br>
+  ターミナルを開き、以下のコマンドを<u>半角で</u>入力せよ:
+  <ul>
+    <li> <kbd>/System/Applications/TextEdit.app/Contents/MacOS/TextEdit</kbd>
+  </ul>
+</ul>
+</div>
+<p>
+これ以外にもいろいろなコマンドがあるが、すべて覚える必要はない。
+
+<div class=exercise>
+<div class=header>演習1-6. lsコマンド・dirコマンド</div>
+<p>
+以下のコマンドを入力し、結果を確認せよ。
+<ul>
+<li> <strong>Windowsの場合</strong>:
+<ol>
+  <li> <kbd>dir C:\Windows\System32</kbd>
+  <li> <kbd>dir /w C:\Windows\System32</kbd>
+</ol>
+<p>
+Windows では、<kbd>dir</kbd> コマンドを使うと、
+指定されたパス名のファイル一覧を表示できる。
+短縮表示するには <kbd>dir /w</kbd> を使う。
+<li> <strong>Macの場合</strong>:
+<ol>
+  <li> <kbd>ls /Applications/Utilities</kbd>
+  <li> <kbd>ls -l /Applications/Utilities</kbd>
+</ol>
+<p>
+Mac では、<kbd>ls</kbd> コマンドを使うと、
+指定されたパス名のファイル一覧を表示できる。
+詳細表示するには <kbd>ls -l</kbd> を使う。
+</ul>
+</div>
+
+<h3 id="current">3.3. カレント・フォルダという考え方</h3>
+<ul>
+  <li> パス名を使うことの問題: いくらでも長くなりうる!<br>
+    <code>/Applications/Safari.app/Contents/MacOS/...</code>
+  <li> いちいちパス名を入力するのは面倒。簡単にできないか?<br>
+    → <strong>いま注目している</strong> (カレント, current) フォルダという考えを導入する。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレント・フォルダ</text>
+    </g>
+  </g>
+</svg>
+</div>
+</div>
+</ul>
+
+<div class=exercise>
+<div class=header>演習1-7. カレントフォルダの変更</div>
+<p>
+以下のコマンドを順に実行し、何が起きたのか観察せよ:
+<ul>
+<li> <strong>Windowsの場合</strong>:
+<ol>
+  <li> <kbd>cd</kbd>
+  <li> <kbd>dir</kbd>
+  <li> <kbd>cd \Windows</kbd>
+  <li> <kbd>cd</kbd>
+  <li> <kbd>dir</kbd>
+</ol>
+<li> <strong>Macの場合</strong>:
+<ol>
+  <li> <kbd>pwd</kbd>
+  <li> <kbd>ls</kbd>
+  <li> <kbd>cd /Applications</kbd>
+  <li> <kbd>pwd</kbd>
+  <li> <kbd>ls</kbd>
+</ol>
+</ul>
+</div>
+
+<p>
+現在の「注目しているフォルダ」のことを
+「カレント・フォルダ」あるいは
+「カレント・ディレクトリ」と呼ぶ。
+(もともとフォルダはディレクトリと呼ばれていた。
+用語としては、ディレクトリのほうが古い。)
+
+<h4>Windowsの場合</h4>
+<ul>
+  <li> <kbd>cd</kbd> <sub>(Change Directory)</sub> コマンド:<br>
+    カレント・フォルダのパス名を表示する。
+  <li> <kbd>cd <em>パス名</em></kbd> <sub>(Change Directory)</sub> コマンド:<br>
+    カレント・フォルダを指定した<em>パス名</em>に変更できる。
+  <li> <kbd>dir</kbd> コマンド:<br>
+    パス名を省略して実行すると、
+    カレント・フォルダのファイル一覧を表示する。
+</ul>
+</ul>
+
+<h4>Macの場合</h4>
+<ul>
+  <li> <kbd>pwd</kbd> <sub>(Print Working Directory)</sub> コマンド:<br>
+    カレント・フォルダのパス名を表示する。
+  <li> <kbd>cd <em>パス名</em></kbd> <sub>(Change Directory)</sub> コマンド:<br>
+    カレント・フォルダを指定した<em>パス名</em>に変更できる。
+  <li> <kbd>ls</kbd> コマンド:<br>
+    パス名を省略して実行すると、
+    カレント・フォルダのファイル一覧を表示する。
+</ul>
+</ul>
+
+<div class=exercise>
+<div class=header>演習1-8. コマンドを使ったフォルダの確認</div>
+<ol type=a>
+<li> 自分のデスクトップ (フォルダ) のパス名を確認せよ。
+<li> <kbd>cd</kbd> コマンドを使って、
+  カレントフォルダを Desktop フォルダに変更せよ。
+<li> デスクトップ上に適当なフォルダを新規作成せよ。
+<li> <kbd>pwd</kbd> または <kbd>ls</kbd> コマンドを使って、
+  いま作成したフォルダが存在することを確認せよ。
+</ol>
+</div>
+
+<h2 id="python">4. Python プログラムの基礎</h2>
+
+<h3 id="install">4.1. Python をインストールする</h3>
+<p>
+<a href="https://www.python.org/">https://www.python.org/</a> に
+アクセスし、Python 3.8.x をダウンロードする。(最後の x の部分は何でもよい)
+<div class=figure>
+<a href="https://www.python.org/"><img width="498" src="python.png"></a>
+</div>
+
+<h3 id="first">4.2. 最初の Python プログラムを書く</h3>
+<ol>
+<li> コマンド プロンプト (ターミナル) を起動する。
+<li> デスクトップ上にフォルダをひとつ作成し、
+  そこに <code>hello.py</code> というテキスト形式のファイルを新規作成する。
+<br>
+これは、以下のように入力する。
+(<strong>注意</strong>: 大文字・小文字の区別は正確に!)
+<ul>
+<li> <strong>Windowsの場合</strong>:
+<pre>
+C:\Users\euske&gt; <strong>cd Desktop</strong>
+C:\Users\euske\Desktop&gt; <strong>mkdir cs1</strong>
+C:\Users\euske\Desktop&gt; <strong>cd cs1</strong>
+C:\Users\euske\Desktop\cs1&gt; <strong>notepad hello.py</strong>
+</pre>
+<li> <strong>Macの場合</strong>:<br>
+<pre>
+euske@shinyama-mbpro ~ % <strong>cd Desktop</strong>
+euske@shinyama-mbpro Desktop % <strong>mkdir cs1</strong>
+euske@shinyama-mbpro cs1 % <strong>cd cs1</strong>
+euske@shinyama-mbpro cs1 % <strong>idle3 hello.py</strong>
+</pre>
+</ul>
+<li> 以下のプログラムを入力する。
+<div class=file>
+hello.py
+<pre>
+print("Hello, World!")
+</pre>
+</div>
+<li> 完成したプログラム <code>hello.py</code> を実行する。
+<ul>
+<li> <strong>Windowsの場合</strong>:
+<pre>
+C:\Users\euske\Desktop\cs1&gt; <strong>python hello.py</strong>
+Hello, World!
+</pre>
+<li> <strong>Macの場合</strong>:<br>
+<pre>
+euske@shinyama-mbpro cs1 % <strong>python<mark>3</mark> hello.py</strong>
+Hello, World!
+</pre>
+</ul>
+</ol>
+
+<p>
+以下、この <code>hello.py</code> をいろいろなファイルに
+変えることで演習・課題をおこなう。
+
+<h3 id="variables">4.3. 変数を使う</h3>
+<ol>
+<li> 「ターミナル」を起動する。
+<li> 先ほど作成したフォルダに <code>cd</code> する。
+<li> IDLE を使って <code>greetings.py</code>
+  というテキストファイルを作成する。<Br>
+  <strong>1文字</strong>も間違えないように!
+
+<div class=file>
+greetings.py
+<pre>
+print("What is your name?")
+x = input("name:")
+print(f"Good morning {x}!")
+</pre>
+</div>
+<li> Python で <code>greetings.py</code> を実行する。
+<pre>
+$ <strong>python greetings.py</strong>
+What is your name?
+name:<strong>euske</strong>
+Good morning euske!
+</pre>
+</ol>
+
+<div class=exercise>
+<div class=header>演習1-9.</div>
+<ul>
+<li> 上のプログラムを入力し、実行せよ。
+</ul>
+</div>
+
+<h3 id="statements">4.4. 文とは?</h3>
+<p>
+プログラム中の各行を、それぞれ <u>文</u> (statement) とよぶ。
+各文は、書かれたとおりの順序で実行される。
+<table border align=center>
+<tr><td>文1</td><td><code>print("What is your name?")</code></td></tr>
+<tr><td>文2</td><td><code>x = input("name:")</code></td></tr>
+<tr><td>文3</td><td><code>print(f"Good morning {x}!")</code></td></tr>
+</table>
+
+<div class=exercise>
+<div class=header>演習1-10.</div>
+<ul>
+<li> 上のプログラムの 2行目と3行目を入れかえると、何が起こるか確認せよ。
+</ul>
+</div>
+
+<div class=exercise>
+<div class=header>演習1-11.</div>
+<ul>
+<li> 上のプログラムの 3行目を10個繰り返し (コピーを使う)、
+<code>「Good morning <em>名前</em> !」</code>が
+10回表示されるようにせよ。
+</ul>
+</div>
+
+<h4>ふたたび、コンピュータサイエンスとは何か?</h4>
+<p>
+コンピュータサイエンスとは、
+「手順 (プロセス)」をあつかう学問である。
+<p>
+プログラムにおいて、実行順序はきわめて重要である。
+ある意味、カレーの作り方もプログラムである。(実行順序が重要)
+<div class=figure>
+<a href="curry.jpg"><img width="400" src="curry.jpg"></a>
+</div>
+
+<h3 id="syntax">4.5. 関数・変数・代入とは?</h3>
+<p>
+各文のなかの <code>print(...)</code>、<code>input(...)</code> のような部分を
+<u>関数</u> (function) とよぶ。
+<p>
+また、<code>x</code> のような部分を<u>変数</u> (variable) とよび、
+<code>x = input("name:")</code> という文全体を
+<u>代入文</u> (assignment) という。
+
+<p>
+変数は、いくつでも定義することができる。
+<blockquote class=file>
+greetings2.py
+<pre>
+print("What is your name?")
+x = input("name1:")
+y = x
+print(f"Good morning {x} and {y}!")
+</pre>
+</blockquote>
+
+<div class=exercise>
+<div class=header>演習1-12.</div>
+<ul>
+<li> 上のプログラムの文 <code>y = x</code> で <code>input()</code> 関数を使い、
+実際に 2人目の名前を尋くようにせよ。
+</ul>
+</div>
+
+<h4>変数の上書き</h4>
+<p>
+さらに、一度変数に代入された値は、別の代入文で上書きすることができる。
+<blockquote class=file>
+greetings3.py
+<pre>
+x = input("name1:")
+y = input("name2:")
+x = y
+print(f"Good morning {x} and {y}!")
+</pre>
+</blockquote>
+
+<div class=exercise>
+<div class=header>演習1-13.</div>
+<ul>
+<li> 上のプログラムがどう動くか、<strong>実行する前に</strong>予測せよ。
+</ul>
+</div>
+
+<h4>変数の入れ替え</h4>
+<p>
+代入文をある順序で書くと、
+2つの変数の内容を入れ替えることができる。
+
+<blockquote class=file>
+swap.py
+<pre>
+x = "john"
+y = "mary"
+<div class=bl>  ???
+  ???
+  ???
+</div>print(f"x={x}, y={y}")
+</pre>
+</blockquote>
+
+<div class=exercise>
+<div class=header>演習1-14.</div>
+<ul>
+<li> 上のプログラム中の [???] 部分に代入文をいくつか書き、
+変数 <code>x</code> と <code>y</code> の値を入れ替えるようにせよ。<Br>
+(ヒント: <code>x</code> と <code>y</code> 以外に
+もうひとつの変数が必要。)
+<pre>
+$ <strong>python swap.py</strong>
+x=mary, y=john
+</pre>
+</ul>
+</div>
+
+
+<h2 id="summary">5. 本日のまとめ・小課題</h2>
+
+<div class=exercise>
+<div class=header>本日の小課題 2. 変数の内容の入れ替え</div>
+<ul>
+  <li> 締め切り: <strong>10月8日</strong> (1週間後)
+  <li> 演習 1-14. で作成したプログラム <code>swap.py</code> を OCW-i から提出せよ。
+<blockquote class=file>
+swap.py
+<pre>
+x = "john"
+y = "mary"
+<div class=bl>???
+y = x
+???
+</div>print(f"x={x}, y={y}")
+</pre>
+</blockquote>
+</ul>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

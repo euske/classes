@@ -44,6 +44,7 @@
   <li> <a href="#variables">変数を使う</a>
   <li> <a href="#statements">文とは?</a>
   <li> <a href="#syntax">関数・変数・代入とは?</a>
+  <li> <a href="#conditional">条件分岐とは?</a>
 </ul>
 <li> <a href="#summary">本日のまとめ・小課題</a>
 </ol>
@@ -772,8 +773,11 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 <li> コマンド プロンプト (ターミナル) を起動する。
 <li> デスクトップ上にフォルダをひとつ作成し、
   そこに <code>hello.py</code> というテキスト形式のファイルを新規作成する。
-<br>
-これは、以下のように入力する。
+  ここでは Windows であれば「メモ帳 (notepad)」、
+  Mac であれば「IDLE」を使う。
+  このようなアプリを以後<u>テキストエディタ</u> (あるいは単にエディタ) と呼ぶ。
+<p>
+以下のように入力する。
 (<strong>注意</strong>: 大文字・小文字の区別は正確に!)
 <ul>
 <li> <strong>Windowsの場合</strong>:
@@ -821,7 +825,7 @@ Hello, World!
 <ol>
 <li> 「ターミナル」を起動する。
 <li> 先ほど作成したフォルダに <code>cd</code> する。
-<li> IDLE を使って <code>greetings.py</code>
+<li> テキストエディタを使って <code>greetings.py</code>
   というテキストファイルを作成する。<Br>
   <strong>1文字</strong>も間違えないように!
 
@@ -945,7 +949,7 @@ swap.py
 <pre>
 x = "john"
 y = "mary"
-<div class=bl>  ???
+<div class=qqq>  ???
   ???
   ???
 </div>print(f"x={x}, y={y}")
@@ -955,7 +959,7 @@ y = "mary"
 <div class=exercise>
 <div class=header>演習1-14.</div>
 <ul>
-<li> 上のプログラム中の [???] 部分に代入文をいくつか書き、
+<li> 上のプログラム中の <span class=qqq>???</span> 部分に代入文をいくつか書き、
 変数 <code>x</code> と <code>y</code> の値を入れ替えるようにせよ。<Br>
 (ヒント: <code>x</code> と <code>y</code> 以外に
 もうひとつの変数が必要。)
@@ -966,8 +970,190 @@ x=mary, y=john
 </ul>
 </div>
 
+<h3 id="conditional">4.6. 条件分岐とは</h3>
+<p>
+変数の値によって、プログラムに異なる動きをさせることができる。
+このような機能を <u>条件分岐</u> (conditional branch) という。
+
+<blockquote class=file>
+conditional.py
+<pre>
+print("What is your name?")
+x = input("name:")
+if x == "euske":
+    print("You are foolish!")
+else:
+    print("You are normal.")
+</pre>
+</blockquote>
+
+<p>
+このプログラムを実行すると、以下のように動く。
+<blockquote><pre>
+$ <strong>python conditional.py</strong>
+What is your name?
+name=<strong>euske</strong>
+You are foolish!
+
+$ <strong>python conditional.py</strong>
+What is your name?
+name=<strong>john</strong>
+You are normal.
+</pre></blockquote>
+
+<p>
+Python における <code>if</code>文は、
+変数の値によって 2種類の異なる動作をさせることができる。
+<blockquote><pre>
+if <em>変数名</em> == <em>値</em>:
+    <em>等しい場合の動作</em>
+else:
+    <em>等しくない場合の動作</em>
+</pre></blockquote>
+
+<p>
+<code>if</code>の内部では、
+必ず<u>インデント</u> (indentation、字下げ) が必要である。
+たとえば上の例を以下のようにすると動作しない:
+<blockquote class=file>
+エラーになる例:
+<pre>
+print("What is your name?")
+x = input("name=")
+if x == "euske":
+print("You are awesome!")
+else:
+print("You are not awesome!")
+</pre>
+</blockquote>
+
+<p>
+メモ帳を使っている場合は、インデントには半角スペース4個を使う。
+IDLE では、<code>if</code>文を書くと自動的に
+インデントが行われる。または <kbd>Tab</kbd> キーを押しても
+半角スペース4個が挿入される。
+
+<h4>if文の使用例</h4>
+<ul>
+<li> 標準的な使用例:
+<pre>
+if x == "foo":
+    print("x is foo.")
+else:
+    print("x is not foo.")
+</pre>
+<li> 2つの変数の内容を比較することもできる:
+<pre>
+if x == y:
+    print("x is y.")
+else:
+    print("x is not y.")
+</pre>
+<li> 分岐の中に複数の文を入れることもできる:
+<pre>
+if x == "euske":
+    print("You are awesome.")
+    print("And handsome, too.")
+else:
+    print("You are not awesome.")
+    print("Or handsome, either.")
+</pre>
+<li> <code>else</code>節は省略可能である。
+こうすると、等しくない場合は何も実行されない:
+<pre>
+if day == "sunday":
+    print("There is no class.")
+</pre>
+<li> <code>if</code>文の中に
+さらに<code>if</code>文を入れることもできる。
+この場合は、2重に字下げする:
+<pre>
+if a == "2":
+    if b == "3":
+        print("Correct!")
+    else:
+        print("Incorrect!")
+else:
+    print("Incorrect!")
+</pre>
+</ul>
+
+<h4>Pythonでインデントする際の注意</h4>
+<p>
+実際にはインデントは (一貫しているかぎり)
+何マス空けてもよいが、通常は <u>半角スペース4個</u>
+(<code>&nbsp;&nbsp;&nbsp;&nbsp;</code>) を使う慣例である。
+ここに、半角スペース以外の文字を使うと動かない。
+たとえば以下の例は正しく見えるが、実際にはエラーとなる:
+
+<blockquote class=file>
+動かない例:
+<pre>
+print("What is your name?")
+x = input("name=")
+if x == "euske":
+　　print("You are awesome!")
+else:
+　　print("You are not awesome!")
+</pre>
+</blockquote>
+
+<div class=exercise>
+<div class=header>演習 1-15.</div>
+<ul>
+<li> 上の例をテキストエディタ上にコピーして保存し、
+Python で実際に動かないことを確認せよ。
+なぜ動かないのか原因をつきとめ、正しいコードに修正せよ。
+</ul>
+</div>
+
 
 <h2 id="summary">5. 本日のまとめ・小課題</h2>
+
+<div class=exercise>
+<div class=header>本日の小課題 1. パソコンの基礎</div>
+<ul>
+  <li> 締め切り: <strong>10月8日</strong> (1週間後)
+  <li> 以下のような構成の <u>Zip形式</u> のファイルを作成し、
+    OCW-i から提出せよ。
+    <ul>
+      <li> まず、"<code>kadai1</code>" フォルダを作成する。
+        その中にさらに 2つのフォルダ "<code>text</code>" と "<code>image</code>" を作成する。
+        <code>text</code> フォルダの中に
+        <strong>テキスト形式</strong>のファイルをひとつ入れ、
+        <code>image</code> フォルダの中に
+        <strong>JPEG形式</strong>のファイルをひとつ入れる。
+        ファイルの内容は (形式さえあっていれば) なんでもよい。
+        最後に <code>kadai1</code> フォルダ全体をZip形式として圧縮する。
+  <li> 最終的なフォルダ構成は次のようになっているはずである:
+    <ul>
+      <li> kadai1
+        <ul>
+          <li> text
+          <ul>
+            <li> (テキスト形式のファイル...)
+          </ul>
+          <li> image
+          <ul>
+            <li> (JPEG形式のファイル...)
+          </ul>
+        </ul>
+        <div class=figure><img src="kadai1folder.png"></div>
+    </ul>
+  <li> Zip形式のファイルを作成するには、以下のようにする:
+    <ul>
+      <li> <strong>Windows の場合:</strong>
+        フォルダを右クリックし、メニューから
+        <kbd>送る(N)</kbd> &gt; <kbd>圧縮 (zip形式) フォルダー</kbd> を選ぶと
+        圧縮された zip ファイルが生成される。
+        <div class=figure><img src="kadai1win.png"></div>
+      <li> <strong>Mac の場合:</strong>
+        フォルダを右クリックし、メニューから
+        <kbd>kadai1 を圧縮</kbd> を選ぶと、圧縮された zip ファイルが生成される。
+        <div class=figure><img src="kadai1mac.png"></div>
+    </ul>
+</ul>
+</div>
 
 <div class=exercise>
 <div class=header>本日の小課題 2. 変数の内容の入れ替え</div>
@@ -979,7 +1165,7 @@ swap.py
 <pre>
 x = "john"
 y = "mary"
-<div class=bl>???
+<div class=qqq>???
 y = x
 ???
 </div>print(f"x={x}, y={y}")

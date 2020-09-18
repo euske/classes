@@ -37,6 +37,7 @@
   <li> <a href="#basics">コマンド プロンプト (ターミナル) の使い方・超基本</a>
   <li> <a href="#current">カレント・フォルダという考え方</a>
 </ul>
+<li> <a href="#screenshot">パソコンの基礎: 画面のスクリーンショットを撮る</a>
 <li> <a href="#python">Python プログラムの基礎</a>
 <ul>
   <li> <a href="#install">Python をインストールする</a>
@@ -47,6 +48,10 @@
   <li> <a href="#conditional">条件分岐とは?</a>
 </ul>
 <li> <a href="#summary">本日のまとめ・小課題</a>
+<ul>
+  <li> <a href="#ex1">小課題1</a>
+  <li> <a href="#ex2">小課題2</a>
+</ul>
 </ol>
 
 
@@ -462,6 +467,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 <tr><td>テキストファイル</td><td><code>.txt</code></td></tr>
 <tr><td>HTMLファイル</td><td><code>.html</code> または <code>.htm</code></td></tr>
 <tr><td>JPEG画像ファイル</td><td><code>.jpeg</code> または <code>.jpg</code></td></tr>
+<tr><td>PNG画像ファイル</td><td><code>.png</code></td></tr>
 <tr><td>音声ファイル</td><td><code>.mp3</code> など</td></tr>
 <tr><td>動画ファイル</td><td><code>.mp4</code>, <code>.mov</code> など</td></tr>
 <tr><td>圧縮ファイル</td><td><code>.zip</code></td></tr>
@@ -758,9 +764,40 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 </ol>
 </div>
 
-<h2 id="python">4. Python プログラムの基礎</h2>
 
-<h3 id="install">4.1. Python をインストールする</h3>
+<h2 id="screenshot">4. パソコンの基礎: 画面のスクリーンショットを撮る</h2>
+<p>
+自分のパソコンで指示された操作がうまくできない場合、
+その画面の <u>スクリーンショット</u> を撮影し、教員または TA に送ること。
+スマートフォンのカメラで画面の写真を撮ったりしないこと (見にくいしダサいため)。
+
+<h4>Windows の場合</h4>
+<ul>
+<li> スタートメニューから <kbd>切り取り・スケッチ</kbd> を選ぶ。
+<div class=figure><img src="screenshot-win.png"></div>
+(あるいは <kbd>Print Screen</kbd> キーを押してもよい。)
+</ul>
+
+<h4>Mac の場合</h4>
+<ul>
+<li> Finder のメニューから <kbd>表示</kbd> →
+    <kbd>ユーティリティ</kbd> を選び、
+    <kbd>スクリーンショット</kbd> のアイコンを開く。
+<div class=figure><img src="screenshot-mac.png"></div>
+(あるいは <kbd>Shift</kbd> + <kbd>&#8984; Command</kbd> + <kbd>5</kbd> を押してもよい)
+</ul>
+
+<p>
+アプリが起動したら撮影する範囲を指定し、
+結果を PNG形式の画像ファイルとして保存する。
+あとはこれをメールに添付しても送ってもよいし、
+Discord チャットに投稿してもよい。
+(本日の小課題1 では、これを提出してもらう)
+
+
+<h2 id="python">5. Python プログラムの基礎</h2>
+
+<h3 id="install">5.1. Python をインストールする</h3>
 <p>
 <a href="https://www.python.org/">https://www.python.org/</a> に
 アクセスし、Python 3.8.x をダウンロードする。(最後の x の部分は何でもよい)
@@ -768,7 +805,7 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 <a href="https://www.python.org/"><img width="498" src="python.png"></a>
 </div>
 
-<h3 id="first">4.2. 最初の Python プログラムを書く</h3>
+<h3 id="first">5.2. 最初の Python プログラムを書く</h3>
 <ol>
 <li> コマンド プロンプト (ターミナル) を起動する。
 <li> デスクトップ上にフォルダをひとつ作成し、
@@ -821,7 +858,7 @@ Hello, World!
 以下、この <code>hello.py</code> をいろいろなファイルに
 変えることで演習・課題をおこなう。
 
-<h3 id="variables">4.3. 変数を使う</h3>
+<h3 id="variables">5.3. 変数を使う</h3>
 <ol>
 <li> 「ターミナル」を起動する。
 <li> 先ほど作成したフォルダに <code>cd</code> する。
@@ -853,7 +890,7 @@ Good morning euske!
 </ul>
 </div>
 
-<h3 id="statements">4.4. 文とは?</h3>
+<h3 id="statements">5.4. 文とは?</h3>
 <p>
 プログラム中の各行を、それぞれ <u>文</u> (statement) とよぶ。
 各文は、書かれたとおりの順序で実行される。
@@ -890,7 +927,7 @@ Good morning euske!
 <a href="curry.jpg"><img width="400" src="curry.jpg"></a>
 </div>
 
-<h3 id="syntax">4.5. 関数・変数・代入とは?</h3>
+<h3 id="syntax">5.5. 関数・変数・代入とは?</h3>
 <p>
 各文のなかの <code>print(...)</code>、<code>input(...)</code> のような部分を
 <u>関数</u> (function) とよぶ。
@@ -970,7 +1007,7 @@ x=mary, y=john
 </ul>
 </div>
 
-<h3 id="conditional">4.6. 条件分岐とは</h3>
+<h3 id="conditional">5.6. 条件分岐とは</h3>
 <p>
 変数の値によって、プログラムに異なる動きをさせることができる。
 このような機能を <u>条件分岐</u> (conditional branch) という。
@@ -1110,7 +1147,7 @@ Python で実際に動かないことを確認せよ。
 
 <h2 id="summary">5. 本日のまとめ・小課題</h2>
 
-<div class=exercise>
+<div class=exercise id="ex1">
 <div class=header>本日の小課題 1. パソコンの基礎</div>
 <ul>
   <li> 締め切り: <strong>10月8日</strong> (1週間後)
@@ -1122,8 +1159,9 @@ Python で実際に動かないことを確認せよ。
         <code>text</code> フォルダの中に
         <strong>テキスト形式</strong>のファイルをひとつ入れ、
         <code>image</code> フォルダの中に
-        <strong>JPEG形式</strong>のファイルをひとつ入れる。
-        ファイルの内容は (形式さえあっていれば) なんでもよい。
+        さきほど撮影した自分の PC の <a href="#screenshot">スクリーンショット</a>
+        (<strong>PNG形式</strong>の画像ファイル) をひとつ入れる。
+        画面の内容はなんでもよい。
         最後に <code>kadai1</code> フォルダ全体をZip形式として圧縮する。
   <li> 最終的なフォルダ構成は次のようになっているはずである:
     <ul>
@@ -1135,7 +1173,7 @@ Python で実際に動かないことを確認せよ。
           </ul>
           <li> image
           <ul>
-            <li> (JPEG形式のファイル...)
+            <li> (PNG形式のファイル...)
           </ul>
         </ul>
         <div class=figure><img src="kadai1folder.png"></div>
@@ -1155,7 +1193,7 @@ Python で実際に動かないことを確認せよ。
 </ul>
 </div>
 
-<div class=exercise>
+<div class=exercise id="ex2">
 <div class=header>本日の小課題 2. 変数の内容の入れ替え</div>
 <ul>
   <li> 締め切り: <strong>10月8日</strong> (1週間後)

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2020年度 コンピュータサイエンス第一 (5a)
+第3回 - 2進数の計算、四則演算、アニメーション作成
+/ 新山 祐介</title>
+<style><!--
+.bin { font-family: Courier New, Courier, monospace; font-style: italic; font-weight: 900; color: blue; }
+.dec { font-family: serif; font-style: italic; font-weight: 900; color: red; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第3回 - 2進数の計算、四則演算、アニメーション作成</h1>
+<div class=nav>2020年10月15日</div>
+
+<ol start="0">
+<li> <a href="#prev">先週の復習</a>
+  <ul>
+  <li> <a href="#while">while文による繰り返し</a>
+  <li> <a href="#add">繰り返しを使って足し算を実現する</a>
+  <li> <a href="#mult">足し算を使って掛け算を実現する</a>
+  </ul>
+<li> <a href="#binary">2進数を使った計算</a>
+  <ul>
+  <li> <a href="#binadd">2進数における加算</a>
+  <li> <a href="#binmult">2進数における乗算</a>
+  </ul>
+<li> <a href="#calc">Pythonにおける四則演算</a>
+<li> <a href="#vscode">Visual Studio Code を使う</a>
+  <ul>
+  <li> <a href="#vscodeinstall">VS Code をインストールする</a>
+  <li> <a href="#vscodeuse">VS Code + Python の使い方</a>
+  </ul>
+<li> <a href="#animation">数値だけを使ったアニメーションの作成</a>
+  <ul>
+  <li> <a href="#comments">プログラムの「コメント」</a>
+  </ul>
+<li> <a href="#assignment">本日の課題</a>
+  <ul>
+  <li> <a href="#ex4">小課題 4. ユークリッドの互除法 (10月22日締切)</a>
+  <li> <a href="#m1">中課題 1. アニメーションプログラム (10月29日締切)</a>
+  </ul>
+</ol>
+
+
+<h2>雑談</h2>
+<p>
+航空機が安全性をどれほど真剣に考えているかについて。
+<ul>
+<li> 航空機事故で亡くなった人の 55% は、離陸・着陸時に死んでいる。
+これは全体の飛行時間のうち、わずか 6%。
+(<A href="http://www.planecrashinfo.com/cause.htm">資料1</a>,
+<A href="https://www.aviation-safety.net/statistics/">資料2</a>)
+<li> さらに、多くの人は衝撃ではなく火災で死んでいる。
+火災の多くは焼け死ぬのではなく、煙による窒息死。
+→ つまり、さっさと逃げることが重要。
+<li> しかしほとんどの人は目が見えない・息ができない・頭がパニックしている。
+→ 緊急時に考えていたら死んでしまう。
+<li> 考えなくても行動できるようにする → 避難訓練が重要。
+<li> しかし普通の人は飛行機の避難訓練などしたことがない。→ 安全ビデオで「ヴァーチャル避難訓練」させる。
+<li> 最近の安全ビデオは、わざと奇抜にして人の注意を引きつけるようにできている。
+  <ul>
+    <li> <a href="https://www.youtube.com/watch?v=nU7fm302UjY">全日空 (ANA)</a> - 古いバージョン
+    <li> <a href="https://www.youtube.com/watch?v=z1A5BtqsaPM">Virgin America (米国)</a> - 奇抜
+    <li> <a href="https://www.youtube.com/watch?v=zQtod9801j0">Turkish Airlines (トルコ)</a> - ウケ狙い
+    <li> <a href="https://www.youtube.com/watch?v=h2btt98pKlA">カンタス航空 (オーストラリア)</a> - 泣かせる
+    <li> <a href="https://www.youtube.com/watch?v=T0Zkey8LMHU">全日空 (ANA)</a> - 新しいバージョン
+  </ul>
+<li> 離陸時に携帯電話をオフにさせるのは電波障害のためでなく、実は乗客をビデオに集中させるため。
+<li> 夜間の着陸時に機内のライトを消すのは、実は万が一避難のときに乗客の目を暗闇に慣れさせるため。
+<li> 避難訓練・安全ビデオをあなどってはならない。<br>
+  また、(飛行機にかぎらず) 出先ではつねに非常口の場所をチェックすること。
+</ul>
+
+
+<h2 id="prev">0. 先週の復習</h2>
+
+<ul>
+<li> どんな情報も <span class=bin>0</span> と <span class=bin>1</span> で表すことができる。
+<li> Python による整数の扱い。
+<li> <code>print</code>関数と <code>input</code>関数を使った表示と入力。
+<li> 条件分岐 (<code>if</code>文) と繰り返し (<code>while</code>文)。
+</ul>
+
+<dl>
+<dt> if文 (パターン1):
+<dd> インデントが重要。複数の文を入れることもできる。
+<pre>
+if <em>条件式</em>:
+    <em>条件式が真で<strong>ある</strong>ときに実行される文</em>
+else:
+    <em>条件式が真で<strong>ない</strong>ときに実行される文</em>
+</pre>
+<dt> if文 (パターン2):
+<dd> <code>else:</code> 以降は省略できる。
+<pre>
+if <em>条件式</em>:
+<span class=ind1>    </span><em>条件式が真で<strong>ある</strong>ときに実行される文</em>
+</pre>
+</dl>
+
+<div class=exercise>
+<div class=header>演習 3-1. 真偽を判定する</div>
+<ol type=a>
+  <li> <code>x</code> が 3 のとき、<code>x &gt; 2</code> は成り立つか?
+  <li> <code>y</code> が 0 のとき、<code>y &lt; 0</code> は成り立つか?
+  <li> <code>z</code> が 1 のとき、<code>1 != z</code> は成り立つか?
+  <li> <code>t</code> が 7 のとき、<code>3 &gt; 7</code> は成り立つか?
+</ol>
+</div>
+
+<h3 id="while">0.1. while文による繰り返し</h3>
+<p>
+Python による繰り返し (<code>while</code>文) の構文を思い出そう:
+<div class=file>
+loop.py
+<pre>
+i = 0
+while i &lt; 10:
+    print(f"i={i}")
+    i = i + 1
+print("end")
+</pre>
+</div>
+
+<div class=exercise>
+<div class=header>演習 3-2. ループを理解する</div>
+<ol type=a>
+  <li> 上のプログラム <code>loop.py</code> で、
+    最後に表示される <code>i</code> の値はいくつか。
+  <li> 上のプログラム中に以下の <code>if</code>文を挿入し、
+<pre>
+    if i == 5:
+        print("five!")
+</pre>
+    "<code>i=5</code>" を表示した直後に "<code>five!</code>" を表示したい:
+<pre>
+i=0
+i=1
+i=2
+i=3
+i=4
+i=5
+five!
+i=6
+i=7
+...
+</pre>
+    上の<code>if</code>文を挿入すべき箇所はプログラム中のどこか。
+</ol>
+</div>
+
+<h3 id="add">0.2. 繰り返しを使って足し算を実現する</h3>
+<p>
+「1を足す」「1を引く」だけの計算を使って、整数の和 a + b を計算する:
+<div class=file>
+add.py
+<pre>
+a = int(input("a:"))
+b = int(input("b:"))
+while <span class=qqq>0 &lt; b</span>:
+    a = a + 1
+    b = b - 1
+print(f"answer={a}")
+</pre>
+</div>
+
+<div class=exercise>
+<div class=header>演習 3-3. 条件式を理解する</div>
+<ol>
+  <li> b の値に 0 が入力されたときのプログラムの動作を日本語で説明せよ。
+  <li> <code><span class=qqq>0 &lt; b</span></code> の部分には、
+    <code>0 &lt; b</code> のかわり別の条件式を入れてもよい。
+    そのような条件式の例をひとつ挙げよ。
+</ol>
+</div>
+
+<h3 id="mult">0.3. 足し算を使って掛け算を実現する</h3>
+<p>
+さらに上の結果を使って、今度は掛け算を実現することを考える。
+以下のプログラムは与えられた整数 p と q に対して p × q を計算する。
+<div class=file>
+mult.py (未完成)
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+<div class=qqq>    (変数 a に p の値を足す)
+</div>    q = q - 1
+print(f"answer={a}")
+</pre>
+</div>
+<p>
+ここで <span class=qqq>(変数 a に p の値を足す)</span> の部分に
+上の add.py の処理を埋め込むと、以下のようになる:
+
+<div class=file>
+mult.py (完成版)
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+    b = p
+<div class=qqq>    while 0 &lt; b:
+        a = a + 1
+        b = b - 1
+</div>    q = q - 1
+print(f"answer={a}")
+</pre>
+</div>
+
+
+<h2 id="binary">1. 2進数を使った計算</h2>
+<p>
+10進数における <span class=dec>0</span>〜<span class=dec>15</span> までの数を
+2進数の <span class=bin>0000</span>〜<span class=bin>1111</span> で
+表した結果は以下のようであった:
+<table border align=center>
+<tr>
+<th>10進数</th><th>2進数</th><th>10進数</th><th>2進数</th>
+<th>10進数</th><th>2進数</th><th>10進数</th><th>2進数</th>
+</tr><tr>
+<td align=right><span class=dec>0</span></td><td><code><nobr><span class=bin>0000</span></nobr></code></td>
+<td align=right><span class=dec>4</span></td><td><code><nobr><span class=bin>0100</span></nobr></code></td>
+<td align=right><span class=dec>8</span></td><td><code><nobr><span class=bin>1000</span></nobr></code></td>
+<td align=right><span class=dec>12</span></td><td><code><nobr><span class=bin>1100</span></nobr></code></td>
+</tr><tr>
+<td align=right><span class=dec>1</span></td><td><code><nobr><span class=bin>0001</span></nobr></code></td>
+<td align=right><span class=dec>5</span></td><td><code><nobr><span class=bin>0101</span></nobr></code></td>
+<td align=right><span class=dec>9</span></td><td><code><nobr><span class=bin>1001</span></nobr></code></td>
+<td align=right><span class=dec>13</span></td><td><code><nobr><span class=bin>1101</span></nobr></code></td>
+</tr><tr>
+<td align=right><span class=dec>2</span></td><td><code><nobr><span class=bin>0010</span></nobr></code></td>
+<td align=right><span class=dec>6</span></td><td><code><nobr><span class=bin>0110</span></nobr></code></td>
+<td align=right><span class=dec>10</span></td><td><code><nobr><span class=bin>1010</span></nobr></code></td>
+<td align=right><span class=dec>14</span></td><td><code><nobr><span class=bin>1110</span></nobr></code></td>
+</tr><tr>
+<td align=right><span class=dec>3</span></td><td><code><nobr><span class=bin>0011</span></nobr></code></td>
+<td align=right><span class=dec>7</span></td><td><code><nobr><span class=bin>0111</span></nobr></code></td>
+<td align=right><span class=dec>11</span></td><td><code><nobr><span class=bin>1011</span></nobr></code></td>
+<td align=right><span class=dec>15</span></td><td><code><nobr><span class=bin>1111</span></nobr></code></td>
+</tr>
+</table>
+
+<h3 id="binadd">1.1. 2進数における加算</h3>
+<ul>
+<li> <span class=bin>11</span> + <span class=bin>110</span> を計算せよ。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 3-4. 足し算の練習</div>
+<ol type=a>
+<li> <span class=bin>1</span> + <span class=bin>10</span> + <span class=bin>100</span> を計算せよ。
+<li> <span class=bin>111</span> + <span class=bin>11</span> を計算せよ。
+<li> <span class=dec>3</span> + <span class=dec>5</span> を 2進数に変換し、これを計算して、また 10進数に戻せ。
+</ol>
+</div>
+
+<h3 id="binmult">1.2. 2進数における乗算</h3>
+<ul>
+<li> 筆算を使って、<span class=bin>11</span> × <span class=bin>101</span> を計算せよ。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 3-5. かけ算の練習</div>
+<ol type=a>
+<li> <span class=bin>110</span> × <span class=bin>100</span> を計算せよ。
+<li> <span class=bin>110</span> × <span class=bin>1001</span> を計算せよ。
+<li> <span class=dec>4</span> × <span class=dec>7</span> を 2進数に変換し、これを計算して、また 10進数に戻せ。
+</ol>
+</div>
+
+
+<h2 id="calc">2. Pythonにおける四則演算</h2>
+<p>
+Python では、もちろん +1, -1 だけではなく、実際の四則演算が可能である。
+<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> などの記号を
+<u>演算子</u> (operator) という。
+<dl>
+<dt> 構文:
+<dd> <table border>
+<tr><td><code><em>a</em> + <em>b</em></code></td><td>a と b を足した値</td></tr>
+<tr><td><code><em>a</em> - <em>b</em></code></td><td>a から b を引いた値</td></tr>
+<tr><td><code><em>a</em> * <em>b</em></code></td><td>a と b を掛けた値</td></tr>
+<tr><td><code><em>a</em> // <em>b</em></code></td><td>a を b で割った値 (商)</td></tr>
+<tr><td><code><em>a</em> % <em>b</em></code></td><td>a を b で割った値 (余り)</td></tr>
+<tr><td><code><em>a</em> / <em>b</em></code></td><td>a を b で割った値 (実数)</td></tr>
+<tr><td><code><em>a</em> ** <em>b</em></code></td><td>べき乗 a<sup>b</sub></td></tr>
+</table>
+<dt> 例1:
+<dd> 代入文の中で使うのが一般的。
+<pre>
+c = a + b
+</pre>
+<dt> 例2:
+<dd> 通常の数式と同じく、乗算が優先される。
+<pre>
+det = a*d - b*c
+<span class=err>det = a d - b c</span> (演算子は省略できない)
+<span class=err>det = ad - bc</span> (変数 ad から変数 bc の値を引くことになる)
+</pre>
+<dt> 例3:
+<dd> カッコも使える。
+<pre>
+s = n*(n+1)/2
+<span class=err>s = n(n+1)/2</span> (演算子は省略できない)
+</pre>
+<dt> 例4:
+<dd> 直接、print文の中で使ってもよい。
+<pre>
+print(f"result={a+b}")
+</pre>
+</dl>
+
+<div class=exercise>
+<div class=header>演習 3-6. Pythonによる四則演算</div>
+<p>
+以下のプログラムを実行し、
+a と b にいろいろな値を入力せよ。
+b = 0 とすると何が起こるか?
+<div class=file>
+calc.py
+<pre>
+a = int(input("a:"))
+b = int(input("b:"))
+print(f"a+b = {a+b}")
+print(f"a-b = {a-b}")
+print(f"a*b = {a*b}")
+print(f"a//b = {a//b}")
+print(f"a%b = {a%b}")
+print(f"a/b = {a/b}")
+</pre>
+</div>
+</div>
+
+<h4>例1. 平均を計算する</h4>
+<blockquote><pre>
+a = int(input("a:"))
+b = int(input("b:"))
+avg = (a+b)/2
+print(f"average = {avg}")
+</pre></blockquote>
+
+<h4>例2. 複数の値の合計を計算する</h4>
+<ol>
+  <li> 最初に <code>total = 0</code> とする。
+  <li> <code>x</code> に値を入力する。
+  <li> その値を <code>total</code> に加える。
+  <li> <code>x = 0</code> が入力されるまで繰り返す。
+</ol>
+<blockquote><pre>
+total = 0
+x = 1
+while x != 0:
+    x = int(input("x:"))
+    total = total + x
+print(f"total = {total}")
+</pre></blockquote>
+
+<div class=exercise>
+<div class=header>演習 3-7. <a href="https://ja.wikipedia.org/wiki/%E3%83%A6%E3%83%BC%E3%82%AF%E3%83%AA%E3%83%83%E3%83%89%E3%81%AE%E4%BA%92%E9%99%A4%E6%B3%95">ユークリッドの互除法</a></div>
+<p>
+2つの数の最大公約数を発見する以下のプログラム <code>gcd.py</code> を完成させよ:
+<ol>
+  <li> 最初に <code>a</code> と <code>b</code> の 2つの値を入力する。
+  <li> <code>a</code> を <code>b</code> で割った余り <code>a % b</code> を計算する。
+  <li> その値を新しい <code>b</code> の値とし、2. に戻る。
+  <li> 余りが 0 になったら、そのときの <code>b</code> の値を表示する。
+</ol>
+<p>
+まず、簡単な例 (a=12, b=3 など) を手作業でやってみて、
+同じことをするプログラムを書け:
+<div class=file>
+gcd.py
+<pre>
+a = int(input("a:"))
+b = int(input("b:"))
+c = a % b
+while c != 0:
+    a = <span class=qqq>???</span>
+    b = <span class=qqq>???</span>
+    c = a % b
+print(f"gcd = {b}")
+</pre>
+</div>
+</div>
+
+
+<h2 id="vscode">3. Visual Studio Code を使う</h2>
+<p>
+Visual Studio Code (以下 VS Code) は高機能なテキストエディタで、
+Python のプログラムを書いたり実行したりするのに使える。
+
+<h3 id="vscodeinstall">3.1. VS Code をインストールする</h3>
+<p>
+まず
+<a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a> に
+アクセスし、VS Code をダウンロードする。
+<div class=figure>
+<a href="https://code.visualstudio.com/"><img height="394" width="644" src="vscode.png"></a>
+</div>
+<p>
+インストールするには、以下の方法に従う:
+<ul>
+<li> <a href="https://code.visualstudio.com/docs/setup/windows">Windows の場合</a><br>
+(「PATHへの追加」を必ずチェックするようにする)
+<div class=figure><img height="464" src="vscode-win.png"></div>
+<li> <a href="https://code.visualstudio.com/docs/setup/mac">Mac の場合</a><Br>
+「アプリケーション」フォルダにアイコンをドラッグ・ドロップし、
+起動後に「Install 'code' command in PATH」を実行する。
+</ul>
+<p>
+インストールが終わったら、左下の歯車アイコンをクリックして
+「Extensions (拡張機能)」を選ぶ。
+<div class=figure><img height="546" src="vscode-ext.png"></div>
+<p>
+ここでさらに「Python」を選択し、インストールする。
+<div class=figure><img height="546" src="vscode-python.png"></div>
+
+<h3 id="vscodeuse">3.2. VS Code + Python の使い方</h3>
+<p>
+VS Code が正しくインストールされると、
+コマンド プロンプト上で以下のようにして VS Code を
+メモ帳のかわりに使える:
+<pre>
+C:\Users\euske\Desktop\cs1&gt; <strong>notepad hello.py</strong> (使用前)
+C:\Users\euske\Desktop\cs1&gt; <strong>code hello.py</strong>    (使用後)
+</pre>
+<p>
+さらに VS Code (+ Python 機能拡張) では、
+編集中のプログラムを同じウィンドウ上でそのまま実行できる。
+右上の「<u>再生</u>」ボタンをクリックすればよい。
+<div class=figure><img height="546" src="vscode-shell.png"></div>
+
+
+<h2 id="animation">4. 数値だけを使ったアニメーションの作成</h2>
+<p>
+今回は、数値だけを使ってアニメーションを表示してみる。
+<div class=file>
+anim.py
+<pre>
+<mark>import time</mark>
+<span class=comment># 変数を定義する。</span>
+img0 = 1000000000000000000000000000
+img1 = 1000000000110000110000000000
+img2 = 1000000000110000110000000000
+img3 = 1000000000000000000000000000
+img4 = 1000001100000000000011000000
+img5 = 1000000110000000000110000000
+img6 = 1000000011000000001100000000
+img7 = 1000000000111111110000000000
+img8 = 1000000000000000000000000000
+img9 = 1000000000000000000000000000
+<span class=comment># 30回繰り返す。</span>
+t = 0
+while t &lt; 30:
+    print(img0)
+    print(img1)
+    print(img2)
+    print(img3)
+    print(img4)
+    print(img5)
+    print(img6)
+    print(img7)
+    print(img8)
+    print(img9)
+    print()
+    time.sleep(0.1)  <span class=comment># すこし待つ。</span>
+    t = t + 1
+</pre>
+</div>
+<p>
+ここでは表示の間に「0.1秒だけ待つ」という機能を使っている:
+<dl>
+<dt> 構文:
+<dd> <strong>注意:</strong>
+<code>import time</code> はプログラムの最初に 1回だけ必要。
+<pre>
+import time
+...
+time.sleep(<em>秒数</em>)
+</pre>
+<dt> 例1:
+<dd> <pre>
+time.sleep(60)
+time.sleep(1.25)
+</pre></dd>
+</dl>
+
+<p>
+これだけでは同じ絵が繰り返し表示されるだけなので、
+すこし変更を加える:
+<div class=file>
+anim.py
+<pre>
+import time
+<span class=comment># 変数を定義する。</span>
+img0 = 1000000000000000000000000000
+img1 = 1000000000110000110000000000
+img2 = 1000000000110000110000000000
+img3 = 1000000000000000000000000000
+img4 = 1000001100000000000011000000
+img5 = 1000000110000000000110000000
+img6 = 1000000011000000001100000000
+img7 = 1000000000111111110000000000
+img8 = 1000000000000000000000000000
+img9 = 1000000000000000000000000000
+<span class=comment># 30回繰り返す。</span>
+t = 0
+while t &lt; 30:
+    print(img0)
+    print(img1)
+    print(img2)
+    print(img3)
+    print(img4)
+    print(img5)
+    print(img6)
+    print(img7)
+    print(img8)
+    print(img9)
+    print()
+<div class=qqq>    <span class=comment># 1桁減らす。</span>
+    img0 = img0 // 10
+    img1 = img1 // 10
+    img2 = img2 // 10
+    img3 = img3 // 10
+    img4 = img4 // 10
+    img5 = img5 // 10
+    img6 = img6 // 10
+    img7 = img7 // 10
+    img8 = img8 // 10
+    img9 = img9 // 10
+</div>    time.sleep(0.1)  <span class=comment># すこし待つ。</span>
+    t = t + 1
+</pre>
+</div>
+
+<h3 id="comments">4.1. プログラムの「コメント」</h3>
+<p>
+実はプログラムの多くの部分はコンピュータに対してではなく、
+おもに<strong>人間に向けて書かれている</strong>。
+そのため、たいていのプログラミング言語では動作を説明するための注釈、
+あるいは <u>コメント</u> (comment)を入れることができる。
+Python では「<code>#</code>」記号がコメントを表す。
+コメント (注釈文) とは、プログラムのわかりにくい部分を説明するための
+日本語の文である。コメント部分は、なにも実行されない。
+<dl>
+<dt> 構文:
+<dd> <pre>
+<span class=comment># コメント</span>
+</pre>
+「<code>#</code>」から行末までがコメントとみなされる。
+<dt> 例1:
+<dd> <pre>
+<span class=comment># 挨拶する。</span>
+print("hello")
+</pre>
+<dt> 例2:
+<dd> <pre>
+print("hello")  <span class=comment># 挨拶する。</span>
+</pre>
+<dt> 例3:
+<dd> <pre>
+<span class=comment>#print("hello")</span>
+</pre>
+文の先頭をコメントにすると、何も実行されない。
+このような実行されない部分を「コメントアウトされた部分」などと呼ぶ。
+</dl>
+
+<div class=exercise>
+<div class=header>演習 3-8. アニメーションの実行</div>
+<p>
+上のプログラム <code>anim.py</code> を入力し、実行せよ。
+プログラムを変更し、違った動きをするように改造せよ。
+<code>time.sleep(0.1)</code> の部分を
+コメントアウトすると、なにが起こるか?
+</div>
+
+<h2 id="assignment">5. 本日の課題</h2>
+
+<div class=exercise id="ex4">
+<div class=header>小課題 4. ユークリッドの互除法 (10月22日締切)</div>
+<ul>
+  <li> 提出期限: <strong>10月22日</strong> (1週間後)
+  <li> 演習 3-7. で完成させたプログラム「<code>gcd.py</code>」を
+    <a href="https://t2schola.titech.ac.jp/course/view.php?id=8882">T2SCHOLA</a> から提出せよ。
+</ul>
+</div>
+
+<div class=exercise id="m1">
+<div class=header>中課題 1. アニメーションプログラム (10月29日締切)</div>
+<ul>
+  <li> 提出期限: <strong>10月29日</strong> (2週間後)
+  <li> 本日の成果を使って、数値でアニメーションをおこなうプログラムを作成せよ。
+    <ul>
+      <li> なんらかの動きがあるものであること。
+      <li> 表示するものは<strong>数字のみ</strong>。
+      <li> これまでに学習した
+        <code>print</code>文、<code>if</code>文、<code>while</code>文、
+        四則演算の機能を使ってよい。
+      <li> ユーザからの入力は受けつけない
+        (<code>input</code>関数は使わない)。
+      <li> 必要に応じて、動作を説明するコメントを入れること。
+      <li> まだ学習していない機能を使ってもよいが、
+        その場合は、以下のレポート内で原理を詳細に説明すること。
+    </ul>
+  <li> 以下の2つのファイル (プログラム本体 + レポートPDF) を zip 形式にまとめ、
+    <a href="https://t2schola.titech.ac.jp/course/view.php?id=8882">T2SCHOLA</a> から提出せよ。
+</ul>
+<h4>a. プログラム本体 (5点)</h4>
+<ul>
+  <li> 作成したプログラム本体のファイル。(ファイル名はなんでもよい。)
+  <li> 各作品はクラスによる投票をおこない、優秀な上位3作品にさらに5点の追加点を与える。
+</ul>
+<h4>b. レポート (15点)</h4>
+<ul>
+  <li> a. で提出したプログラムの動作を日本語で説明するレポートを提出せよ。
+  <li> LaTeX あるいは Word で作成し、<strong>PDF形式</strong> で提出すること。
+  <li> アニメーションの動作原理、およびそれが数値演算によって
+    どのように表示されているかを解説すること。
+    (読者は一般的なプログラミングの知識があると仮定してよい。)
+  <li> まだ学習していない機能を使った場合、
+    これまでに学習した知識だけを使って、それがどのように実現可能かを解説すること。
+  <li> 採点基準:
+    <ul>
+      <li> 正しいレポートの形式になっているか。(5点)
+      <li> プログラムのすべての部分について適切な説明がされているか。(5点)
+      <li> 説明がわかりやすいか。(5点)
+    </ul>
+</ul>
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

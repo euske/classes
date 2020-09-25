@@ -35,13 +35,45 @@ function setupCounter() {
 
 <ol start="0">
 <li> <a href="#prev">先週の復習</a>
+<ul>
+  <li> <a href="#intropc">パソコンの基礎</a>
+  <li> <a href="#intropython">Python プログラミングの基礎</a>
+</ul>
 <li> <a href="#computers">コンピュータの原理</a>
+<ul>
+  <li> <a href="#components">コンピュータの4大要素</a>
+  <li> <a href="#bits">情報とは何か?</a>
+  <li> <a href="#numerics">数値を 0 と 1 であらわす</a>
+  <li> <a href="#strings">文字を 0 と 1 であらわす</a>
+  <li> <a href="#images">画像を 0 と 1 であらわす</a>
+  <li> <a href="#audios">音声を 0 と 1 であらわす</a>
+  <li> <a href="#datatypes">データの「形式」</a>
+</ul>
 <li> <a href="#python">Python - 前回までのあらすじ</a>
+<ul>
+  <li> <a href="#firstpython">最初の Python プログラム (再掲)</a>
+  <li> <a href="#print">print関数 - 文字を表示する</a>
+  <li> <a href="#input">input関数 - 文字を入力する</a>
+</ul>
 <li> <a href="#number">Pythonで数値を表示・入力する</a>
+<ul>
+  <li> <a href="#typein">数値の入力</a>
+</ul>
 <li> <a href="#compute">数値を計算する</a>
 <li> <a href="#compare">数値を比較する</a>
+<ul>
+  <li> <a href="#if1">if文 (パターン1)</a>
+  <li> <a href="#conds">条件式とは</a>
+  <li> <a href="#if2">if文 (パターン2)</a>
+</ul>
 <li> <a href="#loop">繰り返し処理をおこなう</a>
+<ul>
+  <li> <a href="#while">while文</a>
+</ul>
 <li> <a href="#addmult">足し算・掛け算を実現する</a>
+<ul>
+  <li> <a href="#plusandmult">足し算を使って掛け算を実現する</a>
+</ul>
 <li> <a href="#summary">本日のまとめ・小課題</a>
 <ul>
   <li> <a href="#ex3">小課題 3. 引き算および割り算をするプログラム (10月15日締切)</a>
@@ -60,7 +92,7 @@ function setupCounter() {
 
 <h2 id="prev">0. 先週の復習</h2>
 
-<h3>0.1. パソコンの基礎</h3>
+<h3 id="intropc">0.1. パソコンの基礎</h3>
 <ul>
 <li> タイピングの練習。
 <li> <u>ファイル</u>と<u>フォルダ</u>。
@@ -156,7 +188,7 @@ function setupCounter() {
 </ol>
 </div>
 
-<h3>0.2. Python プログラミングの基礎</h3>
+<h3 id="intropython">0.2. Python プログラミングの基礎</h3>
 <ul>
 <li> Python プログラムは、いくつかの <u>文</u> からなる。
 <li> 各文は、<strong>書かれている順序</strong>で実行される。
@@ -174,7 +206,7 @@ function setupCounter() {
 <li> 単純な操作 × 膨大な数 = 複雑な処理
 </ul>
 
-<h3>1.1. コンピュータの4大要素</h3>
+<h3 id="components">1.1. コンピュータの4大要素</h3>
 <p>
 すべてのコンピュータは
 以下の4つの部分から成り立っている。
@@ -218,7 +250,7 @@ function setupCounter() {
 </ol>
 </div>
 
-<h3>1.2. 情報とは何か?</h3>
+<h3 id="bits">1.2. 情報とは何か?</h3>
 <p>
 コンピュータ上の情報は、
 2種類の異なる状態の組み合わせで表される。
@@ -269,7 +301,7 @@ function setupCounter() {
   </svg>
 </div>
 
-<h3>1.2. 数値を 0 と 1 であらわす</h3>
+<h3 id="numerics">1.3. 数値を 0 と 1 であらわす</h3>
 <ul>
 <li> アホな方法A:
 <code>1</code>, <code>11</code>, <code>111</code>, <code>1111</code>, <code>11111</code>, ...
@@ -347,7 +379,7 @@ function setupCounter() {
   8桁の2進数で表せる情報 (0〜255)。16進数だと2桁で表せる。
 </ul>
 
-<h3>1.3. 文字を 0 と 1 であらわす</h3>
+<h3 id="strings">1.4. 文字を 0 と 1 であらわす</h3>
 <p>
 1文字 = 1つの数値と考え、
 数値の列を<strong>文字列</strong>とする。
@@ -365,7 +397,7 @@ function setupCounter() {
 <a href="https://web.archive.org/web/20170327170906/https://www.itscj.ipsj.or.jp/iso-ir/058.pdf">GB 2312</a>
 </ul>
 
-<h3>1.4. 画像を 0 と 1 であらわす</h3>
+<h3 id="images">1.5. 画像を 0 と 1 であらわす</h3>
 <p>
 ひとつの点 = 「<u>ピクセル</u>」
 <div class=figure>
@@ -467,7 +499,7 @@ function setupCounter() {
 <li> 文字の認識: 入力装置 → 画像データ → 文字コード
 </ul>
 
-<h3>1.5. 音声を 0 と 1 であらわす</h3>
+<h3 id="audios">1.6. 音声を 0 と 1 であらわす</h3>
 
 <p>音とは何か?
 <div class=figure>
@@ -530,7 +562,7 @@ function setupCounter() {
 <li> 音声認識: 入力装置 → 波形データ → 文字コード
 </ul>
 
-<h3>1.6. データの「形式」</h3>
+<h3 id="datatypes">1.7. データの「形式」</h3>
 <p>
 コンピュータ上では、すべての情報は 0 と 1 からなる。
 その意味は、<strong>解釈する方法によって決まる</strong>。
@@ -576,7 +608,7 @@ Hello!
 
 <h2 id="python">2. Python - 前回までのあらすじ</h2>
 
-<h3>2.1. 最初の Python プログラム (再掲)</h3>
+<h3 id="firstpython">2.1. 最初の Python プログラム (再掲)</h3>
 <ol>
 <li> 「ターミナル」を起動する。
 <li> 先ほど作成したフォルダに <code>cd</code> する。
@@ -602,7 +634,7 @@ Good morning euske!
 </pre>
 </ol>
 
-<h3>2.2. print関数 - 文字を表示する</h3>
+<h3 id="print">2.2. print関数 - 文字を表示する</h3>
 <dl>
 <dt> 構文:
 <dd> <pre>
@@ -630,7 +662,7 @@ print("おおさまのみみは{donkey}")
 <code>{donkey}</code> はただ文字列として表示される。
 </dl>
 
-<h3>2.3. input関数 - 文字を入力する</h3>
+<h3 id="input">2.3. input関数 - 文字を入力する</h3>
 <dl>
 <dt> 構文:
 <dd> <pre>
@@ -676,7 +708,7 @@ print(f"x is {x}")
 </ol>
 </div>
 
-<h3>3.1. 数値の入力</h3>
+<h3 id="typein">3.1. 数値の入力</h3>
 <p>
 <code>input()</code> 関数を <code>int(...)</code> 関数で囲むと、
 キーボードからの入力を<strong>文字ではなく数値として</strong>
@@ -752,7 +784,7 @@ IDLE では、<kbd>Tab</kbd> キーを使ってインデントをおこなう。
 </ol>
 </div>
 
-<h3>5.1. if文 (パターン1)</h3>
+<h3 id="if1">5.1. if文 (パターン1)</h3>
 <dl>
 <dt> 構文:
 <dd> <pre>
@@ -812,7 +844,7 @@ else:
 </ol>
 </div>
 
-<h3>5.2. 条件式とは</h3>
+<h3 id="conds">5.2. 条件式とは</h3>
 <p>
 Python では、条件式は if 文の中で変数の値の大小比較をするのに使う。
 <dl>
@@ -852,7 +884,7 @@ if <mark>4 &gt;= y</mark>:
 </ol>
 </div>
 
-<h3>5.3. if文 (パターン2)</h3>
+<h3 id="if2">5.3. if文 (パターン2)</h3>
 
 <dl>
 <dt> 構文:
@@ -923,7 +955,7 @@ print("end")
     <code>print("end")</code> が実行される。
 </ul>
 
-<h3>6.1. while文</h3>
+<h3 id="while">6.1. while文</h3>
 <dl>
 <dt> 構文:
 <dd> <pre>
@@ -1045,7 +1077,7 @@ print(f"answer={a}")
 <code>b &gt; 0</code> や、
 <code>b != 0</code> などの条件式を使ってもかまわない。
 
-<h3>7.1. 足し算を使って掛け算を実現する</h3>
+<h3 id="plusandmult">7.1. 足し算を使って掛け算を実現する</h3>
 <p>
 さらに上の結果を使って、今度は掛け算を実現することを考える。
 以下のプログラムは与えられた整数 p と q に対して p × q を計算する。

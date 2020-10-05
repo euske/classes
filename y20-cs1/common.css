@@ -29,3 +29,4 @@ u { color: green; font-weight: bold; }
 .bl { outline: 1px solid black; padding: 2px; font-size: 120%; color: transparent; }
 .qqq { outline: 1px solid black; padding: 2px; font-size: 120%; background: #ccffff; }
 .spacy li { margin-bottom: 0.5em; }
+.skipped { background: #ff8888; }

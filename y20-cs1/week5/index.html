@@ -24,6 +24,7 @@
 <ul>
   <li> <a href="#prev-assn">前回の課題について・補足</a>
 </ul>
+<li> <a href="#programming">プログラミングが苦手な人へ</a>
 <li> <a href="#break">条件式 True と break文</a>
 <li> <a href="#for">For文</a>
 <li> <a href="#string">文字列</a>
@@ -164,7 +165,73 @@ print(f"best student = {<mark>student[maxi]</mark>}")
 </div>
 
 
-<h2 id="break">1. 条件式 True と break文</h2>
+<h2 id="programming">1. プログラミングが苦手な人へ</h2>
+<p>
+有名な格言:
+<div class=formula>
+「プログラムは思ったように動かないが、書いたようには動く」
+</div>
+<ol>
+<li> <strong>「自分ならどうするか」を考える</strong><br>
+  たとえば「東工大の利用者 (学生・職員含む) はどれくらいの割合で
+  あの大岡山の信号を無視しているのか?」を調査するとしたら、どうすればいいだろうか。
+  おそらくいくつか方法はあるだろうが、それぞれ手間 (= 計算時間) と精度に
+  違いがある。それらの中から最適と思われる方法を自分なりに考えて実行する必要がある。
+
+<li> <strong>やることを自分の言葉で説明できなければ、プログラムは書けない</strong><br>
+  繰り返すが、プログラミングに特別な能力は何も必要ない。
+  「自分のやらせたいことを、ひたすら書く」だけである。
+  しかし実は「自分のやらせたいこと」を
+  日本語で具体的に説明すること自体が簡単ではない。
+  これができるようになれば、あとはその説明を特定の
+  プログラミング言語に変換するだけの機械的な作業である。
+
+<li> <strong>「何」ではなく「どうやって」に集中する</strong><br>
+  たとえば小課題 3. でやった掛け算プログラムを考えてみよう:
+<pre>
+<span class=comment># 加減算のみを使って p×q を計算する。</span>
+def multiple(p, q):
+    a = 0
+    while 0 &lt; q:  <span class=comment># q回、p を足す。</span>
+        a = a + p
+        q = q - 1
+    return a
+</pre>
+  ここで「掛け算ではなく、割り算を計算するプログラムを書け」と言われたらどうするだろうか。
+  「掛け算と割り算は逆だから、逆にすりゃいいだろう」と思って、
+  単純に <code>+</code> を <code>-</code> 演算子にするだけでは<u>動かない</u>:
+<pre>
+<span class=comment># 加減算のみを使って p÷q を計算する。</span>
+def divide(p, q):
+    a = 0
+    while 0 &lt; q:
+        a = a <mark>-</mark> p
+        q = q <mark>+</mark> 1
+    return a
+</pre>
+  上の関数は <code>divide</code> と名前がついている
+  (し、コメントにも ÷ と書いてある) が、本当に割り算をしているわけではない。
+  割り算をさせるには、見よう見真似でプログラムを「逆」にするだけではだめで、
+  実際に割り算をさせる手順を書かないとだめなのである。
+  しかし上のような表面的な置換を「プログラミング」と勘違いしている人は時々いる。
+
+<li> <strong>1文字も間違わないように注意する</strong><br>
+  「ちょっとぐらい違ってもいいじゃん」というタイプの人はプログラミングには向かない。
+  <ul>
+    <li> <code>print("foo)</code> … エラー!
+    <li> <code>print{"foo"}</code> … エラー!
+    <li> <code>print(f”x={x}")</code> … エラー!
+    <li> <code>print("x={x}")</code> … エラーじゃないけど変な動作
+  </ul>
+</ol>
+<p>
+ここで格言をもう一度:
+<div class=formula>
+「プログラムは思ったように動かないが、書いたようには動く」
+</div>
+
+
+<h2 id="break">2. 条件式 True と break文</h2>
 <p>
 以下のようなループを考える:
 <blockquote><pre>
@@ -204,7 +271,7 @@ while True:  <span class=comment># つねに真</span>
 </pre></blockquote>
 </div>
 
-<h2 id="for">2. For文</h2>
+<h2 id="for">3. For文</h2>
 <p>
 ふたたび同じループを考える:
 <blockquote><pre>
@@ -265,7 +332,7 @@ for i in range(len(a)):
     リストの全要素を表示できる。
 </dl>
 
-<h2 id="string">3. 文字列</h2>
+<h2 id="string">4. 文字列</h2>
 <p>
 Python における文字列 (string) とは、
 文字のリストである。
@@ -418,7 +485,7 @@ for i in range(3):
 </div>
 
 
-<h2 id="datatype">4. データの「型」について</h2>
+<h2 id="datatype">5. データの「型」について</h2>
 <p>
 Python の変数に格納されるデータは、
 実はいくつかの「<u>型</u> (type)」に分類されている:
@@ -605,7 +672,7 @@ t = "x=" + str(x)
 </pre></blockquote>
 
 
-<h2 id="assignment">5. 本日の課題</h2>
+<h2 id="assignment">6. 本日の課題</h2>
 
 <div class=exercise id="ex6">
 <div class=header>小課題 6. 投票集計プログラム vote3.py</div>

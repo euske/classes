@@ -357,6 +357,8 @@ s = "おうさまのみみはろばのみみ"
 print(s[8])    <span class=comment># 「ろ」が表示される</span>
 print(len(s))  <span class=comment># 13</span>
 </pre>
+<p>
+リストと同じように、文字列も最初の文字は「<strong>0文字目</strong>」です。
 <dt> 例2:
 <dd> <pre>
 a = "お"
@@ -391,10 +393,15 @@ else:
 <p>
 数値と同じように、文字列に対しても
 <code>==</code> および <code>!=</code> を使った条件式が使える。
-</dl>
-
+<dt> 例6:
+<dd> 空のリストがあるのと同様に、「空の文字列」というものも存在する。
+<pre>
+name = ""
+</pre>
 <p>
-リストと同じように文字列も、最初の文字は「<strong>0文字目</strong>」です。
+なお、<code>input()</code> 関数で何も入力せずにただ <kbd>Enter</kbd> を押すと、
+空の文字列が返される。
+</dl>
 
 <div class=exercise>
 <div class=header>演習 5-4. 図形を描く</div>
@@ -447,7 +454,7 @@ for m in range(12):
 <p>
 前回の投票集計プログラムを改良し、番号でなく
 候補者の名前を入力して投票できるようにしたい。
-("<code>end</code>" が入力されたらループを抜けるものとする。)
+(ただ <kbd>Enter</kbd> のみが押されたらループを抜けるものとする。)
 以下のプログラム vote3.py を完成させよ。
 <p>
 このプログラムを実行すると、以下のように動作する:
@@ -457,13 +464,13 @@ name:<strong>trump</strong>
 name:<strong>kim</strong>
 name:<strong>abe</strong>
 name:<strong>kim</strong>
-name:<strong>end</strong>
+name:<strong></strong>    (<kbd>Enter</kbd> のみを押す)
 abe: 1
 trump: 1
 kim: 2
 </pre></blockquote>
 <p>
-なお、不正な文字列 (候補者のどれでもなく、<code>end</code> でもない文字列) が
+なお、不正な文字列 (候補者のどれでもなく、空文字でもない文字列) が
 入力される可能性は考えなくてよい。
 <div class=file>
 vote3.py
@@ -711,9 +718,10 @@ for i in range(3):
     <span class=comment># i番目の候補者名と name が等しければ、found に i を代入する。</span>
     ...
 </pre>
-<li> 次に "<code>end</code>" が入力されたケースを考える。
-  "<code>end</code>" が入力された場合、変数 <code>name</code> の内容が
-  "<code>end</code>" になるが、その場合はどうすればよいのか? を考えよう。
+<li> 次に <kbd>Enter</kbd> だけが押されたケースを考える。
+  文字を入力せずに <kbd>Enter</kbd> だけが押された場合、
+  変数 <code>name</code> の内容が空文字列 <code>""</code> になる。
+  この場合はどうすればよいのか? を考えよう。
 </ul>
 </div>
 

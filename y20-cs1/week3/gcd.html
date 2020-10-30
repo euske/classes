@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<link rel="icon" href="../favicon.png" />
+<title>2020年度 コンピュータサイエンス第一 (5a)
+小課題 4. ユークリッドの互除法
+- 解答例
+</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>小課題 4. ユークリッドの互除法 - 解答例</h1>
+
+<div class=file>
+gcd.py
+<pre>
+a = int(input("a:"))
+b = int(input("b:"))
+c = a % b
+while c != 0:
+    a = b
+    b = c
+    c = a % b
+print(f"gcd = {b}")
+</pre>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

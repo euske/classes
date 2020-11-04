@@ -1,0 +1,2 @@
+{"version": 2, "width": 100, "height": 40, "timestamp": 1604102584, "env": {"SHELL": "/bin/bash", "TERM": "screen"}, "title": "out/entry_014"}
+[0.033867, "o", "  File \"out/entry_014.py\", line 79\r\n    if x % 2 == 0:　#偶数の時\r\n                  ^\r\nSyntaxError: invalid character in identifier\r\n"]

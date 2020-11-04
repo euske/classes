@@ -20,6 +20,12 @@
 
 <ol start="0">
 <li> <a href="#prev">前回の復習</a>
+<li> <a href="#datatype">データの「型」について (前回とばした部分)</a>
+<ul>
+  <li> <a href="#conv-toint">文字(列)型 → 整数型への変換</a>
+  <li> <a href="#conv-tostr">整数型 → 文字(列)型への変換</a>
+  <li> <a href="#formatting">print関数における <code>f"〜"</code> と <code>"〜"</code> の違い</a>
+</ul>
 <li> <a href="#function">Python における関数 (function) とは?</a>
   <ul>
     <li> <a href="#function-learned">これまでに習ったPython関数</a>
@@ -150,13 +156,160 @@ while <span class=qqq>???</span>:
 0番目のイスをはずして残りを詰めるにはどうすればよいか?
 </div>
 
+<div class=recovered>
+<h2 id="datatype">1. データの「型」について (前回とばした部分)</h2>
+<p>
+Python の変数に格納されるデータは、
+実はいくつかの「<u>型</u> (type)」に分類されている:
+<ul>
+<li> 数値型 (整数・実数) … <code>3</code>, <code>-15.7</code> など。
+<li> 文字列型 … <code>"abc"</code> など。
+<li> リスト型 (配列型) … <code>[4, 6, 4, 9]</code> など。<br>
+  リストの中にはさらに整数・文字列・リストを入れることができる。
+  <ul>
+    <li> <code>["月", "火", "水", "木", "金", "土", "日"]</code>
+    <li> <code>[ [9,6,3], [8,5,2], [7,4,1] ]</code>
+  </ul>
+<li> (真理値型 … 条件式で使われる値。<code>True</code>と
+  <code>False</code>の2種類の値しかない。)
+</ul>
+<p>
+<code>+</code> 演算子の意味は、計算対象のデータ型によって異なる。
+<blockquote><pre>
+print(123+456)      <span class=comment># 整数 + 整数: 579</span>
+print("123"+"456")  <span class=comment># 文字列 + 文字列: "123456"</span>
+print(123+"456")    <span class=comment># 整数 + 文字列: エラー!</span>
+</pre></blockquote>
+<p>
+型が異なるデータの計算は意味をなさないので、ふつうはエラーが発生する。
+<ul>
+<li> <code>"abc" - 5</code> … エラー!
+<li> <code>[3,1,4] + "moo"</code> … エラー!
+<li> 9.8m/s<sup>2</sup> + 1kg … エラー!
+</ul>
 
-<h2 id="function">1. Python における関数 (function) とは?</h2>
+<h3 id="conv-toint">1.1. 文字(列)型 → 整数型への変換</h3>
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>int(文字列)</code> … 文字列を整数として解釈する。
+    <li> <code>ord(文字列)</code> … 1文字の文字コード (Unicode) を整数として返す。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+a = 123         <span class=comment># a は整数の 123</span>
+b = int("123")  <span class=comment># b は整数の 123</span>
+print(a+b)      <span class=comment># 整数+整数: 246</span>
+</pre>
+<dt> 例2:
+<dd> <pre>
+print(ord("A"))   <span class=comment># "A"の文字コード: 65</span>
+print(ord("あ"))  <span class=comment># 「あ」の文字コード: 12354</span>
+</pre>
+<dt> 例3:
+<dd> <pre>
+s = input("string:")
+for i in range(len(s)):  <span class=comment># i は 0〜(文字数-1) まで変化する。</span>
+    print(ord(s[i]))     <span class=comment># i番目の文字コードを表示。</span>
+</pre>
+</dl>
+
+<h4>input関数の動き</h4>
+<p>
+本来、Pythonの<code>input</code>関数は入力された <u>文字列</u> (string) を返す。
+<blockquote><pre>
+s = input("string:")  <span class=comment># s は文字列型</span>
+print(s)
+</pre></blockquote>
+<p>
+ここに <code>int()</code> 関数を適用することで、
+文字列を整数型として利用できる。
+<blockquote><pre>
+s = input("number:")
+x = int(s)  <span class=comment># x は文字列型</span>
+print(x)
+</pre></blockquote>
+
+<h3 id="conv-tostr">1.2. 整数型 → 文字(列)型への変換</h3>
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>str(数値)</code> … 整数を文字列として表す。<code>int()</code> の逆。
+    <li> <code>chr(数値)</code> … 整数で表される文字コードの文字を返す。<code>ord()</code> の逆。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+a = 123        <span class=comment># a は整数の 123</span>
+b = str(a)     <span class=comment># b は文字列の "123"</span>
+print(b+"0")   <span class=comment># 文字列+文字列: 1230</span>
+</pre>
+<dt> 例2:
+<dd> <pre>
+a = 9829
+b = chr(a)         <span class=comment># b は Unicode 9829番 で表される文字</span>
+print("I"+b+"NY")  <span class=comment># I&hearts;NY</span>
+</pre>
+<p>
+<code>chr()</code>関数に与える文字コードは
+<a href="http://unicode.org/charts/">Unicode</a> で定義されている。
+<dt> 例3:
+<dd> <pre>
+for i in range(26):   <span class=comment># 26回繰り返す。</span>
+    print(chr(65+i))  <span class=comment># (65+i) で表されるUnicodeの文字を表示する。</span>
+</pre>
+<p>
+このプログラムを実行すると、A から Z までの文字が表示される。
+</dl>
+
+<p>
+まとめると、以下のような関係がなりたつ:
+<table border>
+<tr><th></th><th>文字 → 数値</th><th>数値 → 文字</th></tr>
+<tr><td>文字列</td><td><code>int(x)</code></td><td><code>str(x)</code></td></tr>
+<tr><td>文字</td><td><code>chr(x)</code></td><td><code>ord(x)</code></td></tr>
+</table>
+
+<h3 id="formatting">1.3. print関数における <code>f"〜"</code> と <code>"〜"</code> の違い</h3>
+<p>
+じつは、<code>print</code>関数の機能は
+<dl>
+  <dt> 構文:
+<dd> <pre>
+print(<em>文字列</em>)  <span class=comment># 文字列を表示する。</span>
+</pre>
+</dl>
+だけであった。
+<blockquote><pre>
+print("hello")
+print(f"x={x}")
+</pre></blockquote>
+
+などの書き方は、以下のようにもできる:
+<blockquote><pre>
+s = "hello"    <span class=comment># s は文字列型</span>
+print(s)       <span class=comment># s の内容を表示</span>
+t = f"x={x}"   <span class=comment># t は文字列型</span>
+print(t)       <span class=comment># t の内容を表示</span>
+</pre></blockquote>
+<p>
+さらに、
+<code>f"x={x}"</code> は、
+文字列の連結と <code>str(x)</code> 関数を
+組み合わせたものと同じである:
+<blockquote><pre>
+t = "x=" + str(x)
+</pre></blockquote>
+</div>
+
+
+<h2 id="function">2. Python における関数 (function) とは?</h2>
 
 <code>print(...)</code>、<code>input(...)</code> のような部分。
 <u>引数</u> (ひきすう, arguments) をとり、値を返す。
 
-<h3 id="function-learned">1.1. これまでに習ったPython関数</h3>
+<h3 id="function-learned">2.1. これまでに習ったPython関数</h3>
 <ul>
 <li> <code>print(...)</code> … 文字列を表示する。
 <li> <code>input(...)</code> … 文字列を入力する。
@@ -171,7 +324,7 @@ while <span class=qqq>???</span>:
 <code>if</code>文, <code>while</code>文, <code>for</code> 文などは
 「文」であって関数ではない。
 
-<h3 id="function-other">1.2. いろいろな関数</h3>
+<h3 id="function-other">2.2. いろいろな関数</h3>
 <dl>
 <dt> <code>abs</code>: 絶対値を求める。
 <dd> 簡単な処理だが、よく使われるので Python に組み込まれている。
@@ -246,7 +399,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 </pre></blockquote>
 
 
-<h2 id="userfunc">2. 自前の関数を定義する</h2>
+<h2 id="userfunc">3. 自前の関数を定義する</h2>
 <p>
 Python では、自前の関数を新しく定義することができる。
 新しく定義された関数は、従来からある関数とまったく同じように使える:
@@ -295,7 +448,7 @@ z = plus(x, y)  <span class=comment># zの値は 5。</span>
 </svg>
 </div>
 
-<h3 id="userfunc-def">2.1. 関数を定義するには</h3>
+<h3 id="userfunc-def">3.1. 関数を定義するには</h3>
 
 <blockquote><pre>
 def <em>関数名</em>(<em>変数名1</em>, <em>変数名2</em>, ...)
@@ -314,7 +467,7 @@ def <em>関数名</em>(<em>変数名1</em>, <em>変数名2</em>, ...)
 <li> 関数の定義は、かならずそれが<strong>使われるよりも前に</strong>書くこと。
 </ul>
 
-<h3 id="userfunc-call">2.2. 定義した関数を利用するには</h3>
+<h3 id="userfunc-call">3.2. 定義した関数を利用するには</h3>
 
 <blockquote><pre>
 <em>変数名</em> = <em>関数名</em>(<em>値1</em>, <em>値2</em>, ...)
@@ -396,7 +549,7 @@ z = plus(3, p)
 </ol>
 </div>
 
-<h3 id="userfunc-examples">2.3. いろいろな関数の例</h3>
+<h3 id="userfunc-examples">3.3. いろいろな関数の例</h3>
 
 <h4>2つの値の平均を求める関数</h4>
 <div class=file>
@@ -520,7 +673,7 @@ navi()  <span class=comment># "Hey!" のみが表示される。</span>
 関数の実行は、最初の <code>return</code>文を実行した時点で終了する。
 </div>
 
-<h3 id="userfunc-vars">2.4. 関数内における変数の扱い</h3>
+<h3 id="userfunc-vars">3.4. 関数内における変数の扱い</h3>
 <p>
 <strong>注意:</strong>
 関数の内と外で同じ名前の変数を使っている場合、
@@ -596,7 +749,7 @@ triangle(5)
 </ul>
 </div>
 
-<h2 id="anim-voting">3. アニメーション・コンテスト投票</h2>
+<h2 id="anim-voting">4. アニメーション・コンテスト投票</h2>
 <p>
 演習の合間に、10月29日に提出したアニメーション・コンテストの
 投票をおこなう。
@@ -622,7 +775,7 @@ triangle(5)
 </div>
 
 
-<h2 id="crypto-ceasar">4. シーザー暗号とは何か?</h2>
+<h2 id="crypto-ceasar">5. シーザー暗号とは何か?</h2>
 <p>
 「シーザー暗号」とは、ジュリアス・シーザー (Julius Caesar, ユリウス・カエサル) が
 使ったと言われる暗号で、アルファベットの順番をずらして文を作成する方法である。
@@ -681,7 +834,7 @@ A〜Z の範囲を超えてしまうことである。
 </ol>
 </div>
 
-<h3 id="crypto-analysis">4.1. 暗号解析とは?</h3>
+<h3 id="crypto-analysis">5.1. 暗号解析とは?</h3>
 <p>
 上のような簡単な英文のシーザー暗号は、すぐに解読することができる。
 エドガー・アラン・ポーが 19世紀に発表した推理小説
@@ -730,7 +883,7 @@ def analyze(text):
 </div>
 
 
-<h2 id="assignment">5. 本日の課題</h2>
+<h2 id="assignment">6. 本日の課題</h2>
 <p>
 本日の課題は 2つある。
 小課題 7. のほうは難しいので、余力のある人のみ提出すればよい。

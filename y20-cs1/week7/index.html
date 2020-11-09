@@ -26,6 +26,7 @@ img { max-width: 80vw; height: auto; }
 <ol start="0">
 <li> <a href="#prev">前回の復習</a>
 <ul>
+  <li> <a href="#prev-assignment">『中課題 2. 循環小数の「循環」を検出する』 講評</a>
   <li> <a href="#prev-summary">前回までのあらすじ</a>
   <li> <a href="#prev-computer">コンピュータの4大要素</a>
 </ul>
@@ -81,7 +82,93 @@ img { max-width: 80vw; height: auto; }
 
 <h2 id="prev">0. 前回の復習</h2>
 
-<h3 id="prev-summary">0.1. 前回までのあらすじ</h3>
+<h3 id="prev-assignment">0.1. 『中課題 2. 循環小数の「循環」を検出する』 講評</h3>
+<p>
+この課題を実現するには、おもに2つの方法がある:
+<ul>
+<li> <strong>方法A.</strong>
+  リスト <code>r</code> を「集合」とみなし、余りをひとつずつ入れていく。
+  この場合、必ず 2重の whileループ (または while + forループ) が必要になる。
+<li> <strong>方法B.</strong>
+  余りがつねに20未満であることを利用して、
+  リスト <code>r</code> を「頻度表」とみなし、「余りが出た番目」の要素に 1 を足す。
+  この場合、whileループは 1つでよい。
+</ul>
+
+<h4>方法A を使った秀逸な回答例:</h4>
+<blockquote><pre>
+a = 1
+x = int(input("x?"))
+a = a % x
+check = False  <span class=comment># 循環の有無を表すためのブール変数。初めはFalseと定義する。</span>
+count = 0      <span class=comment># whileループが何回目のループかをカウントするための変数。</span>
+<span class=comment># 20個分の余りを記録できるようにする。</span>
+r = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+<span class=comment># 余りがゼロになるまで続ける。循環になれば、breakする。</span>
+while a != 0:
+    a = a * 10
+    d = a // x  <span class=comment># 商を求める。</span>
+    a = a % x   <span class=comment># 余りを求める。</span>
+    print(f"digit={d}, remainder={a}")
+    r[count] = a   <span class=comment># 余りをリストに格納する。</span>
+    count += 1     <span class=comment># カウントを1増やす</span>
+    <span class=comment># リストの0番目から現在のあまりの一つ前の番目（count-1番目）の余りまでを、</span>
+    <span class=comment># 現在の余りと等しいかチェックする。</span>
+    for i in range (count - 1):  <span class=comment># count-1以降は初期値の0であり、調べるのは余分なので除いた。計算量を少し減らせた。</span>
+        if a == r[i]:            <span class=comment># 等しければ、checkをTrueにする。（循環）</span>
+            check = True
+    if check:                    <span class=comment># forループで探索後、checkがTrue（循環）ならば、whileループを終了する。</span>
+        break
+if check:                   <span class=comment># whileループが終了後、checkがTrueならば、「junkan」と表示する。</span>
+    print("junkan")
+</pre></blockquote>
+
+<h4>方法B を使った秀逸な回答例:</h4>
+<blockquote><pre>
+<span class=comment># 割られる数 a の初期値は 1</span>
+a = 1
+
+<span class=comment># x を入力から受け取る</span>
+x = int(input("x?"))
+
+<span class=comment># 小数部分を表示するので a % x で余りをとり a &lt; x とする</span>
+<span class=comment># このプログラムでは 2 &lt;= x &lt;= 20, a = 1 が保証されていて a &lt; x を常に満たすので必要ない</span>
+a %= x
+
+<span class=comment># 20個分の余りを記録できるようにする</span>
+<span class=comment># 余りは必ず 0 以上 x 以下になるので listの大きさは x で十分</span>
+<span class=comment># 今回は x の最大値が 20 であるため 20 とする</span>
+<span class=comment>r = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</span>
+
+<span class=comment># 余りが 0 になるか、循環するまで続ける</span>
+while a != 0:
+    <span class=comment># a を10倍する</span>
+    <span class=comment># これは筆算でどんどん右にずれていくのと同じ行為</span>
+    a *= 10
+
+    <span class=comment># 商をを求める</span>
+    <span class=comment># 筆算の上に書かれる数字と対応している</span>
+    d = a // x
+
+    <span class=comment># 余りを求める</span>
+    <span class=comment># 筆算の下に書かれる数字と対応している</span>
+    a %= x
+
+    <span class=comment># 商と余りを表示する</span>
+    print(f"digit={d}, remainder={a}")
+
+    <span class=comment># 余りを記録する</span>
+    r[a] += 1
+
+    <span class=comment># 2回以上同じ余りが出た場合、循環している</span>
+    if r[a] &gt; 1:
+        <span class=comment># 循環していることを出力する</span>
+        print("junkan")
+        <span class=comment># while文を終わらせるbreak処理</span>
+        break
+</pre></blockquote>
+
+<h3 id="prev-summary">0.2. 前回までのあらすじ</h3>
 <ul>
 <li> Pythonで自前の関数を定義する方法を学習した。
 <li> シーザー暗号と暗号解析について学習した。
@@ -91,7 +178,7 @@ img { max-width: 80vw; height: auto; }
 これまで Python を使ったプログラミングの練習をしてきたが、
 本日はもっと初歩的なコンピュータの原理を説明する。
 
-<h3 id="prev-computer">0.2. コンピュータの4大要素</h3>
+<h3 id="prev-computer">0.3. コンピュータの4大要素</h3>
 <div class=figure>
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="130">
     <g stroke="black" stroke-width="2" fill="none">

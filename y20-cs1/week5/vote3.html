@@ -22,15 +22,30 @@
 <div class=file>
 vote3.py
 <pre>
+<span class=comment># 候補者リスト。</span>
 cands = ["abe", "trump", "kim"]
+<span class=comment># 投票数リスト。</span>
 votes = [0, 0, 0]
+
 while True:
-    <span class=comment># 候補者の名前を入力する。</span>
+    <span class=comment># 候補者の名前を入力する。空ならばループを抜ける。</span>
     name = input("name:")
-    <span class=comment># name を候補者の名前と比較し、一致した候補者の票を増やす。</span>
-<div class=qqq>    ???
-    ...
-</div><span class=comment># 3人の得票数を表示する。</span>
+    if name == "":
+        break
+    <span class=comment># name を各候補者の名前と比較し、見つかった番号を found に入れる。</span>
+    found = -1
+    for i in range(len(cands)):
+        if name == cands[i]:
+            found = i
+            break
+    if 0 <= found:
+        <span class=comment># その候補者の票を 1だけ増やす。</span>
+        votes[found] = votes[found] + 1
+    else:
+        <span class=comment># 見つからない場合、found は -1 のままなので、エラーを表示。</span>
+        print("invalid name")
+
+<span class=comment># 3人の得票数を表示する。</span>
 for i in range(3):
     print(f"{cands[i]}: {votes[i]}")
 </pre>

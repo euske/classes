@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<link rel="icon" href="../favicon.png" />
+<title>2020年度 コンピュータサイエンス第一 (5a)
+小課題 8. 直線描画プログラム drawline.py
+- 解答例
+</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>小課題 8. 直線描画プログラム drawline.py - 解答例</h1>
+
+<div class=file>
+drawline.py
+<pre>
+<span class=comment># 画面の大きさ (w列 × h行)</span>
+w = 10
+h = 10
+
+<span class=comment># 画面のピクセル (screen) を 0 で埋める。</span>
+screen = []
+for i in range(h):
+    row = []
+    for j in range(w):
+        row = row + [0]
+    screen = screen + [row]
+
+<span class=comment># drawline: (x0,y0)-(x1,y1) に線分を描く関数。</span>
+<span class=comment>#   画面上の該当部分に 1 で埋める。</span>
+<span class=comment>#   注意: この関数は不完全である。</span>
+def drawline(x0, y0, x1, y1):
+    <span class=comment>#print(f"drawline({x0}, {y0}, {x1}, {y1})")</span>
+    if abs(y1-y0) &lt; abs(x1-x0):
+        <span class=comment># 横長の場合。</span>
+        x = x0
+        while x != x1:
+            <span class=comment># 現在の x 座標に対応する y を計算する。</span>
+            y = y0 + (x-x0)*(y1-y0)//(x1-x0)
+            <span class=comment># y行 x列目を 1 にする。</span>
+            screen[y][x] = 1
+            if x0 &lt; x1:
+                x = x + 1  <span class=comment># 左→右に動く。</span>
+            else:
+                x = x - 1  <span class=comment># 右→左に動く。</span>
+    else:
+        <span class=comment># 縦長の場合。</span>
+        y = y0
+        while y != y1:
+            <span class=comment># 現在の y 座標に対応する x を計算する。</span>
+            x = x0 + (y-y0)*(x1-x0)//(y1-y0)
+            <span class=comment># y行 x列目を 1 にする。</span>
+            screen[y][x] = 1
+            if y0 &lt; y1:
+                y = y + 1  <span class=comment># 上→下に動く。</span>
+            else:
+                y = y - 1  <span class=comment># 下→上に動く。</span>
+    return
+
+<span class=comment># 画面上に三角形を描く。</span>
+drawline(2,8, 5,1)
+drawline(5,1, 7,8)
+drawline(2,8, 7,8)
+
+<span class=comment># 画面の内容を表示する。</span>
+for i in range(h):
+    print(screen[i])
+</pre>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

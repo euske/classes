@@ -30,12 +30,28 @@ function toggle(e) {
 <div class=nav>2020年12月17日</div>
 
 <ol start="0">
-<li> <a href="#scores">コンピュータサイエンス第一の成績について</a>
+<li> <a href="#hints">オプション課題 A. のヒント</a>
 <li> <a href="#orders">関数の序列</a>
+<ul>
+  <li> <a href="#orders-program">プログラムの計算量</a>
+</ul>
 <li> <a href="#bsearch">二分探索の計算量</a>
+<ul>
+  <li> <a href="#orders-bsearch">関数 <code>bsearch()</code> の計算量</a>
+  <li> <a href="#bsearch-faster">さらに高速化する</a>
+  <li> <a href="#bsearch-notfound">要素が存在しない場合</a>
+</ul>
 <li> <a href="#arrayslice">リストのスライスについて</a>
 <li> <a href="#sorting">ソート (並べ替え) アルゴリズムとは</a>
+<ul>
+  <li> <a href="#sorting-insertion">挿入法 (insertion sort)</a>
+  <li> <a href="#sorting-mergesort">マージソート (merge sort)</a>
+</ul>
 <li> <a href="#assignments">本日の課題</a>
+<ul>
+  <li> <a href="#ex3">小課題 3. 挿入法の改良 (12月24日締切)</a>
+  <li> <a href="#m1">中課題 1. マージソートの実装 (12月31日締切)</a>
+</ul>
 </ol>
 
 
@@ -203,7 +219,7 @@ lim <sub>[x &rarr; &infin;]</sub> f(x) / g(x) &leq; C ならば、f(x) は <i>O<
 </ol>
 </div>
 
-<h3>1.1. プログラムの計算量</h3>
+<h3 id="orders-program">1.1. プログラムの計算量</h3>
 <p>
 Big O 記法は、あるアルゴリズム (プログラム) の計算量や
 メモリ使用量を表すのによく使われる。
@@ -232,6 +248,7 @@ def fill(n):
 
 <div class=exercise>
 <div class=header>練習問題.</div>
+<p>
 上の関数 <code>sum(n)</code> には実は<strong>隠れた</strong>計算量
 (= 一定時間だと思われているがそうではないもの) がある。
 それはどこか。
@@ -512,7 +529,7 @@ def bsearch(a, x, i0, i1):
 そのどちらかの半分に対して再帰的に <code>bsearch()</code> を呼び出す。
 以後、これは範囲がただ 1つの要素に絞られるまで続く。
 
-<h3>2.1. 関数 <code>bsearch()</code> の計算量</h3>
+<h3 id="orders-bsearch">2.1. 関数 <code>bsearch()</code> の計算量</h3>
 <p>
 この関数 <code>bsearch()</code> の計算量を考える。
 実際には、プログラムの動き方は入力によって変わるため、
@@ -543,7 +560,7 @@ f(p) = p であり、B<sub>n</sub> は事実上 2<sup>n</sup> の
 定数を無視するとやはり O(log(n)) である。
 </ul>
 
-<h3>2.2. さらに高速化する</h3>
+<h3 id="bsearch-faster">2.2. さらに高速化する</h3>
 <p>
 実は <code>a[i] &lt; x</code> のとき、<code>a[i]</code> はすでに <code>x</code> と
 等しくないので、<code>a[i]</code> をふたたび探索する必要はない。
@@ -610,7 +627,7 @@ def bsearch(a, x, i0, i1):
     return
 </pre></blockquote>
 
-<h3>2.3. 要素が存在しない場合</h3>
+<h3 id="bsearch-notfound">2.3. 要素が存在しない場合</h3>
 <p>
 さて、これまではリスト <code>a</code> の中に <code>x</code> が存在しない
 場合を考えてこなかった。実は関数 <code>bsearch()</code> (改良版) では
@@ -826,6 +843,7 @@ a = [5,9,4,0,7,3,1,8]
 
 <div class=exercise>
 <div class=header>練習問題.</div>
+<p>
 以下のリストがあるとする:
 <pre>
 <span class=comment>#   0    1    2    3    4    5    6    7    8</span>
@@ -861,7 +879,7 @@ s = ["H", "E", "A", "D", "A", "C", "H", "E"]
 これまでいくつもの方式が提案されてきており、それぞれに一長一短がある。
 本授業では中でもわかりやすい 2つの方法 (挿入法とマージソート) を紹介する。
 
-<h3>4.1. 挿入法 (insertion sort)</h3>
+<h3 id="sorting-insertion">4.1. 挿入法 (insertion sort)</h3>
 <p>
 挿入法のアイデアは単純で、これは人間が数字を並べ替えるときの方法に近い。
 まずリストの最初から、隣り合った要素が昇順に並んでいるかどうかをチェックしていく。
@@ -1092,7 +1110,7 @@ print(a)
 </pre>
 </div>
 
-<h3>4.2. マージソート (merge sort)</h3>
+<h3 id="sorting-mergesort">4.2. マージソート (merge sort)</h3>
 <p>
 一方、マージソートはまったく異なる方法で並べ替えをおこなう。
 まず、すでにソートされている (昇順に並んでいる) 2つのリスト
@@ -1459,9 +1477,9 @@ def mergesort(a):
 </ul>
 
 
-<h2 id="assignments">本日の課題</h2>
+<h2 id="assignments">5. 本日の課題</h2>
 
-<div class=exercise>
+<div class=exercise id="ex3">
 <div class=header>小課題 3. 挿入法の改良 (12月24日締切)</div>
 <ul>
   <li> 提出期限: 12月24日 (1週間後)
@@ -1513,7 +1531,7 @@ print(a)
 ソートする数をコマンド引数から指定できるようにすること。
 </div>
 
-<div class=exercise>
+<div class=exercise id="m1">
 <div class=header>中課題 1. マージソートの実装 (12月31日締切)</div>
 <ul>
   <li> 提出期限: 12月31日 (2週間後)

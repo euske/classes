@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2020年度 コンピュータサイエンス第二 (5a)
+第4回 - CSV形式の読み込み、ハッシュテーブルと辞書
+/ 新山 祐介</title>
+<style><!--
+dd { margin-bottom: 1em; }
+.yellow { background: #ffff88; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第4回 - CSV形式の読み込み、ハッシュテーブルと辞書</h1>
+<div class=nav>2020年12月24日</div>
+
+<ol start="0">
+<li> <a href="#sorting">ソーティングについて・補足</a>
+<ul>
+  <li> <a href="#sort-silly">アホなソート法</a>
+</ul>
+<li> <a href="#lists">リストについて・つづき</a>
+<li> <a href="#readcsv">PythonでCSV形式を読み込む</a>
+<ul>
+  <li> <a href="#for-alt">for文のもうひとつの使い方</a>
+</ul>
+<li> <a href="#hashtable">ハッシュテーブルとは</a>
+<ul>
+  <li> <a href="#hash-seq">逐次探索</a>
+  <li> <a href="#hash-seq2">逐次探索・改</a>
+  <li> <a href="#hash-hash">ハッシュテーブル</a>
+</ul>
+<li> <a href="#dictionary">Python のハッシュテーブル (辞書)</a>
+<li> <a href="#assignments">本日の課題</a>
+<ul>
+  <li> <a href="#ex4">小課題 4. ハッシュ関数の実装 (2021年1月7日締切)</a>
+  <li> <a href="#exb">オプション課題 B. 同一の町名を発見する (2021年1月14日締切)</a>
+</ul>
+</ol>
+
+
+<h2>雑談</h2>
+
+<h4>アルゴリズムを舞踊で表現する</h4>
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=ROalU379l3U">ルーマニアの民族舞踊で挿入法</a>
+<li> <a href="https://www.youtube.com/watch?v=XaqR3G_NVoo">トランシルヴァニア・ザクソンの民族舞踊でマージソート</a>
+<li> <a href="https://www.youtube.com/watch?v=iP897Z5Nerk">フラメンコによる二分探索</a>
+<li> <a href="https://www.youtube.com/watch?v=o2Yim7vTsWw">おまけ・ソートする女の子</a>
+</ul>
+
+
+<h2 id="sorting">0. ソーティングについて・補足</h2>
+
+<h3 id="sort-silly">0.1. アホなソート法</h3>
+<blockquote><pre>
+a = [5,9,4,0,7,3,1,8,6,2]
+while aのすべての順列を試す:
+    if aがソートされていたら:
+        print(a)
+        break
+</pre></blockquote>
+
+当然、 <i>O</i>(2<sup>n</sup>) &lt; <i>O</i>(n!) であるので、
+これは非常に効率が悪い。
+
+<ul>
+<li> <a href="http://www.e.gsic.titech.ac.jp/~kashima/SortGame/cs.html">ソーティング・ゲーム</a>
+</ul>
+
+
+<h2 id="lists">1. リストについて・つづき</h2>
+<p>
+Python では、<code>print()</code> や <code>str()</code> などの関数は
+自分で定義しなくても最初から使える。このような関数を<u>組み込み関数</u>という。
+いっぽう、リスト <code>a</code> をコピーする場合、
+<code>copy(a)</code> ではなく <code>a<mark>.copy()</mark></code> のようにする。
+この <code>.copy()</code> の部分は <u>メソッド</u> と呼ばれる。
+本当は <code>copy()</code> のような組み込み関数にしてもよかったはずだが、
+おそらく組み込み関数の数を増やしすぎると名前がカブってしまう
+(誰か他の人が <code>copy()</code> という関数を作りたくても作れない)
+ためであると思われる。
+<p>
+以下では、リストの操作をするためのいくつかのメソッドを紹介する。
+
+<dl>
+  <dt> リストをコピーして新しいものを作成する:
+  <dd> <pre>
+b = a.copy()
+</pre>
+  n要素のリストをコピーするのにかかる計算量は <i>O</i>(n) である。
+
+  <dt> リストの末尾に要素を追加する (<u>破壊的</u>):
+  <dd> <pre>
+a.append(<em>値</em>)
+</pre>
+   例:
+<pre>
+x = ["dog", "cat"]
+x.append("cow")
+print(x)   <span class=comment># ["dog", "cat", "cow"]</span>
+</pre>
+  ひとつの要素を追加するのにかかる計算量は <i>O</i>(1) である。
+  ちなみに、同じ処理は <code>+</code> 記号を使ってもできる:
+<pre>
+x = x + [ "cow" ]
+</pre>
+
+  <dt> リストの途中に要素を挿入する (<u>破壊的</u>):
+  <dd> <pre>
+a.insert(<em>位置</em>, <em>値</em>)
+</pre>
+  例:
+<pre>
+x = ["dog", "cat", "cow"]
+<span class=comment>#   0      1      2</span>
+x.insert(1, "penguin")
+print(x)   <span class=comment># ["dog", "penguin", "cat", "cow"]</span>
+</pre>
+  n要素のリストに新たに要素を挿入する場合、後続の要素をずらす必要があるため
+  最悪で <i>O</i>(n) の計算量がかかる。
+
+  <dt> リストの要素を削除する (破壊的):
+  <dd> <pre>
+del a[<em>位置</em>]
+</pre>
+  例:
+<pre>
+x = ["dog", "penguin", "cat", "cow"]
+del x[2]
+print(x)   <span class=comment># ["dog", "penguin", "cow"]</span>
+</pre>
+</dl>
+
+<div class=exercise>
+<div class=header>練習問題.</div>
+<p>
+n要素のリストから要素を削除する場合にかかる最悪計算量はいくらか?
+またそれはどのような場合か?
+</div>
+
+
+<h2 id="readcsv">2. PythonでCSV形式を読み込む</h2>
+<p>
+CSV (<strong>C</strong>omma <strong>S</strong>eparated <strong>V</strong>alues、カンマ区切り値)
+形式とは、テキスト形式の一種で、
+カンマによって区切られた値を並べたものである。
+まず、テキストファイルの各行は表の一<u>行</u> (row) に相当する。
+さらに各行のなかのカンマで囲まれた部分を
+<u>カラム</u> (column、列または欄) または <u>フィールド</u> (field) という。
+空白や特殊な文字が入ったフィールドはさらに <code>"〜"</code> で囲まれる。
+また CSVファイルは、Microsoft Excel で開くことができる:
+<div class=file>
+test.csv
+<pre>
+Alice,USA,22
+Bob,UK,25
+"Yusuke Shinyama",Japan,13
+</pre></div>
+<p>
+エクセルで上の CSVファイルを開くと、以下のような表が表示される:
+<div class=figure>
+<table align=center border>
+<tr><td>Alice</td><td>USA</td><td>22</td></tr>
+<tr><td>Bob</td><td>UK</td><td>25</td></tr>
+<tr><td>Yusuke Shinyama</td><td>Japan</td><td>13</td></tr>
+</table>
+</div>
+<p>
+日本語のCSVをPythonでリスト(のリスト)として読み込むには、
+以下のようにする:
+<blockquote><pre>
+import csv
+with open("<mark>ファイル名</mark>", encoding="utf-8") as fp:
+    <mark>変数名</mark> = list(csv.reader(fp))
+</pre></blockquote>
+
+<div class=notice>
+<strong>注意:</strong>
+プログラムのファイル名を <code>csv.py</code> にすると、
+<u>正しく動かない</u>ので注意。
+</div>
+
+<div class=exercise>
+<div class=header>演習 5-1. CSVファイルの読み込み</div>
+<ol type=i>
+<li> 上のテキストファイル <code>test.csv</code> を作成し、
+Excel で実際に開けることを確認せよ。
+<li> Python を使ってこの CSV ファイルを読み込み、
+リストのリストを表示せよ。
+</ol>
+</div>
+<p>
+Python で上の CSV ファイルを読み込むと、
+以下のような「リストのリスト」になっている:
+<blockquote><pre>
+[['Alice', 'USA', '22'], ['Bob', 'UK', '25'], ['Yusuke Shinyama', 'Japan', '13']]
+</pre></blockquote>
+(外側にある) リストの要素は、CSV (表) の各行に相当する。
+各要素はさらにリストになっており (リストのリスト)、
+その各要素は1行のカラム (列) に相当する。
+なお、すべての内容は (<code>22</code> のような数字でも)
+文字列型になっていることに注意。これを数値として正しく処理するためには、
+<code>int()</code> 関数などを使う必要がある。
+
+<h3 id="for-alt">2.1. for文のもうひとつの使い方</h3>
+<p>
+これまではリストの要素をひとつずつ表示するのに、
+以下のようにしていた:
+<blockquote><pre>
+a = [5,9,4,0]
+for i in range(len(a)):
+    x = a[i]
+    print(x)
+</pre></blockquote>
+実は <code>for</code>文ではこうも書ける:
+<blockquote><pre>
+a = [5,9,4,0]
+for x in a:
+    print(x)
+</pre></blockquote>
+<p>
+これらは同じ原理にもとづいている。
+<code>range(<em>n</em>)</code> 関数は、
+<code>[0, 1, 2, ..., <em>n-1</em>]</code> というリスト
+(のようなもの) を返す。
+したがって、
+<blockquote><pre>
+for i in range(n):
+    ....
+</pre></blockquote>
+という文は、この中の要素ひとつひとつを変数 <code>i</code> に代入し、
+「結果として <code>i</code> が 0 から <em>n-1</em> まで
+変化しているように見えた」のである。
+
+<div class=exercise>
+<div class=header>演習 5-2. 郵便番号データベースを読み込む</div>
+以下の zip ファイルをダウンロードし、
+その中に含まれる全国の郵便番号一覧を記した <code>.csv</code> ファイルを
+Python で読み込むと、以下のようなリストのリストができる:
+<ul>
+<li> <a href="../../data/ken_all_rome.zip">全国の郵便番号リスト (ローマ字読みつき)</a>
+</ul>
+<blockquote><pre class=small>
+['0600000', '北海道', '札幌市\u3000中央区', '以下に掲載がない場合', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'IKANIKEISAIGANAIBAAI']
+['0640941', '北海道', '札幌市\u3000中央区', '旭ケ丘', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ASAHIGAOKA']
+['0600041', '北海道', '札幌市\u3000中央区', '大通東', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ODORIHIGASHI']
+...
+</pre></blockquote>
+<p>
+この一覧の中から、<mark>東京都の郵便番号だけ</mark>を
+表示するプログラムを書くと、こうなる。
+<div class=file>
+postcode.py
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 表を1行(row)ずつ処理する。</span>
+for row in table:
+    <span class=comment># 各行の0番目の要素 (郵便番号) をとりだす。</span>
+    p = row[0]
+    if p[0] == "1":
+        <span class=comment># 東京都の番号は 1 から始まるので、それを表示。</span>
+        print(p)
+</pre>
+</div>
+
+<p>
+(ちなみに、このデータは郵便局の
+<a href="https://www.post.japanpost.jp/zipcode/download.html">郵便番号データダウンロード</a>ページから取得したものである。)
+
+<ol type=i>
+<li> 上のプログラムを変更し、コマンド引数から入力された
+  郵便番号から住所を検索できるようにせよ:
+<pre>
+$ <strong>python postcode.py 1520001</strong>
+東京都目黒区中央町
+</pre>
+<li> 演習 5-1. で作成した関数 <code>find</code> を使って
+  「東京都にあって、住所に『<code>が丘</code>』が含まれる郵便番号」を
+  すべて表示させよ。
+</ol>
+</div>
+
+<h2 id="hashtable">3. ハッシュテーブルとは</h2>
+<p>
+第5回の授業でやった以下の問題を考える:
+郵便番号を入力すると、その住所を表示するプログラムを作りたい。
+<blockquote><pre>
+$ <strong>python postcode.py 1520001</strong>
+東京都目黒区中央町
+</pre></blockquote>
+<p>
+このように、ある情報 (e.g. 郵便番号) を別の情報 (e.g. 住所) に関連づける処理は、
+業務用コンピュータの代表的な利用例である。数学的には、
+これは2つの集合 <span class=key>K</span> から
+<span class=value>V</span> への写像 <span class=key>K</span> →
+<span class=value>V</span> として定義される。
+このとき、集合 <span class=key>K</span> の要素を
+「<u>キー</u> (key)」、集合 <span class=value>V</span> の要素を
+「<u>バリュー</u> (value)」と呼ぶ。
+<ul>
+<li> <strong>成績管理システム:</strong>
+  <span class=key>学籍番号</span> → <span class=value>氏名、履修科目、点数</span>
+<li> <strong>商品管理システム:</strong>
+  <span class=key>商品名</span> → <span class=value>メーカー、価格、在庫数</span>
+<li> <strong>チケット予約システム:</strong>
+  <span class=key>予約番号</span> → <span class=value>氏名、場所、日時、人数</span>
+<li> ...
+</ul>
+
+<h3 id="hash-seq">3.1. 逐次探索</h3>
+<p>
+今回の例では<span class=key>郵便番号</span> (<code>row[0]</code>) がキー、
+<span class=value>住所</span> (<code>row[1]+row[2]+row[3]</code>)
+がバリューということになる。
+<blockquote><pre>
+import sys
+key = sys.argv[1]
+...
+for row in table:
+    if row[0] == key:
+        <span class=comment># キーに対応するバリューを表示する。</span>
+        value = row[1]+row[2]+row[3]
+        print(value)
+</pre></blockquote>
+<p>
+郵便番号データ (<code>KEN_ALL_ROME.CSV</code>) は 12万行以上あるので、
+逐次探索をすると毎回 (最悪) 12万回のループを実行することになり、
+効率が悪い。<em>n</em>件のデータに対して、<em>O</em>(<em>n</em>) の計算量が必要である。
+<p>
+二分探索を使えば、最悪 <em>O</em>(log <em>n</em>) の計算量ですむが、
+データをあらかじめキーが昇順になるようにソートしておく必要がある。
+またキーを新しく追加・更新するたびに正しく並べ直さなければならない。
+
+<h3 id="hash-seq2">3.2. 逐次探索・改</h3>
+<p>
+郵便番号は <code>0</code>〜<code>9</code> の数字から始まるので、
+まずキーを「最初の1文字」で分類し、10個のリストに分割するという手がある。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="350" height="320">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g transform="translate(25,10)">
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="0" y="0" width="50" height="30" />
+    <rect x="0" y="30" width="50" height="30" />
+    <rect x="0" y="60" width="50" height="30" />
+    <rect x="0" y="90" width="50" height="30" />
+    <rect x="0" y="120" width="50" height="30" />
+    <rect x="0" y="150" width="50" height="30" />
+    <rect x="0" y="180" width="50" height="30" />
+    <rect x="0" y="210" width="50" height="30" />
+    <rect x="0" y="240" width="50" height="30" />
+    <rect x="0" y="270" width="50" height="30" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrow)"
+       transform="translate(0,15)">
+      <path d="M25,0 l50,0" />
+      <path d="M25,30 l50,0" />
+      <path d="M25,60 l50,0" />
+      <path d="M25,90 l50,0" />
+      <path d="M25,120 l50,0" />
+      <path d="M25,150 l50,0" />
+      <path d="M25,180 l50,0" />
+      <path d="M25,210 l50,0" />
+      <path d="M25,240 l50,0" />
+      <path d="M25,270 l50,0" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="80" y="5" width="60" height="20" />
+    <rect x="140" y="5" width="60" height="20" />
+    <rect x="80" y="35" width="60" height="20" />
+    <rect x="140" y="35" width="60" height="20" />
+    <rect x="200" y="35" width="60" height="20" />
+    <rect x="260" y="35" width="60" height="20" />
+    <rect x="80" y="65" width="60" height="20" />
+    <rect x="140" y="65" width="60" height="20" />
+    <rect x="80" y="95" width="60" height="20" />
+    <rect x="140" y="95" width="60" height="20" />
+    <rect x="200" y="95" width="60" height="20" />
+    <rect x="80" y="125" width="60" height="20" />
+    <rect x="140" y="125" width="60" height="20" />
+    <rect x="80" y="155" width="60" height="20" />
+    <rect x="140" y="155" width="60" height="20" />
+    <rect x="80" y="185" width="60" height="20" />
+    <rect x="140" y="185" width="60" height="20" />
+    <rect x="200" y="185" width="60" height="20" />
+    <rect x="80" y="215" width="60" height="20" />
+    <rect x="140" y="215" width="60" height="20" />
+    <rect x="80" y="245" width="60" height="20" />
+    <rect x="140" y="245" width="60" height="20" />
+    <rect x="80" y="275" width="60" height="20" />
+    </g>
+    <g text-anchor="middle" transform="translate(-15,20)"
+       style="font-family: monospace;">
+    <text x="0" y="0">"0"</text>
+    <text x="0" y="30">"1"</text>
+    <text x="0" y="60">"2"</text>
+    <text x="0" y="90">"3"</text>
+    <text x="0" y="120">"4"</text>
+    <text x="0" y="150">"5"</text>
+    <text x="0" y="180">"6"</text>
+    <text x="0" y="210">"7"</text>
+    <text x="0" y="240">"8"</text>
+    <text x="0" y="270">"9"</text>
+    </g>
+    <g transform="translate(85,20)" style="font-size: 75%;">
+    <text x="0" y="0">0010201</text>
+    <text x="60" y="0">0020853</text>
+    <text x="120" y="0">...</text>
+    <text x="0" y="30">1006001</text>
+    <text x="60" y="30">1057044</text>
+    <text x="120" y="30">1310045</text>
+    <text x="180" y="30">1630207</text>
+    <text x="240" y="30">...</text>
+    <text x="0" y="60">2010016</text>
+    <text x="60" y="60">2260027</text>
+    <text x="120" y="60">...</text>
+    <text x="0" y="90">3002638</text>
+    <text x="60" y="90">3114206</text>
+    <text x="120" y="90">3390082</text>
+    <text x="180" y="90">...</text>
+    <text x="0" y="120">4093423</text>
+    <text x="60" y="120">4420029</text>
+    <text x="120" y="120">...</text>
+    <text x="0" y="150">5012561</text>
+    <text x="60" y="150">5180464</text>
+    <text x="120" y="150">...</text>
+    <text x="0" y="180">6028151</text>
+    <text x="60" y="180">6308343</text>
+    <text x="120" y="180">6570032</text>
+    <text x="180" y="180">...</text>
+    <text x="0" y="210">7038258</text>
+    <text x="60" y="210">7320001</text>
+    <text x="120" y="210">...</text>
+    <text x="0" y="240">8030815</text>
+    <text x="60" y="240">"8120892</text>
+    <text x="120" y="240">...</text>
+    <text x="0" y="270">9000006</text>
+    <text x="60" y="270">...</text>
+    </g>
+  </g>
+</svg>
+</div>
+これは人間が紙の辞書をひくとき、実際にやっている方法でもある。
+Python のプログラムでこれを実現するには、まず以下のようにする。
+<blockquote><pre>
+<span class=comment># まず 10個の (空のリストからなる) リストを作成。</span>
+index = [[], [], [], [], [], [], [], [], [], []]
+for row in table:
+    key = row[0]
+    value = row[1]+row[2]+row[3]
+    <span class=comment># キーの0文字目を数値に直す。</span>
+    i = int(key[0])
+    <span class=comment># i番目のリストにキーとバリューの組を追加する。</span>
+    a = index[i]
+    a.append([key, value])
+</pre></blockquote>
+<p>
+ここで作られたリストのリストを「索引」あるいは
+「<u>インデックス</u> (index)」とよぶ。
+インデックスを使って検索をする処理 <code>lookup()</code> は以下のようになる:
+<blockquote><pre>
+def lookup(index, key):
+    <span class=comment># キーの0文字目を数値に直す。</span>
+    i = int(key[0])
+    <span class=comment># i番目のリストをとりだす。</span>
+    a = index[i]
+    <span class=comment># そのリストに対して逐次探索をおこなう。</span>
+    for pair in a:
+        <span class=comment># 一致するキーとバリューの組をとりだす。</span>
+        k = pair[0]
+        v = pair[1]
+        if k == key:
+            return v
+    <span class=comment># 見つからなかったら、空の文字列を返す。</span>
+    return ""
+</pre></blockquote>
+<p>
+最後に、この関数を呼び出す:
+<blockquote><pre>
+import sys
+key = sys.argv[1]
+value = lookup(index, key)
+print(value)
+</pre></blockquote>
+<p>
+この例では、最初のインデックスを作成するのに
+ある程度の時間がかかるので、全体の実行時間はそれほど速くならないが、
+検索時間だけをみると、このようにリストを10個に分割すれば
+時間は約 1/10 に短縮されると思われる、が…
+
+<div class=exercise>
+<div class=header>演習 5-3. 逐次検索・改を実行する</div>
+<ol type=i>
+  <li> この方法の計算量を Big-O 記法で答えよ。
+  <li> 実際には、ここでの検索時間は厳密に 1/10 にはならない。その理由を説明せよ。
+  <li> 上の方法で実際に郵便番号をキーとしたインデックスを作成し、
+    各リストにいくつの要素が追加されるかを表示せよ。
+</ol>
+</div>
+
+<h3 id="hash-hash">3.3. ハッシュテーブル</h3>
+<p>
+上の方法のインデックスをより一般化したものが
+<u>ハッシュテーブル</u> (hash table) である。
+これはインデックス作成時にキーの最初の1文字を使うかわりに、
+<u>ハッシュ関数</u> (hash function) が返す値を使う。
+ハッシュ関数とは、任意の文字列をなんらかの値 (ハッシュ) に
+変換するような関数である:
+<ul>
+<li> <code>h("7038258")</code> = <code>0</code>
+<li> <code>h("7320001")</code> = <code>15731</code>
+<li> <code>h("4420029")</code> = <code>602</code>
+<li> ...
+</ul>
+<p>
+ハッシュ関数 <em>h</em>(x) はどんな関数でもよいが、
+<u>同じ文字列に対してはつねに同じ値を返す</u>ように設計しなければならない。
+また、2つの異なる文字列が<strong>できるだけ異なる値になる</strong>ように
+設計することが望ましい。一般的なハッシュ関数の例として考えられるのは、
+与えられたキー (文字列) に含まれる文字コードをすべて足す、
+などの方法である。
+<p>
+ハッシュ関数ができたら、これを使って何番目のリストを使うべきか決定する。
+全体的な流れは以下のようになる:
+<ol>
+<li> まず <em>k</em>個のリストを用意する。
+<li> ハッシュ関数 h(<em>x</em>) が、与えられた文字列 <em>x</em> を整数に変換する。
+<li> インデックス作成時および検索時には、<code>(h(<em>x</em>) % k)</code> 番目の
+  リストを使用する。
+</ol>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="320" height="220">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g transform="translate(30,10)">
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="0" y="0" width="50" height="30" />
+    <rect x="0" y="30" width="50" height="30" />
+    <rect x="0" y="60" width="50" height="30" />
+    <rect x="0" y="90" width="50" height="30" />
+    <rect x="0" y="120" width="50" height="30" />
+    <rect x="0" y="170" width="50" height="30" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrow)"
+       transform="translate(0,15)">
+      <path d="M25,0 l50,0" />
+      <path d="M25,30 l50,0" />
+      <path d="M25,60 l50,0" />
+      <path d="M25,90 l50,0" />
+      <path d="M25,120 l50,0" />
+      <path d="M25,170 l50,0" />
+    </g>
+    <g fill="none" stroke="black" stroke-width="2">
+    <rect x="80" y="5" width="60" height="20" />
+    <rect x="140" y="5" width="60" height="20" />
+    <rect x="200" y="5" width="60" height="20" />
+    <rect x="80" y="35" width="60" height="20" />
+    <rect x="140" y="35" width="60" height="20" />
+    <rect x="200" y="35" width="60" height="20" />
+    <rect x="80" y="65" width="60" height="20" />
+    <rect x="140" y="65" width="60" height="20" />
+    <rect x="200" y="65" width="60" height="20" />
+    <rect x="80" y="95" width="60" height="20" />
+    <rect x="140" y="95" width="60" height="20" />
+    <rect x="200" y="95" width="60" height="20" />
+    <rect x="80" y="125" width="60" height="20" />
+    <rect x="140" y="125" width="60" height="20" />
+    <rect x="200" y="125" width="60" height="20" />
+    <rect x="80" y="175" width="60" height="20" />
+    <rect x="140" y="175" width="60" height="20" />
+    <rect x="200" y="175" width="60" height="20" />
+    </g>
+    <g text-anchor="middle" transform="translate(-15,20)">
+    <text x="0" y="0">0</text>
+    <text x="0" y="30">1</text>
+    <text x="0" y="60">2</text>
+    <text x="0" y="90">3</text>
+    <text x="0" y="120">4</text>
+    <text x="0" y="140">...</text>
+    <text x="190" y="140">...</text>
+    <text x="0" y="170">k-1</text>
+    </g>
+    <g transform="translate(85,20)" style="font-size: 75%;">
+    <text x="0" y="0">7038258</text>
+    <text x="60" y="0">5012561</text>
+    <text x="120" y="0">1630207</text>
+    <text x="180" y="0">...</text>
+    <text x="0" y="30">7320001</text>
+    <text x="60" y="30">1057044</text>
+    <text x="120" y="30">1310045</text>
+    <text x="180" y="30">...</text>
+    <text x="0" y="60">4420029</text>
+    <text x="60" y="60">6308343</text>
+    <text x="120" y="60">9000006</text>
+    <text x="180" y="60">...</text>
+    <text x="0" y="90">6570032</text>
+    <text x="60" y="90">6028151</text>
+    <text x="120" y="90">3390082</text>
+    <text x="180" y="90">...</text>
+    <text x="0" y="120">0020853</text>
+    <text x="60" y="120">1006001</text>
+    <text x="120" y="120">8030815</text>
+    <text x="180" y="120">...</text>
+    <text x="0" y="170">2260027</text>
+    <text x="60" y="170">4093423</text>
+    <text x="120" y="170">3114206</text>
+    <text x="180" y="170">...</text>
+    </g>
+  </g>
+</svg>
+</div>
+<p>
+ひとたびハッシュテーブルができれば、
+関数 <code>lookup()</code> は従来とほぼ同じ方法で検索がおこなえる:
+<blockquote><pre>
+def lookup(index, key):
+    k = len(index)
+    <span class=comment># キーをハッシュに変換し、k の剰余をとる。</span>
+    <mark>i = h(key) % k</mark>
+    <span class=comment># i番目のリストをとりだす。</span>
+    a = index[i]
+    <span class=comment># そのリストに対して逐次探索をおこなう。</span>
+    for pair in a:
+        <span class=comment># 一致するキーとバリューの組をとりだす。</span>
+        k = pair[0]
+        v = pair[1]
+        if k == key:
+            return v
+    <span class=comment># 見つからなかったら、空の文字列を返す。</span>
+    return ""
+</pre></blockquote>
+
+<p>
+ハッシュテーブルの検索時間は二分探索ほど速くないが、
+キーの追加や変更の処理が簡単なため広く利用されている。
+また、ハッシュテーブルによる検索時間は k の値に調整できるところも有利である。
+
+<div class=exercise>
+<div class=header>練習問題.</div>
+<ol type=i>
+  <li> k = 1 の場合、この方式の実行時間はどうなるか。
+  <li> k = n の場合、
+    ハッシュ関数 h に対して<strong>ある理想的な条件</strong>が満たされると
+    この方式の計算時間はほぼ一定になり、二分探索よりも速くなる。
+    「ある理想的な条件」とは何か。
+  <li> 一般的にいって、ハッシュテーブルを使って n個のものから検索するときの
+    計算量はいくらになるか。Big-O 記法で答えよ。
+</ol>
+</div>
+
+<p>
+一般的に、ハッシュテーブルを使うと現実の検索時間は短縮されるが、
+その計算量はたかだか 1/k になるだけである。
+この k は定数であるので、Big-O 記法で表した計算量は変わらない。
+
+<p>
+前節の「郵便番号の最初の数字を 0 〜 9 の整数に変換する」処理は、ある意味
+ハッシュ関数の一例であるが、郵便番号にしか使えないし、ハッシュの値は
+0 から 9 までに固定されている。さらに、得られる値が一様に分布していない。
+どのような文字列に対しても一様に分布するハッシュ関数を
+設計するのは意外に難しく、これは現在でもさかんに研究されている
+テーマのひとつである。ちなみに最悪のハッシュ関数とは、
+どんな文字列に対しても同じ値を返す関数である。
+これではすべての文字に対して同じリストを使うことになってしまい、
+事実上、逐次探索と変わらない:
+<blockquote><pre>
+<span class=comment># 最悪のハッシュ関数</span>
+def h(x):
+    return 123
+</pre></blockquote>
+
+<h4>ハッシュ関数の応用</h4>
+<p>
+ハッシュ値はどんなデータに対しても適用できる。
+これを応用したものが<u>電子署名</u>で、あるデータのハッシュ値を使って、
+そのデータが改竄されていないかチェックするものである。
+ここでは、ハッシュ関数の以下のような特性を利用している:
+<ol type=a>
+<li> もし2つのハッシュ値が違っていれば、元のデータ (キー) は<u>確実に</u>違っている。
+<li> 元のデータ (キー) が違っていても、2つのハッシュ値が違うとは<u>限らない</u>。
+  偶然に同じハッシュになるということもありうる。(ただし、その可能性は非常に小さい。)
+<li> ハッシュ関数として、
+<a href="https://ja.wikipedia.org/wiki/%E6%9A%97%E5%8F%B7%E5%AD%A6%E7%9A%84%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E9%96%A2%E6%95%B0">暗号学的ハッシュ関数</a>
+と呼ばれるものを使っており、これはたとえハッシュ値がわかっても
+元のデータを容易に推測できないようになっている。
+</ol>
+
+
+<h2 id="dictionary">4. Python のハッシュテーブル (辞書)</h2>
+<p>
+上で説明したように、
+「あるデータ (<u>キー</u>) に対応する、別のデータ (<u>バリュー</u>)」を
+検索する処理は多くのプログラムで使われる基本的な処理である。
+そのため、Python には実はハッシュテーブルを
+簡単に使う機能がすでに備わっている。
+
+<blockquote><pre>
+d = {}
+d["abc"] = "def"
+d["xyz"] = "123"
+print(d["abc"])  <span class=comment># def</span>
+print(d["xyz"])  <span class=comment># 123</span>
+</pre></blockquote>
+
+<p>
+ここで使われているハッシュテーブル <code>d</code> は
+ひとつの<u>データ型</u>である。リストなどと同様に、
+まるごとひとつの変数に入れることができる。
+なお Python の用語ではハッシュテーブルとは呼ばず、
+<u>辞書</u> (dictionary) という
+(言語によっては「連想リスト」とも呼ばれる)。
+ここでも <code>d[ ]</code> の中に入る値をキー (key) と呼び、
+それに対応する値をバリュー (value) と呼ぶ。
+<p>
+なお、リストと同じく、辞書もメモリ使用量が
+大きくなる可能性があるので、
+<a href="../week2/index.html#realestate">不動産の法則</a> が成り立っている。
+(変数 <code>d</code> は辞書そのものではなく<u>辞書への参照</u>である。)
+
+
+<dl>
+<dt> 構文
+<dd> <pre>
+d = {}            <span class=comment># 空の辞書を変数 d に入れる。</span>
+d["abc"] = "def"  <span class=comment># キー "abc" に対応するバリュー "def" を d に格納する。</span>
+v = d["abc"]      <span class=comment># キー "abc" に対応するバリューを得る。</span>
+d["abc"] = "xyz"  <span class=comment># バリューを書き換える。</span>
+</pre>
+<p>
+キーはいくつでも追加することができ、
+バリューはあとから書き換えることもできる。
+
+<dt> 文字のかわりに数値を使う
+<dd> キーやバリューとして文字列のかわりに数値を使うこともできる。
+(一見するとリストのように見えるが、リストではない。)
+<pre>
+p = {}
+p[123] = 456      <span class=comment># キー 123 に対応するバリュー 456 を p に格納する。</span>
+print(p[123])     <span class=comment># キー 123 に対応するバリューを得る。</span>
+</pre>
+<p>
+<strong>注意:</strong> ただし Python では<u>リスト型はキーとしては使えない</u>。
+
+<dt> 辞書の直接定義
+<dd> リストと同様、辞書の中身を直接プログラムに書くこともできる。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(price["chocolate"])
+</pre>
+
+<dt> 存在しないキー
+<dd> 存在しないキーのバリューを参照しようとすると、エラーが発生する。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(price["ramen"])
+<span class=err>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+KeyError: 'ramen'</span>
+</pre>
+
+<dt> キーの存在確認
+<dd> あるキーが辞書中に存在するかどうかを調べるには、
+文字列・リストと同じ <code>in</code> 演算子を使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+if "ramen" in price:
+    print("ラーメンいる")
+else:
+    print("ラーメンいない")
+</pre>
+
+<dt> キーの一覧
+<dd> ある辞書に含まれているキーの一覧を表示するには <code>.keys()</code> メソッドを使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+for k in price.keys():
+    print(k, price[k])
+</pre>
+これは以下のように表示される。
+<pre>
+chocolate 100
+cookie 150
+</pre>
+<p>
+<strong>注意:</strong> <u>キーが表示される順序はランダム</u>である。
+あとから代入されたキーが最初に出てくる場合がある。
+
+<dt> キーの個数
+<dd> リストと同じく、ある辞書に含まれているキー・バリュー対の個数を表示するには
+<code>len()</code> 関数を使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(len(price))  <span class=comment># 2</span>
+</pre>
+
+<dt> キーの削除
+<dd> 辞書からキー・バリュー対を削除するには、
+リストのときと同じように <code>del</code> 文を使う。
+<pre>
+d = { "X": 1, "Y": 2, "Z": 3 }
+del d["Y"]
+print(d)    <span class=comment># {'X': 1, 'Z': 3}</span>
+</pre>
+
+</dl>
+
+<div class=exercise>
+<div class=header>演習 5-4. Pythonの辞書を使う</div>
+<ol type=i>
+<li> 前出の <code>postcode.py</code> を Pythonの辞書を使って書け。
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 郵便番号 → 住所に対応させるハッシュテーブル(辞書)を作成。</span>
+postcode = {}
+for row in table:
+    key = <span class=bl>            </span>
+    value = <span class=bl>            </span>
+    postcode[key] = value
+<span class=comment># 実際に検索する (キーに対するバリューを取得する)。</span>
+import sys
+key = sys.argv[1]
+value = <span class=bl>            </span>
+print(value)
+</pre>
+<li> Pythonでは、リストを辞書のキーとして使うと「ある不都合」が起こるので、
+意図的にリストは辞書のキーにはできなくしてある。その不都合とは何か考えよ。
+<pre>
+k = [1,2,3]
+d = {}
+d[k] = "abc"  <span class=comment># エラー</span>
+k.append(4)
+</pre>
+</ol>
+</div>
+
+
+<h2 id="assignments">5. 本日の課題</h2>
+
+<div class=exercise id="ex4">
+<div class=header>小課題 4. ハッシュ関数の実装 (2021年1月7日締切)</div>
+<ul>
+  <li> 提出期限: 2021年1月7日 (2週間後)
+  <li> 提出するファイル: 改良した <code>postcode2.py</code>
+</ul>
+<p>
+以下のプログラムを実行せよ。
+これは、100個のリストを使ったハッシュテーブルを作成し、
+それを使ってランダムな郵便番号 1000件を検索して
+その実行時間を計測するものである。
+ところが、ここで使っているハッシュ関数 h は、
+つねに同じ値を返す「<strong>最悪の関数</strong>」になっており、
+このままで実行すると10秒程度の時間がかかる。
+この関数を改良して実行時間を 1/10以下に短縮せよ。
+<div class=file>
+postcode2.py
+<pre>
+<span class=comment># キーに対応したハッシュを計算する関数 h を定義する。</span>
+<div class=yellow><strong>def h(key):
+    return 123
+</strong></div>
+<span class=comment># 検索をおこなう関数 lookup を定義する。</span>
+def lookup(index, key):
+    <span class=comment># キーをハッシュに変換し、k の剰余をとる。</span>
+    i = h(key) % 100
+    <span class=comment># i番目のリストをとりだす。</span>
+    a = index[i]
+    <span class=comment># そのリストに対して逐次探索をおこなう。</span>
+    for pair in a:
+        <span class=comment># 一致するキーとバリューの組をとりだす。</span>
+        k = pair[0]
+        v = pair[1]
+        if k == key:
+            return v
+    <span class=comment># 見つからなかったら、空の文字列を返す。</span>
+    return ""
+
+<span class=comment># 郵便番号の一覧を読み込む。</span>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+
+<span class=comment># 100個の (空のリストからなる) リストを作成。</span>
+index = []
+for i in range(100):
+    index.append([])
+
+<span class=comment># このリストを使ったハッシュテーブルを作成する。</span>
+for row in table:
+    key = row[0]
+    value = row[1]+row[2]+row[3]
+    <span class=comment># キーをハッシュに変換する。</span>
+    i = h(key) % 100
+    <span class=comment># i番目のリストにキーとバリューの組を追加する。</span>
+    a = index[i]
+    a.append([key, value])
+
+<span class=comment># ランダムな郵便番号 1000件を検索し、実行時間を計測する。</span>
+import random
+import time
+t0 = time.time()  <span class=comment># 最初の時刻 (秒数) を取得する。</span>
+for i in range(1000):
+    <span class=comment># ランダムな 7桁の番号 (1000000〜9999999) を生成。</span>
+    code = int(random.random()*9000000) + 1000000
+    <span class=comment># それをキーとして住所を検索する。</span>
+    key = str(code)
+    print(key, lookup(index, key))
+t1 = time.time()  <span class=comment># 最後の時刻 (秒数) を取得する。</span>
+
+<span class=comment># 実行時間を表示する。</span>
+print(t1 - t0)
+</pre>
+</div>
+</div>
+
+<div class=exercise id="exb">
+<div class=header>オプション課題 B. 同一の町名を発見する (2021年1月14日締切)</div>
+<ul>
+  <li> 提出期限: 2021年1月14日 (3週間後)
+  <li> 提出するファイル: 完成したプログラム (<code>.py</code>ファイルのみでよい)
+</ul>
+<p>
+郵便番号データベースをみると、
+日本全国には同じ町名 (「本町」など) が複数あることがわかる。
+Python を使って、データベース中に同一の町名 (3番目のカラム) がいくつ現れるかを数え、
+それらを<strong>多い順</strong>に一覧表示するプログラムを書け。
+なお、もっとも多く現れる町名 (?) は「以下に掲載がない場合」だが、
+これはそのまま数えてよい。1回しか現れない町名は表示しなくてよい。
+<pre>
+$ <strong>python findnames.py</strong>
+1874 以下に掲載がない場合
+310 本町
+222 栄町
+171 新町
+157 幸町
+149 緑町
+139 旭町
+...
+</pre>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

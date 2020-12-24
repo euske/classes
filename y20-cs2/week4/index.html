@@ -205,7 +205,7 @@ with open("<mark>ファイル名</mark>", encoding="utf-8") as fp:
 </div>
 
 <div class=exercise>
-<div class=header>演習 5-1. CSVファイルの読み込み</div>
+<div class=header>演習 4-1. CSVファイルの読み込み</div>
 <ol type=i>
 <li> 上のテキストファイル <code>test.csv</code> を作成し、
 Excel で実際に開けることを確認せよ。
@@ -257,7 +257,7 @@ for i in range(n):
 変化しているように見えた」のである。
 
 <div class=exercise>
-<div class=header>演習 5-2. 郵便番号データベースを読み込む</div>
+<div class=header>演習 4-2. 郵便番号データベースを読み込む</div>
 以下の zip ファイルをダウンロードし、
 その中に含まれる全国の郵便番号一覧を記した <code>.csv</code> ファイルを
 Python で読み込むと、以下のようなリストのリストができる:
@@ -300,15 +300,28 @@ for row in table:
 $ <strong>python postcode.py 1520001</strong>
 東京都目黒区中央町
 </pre>
-<li> 演習 5-1. で作成した関数 <code>find</code> を使って
+<li> 以下の関数 <code>find</code> を定義する。
+  これは与えられた文字列 x のなかに文字列 y が含まれていれば 1 を、
+  そうでなければ 0 を返すものである:
+<pre>
+<span class=comment># 与えられた文字列 x の中に y が含まれていれば 1 を返す。</span>
+def find(x, y):
+    <span class=comment># x の各位置から切り出した部分文字列と y を比較する。</span>
+    for i in range(len(x)-len(y)+1):
+        <span class=comment># この部分の書き方 (文字列のスライス) は次回の授業で説明する。</span>
+        if x[i:i+len(y)] == y:
+            return 1
+    return 0
+</pre>
+  この関数を使って、
   「東京都にあって、住所に『<code>が丘</code>』が含まれる郵便番号」を
-  すべて表示させよ。
+   すべて表示させよ。
 </ol>
 </div>
 
 <h2 id="hashtable">3. ハッシュテーブルとは</h2>
 <p>
-第5回の授業でやった以下の問題を考える:
+演習 4-2. でやった問題をふたたび考える。
 郵便番号を入力すると、その住所を表示するプログラムを作りたい。
 <blockquote><pre>
 $ <strong>python postcode.py 1520001</strong>
@@ -520,7 +533,7 @@ print(value)
 時間は約 1/10 に短縮されると思われる、が…
 
 <div class=exercise>
-<div class=header>演習 5-3. 逐次検索・改を実行する</div>
+<div class=header>演習 4-3. 逐次検索・改を実行する</div>
 <ol type=i>
   <li> この方法の計算量を Big-O 記法で答えよ。
   <li> 実際には、ここでの検索時間は厳密に 1/10 にはならない。その理由を説明せよ。
@@ -720,8 +733,12 @@ def h(x):
 元のデータを容易に推測できないようになっている。
 </ol>
 
+<div class=skipped>
 
 <h2 id="dictionary">4. Python のハッシュテーブル (辞書)</h2>
+<p>
+<mark>(この部分は時間がなかったため、次回やることにします)</mark>
+
 <p>
 上で説明したように、
 「あるデータ (<u>キー</u>) に対応する、別のデータ (<u>バリュー</u>)」を
@@ -840,7 +857,7 @@ print(d)    <span class=comment># {'X': 1, 'Z': 3}</span>
 </dl>
 
 <div class=exercise>
-<div class=header>演習 5-4. Pythonの辞書を使う</div>
+<div class=header>演習 4-4. Pythonの辞書を使う</div>
 <ol type=i>
 <li> 前出の <code>postcode.py</code> を Pythonの辞書を使って書け。
 <pre>
@@ -869,6 +886,8 @@ k.append(4)
 </pre>
 </ol>
 </div>
+
+</div> <!-- skipped -->
 
 
 <h2 id="assignments">5. 本日の課題</h2>

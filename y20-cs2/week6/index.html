@@ -31,10 +31,15 @@
 </ul>
 <li> <a href="#dictionary">Python のハッシュテーブル (辞書) - 再掲</a>
 <li> <a href="#text-mining">Python を使って大量のテキストを解析する</a>
+<ul>
+  <li> <a href="#text-wikipedia">Wikipediaの記事データを取得する</a>
+  <li> <a href="#text-countletters">よく使われている文字・単語を計測する</a>
+  <li> <a href="#text-similarity">類似した文章を発見する</a>
+</ul>
 <li> <a href="#assignments">本日の課題</a>
 <ul>
-  <li> <a href="#ex6">小課題 6. (2021年1月28日締切)</a>
-  <li> <a href="#m3">中課題 3. (2021年2月4日締切)</a>
+  <li> <a href="#ex6">小課題 6. Wikipediaの頻出文字を表示 (2021年1月28日締切)</a>
+  <li> <a href="#m3">中課題 3. 互いにもっとも類似した2つの記事を発見する (2021年2月4日締切)</a>
 </ul>
 </ol>
 
@@ -767,6 +772,7 @@ for c in letter.keys():
 <li> 実際には上のプログラムはすべての文字の頻度を出力するので、
 どれが頻度の高い文字なのかわからない。
 プログラムを変更し、100,000回以上出現した文字だけを表示するようにせよ。
+(本日の小課題6)
 </ol>
 </div>
 
@@ -1087,18 +1093,18 @@ print(f"もっとも似た記事同士: {bestkk}")
 <h2 id="assignments">5. 本日の課題</h2>
 
 <div class=exercise id="ex5">
-<div class=header>小課題 6. (2021年1月28日締切)</div>
+<div class=header>小課題 6. Wikipediaの頻出文字を表示 (2021年1月28日締切)</div>
 <ul>
   <li> 提出期限: 2021年1月28日 (1週間後)
   <li> 提出するファイル: <code>lettercount.py</code>
 </ul>
 <p>
-本日の演習 6-4. b. を完成させ、Wikipedia の記事群から
-100,000回以上出現した文字だけを表示するプログラムを書け。
+本日の演習 6-4 (b). を完成させ、Wikipedia の記事群から
+100,000回以上出現した文字だけを表示するプログラムを提出せよ。
 </div>
 
-<div class=exercise id="m2">
-<div class=header>中課題 3. (2021年2月4日締切)</div>
+<div class=exercise id="m3">
+<div class=header>中課題 3. 互いにもっとも類似した2つの記事を発見する (2021年2月4日締切)</div>
 <ul>
   <li> 提出期限: 2021年2月4日 (2週間後)
   <li> 提出するファイル: <code>simarts.py</code>
@@ -1106,7 +1112,19 @@ print(f"もっとも似た記事同士: {bestkk}")
 <p>
 本日の授業で説明した、
 Wikipedia から類似記事を発見するプログラム <code>simarts.py</code> を完成させよ。
-最後の行に「互いにもっとも類似した記事」を出力すること。
+このプログラムは <code>jawiki-20201101-top1000/</code> フォルダの中に
+置いて実行し、実行すると最後に「互いにもっとも類似した記事」を出力するものとする:
+<blockquote><pre>
+&gt; <strong>python simarts.py</strong>
+...
+もっとも似た記事同士: <nobr><span class=bl>???????</span></nobr>/<nobr><span class=bl>???????</span></nobr>
+</pre></blockquote>
+<p>
+プログラムの最初に、類似した記事を見つける原理と
+処理のおおまかな流れをコメントで説明せよ。
+その他、複雑な部分には必要に応じてコメントをつけること。
+正しい結果を出力し、わかりやすいコメントがついている
+コードを満点とする。
 </div>
 
 

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2020年度 コンピュータサイエンス第二 (5a)
+第6回 - 辞書の使い方、Wikipediaから類似記事を発見する
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第6回 - 辞書の使い方、Wikipediaから類似記事を発見する</h1>
+<div class=nav>2021年1月21日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<ul>
+  <li> <a href="#hashes">小課題4 で提出されたハッシュ関数 h</a>
+</ul>
+<li> <a href="#stringop">文字列の処理・つづき</a>
+<ul>
+  <li> <a href="#str-slice">文字列のスライス</a>
+  <li> <a href="#str-find">文字列の検索</a>
+  <li> <a href="#str-find-python">Python による文字列の検索</a>
+</ul>
+<li> <a href="#dictionary">Python のハッシュテーブル (辞書) - 再掲</a>
+<li> <a href="#text-mining">Python を使って大量のテキストを解析する</a>
+<li> <a href="#assignments">本日の課題</a>
+<ul>
+  <li> <a href="#ex6">小課題 6. (2021年1月28日締切)</a>
+  <li> <a href="#m3">中課題 3. (2021年2月4日締切)</a>
+</ul>
+</ol>
+
+
+<h2>雑談 - Pythonでゲームを作るには</h2>
+<p>
+Python には、<a href="https://www.pygame.org/">Pygame</a> という拡張機能を
+追加することでPC上のゲームを作成することができる。
+<p>
+まず、以下のようにして pygame を自分のPCにインストールする:
+<blockquote><pre>
+C:\Users\euske&gt;<strong>pip install pygame</strong>
+Collecting pygame
+  Downloading pygame-2.0.1-cp39-cp39-win_amd64.whl (5.2 MB)
+     |████████████████████████████████| 5.2 MB 6.4 MB/s
+Installing collected packages: pygame
+Successfully installed pygame-2.0.1
+</pre></blockquote>
+<p>
+実際に使ってみるには、以下のようにする:
+<blockquote><pre>
+C:\Users\euske&gt;<strong>python</strong>  <span class=comment># まず python を開始する</span>
+Python 3.9.1 (...) [MSC v.1927 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; <strong>import pygame</strong>      <span class=comment># pygame モジュールを使用</span>
+pygame 2.0.1 (SDL 2.0.14, Python 3.9.1)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+&gt;&gt;&gt; <strong>pygame.init()</strong>      <span class=comment># 各種機能を初期化</span>
+(7, 0)
+&gt;&gt;&gt; <strong>disp = pygame.display.set_mode((600,400))</strong> <span class=comment># 画面を600×400のサイズで作成</span>
+&gt;&gt;&gt; <strong>disp.fill((0,0,255))</strong>  <span class=comment># 画面を青色で塗る (実際の画面はまだ変化しない)</span>
+&lt;rect(0, 0, 600, 400)&gt;
+&gt;&gt;&gt; <strong>pygame.display.flip()</strong> <span class=comment># 画面を実際に更新</span>
+&gt;&gt;&gt; <strong>pygame.display.get()</strong>  <span class=comment># イベント列を取得</span>
+</pre></blockquote>
+<p>
+ここで出てくる <u>イベント</u> (event) とは、
+Python プログラムへの「入力」である。
+コマンド・プロンプトから実行するプログラムと違い、
+GUI (グラフィカルユーザインターフェイス) プログラムでは、
+一口に「入力」といっても多様な種類 (キーボードからの入力、
+マウスからの入力、ウィンドウの操作等) があるため、
+これらをひとつにまとめて「イベント」と呼んでいる。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="300" height="120">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="190" y="25" width="80" height="60" />
+    <path d="M130,30 l20,20 h30 v10 h-30 l-20,20 Z" />
+  </g>
+  <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M105,20 l20,10" />
+    <path d="M105,40 l20,5" />
+    <path d="M105,60 l20,0" />
+    <path d="M105,80 l20,-5" />
+  </g>
+  <g text-anchor="middle">
+    <text x="230" y="55" dy="0.4em">Python</text>
+  </g>
+  <g text-anchor="middle" style="font-size:80%; font-weight: bold;">
+    <text x="150" y="90" dy="0.4em">イベント</text>
+    <text x="150" y="90" dy="1.4em">キュー</text>
+  </g>
+  <g text-anchor="end" style="font-size:80%;">
+    <text x="100" y="20" dy="0.4em">キーボード</text>
+    <text x="100" y="40" dy="0.4em">マウス</text>
+    <text x="100" y="60" dy="0.4em">タッチパネル</text>
+    <text x="100" y="80" dy="0.4em">ウィンドウ操作</text>
+    <text x="100" y="100" dy="0.4em">...</text>
+  </g>
+</svg>
+</div>
+<p>
+以上をふまえて、四角形が動くだけのゲーム(?) を
+プログラムすると、以下のようになる:
+<div class=file>
+game.py
+<pre>
+<span class=comment># pygameを初期化。</span>
+import pygame
+pygame.init()
+<span class=comment># ウィンドウを開く。</span>
+window = pygame.display.set_mode((600,400))
+<span class=comment># 初期位置を (0,0) に設定。</span>
+x = 0
+y = 0
+<span class=comment># 初期状態を設定。</span>
+state = 0
+<span class=comment># 有限状態機械。</span>
+while True:
+    <span class=comment># たまっているイベントをひとつずつ処理する。</span>
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            <span class=comment># ウィンドウの「閉じる」ボタンが押されたら終了状態に遷移。</span>
+            state = 1
+        elif e.type == pygame.KEYDOWN:
+            <span class=comment># キーが押されたら、押されたキーに応じた各種処理。</span>
+            if e.key == pygame.K_LEFT:
+                x = x - 1
+            elif e.key == pygame.K_RIGHT:
+                x = x + 1
+            elif e.key == pygame.K_UP:
+                y = y - 1
+            elif e.key == pygame.K_DOWN:
+                y = y + 1
+    <span class=comment># ウィンドウを青で塗る。</span>
+    window.fill((0,0,255))
+    <span class=comment># 自分の位置(x,y) に緑で 10x10 の大きさの四角形を描画。</span>
+    window.fill((0,255,0), (x,y,10,10))
+    <span class=comment># 画面を更新。</span>
+    pygame.display.flip()
+    <span class=comment># 終了状態になったら終了。</span>
+    if state == 1:
+        break
+</pre>
+</div>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> ハッシュテーブルの概念について学習した。
+<li> 有限状態機械の概念について学習した。
+<li> Python の辞書はまだやっていない。
+</ul>
+
+<p>
+<strong>お詫び:</strong>
+時間的な制限により、本授業では正規表現は扱わないことにしました。
+
+
+<h3 id="hashes">小課題4 で提出されたハッシュ関数 h</h3>
+
+<h4>オーソドックスなもの:</h4>
+<blockquote><pre>
+def h(key):
+    return int(key) % 100
+</pre></blockquote>
+
+<h4>特定の桁を取り出したもの:</h4>
+<blockquote><pre>
+def h(key):
+    <span class=comment>#codeの2，3番目の桁を取り出すと、00〜99の100個の数字がすべて同じ確率で現れるので</span>
+    <span class=comment>#効率的なハッシュ関数になる。</span>
+    return int(key[1])*10 + int(key[2])
+</pre></blockquote>
+
+<h4>謎の計算 (いわゆる “黒魔術”) を行っているもの:</h4>
+<blockquote><pre>
+def h(key):
+    x = 0
+    for i in range(7):
+        if int(key[i] + key[6-i]) % 2 == 0:
+            x = x + int(key[i]) ** 2
+        else:
+            x = x + int(key[i]) ** i
+    return x
+</pre></blockquote>
+
+<p>
+ちなみに Python の辞書では、内部的に
+<a href="https://en.wikipedia.org/wiki/SipHash">SipHash</a> と
+呼ばれるハッシュ関数を使用している。
+
+
+<h2 id="stringop">1. 文字列の処理・つづき</h2>
+
+<h3 id="str-slice">1.1. 文字列のスライス</h3>
+<p>
+Python では、
+<a href="../week3/index.html#arrayslice">リストと同じく</a>、文字列も<u>スライス</u>が可能である。
+<blockquote><pre>
+s = "HEADACHE"
+</pre></blockquote>
+<p>
+この場合、<code>s</code>のスライスは、以下のようになる:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="350" height="230">
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+    <rect x="130" y="10" width="40" height="40" />
+    <rect x="170" y="10" width="40" height="40" />
+    <rect x="210" y="10" width="40" height="40" />
+    <rect x="250" y="10" width="40" height="40" />
+    <rect x="290" y="10" width="40" height="40" />
+  </g>
+  <g fill="#88ff88" stroke="black">
+    <rect x="10" y="80" width="40" height="25" />
+    <rect x="290" y="80" width="40" height="25" />
+    <rect x="90" y="110" width="80" height="25" />
+    <rect x="130" y="140" width="120" height="25" />
+    <rect x="10" y="170" width="80" height="25" />
+    <rect x="210" y="200" width="120" height="25" />
+  </g>
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">H</text>
+    <text x="70" y="35">E</text>
+    <text x="110" y="35">A</text>
+    <text x="150" y="35">D</text>
+    <text x="190" y="35">A</text>
+    <text x="230" y="35">C</text>
+    <text x="270" y="35">H</text>
+    <text x="310" y="35">E</text>
+    </g>
+    <text x="10" y="70">0</text>
+    <text x="50" y="70">1</text>
+    <text x="90" y="70">2</text>
+    <text x="130" y="70">3</text>
+    <text x="170" y="70">4</text>
+    <text x="210" y="70">5</text>
+    <text x="250" y="70">6</text>
+    <text x="290" y="70">7</text>
+    <text x="330" y="70">8</text>
+    <g style="font-family: monospace;">
+      <text x="30" y="100">s[0]</text>
+      <text x="310" y="100">s[-1]</text>
+      <text x="130" y="130">s[2:4]</text>
+      <text x="190" y="160">s[3:-2]</text>
+      <text x="50" y="190">s[:2]</text>
+      <text x="270" y="220">s[5:]</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<div class=exercise>
+<div class=header>練習問題.</div>
+<ol type=i>
+  <li> <code>s[2:6]</code> の文字列を答えよ。
+  <li> <code>s[4:]</code> の文字列を答えよ。
+  <li> <code>s[:2]</code> の文字列を答えよ。
+  <li> <code>s[-2:]</code> の文字列を答えよ。
+  <li> <code>s[-2:-1]</code> の文字列を答えよ。
+</ol>
+</div>
+
+<h3 id="str-find">1.2. 文字列の検索</h3>
+<p>
+文字列に対してスライスが使えると、
+ある文字列の中に含まれる<u>部分文字列</u>の検索をおこなうことができる。
+これは、検索したい文字列をスライドさせながら各位置と比較することでおこなう:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="350" height="150">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+    <rect x="130" y="10" width="40" height="40" />
+    <rect x="170" y="10" width="40" height="40" />
+    <rect x="210" y="10" width="40" height="40" />
+    <rect x="250" y="10" width="40" height="40" />
+    <rect x="290" y="10" width="40" height="40" />
+  </g>
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">V</text>
+    <text x="70" y="35">A</text>
+    <text x="110" y="35">C</text>
+    <text x="150" y="35">A</text>
+    <text x="190" y="35">T</text>
+    <text x="230" y="35">I</text>
+    <text x="270" y="35">O</text>
+    <text x="310" y="35">N</text>
+    </g>
+    <text x="10" y="70">0</text>
+    <text x="50" y="70">1</text>
+    <text x="90" y="70">2</text>
+    <text x="130" y="70">3</text>
+    <text x="170" y="70">4</text>
+    <text x="210" y="70">5</text>
+    <text x="250" y="70">6</text>
+    <text x="290" y="70">7</text>
+    <text x="330" y="70">8</text>
+  </g>
+  <g transform="translate(20,75)">
+  <g fill="#ffccff" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+  </g>
+  <line fill="none" stroke="black" stroke-width="6" marker-end="url(#arrow)"
+        x1="140" x2="190" y1="30" y2="30" />
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">C</text>
+    <text x="70" y="35">A</text>
+    <text x="110" y="35">T</text>
+    </g>
+    <text x="10" y="70">i</text>
+    <text x="50" y="70">i+1</text>
+    <text x="90" y="70">i+2</text>
+    <text x="130" y="70">i+3</text>
+  </g>
+  </g>
+</svg>
+</div>
+
+<blockquote><pre>
+<span class=comment># ある文字列に含まれる部分文字列を発見する。</span>
+s = "VACATION"  <span class=comment># 検索対象の文字列</span>
+t = "CAT"       <span class=comment># 含まれる文字列</span>
+for i in range(6):  <span class=comment># 0〜5</span>
+    if s[i:i+3] == t:
+        print("found", i)
+</pre></blockquote>
+
+<div class=exercise>
+<div class=header>演習 6-1.</div>
+<ol type=i>
+  <li> 上のプログラムを一般化し、関数 <code>find(s, t)</code> として実現せよ。
+    これは与えられた文字列 <code>s</code> の中に含まれる <code>t</code> の位置を
+    整数として返し、見つからなければ <code>-1</code> を返すものとする:
+<pre>
+def find(s, t):
+    ...
+
+print(find("VACATION", "CAT"))  <span class=comment># 2</span>
+print(find("VACATION", "DOG"))  <span class=comment># -1</span>
+</pre>
+  <li> 検索対象 <code>s</code> が<em>n</em>文字あったとき、この関数の最悪計算量を答えよ。
+    (<code>t</code> の長さは <code>s</code> に比べて十分に小さいとする。)
+</ol>
+</div>
+
+<h3 id="str-find-python">1.3. Python による文字列の検索</h3>
+<p>
+文字列の検索は基本的な処理なので、
+Python にはすでに上の <code>find</code>関数に相当する機能がある。
+(これには <em>O</em>(n) の時間がかかる。)
+<blockquote><pre>
+s = "vacation"
+print(s.find("cat"))  <span class=comment># 2</span>
+print(s.find("dog"))  <span class=comment># -1</span>
+</pre></blockquote>
+<p>
+また、単に部分文字列が「含まれているか」否かを判定するには
+もっと簡単に <code>in</code>演算子 が使える。
+これは <code>&lt;</code>, <code>&gt;</code>, <code>==</code> などと
+同様に、左辺と右辺に文字列の値を並べることで表現する。
+これにも <em>O</em>(n) の時間がかかる。
+
+<blockquote><pre>
+s = "vacation"
+if "cat" in s:
+    print("ネコいる")
+else:
+    print("ネコいない")
+</pre></blockquote>
+
+<code>in</code>演算子はリストに対しても使える:
+<blockquote><pre>
+a = [5,9,4,0,7]
+if 4 in a:
+    print("4いる")
+else:
+    print("4いない")
+</pre></blockquote>
+(当然、これにも <em>O</em>(n) の時間がかかる。)
+
+
+<h2 id="dictionary">2. Python 内蔵のハッシュテーブル (辞書) - 再掲</h2>
+<p>
+<mark>(前回、時間がなくて説明しなかった部分です)</mark>
+
+<p>
+Python には、実はハッシュテーブル
+(Python の用語では <u>辞書</u> (dictionary) という)
+を簡単に使う機能がすでに備わっている。
+
+<blockquote><pre>
+<span class=comment># d という辞書を新たに作成する。</span>
+d = {}
+<span class=comment># キー "abc" に対応するバリュー "def" を代入する。</span>
+d["abc"] = "def"
+<span class=comment># キー "12345" に対応するバリュー "wxyz" を代入する。</span>
+d["12345"] = "wxyz"
+print(d["abc"])    <span class=comment># def</span>
+print(d["12345"])  <span class=comment># wxyz</span>
+</pre></blockquote>
+
+<p>
+ここで使われている辞書 (ハッシュテーブル) <code>d</code> は、
+ひとつの<u>データ型</u>である。リストなどと同様に、
+まるごとひとつの変数に入れることができる。
+ここでも <code>d[ ]</code> の中に入る値を<u>キー</u> (key) と呼び、
+それに対応する値を<u>バリュー</u> (value) と呼ぶ。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="230" height="110">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="2">
+    <line x1="20" y1="40" x2="50" y2="40" stroke-width="3" marker-end="url(#arrow)" />
+    <rect x="60" y="25" width="80" height="30" />
+    <rect x="140" y="25" width="80" height="30" />
+    <rect x="60" y="65" width="80" height="30" />
+    <rect x="140" y="65" width="80" height="30" />
+    <rect x="55" y="20" width="170" height="80" />
+  </g>
+  <g style="font-family:monospace;">
+    <text x="10" y="40" dy="0.4em">d</text>
+    <text x="65" y="40" dy="0.4em">"abc"</text>
+    <text x="145" y="40" dy="0.4em">"def"</text>
+    <text x="65" y="80" dy="0.4em">"12345"</text>
+    <text x="145" y="80" dy="0.4em">"wxyz"</text>
+  </g>
+  <g style="font-weight:bold; font-size:75%;">
+    <text x="70" y="10" dy="0.4em">キー</text>
+    <text x="150" y="10" dy="0.4em">バリュー</text>
+  </g>
+</svg>
+</div>
+<p>
+なお、リストと同じく、辞書もメモリ使用量が
+大きくなる可能性があるので、
+<a href="../week2/index.html#realestate">不動産の法則</a> が成り立っている。
+(したがって変数 <code>d</code> に入っているのは、
+辞書そのものではなく辞書への<u>参照</u>である。)
+
+<dl>
+<dt> 構文
+<dd> <pre>
+d = {}            <span class=comment># 空の辞書を変数 d に入れる。</span>
+d["abc"] = "def"  <span class=comment># キー "abc" に対応するバリュー "def" を d に格納する。</span>
+v = d["abc"]      <span class=comment># キー "abc" に対応するバリューを得る。</span>
+d["abc"] = "xyz"  <span class=comment># バリューを書き換える。</span>
+</pre>
+<p>
+キーはいくつでも追加することができ、
+バリューはあとから書き換えることもできる。
+
+<dt> 文字のかわりに数値を使う
+<dd> キーやバリューとして文字列のかわりに数値を使うこともできる。
+(一見するとリストのように見えるが、リストではない。)
+<pre>
+p = {}
+p[123] = 456      <span class=comment># キー 123 に対応するバリュー 456 を p に格納する。</span>
+print(p[123])     <span class=comment># キー 123 に対応するバリューを得る。</span>
+</pre>
+<p>
+<strong>注意:</strong> ただし Python では<strong>リスト型はキーとしては使えない</strong>。
+
+<dt> 辞書の直接定義
+<dd> リストと同様、辞書の中身を直接プログラムに書くこともできる。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(price["chocolate"])
+</pre>
+
+<dt> 存在しないキー
+<dd> 存在しないキーのバリューを参照しようとすると、エラーが発生する。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(price["ramen"])
+<span class=err>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+KeyError: 'ramen'</span>
+</pre>
+
+<dt> キーの存在確認
+<dd> あるキーが辞書中に存在するかどうかを調べるには、
+文字列・リストと同じ <code>in</code> 演算子を使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+if "ramen" in price:
+    print("ラーメンいる")
+else:
+    print("ラーメンいない")
+</pre>
+
+<dt> キーの一覧
+<dd> ある辞書に含まれているキーの一覧を表示するには <code>.keys()</code> メソッドを使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+for k in price.keys():
+    print(k, price[k])
+</pre>
+これは以下のように表示される。
+<pre>
+chocolate 100
+cookie 150
+</pre>
+<p>
+<strong>注意:</strong> 辞書のキーが表示される順序はランダムである。
+あとから代入されたキーが最初に出てくる場合がある。
+
+<dt> キーの個数
+<dd> リストと同じく、ある辞書に含まれているキー・バリュー対の個数を表示するには
+<code>len()</code> 関数を使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(len(price))  <span class=comment># 2</span>
+</pre>
+
+<dt> キーの削除
+<dd> 辞書からキー・バリュー対を削除するには、
+リストのときと同じように <code>del</code> 文を使う。
+<pre>
+d = { "X": 1, "Y": 2, "Z": 3 }
+del d["Y"]
+print(d)    <span class=comment># {'X': 1, 'Z': 3}</span>
+</pre>
+
+</dl>
+
+<div class=exercise>
+<div class=header>演習 6-2. Pythonの辞書を使う</div>
+<ol type=i>
+<li> 第4回の授業で出てきた
+<A href="../week4/index.html#ex4-2">郵便番号から住所を検索するプログラム</a> を
+Pythonの辞書を使って書け。
+<div class=file>
+postcode.py
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 郵便番号 → 住所に対応させるハッシュテーブル(辞書)を作成。</span>
+postcode = {}
+for row in table:
+    <span class=comment># row[0] に郵便番号、row[1]+row[2]+row[3] に住所が書かれている。</span>
+    key = <span class=bl>            </span>
+    value = <span class=bl>            </span>
+    postcode[key] = value
+<span class=comment># 実際に検索する (キーに対するバリューを取得する)。</span>
+import sys
+key = sys.argv[1]
+value = <span class=bl>            </span>
+print(value)
+</pre>
+</div>
+<li> Pythonでは、リストを辞書のキーとして使うと「ある不都合」が起こるので、
+意図的にリストは辞書のキーにはできなくしてある。その不都合とは何か考えよ。
+<pre>
+k = [1,2,3]
+d = {}
+d[k] = "abc"  <span class=comment># エラー</span>
+k.append(4)
+</pre>
+</ol>
+</div>
+
+
+<h2 id="text-mining">3. Python を使って大量のテキストを解析する</h2>
+<p>
+これまでの授業で、日本語の文字列やCSVファイルを
+Python で解析する方法を学習した。
+今回はその集大成として、ある程度の分量をもつ
+日本語のテキスト (Wikipedia) を使って、
+その統計的な傾向を分析してみる。
+このように、コンピュータを使って日本語や英語などの
+文章を解析する技術を<u>自然言語処理</u> (Natural Language Processing) という。
+
+<h3 id="text-wikipedia">3.1. Wikipediaの記事データを取得する</h3>
+<p>
+まず、Wikipedia の人気記事 約1000本を収集する。
+これは、次のようにしておこなった:
+<ol>
+<li> 2020年11月時点における <a href="https://pageviews.toolforge.org/topviews/?project=ja.wikipedia.org&amp;platform=all-access&amp;date=2020-11&amp;excludes=">日本語 Wikipedia のトップ記事 1000本</a> を取得し、CSV ファイルとしてダウンロードする。
+<li> 同じく2020年11月1日時点における <a href="https://dumps.wikimedia.org/jawiki/20201101/">日本語 Wikipedia の全記事</a> をダウンロードする。
+(これは圧縮された状態で約 3.3GB ある。)
+<li> ここから 1000記事のテキストを抜き出し、Wikiのマークアップ (リンクなど) を除いて
+ファイルに保存する。(正確には、テキストが正しく抽出できた 965記事が保存してある。)
+</ol>
+<p>
+以上のようにして得られたファイルを zip で圧縮した:
+<ul>
+<li> <a href="../../data/jawiki-20201101-top1000.zip">jawiki-20201101-top1000.zip</a> (16MBytes)
+</ul>
+<p>
+これをダウンロードして展開し、
+<code>jawiki-20201101-top1000/</code> フォルダの中を見ると、
+以下のようなファイルが含まれている:
+<ul>
+<li> <code>articles.csv</code>
+<li> <code>p00000229.txt</code>
+<li> <code>p00000331.txt</code>
+<li> ...
+</ul>
+<p>
+さらに <code>articles.csv</code> の中身は以下のようになっている:
+<blockquote><pre>
+0,鬼滅の刃,p03365460.txt
+1,窪寺昭,p00409407.txt
+2,呪術廻戦,p03753018.txt
+3,NiziU,p04162939.txt
+...
+</pre></blockquote>
+<p>
+これは、左から順に「番号,記事の題名,ファイル名」が
+書かれている CSV ファイルである。
+<p>
+さて、あるファイル名が与えられたとき、それをテキスト形式とみなして
+読み込み、内容を文字列として取得するには、次のようにする:
+<blockquote><pre>
+with open("<mark>ファイル名</mark>", encoding="utf-8") as fp:
+    <mark>変数名</mark> = fp.read()
+</pre></blockquote>
+<p>
+この方法を使い、
+まず1000個 (正確には965個) のテキストファイルを
+ひとつずつ読み込んで文字数を数えるだけのプログラムを作ってみよう:
+<div class=file>
+showtext.py
+<pre>
+<span class=comment># まず記事一覧のCSVファイルを読み込む。</span>
+import csv
+with open("articles.csv", encoding="utf-8") as fp:
+    articles = list(csv.reader(fp))
+
+<span class=comment># 各記事について処理する。</span>
+for row in articles:
+    index = row[0]  <span class=comment># 番号 (順位)</span>
+    title = row[1]  <span class=comment># 記事の題名</span>
+    path = row[2]   <span class=comment># ファイル名 (パス名)</span>
+    <span class=comment># 記事ファイルから文字を読み込む。</span>
+    with open(path, encoding="utf-8") as fp:
+        text = fp.read()
+    print(f"{title}: {len(text)}文字")
+</pre>
+</div>
+
+<div class=exercise>
+<div class=header>演習 6-3. Wikipedia の記事を表示する</div>
+<ol type=a>
+<li> Wikipediaの 965記事データをダウンロードし、
+上のプログラム <code>showtext.py</code> を実際に走らせてみよ。<br>
+<strong>注意:</strong> このプログラムは、データを展開した
+<code>jawiki-20201101-top1000/</code> フォルダの中で
+(このフォルダに <code>cd</code> して) 実行すること。
+<li> 文字数だけでなく、実際の記事の
+先頭 100文字を表示するようにプログラムを変更せよ。
+</ol>
+</div>
+
+<h3 id="text-countletters">3.2. よく使われている文字・単語を計測する</h3>
+<p>
+以上で 965記事を Python のプログラムで処理できるようになった。
+では、実際にこれらの記事データ
+(専門用語では<u>コーパス</u>, corpus と呼ばれる) から
+なんらかの統計情報を抽出してみよう。
+まず簡単な例として、頻出の文字や単語を数えてみる。
+これは、先に習った Python の<u>辞書</u>を使うと簡単にできる。
+<p>
+まず、ある文字をキー、その出現回数 (頻度) をバリューとした
+辞書を考える:
+<blockquote><pre>
+<span class=comment># "あ"が10回、"A"が20回、...</span>
+letter = {"あ":10, "A":20, ...}
+</pre></blockquote>
+<p>
+このような辞書を構築するには、読み込んだテキスト中の
+文字をひとつずつ、すべて追加していけばよい。
+<div class=file>
+lettercount.py
+<pre>
+...
+<span class=comment># まず、辞書を初期化する。</span>
+letter = {}
+<span class=comment># 各記事について処理する。</span>
+for row in a:
+    ...
+    <span class=comment># 記事ファイルから文字を読み込む。</span>
+    with open(path, encoding="utf-8") as fp:
+        text = fp.read()
+    <span class=comment># 読み込んだ文字を 1文字ずつ処理する。</span>
+    for c in text:
+        <span class=comment># 文字c に対応するバリュー (頻度) を 1だけ増やす。</span>
+        letter[c] = letter[c] + 1
+</pre>
+</div>
+<p>
+ところが、これを動かそうとすると KeyError エラーが生じる:
+<blockquote><pre>
+<span class=err>Traceback (most recent call last):
+  File "&lt;lettercount.py&gt;", line 20, in &lt;module&gt;
+KeyError: '　'</span>
+</pre></blockquote>
+<p>
+なぜかというと、
+たとえば変数 <code>c</code> に文字 <code>"A"</code> が入っていて
+<code>letter[c] = letter[c] + 1</code> を実行するとき、
+<code>letter["A"]</code> はまだ辞書中に存在しないキーを
+参照するからである。
+したがって、このときは以下のように <code>if</code> 文を使って
+キーが存在していない場合は初期値としてあらかじめ
+0 を代入するようにしておく。
+<blockquote><pre>
+<span class=comment># キー c が存在しない場合は 0 を代入する。</span>
+if not (c in letter):
+    letter[c] = 0
+<span class=comment># キー c に対応するバリューを 1だけ増やす。</span>
+letter[c] = letter[c] + 1
+</pre></blockquote>
+<p>
+プログラムの最後に <code>letter</code> の中身が全部埋まったら、
+これを表示するようにしよう:
+<blockquote><pre>
+for c in letter.keys():
+    <span class=comment># キー c に対応するバリュー (頻度) を取得する。</span>
+    n = letter[c]
+    print(f"{c} は {n} 回出現した。")
+</pre></blockquote>
+
+<div class=exercise id="ex64">
+<div class=header>演習 6-4. 頻出文字を表示する</div>
+<ol type=a>
+<li> 上のプログラム <code>lettercount.py</code> を完成させ、実行せよ。
+<li> 実際には上のプログラムはすべての文字の頻度を出力するので、
+どれが頻度の高い文字なのかわからない。
+プログラムを変更し、100,000回以上出現した文字だけを表示するようにせよ。
+</ol>
+</div>
+
+<h4>最頻値を取り出すには</h4>
+<p>
+さて、完成した辞書 <code>letter</code> から
+実際に最も頻度の高いキー (最頻値) を求めるにはどうすればよいだろうか?
+これを一般化した問題として、関数 argmax というものを考えてみる。
+これは、ある辞書に対して、それのバリューが最大となるような
+キーを返す関数である:
+<blockquote><pre>
+&gt;&gt;&gt; x = { "a":10, "bbb":100, "cc":20 }
+&gt;&gt;&gt; argmax(x)
+'bbb'   <span class=comment># キー bbb に対応する値が最大</span>
+</pre></blockquote>
+<p>
+このような処理は以下のようにすればできる:
+<blockquote><pre>
+<span class=comment># argmax: 辞書 d のバリューが最大であるようなキーを返す。</span>
+def argmax(d):
+    vmax = -1  <span class=comment># 現在の最大値</span>
+    kmax = ""  <span class=comment># そのときのキー</span>
+    <span class=comment># キーとそれに対応するバリューをすべて検査する。</span>
+    for k in d.keys():
+        v = d[k]
+        <span class=comment># もし現在の最大値よりも高ければ、更新する。</span>
+        if vmax &lt; v:
+            <nobr><span class=bl>vmax</span></nobr> = <nobr><span class=bl>v</span></nobr>
+            <nobr><span class=bl>kmax</span></nobr> = <nobr><span class=bl>k</span></nobr>
+    return kmax
+</pre></blockquote>
+
+<div class=exercise>
+<div class=header>練習問題.</div>
+<p>
+上の関数 <code>argmax</code> の空白を埋めよ。
+</div>
+
+<h3 id="text-similarity">3.3. 類似した文章を発見する</h3>
+<p>
+これらの技術を用いて
+「ある Wikipedia の記事に類似した記事」を自動的に発見してみよう。
+一般に、文章の意味が似ていることを機械によって判定するのは困難だが、
+「同じような単語を使っている記事」を判定することは比較的簡単にできる。
+<p>
+まず、ある 2つの記事<em>A</em>, 記事<em>B</em> について:
+<ul>
+<li> 記事<em>A</em> で使われている単語の集合 : W<sub><em>A</em></sub>
+<li> 記事<em>B</em> で使われている単語の集合 : W<sub><em>B</em></sub>
+</ul>
+としよう。
+ここで「集合 W<sub><em>A</em></sub> と W<sub><em>B</em></sub> が
+どれくらい重なっているか」を
+記事の<u>類似度</u>と定義する。
+ここでは、集合の類似度 Sim(W<sub><em>A</em></sub>, W<sub><em>B</em></sub>) を以下のように定義する (<a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard係数</a>):
+<div class=formula>
+Sim(W<sub><em>A</em></sub>, W<sub><em>B</em></sub>) =
+|W<sub><em>A</em></sub> &cap; W<sub><em>B</em></sub>| &div; |W<sub><em>A</em></sub> &cup; W<sub><em>B</em></sub>|
+</div>
+<p>
+この値は、たとえば W<sub><em>A</em></sub> と W<sub><em>B</em></sub> の要素が
+完全に一致しているとき 1 となる。
+W<sub><em>A</em></sub> と W<sub><em>B</em></sub> が
+お互いに半分だけ共通の要素をもつ場合は 1/3 となり、
+W<sub><em>A</em></sub> と W<sub><em>B</em></sub> が
+まったく共通の要素をもたない場合は 0 となる。
+<p>
+このプログラムのおおまかな構成は以下のようになる:
+<ol>
+<li> 各記事のテキストから日本語の単語列を抽出する。
+<li> 記事中の単語一覧の集合を作成する。
+<li> すべての記事の組み合わせ (965 &times; 965) に対して、
+  単語の集合の類似度を計算する。
+<li> 互いにもっとも類似度が高い記事の対を発見する。
+</ol>
+
+<h4>1. 各記事のテキストから単語列を抽出する</h4>
+<p>
+<a href="../week5/index.html#japanese">前回の授業で習った方法</a>を使えば、
+テキストから単語の列を切りだす関数 <code>splitwords()</code> が作れる。
+この関数は文字列を与えると、そこに含まれている単語をリストとして返す。
+
+<blockquote><pre>
+<span class=comment># splitwords(s): 与えられた文字列に含まれている単語をリストとして返す。</span>
+def splitwords(s):
+    a = []
+    col = ""
+    ...
+    return a
+</pre></blockquote>
+<p>
+この関数は以下のように動く:
+<blockquote><pre>
+&gt;&gt;&gt; <strong>print(splitwords("王様の耳はロバの耳"))</strong>
+['王様', '耳', 'ロバ', '耳']
+</pre></blockquote>
+
+<h4>2. 記事中の単語一覧の集合を作成する</h4>
+<p>
+単語のリストが得られたら、<a href="#text-countletters">上で説明した方法で</a>
+これの出現回数を数えた辞書を作成する。
+
+<blockquote><pre>
+<span class=comment># countwords(a): 与えられたリスト中の各単語の出現回数の辞書を返す。</span>
+def countwords(a):
+    words = {}
+    ...
+    return words
+</pre></blockquote>
+<p>
+この関数は以下のように動作する:
+<blockquote><pre>
+&gt;&gt;&gt; <strong>print(countwords(["a", "b", "c", "a", "c"]))</strong>
+{'a': 2, 'b': 1, 'c': 2}
+</pre></blockquote>
+
+<p>
+さらに、ここで<mark>単語の辞書を「単語の集合」として扱う</mark>
+(本来、辞書はキーとバリューを対応させて使うものだが、
+一意なキーは 1つしか現れないので、事実上
+辞書のキーを「集合」として扱うことができるためである)。
+
+<blockquote><pre>
+<span class=comment># 各記事ごとの内容 (単語の集合) を入れる辞書。</span>
+contents = {}
+
+for row in articles:
+    title = row[1]  <span class=comment># 記事の題名</span>
+    path = row[2]   <span class=comment># ファイル名</span>
+    <span class=comment># 記事ファイルから文字を読み込む。</span>
+    with open(path, encoding="utf-8") as fp:
+        text = fp.read()
+    <span class=comment># 単語のリストを取得し、辞書 (集合) に変換する。</span>
+    words = splitwords(text)
+    wordset = countwords(words)
+    <span class=comment># この単語集合を「記事の内容」として記憶しておく。</span>
+    contents[title] = wordset
+</pre></blockquote>
+
+<p>
+ここで変数 <code>contents</code> は
+「記事名をキー、単語集合 (辞書) をバリューとする辞書」、
+つまり「辞書の辞書」であることに注意。
+(厳密にいえば「辞書への参照の辞書への参照」である)
+
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="480" height="260">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrow)">
+    <line x1="80" y1="40" x2="110" y2="40" />
+    <line x1="230" y1="40" x2="315" y2="40" />
+    <line x1="230" y1="100" x2="315" y2="160" />
+  </g>
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="115" y="20" width="150" height="160" />
+    <rect x="120" y="25" width="80" height="30" />
+    <rect x="200" y="25" width="60" height="30" />
+    <rect x="120" y="85" width="80" height="30" />
+    <rect x="200" y="85" width="60" height="30" />
+    <rect x="320" y="20" width="150" height="100" />
+    <rect x="325" y="25" width="80" height="30" />
+    <rect x="405" y="25" width="60" height="30" />
+    <rect x="325" y="65" width="80" height="30" />
+    <rect x="405" y="65" width="60" height="30" />
+    <rect x="320" y="150" width="150" height="100" />
+    <rect x="325" y="155" width="80" height="30" />
+    <rect x="405" y="155" width="60" height="30" />
+    <rect x="325" y="195" width="80" height="30" />
+    <rect x="405" y="195" width="60" height="30" />
+  </g>
+  <g style="font-weight:bold; font-size:75%;">
+    <text x="130" y="10" dy="0.4em">キー</text>
+    <text x="210" y="10" dy="0.4em">バリュー</text>
+    <text x="330" y="10" dy="0.4em">キー</text>
+    <text x="410" y="10" dy="0.4em">バリュー</text>
+    <text x="330" y="140" dy="0.4em">キー</text>
+    <text x="410" y="140" dy="0.4em">バリュー</text>
+  </g>
+  <g style="font-family:monospace;">
+    <text x="10" y="40" dy="0.4em">contents</text>
+    <text x="120" y="40" dy="0.4em">"鬼滅の刃"</text>
+    <text x="120" y="100" dy="0.4em">"窪寺昭"</text>
+    <text x="130" y="140" dy="0.4em">...</text>
+    <text x="330" y="40" dy="0.4em">"鬼滅"</text>
+    <text x="410" y="40" dy="0.4em">34</text>
+    <text x="330" y="80" dy="0.4em">"刃"</text>
+    <text x="410" y="80" dy="0.4em">46</text>
+    <text x="330" y="100" dy="0.4em">...</text>
+    <text x="330" y="170" dy="0.4em">"窪寺"</text>
+    <text x="410" y="170" dy="0.4em">1</text>
+    <text x="330" y="210" dy="0.4em">"昭"</text>
+    <text x="410" y="210" dy="0.4em">1</text>
+    <text x="330" y="230" dy="0.4em">...</text>
+  </g>
+</svg>
+</div>
+
+<h4>3. すべての記事の組み合わせに対して、単語の集合の類似度を計算する</h4>
+<p>
+つぎに、特定の単語集合 W<sub><em>A</em></sub>, W<sub><em>B</em></sub> に対して
+|W<sub><em>A</em></sub> &cap; W<sub><em>B</em></sub>| を計算することを考える:
+
+<blockquote><pre>
+<span class=comment># intersection: 2つの集合 wa と wb の積集合 wa&cap;wb の要素数を返す。</span>
+def intersection(wa, wb):
+    n = 0
+    <span class=comment># wa のすべてのキーに対して...</span>
+    for k in wa.keys():
+        <span class=comment># それが wb にも含まれていれば 1 と数える。</span>
+        if k in wb:
+            n = n + 1
+    return n
+</pre></blockquote>
+
+<p>
+ここで、
+|W<sub><em>A</em></sub> &cup; W<sub><em>B</em></sub>| =
+|W<sub><em>A</em></sub>| + |W<sub><em>B</em></sub>| -
+|W<sub><em>A</em></sub> &cap; W<sub><em>B</em></sub>|
+であることを考えると、
+|W<sub><em>A</em></sub> &cup; W<sub><em>B</em></sub>| も
+計算できるはずである。
+
+<div class=exercise>
+<div class=header>練習問題.</div>
+<p>
+辞書 <code>W</code> のキーを集合として扱ったとき、
+その要素数 |<em>W</em>| は Python でどのように表現できるか。
+</div>
+
+<p>
+最後に、いっさいがっさいをまとめて、
+「各記事に対する、もっとも類似度が高い記事」を表示させる:
+<div class="file">
+simarts.py
+<pre>
+<span class=comment># すべての記事に対して...</span>
+for k1 in contents.keys():
+    <span class=comment># k1 に対してもっとも類似度が高い記事 kmax をさがす。</span>
+    <span class=comment># others: 記事k1に対する、ほかの記事の類似度。</span>
+    others = {}
+    for k2 in contents.keys():
+        <span class=comment># さらに、k1 以外のすべての記事に対して...</span>
+        if k1 != k2:
+            <span class=comment># 単語集合 wa, wb を取得する。</span>
+            wa = contents[k1]
+            wb = contents[k2]
+            <span class=comment># 類似度 Sim(wa,wb) を計算する。</span>
+            p = intersection(wa, wb)
+            sim = p / <nobr><span class=bl>??????????</span></nobr>
+            <span class=comment># k1 に対する k2 の類似度を記録。</span>
+            others[k2] = sim
+    <span class=comment># k1 に対する類似度が最高となるキーを取得。</span>
+    kmax = argmax(others)
+    <span class=comment># そのときの類似度を表示する。</span>
+    print(f"{k1}/{kmax} {sim[kmax]}")
+</pre></div>
+<p>
+上のプログラムを実行すると、
+以下のような興味深い関係 (?) が見つかる:
+<blockquote><pre>
+...
+織田信長/豊臣秀吉 0.17473118279569894
+菅義偉/小池百合子 0.13618677042801555
+太宰治/夏目漱石 0.12096575511209658
+Netflix/YouTube 0.138635142396561
+ジャニーズ事務所/SMAP 0.1342741935483871
+...
+</pre></blockquote>
+<p>
+(なお、ここでいう「類似」はあくまで<strong>記事が似ている</strong>ことを示し、
+対象となるアニメ・人物が似ているわけではないことに注意。)
+
+<h4>4. 互いにもっとも類似度が高い記事の対を発見する</h4>
+<p>
+上のプログラムでは「個々の記事に対して、もっとも類似度が高い記事」を
+表示するものであった。
+ではこれをさらに拡張して、
+「任意の2つの記事ペアに対して、互いにもっとも類似度が高い組み合わせ」を
+求めることはできるだろうか?
+じつはこれは比較的簡単である。
+「ある記事に対して、もっとも似ている記事」はすでにわかっているのだから、
+2つの記事名を連結して
+<code>"<em>ある記事名</em>/<em>もっとも似ている記事名</em>"</code> というキーをつくり、
+そのときの類似度を別の辞書 (<code>pairsim</code>) に格納しておく。
+この辞書の値がもっとも高くなるようなキー (記事ペア) が
+「互いにもっとも類似した記事」のはずである:
+<div class=file>
+simarts.py (つづき)
+<pre>
+<span class=comment># 2つの記事ペアの類似度を記録する辞書。</span>
+pairsim = {}
+
+<span class=comment># すべての記事に対して...</span>
+for k1 in contents.keys():
+    <span class=comment># k1 に対してもっとも類似度が高い記事 kmax をさがす。</span>
+    ...
+    <span class=comment># "記事名1/記事名2" というキーをつくり、ペアに対する類似度を記録。</span>
+    kk = f"{k1}/{kmax}"
+    pairsim[kk] = others[kmax]
+
+<span class=comment># 最も類似度が高いペアを見つける。</span>
+bestkk = argmax(pairsim)
+print(f"もっとも似た記事同士: {bestkk}")
+</pre></div>
+
+<p>
+さて、上のプログラムを実行すると「もっとも似た記事同士」は何になるだろうか?
+ここまで最終的に求めるプログラムが本日の中課題 3 である。
+
+
+<h2 id="assignments">5. 本日の課題</h2>
+
+<div class=exercise id="ex5">
+<div class=header>小課題 6. (2021年1月28日締切)</div>
+<ul>
+  <li> 提出期限: 2021年1月28日 (1週間後)
+  <li> 提出するファイル: <code>lettercount.py</code>
+</ul>
+<p>
+本日の演習 6-4. b. を完成させ、Wikipedia の記事群から
+100,000回以上出現した文字だけを表示するプログラムを書け。
+</div>
+
+<div class=exercise id="m2">
+<div class=header>中課題 3. (2021年2月4日締切)</div>
+<ul>
+  <li> 提出期限: 2021年2月4日 (2週間後)
+  <li> 提出するファイル: <code>simarts.py</code>
+</ul>
+<p>
+本日の授業で説明した、
+Wikipedia から類似記事を発見するプログラム <code>simarts.py</code> を完成させよ。
+最後の行に「互いにもっとも類似した記事」を出力すること。
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

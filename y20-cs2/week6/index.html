@@ -1034,7 +1034,7 @@ for k1 in contents.keys():
     <span class=comment># k1 に対する類似度が最高となるキーを取得。</span>
     kmax = argmax(others)
     <span class=comment># そのときの類似度を表示する。</span>
-    print(f"{k1}/{kmax} {sim[kmax]}")
+    print(f"{k1}/{kmax} {others[kmax]}")
 </pre></div>
 <p>
 上のプログラムを実行すると、
@@ -1049,8 +1049,10 @@ Netflix/YouTube 0.138635142396561
 ...
 </pre></blockquote>
 <p>
-(なお、ここでいう「類似」はあくまで<strong>記事が似ている</strong>ことを示し、
-対象となるアニメ・人物が似ているわけではないことに注意。)
+なお、ここでいう「類似」はあくまで<strong>記事が似ている</strong>ことを示し、
+対象となるアニメ・人物が似ているわけではないことに注意。
+また、上の類似度の値はプログラムの組み方によって
+微妙に違ってくる可能性がある。
 
 <h4>4. 互いにもっとも類似度が高い記事の対を発見する</h4>
 <p>

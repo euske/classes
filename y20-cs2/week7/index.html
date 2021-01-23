@@ -30,7 +30,7 @@
 </ul>
 <li> <a href="#ml-what">機械学習とは何か?</a>
 <ul>
-  <li> <a href="#ml-issue">機械学習の問題点</a>
+  <li> <a href="#ml-issue">機械学習の難しさ</a>
   <li> <a href="#ml-dtree">決定木とは</a>
 </ul>
 <li> <a href="#dtree">Python による決定木の学習 (探索)</a>
@@ -80,8 +80,8 @@
 それでも課題を多くしているのには理由がある:
 <ol type=a>
   <li> 米国の大学ではそれが普通。
-  <li> 「なんとなくわかった気にさせる」のではなく、
-    「実際にできるようにさせる」のが目標。
+  <li> 「なんとなくわかった気になる」のではなく、
+    「実際にできるようになる」のが目標だから。
   <li> 外国人が日本で就職するようになると、
     日本の大学教育ではヤバい。
 </ol>
@@ -109,30 +109,8 @@
 
 <h4>これからどこへ</h4>
 <ul>
-<li> ゲーム開発
-<ul>
-<li> ゲームデザイン
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342205&amp;KeiCD=22&amp;course=5&amp;KougiCD=201904843&amp;Nendo=2019&amp;lang=JA&amp;vid=03">コンピューターグラフィクス</a>
-<li> ユーザーインタフェイス
-</ul>
-<li> ウェブアプリ開発
-<ul>
-<li> HTML、CSS、JavaScript言語
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902436&amp;Nendo=2019&amp;lang=JA&amp;vid=03">コンピュータネットワーク</a>
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342323&amp;KeiCD=23&amp;course=23&amp;KougiCD=201904889&amp;Nendo=2019&amp;lang=JA&amp;vid=03">先端情報セキュリティ</a>
-</ul>
-<li> システムプログラミング
-<ul>
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902445&amp;Nendo=2019&amp;lang=JA&amp;vid=03">システムソフトウェア</a>
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902427&amp;Nendo=2019&amp;lang=JA&amp;vid=03">アセンブリ言語</a>
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342300&amp;KeiCD=23&amp;KougiCD=201902446&amp;Nendo=2019&amp;lang=JA&amp;vid=03">コンパイラ構成</a>
-</ul>
-<li> データサイエンス
-<ul>
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=342200&amp;KeiCD=22&amp;KougiCD=201902381&amp;Nendo=2019&amp;lang=JA&amp;vid=03">数理統計学</a>
-<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=4&amp;GakkaCD=340000&amp;KeiCD=0&amp;KougiCD=201926658&amp;Nendo=2019&amp;lang=JA&amp;vid=03">基盤データサイエンス</a>
-</ul>
-<li> ロボットプログラミング
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&action=T0200&GakubuCD=4&GakkaCD=342200&KeiCD=22&tab=2&focus=200&lang=JA">数理・計算科学系の授業</a>
+<li> <a href="http://www.ocw.titech.ac.jp/index.php?module=General&action=T0200&GakubuCD=4&GakkaCD=342300&KeiCD=23&tab=2&focus=200&lang=JA">情報工学系の授業</a>
 </ul>
 
 
@@ -226,7 +204,7 @@ topvote(["miso","shoyu","tonkotsu","miso"])  <span class=comment># "miso"</span>
 <strong>ヒント:</strong>
 これとほぼ同じ処理は、コンピュータサイエンス第一の
 暗号解読の課題 (もっとも頻出する文字を見つける) でやったはず。
-ここでは Python の辞書 (ハッシュテーブル) を使うとさらに簡単。
+ここでは Python の辞書 (ハッシュテーブル) を使うと簡単。
 <blockquote><pre>
 <span class=comment># 与えられたリストでもっとも頻出の要素を返す。</span>
 def topvote(a):
@@ -240,6 +218,14 @@ def topvote(a):
 
 </div>    return best
 </pre></blockquote>
+<p>
+実は、前回の課題でやった <code>argmax</code> と 
+<code>countwords</code> が使えれば、単に
+<blockquote><pre>
+def topvote(a)
+    return argmax(countwords(a))
+</pre></blockquote>
+とするだけである。
 <p>
 ここで作成した関数 <code>topvote()</code> は、
 あとの演習および小課題で使用する。
@@ -307,8 +293,14 @@ def faceness(image):
 コンピュータを使ってこのような関数を自動的に発見させよう、
 というアイデアが <u>機械学習</u> (Machine Learning, ML) である。
 このようにして発見されたプログラムを「<u>分類器</u> (classifier)」と呼ぶ。
+<strong>注意:</strong>
+ここでいう「学習」は、通常の日本語とは若干意味が異なっている。
+たとえば日本語では「彼女は海水が塩辛いということを学んだ」などというが、
+機械学習における学習とは「ひとつの事実」を学ばせることではなく、
+「方法」を学ばせることなのである。
+<p>
 機械学習は人工知能の一分野であり、現在さかんに研究されているが、
-基本的には「プログラムを発見 (作成) するプログラム」といえる。
+基本的には「プログラム (分類器) を作成 (発見) するプログラム」といえる。
 機械学習はおもに自然界の現象 (規則できっちり定義できないもの) を対象に使われることが多い。
 (消費税の計算をするのに機械学習を使ったりはしない)
 
@@ -347,7 +339,7 @@ def faceness(image):
 <p>
 この授業ではもっとも簡単な教示つき学習を扱う。
 
-<h3 id="ml-issue">2.1. 機械学習の問題点</h3>
+<h3 id="ml-issue">2.1. 機械学習の難しさ</h3>
 <p>
 他の人工知能の例にもれず、機械学習もまた探索として定義される:
 <blockquote><pre>
@@ -624,7 +616,7 @@ print(score)
 </ol>
 
 <div class=exercise>
-<div class=header>演習 7-2.</div>
+<div class=header>演習 7-2. 決定木を学習する</div>
 <p>
 上で説明した決定木の学習アルゴリズムを実際に実行してみよう。
 上のコードをただつなげればよい。
@@ -772,7 +764,7 @@ for i in range(22):
 じつは <code>agaricus-lepiota.data</code> に一覧されているキノコの順序は
 <strong>大幅に偏っている</strong>。そこで、7000件以降のデータを
 テストデータとして使うと、偏った結果を学習してしまう。これを避けるために、
-前回の授業で作成した <code>shuffle()</code> 関数を使って、
+以下のような関数 <code>shuffle()</code> 関数を使って、
 リスト<code>table</code> をまずシャッフルしてから使うことにする。
 
 <blockquote><pre>
@@ -780,8 +772,11 @@ import random
 def shuffle(a):
     n = len(a)
     for k in range(n):
+        <span class=comment># i に 0〜(n-1) のランダムな数をいれる。</span>
         i = int(random.random()*n)
+        <span class=comment># j に 0〜(n-1) のランダムな数をいれる。</span>
         j = int(random.random()*n)
+        <span class=comment># a[i] とa[j] の要素を入れ替える。</span>
         t = a[i]
         a[i] = a[j]
         a[j] = t
@@ -793,6 +788,21 @@ shuffle(table)
 train = table[:7000]
 <span class=comment># 残りをテストデータとして使う。</span>
 test = table[7000:]
+</pre></blockquote>
+<p>
+ここで、<code>random.random()</code> は 0.0 〜 0.999999... までの
+ランダムな数 (乱数) を返す関数である。
+これを使うと、任意の範囲にあるランダムな数を生成することができる:
+<blockquote><pre>
+&gt;&gt;&gt; <strong>import random</strong>
+&gt;&gt;&gt; <strong>random.random()</strong>
+0.7576950216752333
+&gt;&gt;&gt; <strong>random.random()</strong>
+0.2107090484219279
+&gt;&gt;&gt; <strong>int(random.random()*10)</strong>
+5
+&gt;&gt;&gt; <strong>int(random.random()*10)</strong>
+8
 </pre></blockquote>
 
 <h3 id="training-f2">4.2. ふたつの素性を使った決定木の学習</h3>
@@ -848,7 +858,7 @@ for i in range(22):
 </pre></blockquote>
 
 <div class=exercise>
-<div class=header>演習 7-3.</div>
+<div class=header>演習 7-3. ふたつの素性を使った決定木の学習</div>
 <ol type=i>
 <li> 4.1節および 4.2 節のコードを実際に実行せよ。
 <li> 4.2節の例では素性の組み合せが 22×21 = 462通りあり、

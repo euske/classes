@@ -128,11 +128,11 @@
 「電脳 (<a href="https://zh.wikipedia.org/wiki/%E7%94%B5%E8%84%91">电脑</a>)」
 と呼んでいる)
 <p>
-たとえば、以下は消費税を計算する<strong>人工知能</strong>といえる。
+たとえば、以下は消費税込みの価格を計算する<strong>人工知能</strong>といえる。
 これは人間の能力を超えた計算能力をもつ:
 <blockquote><pre>
-x = input("価格?")
-print("消費税", x*0.08)
+x = input("税抜き価格?")
+print("税込み価格", int(x*1.10))
 </pre></blockquote>
 <p>
 ちなみに
@@ -220,7 +220,7 @@ def topvote(a):
 </div>    return best
 </pre></blockquote>
 <p>
-実は、前回の課題でやった <code>argmax</code> と 
+実は、前回の課題でやった <code>argmax</code> と
 <code>countwords</code> が使えれば、単に
 <blockquote><pre>
 def topvote(a)

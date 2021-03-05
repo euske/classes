@@ -279,16 +279,43 @@ print(f"c={c}")
 <dd> <code>if〜else</code> のパターンをさらに発展させたもの。
 <pre>
 if <em>条件式1</em>:
-    <em><strong>条件式1</strong>が真であるときに実行される文</em>
+    <em><strong>条件式1が真である</strong>ときに実行される文</em>
 elif <em>条件式2</em>:
-    <em><strong>条件式2</strong>が真であるときに実行される文</em>
+    <em><strong>そうではなく、条件式2が真である</strong>ときに実行される文</em>
 elif <em>条件式3</em>:
-    <em><strong>条件式3</strong>が真であるときに実行される文</em>
+    <em><strong>そうではなく、条件式3が真である</strong>ときに実行される文</em>
     ...
 else:
-    <em><strong>すべての条件式</strong>が真でなかったときに実行される文</em>
+    <em><strong>どの条件式も真でなかった</strong>ときに実行される文</em>
 </pre>
 </dl>
+
+<h4>if〜else と if〜elif〜else の違い</h4>
+<p>
+<code>elif</code> 句は <code>else</code> + <code>if</code> を
+ひとつにまとめたもので「そうではなく…」という意味を含んでいる。
+個々の <code>elif</code> は上から見ていくため、最初に真であった条件式に
+対応する部分が実行され、<strong>それ以降の部分は実行されない</strong>。
+たとえば
+<pre>
+if <em>条件式1</em>:
+    print("X")
+if <em>条件式2</em>:
+    print("Y")
+</pre>
+は、<em>条件式1</em> および <em>条件式2</em> が両方成り立つ場合、
+<code>print("X")</code> および <code>print("Y")</code> の両方が実行されるが、
+<pre>
+if <em>条件式1</em>:
+    print("X")
+<mark>elif</mark> <em>条件式2</em>:
+    print("Y")
+</pre>
+の場合は、<code>print("X")</code> しか実行されない。
+なぜなら <em>条件式1</em> が成り立っている時点で、
+もう「そうではなく」ないので、それ以降の
+<code>elif</code>句がチェックされないからである。
+
 
 <h3 id="nolist">2.1. 通常の変数を使うとなにが問題か?</h3>
 <p>

@@ -17,6 +17,7 @@ pre, code { background: #ddd; font-size: 150%; font-family: courier; }
 img { max-width: 80vw; height: auto; }
 dt { text-decoration: underline; font-weight: bold; }
 u { color: green; font-weight: bold; }
+mark { font-weight: bold; }
 .exercise { outline: 2px solid black; padding: 1em; margin: 1em; }
 .exercise .header { font-size: 120%; font-weight: bold; border-bottom: solid 1px black; }
 .figure { outline: 1px solid black; padding: 4px; margin: 4px; text-align: center; }

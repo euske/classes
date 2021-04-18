@@ -41,10 +41,13 @@ function setupCounter() {
   <li> <a href="#computer-colors">色を 0 と 1で表すには</a>
   <li> <a href="#computer-sounds">音声を 0 と 1で表すには</a>
 </ul>
-<li> <a href="#infounits">情報量の単位</a>
+<li> <a href="#bits">情報の量と単位</a>
 <ul>
-  <li> <a href="#infounits-prefixes">接頭語</a>
-  <li> <a href="#infounits-examples">いろいろな量のめやす</a>
+  <li> <a href="#bits-text">文字を表すのに必要な情報量</a>
+  <li> <a href="#bits-image">画像を表すのに必要な情報量</a>
+  <li> <a href="#bits-sound">音声を表すのに必要な情報量</a>
+  <li> <a href="#bits-video">動画の情報量</a>
+  <li> <a href="#bits-prefixes">情報量でよく使う接頭語</a>
 </ul>
 <li> <a href="#summary">本日のまとめ・小課題</a>
 <ul>
@@ -181,7 +184,7 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
       <li> エレベータの場合: 入力装置・出力装置は?
     </ul>
   <li> 装置の間で渡されるあらゆる情報 (= 文字・画像・音声・動画など) は、
-    すべて <u>2種類の異なる状態</u>の組み合わせで表される:
+    すべて <strong>2種類の異なる状態</strong> の組み合わせで表される:
     <ul>
       <li> 電圧の高(5V)／低(0V)
       <li> 0 と 1
@@ -216,6 +219,17 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
 </ul>
 </div>
 
+<h4>コンピュータで扱うデータ</h4>
+<p>
+コンピュータでは、おもに以下のようなデータを扱う:
+<ul>
+<li> 数値
+<li> 文字 / <u>テキスト</u> (text)
+<li> 静止画像
+<li> 音声
+<li> 動画
+</ul>
+
 <h3 id="computer-numbers">2.2. 数値 (整数) を 0 と 1で表すには</h3>
 <ul>
   <li> 10種類の数字を使う: 10進数 (ふつうの数)
@@ -243,9 +257,22 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
 <ul>
   <li> 1文字 = 1つの数値で表わす。<br>
     数値を並べれば文章が表現できる。
+  <li> ASCII 方式 (国際規格): A=65, B=66, C=67, ...
     <table border class=figure align=center>
       <tr><td>H</td><td>E</td><td>L</td><td>L</td><td>O</td></tr>
       <tr><td>72</td><td>69</td><td>76</td><td>76</td><td>79</td></tr>
+    </table>
+  <li> いろいろな規格:
+    <ul>
+      <li> ASCII (英語のみ)
+      <li> <a href="https://web.archive.org/web/20150317193520/http://kikaku.itscj.ipsj.or.jp/ISO-IR/042.pdf">JIS X 0208</a> (日本語)
+      <li> <a href="https://web.archive.org/web/20000820072211/http://www.itscj.ipsj.or.jp/ISO-IR/058.pdf">GB 2312</a> (国标、中国語)
+      <li> KS C 5601 (ハングル)
+      <li> <a href="https://www.unicode.org/charts/">Unicode</a> (すべての言語)
+    </ul>
+    <table border class=figure align=center>
+      <tr><td>A</td><td>あ</td><td>&hearts;</td></tr>
+      <tr><td>65</td><td>12354</td><td>9829</td></tr>
     </table>
 </ul>
 
@@ -317,7 +344,6 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
 <a href="https://en.wikipedia.org/wiki/File:Spectrum4websiteEval.png"><img width="600" height="72" src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spectrum4websiteEval.png"></a><br>
 <a href="https://en.wikipedia.org/wiki/File:Cone-response-en.png"><img width="550" height="346" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Cone-response-en.png"></a>
 </div>
-<ul>
 <li> 桿体細胞 (明るさを認識する)
 <li> 錐体細胞 (色を認識する -
 <span style="color:red;">赤</span>、
@@ -330,7 +356,6 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
 の各成分をそれぞれ 256段階の数値で表す
 = 256×256×256種類の色が表現可能<br>
 これをピクセルの数だけ並べれば画像が表現できる。
-</ul>
 <table border class=figure align=center>
 <tr>
 <td style="background:#cc8855; width:1em; height:1em;"></td>
@@ -395,13 +420,15 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
   </g>
 </svg>
 </div>
-<li> 波形の形を数値の列によって表す:
+<li> 波形の形を数値の列によって表す (サンプリング):
 <br> 10, 25, 35, 40, 45, 40, 35, ...
 <li> 人間の可聴領域: 20Hz 〜 20,000Hz。
+<li> CDの音: 1秒間の波形を 44,100個の数値でサンプリングする
+  (サンプリング周波数は 44,100Hz = 44.1KHz)。<br>
 </ul>
 
 
-<h2 id="infounits">3. 情報量の単位</h2>
+<h2 id="bits">3. 情報の量と単位</h2>
 <p>
 コンピュータやインターネットを使う際には、
 「情報の量」を表わす単位が頻繁に使われる。
@@ -412,7 +439,95 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
   <li> bps (bits per second) … 「1秒間に何ビット送信するか」をあらわす単位。
 </ul>
 
-<h3 id="infounits-prefixes">3.1. 接頭語</h3>
+<h3 id="bits-text">3.1. 文字を表すのに必要な情報量</h3>
+<ul>
+  <li> 1文字 = Unicodeで表すと約24ビット = 3バイト
+<div class=formula>
+<strong>文字の情報量</strong> = (文字数) × 3バイト
+</div>
+  <li> メール1000文字 = 3000バイト
+  <li> 新約聖書 = 約40万文字 = 120万バイト
+</ul>
+
+<div class=exercise>
+<div class=header>演習 2-3. 文字の情報量</div>
+<ol type=a>
+<li> 夏目漱石「坊っちゃん」は約4万文字ある。これを表すのに必要な情報量は何バイトか。
+<li> Wikipedia日本語版における文章部分のみを合計すると、約50億文字になる。
+  これを表すのに必要な情報量は何バイトか。
+</ol>
+</div>
+
+<h3 id="bits-image">3.2. 画像を表すのに必要な情報量</h3>
+<ul>
+  <li> 白と黒だけの場合 … 単に 0 と 1 をピクセルの数だけ並べればよい。
+<div class=formula>
+<strong>白黒の画像を表す情報量</strong> = ((縦ピクセル数) × (横ピクセル数) ÷ 8) バイト
+</div>
+  <li> カラー画像の場合 … <span style="color:red;">R</span>,
+    <span style="color:green;">G</span>,
+    <span style="color:blue;">B</span>
+    の各成分をそれぞれ 256段階 (8ビット) の数値で表すため、
+    24ビット (= 3バイト) あればひとつのピクセルの色が表現可能。
+<div class=formula>
+<strong>カラー画像の情報量</strong> = (縦ピクセル数) × (横ピクセル数) × 3バイト
+</div>
+<li> 文字と比べて、画像は情報量がずっと多い。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 2-4. 画像の情報量</div>
+<ol type=a>
+<li> A4 の紙に 300dpi (300ピクセル/インチ) の細かさで白黒印刷すると、
+  2480×3500ピクセルの画像になる。
+  これを表すのに必要な情報量は何バイトか。
+<li> Twitterのアイコンはカラー画像であり、400×400ピクセルある。
+  これを表すのに必要な情報量は何バイトか。
+<li> iPhone X のカメラは、12Mピクセルの画素をもっている。
+  これで撮影した一枚の写真を表すのに必要な情報量は何バイトか。
+  また、これは新約聖書 (120万バイト) のおよそ何倍か。
+</ol>
+</div>
+
+<ul>
+</ul>
+
+<h3 id="bits-sound">3.3. 音声を表すのに必要な情報量</h3>
+<ul>
+<li> CD音質の音 (モノラル): 44,100Hz のサンプリング波形の
+  1成分を 0 〜 65535 (16ビット) で表すと、44KHz×2バイト = 88,000バイト/秒。
+<div class=formula>
+<strong>音声の情報量</strong> = (秒数) × (チャンネル数) × 88,000バイト
+</div>
+</ul>
+
+<h3 id="bits-video">3.4. 動画の情報量</h3>
+<ul>
+<li> 動画というのは、ようは静止画像を並べたものである:
+<div class=formula>
+<strong>動画の情報量</strong> = (1コマ分の静止画像の情報量) × (コマ数)
+</div>
+<li> HD画質で毎秒30コマ:<br>
+  1920×1280×3×30 = 186,624,000バイト/秒
+<li> 4K画質で毎秒60コマで1時間の動画:<br>
+  3840×2160×3×60×3600 = 5,374,771,200,000バイト
+<li> 動画は<strong>ケタ違いに</strong>情報量が多い。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 2-5. 動画の情報量</div>
+<ol type=a>
+<li> HD画質で毎秒30コマの映像 1時間分は何バイトか。
+<li> a. の映像にモノラル 44.1KHz の音声がついていると仮定すると、
+  合計で何バイトになるか。
+</ol>
+</div>
+
+<h3 id="bits-prefixes">3.5. 情報量でよく使う接頭語</h3>
+<p>
+情報量は大きな数字になりうるので、
+普通は「何億バイト」とか「何兆バイト」とは言わずに、
+SI単位系の接頭語を使う:
 <ul>
 <li> K (<nobr><span class=bl>キロ</span></nobr>) = 10<sup>3</sup> = 1,000
 <li> M (<nobr><span class=bl>メガ</span></nobr>) = 10<sup>6</sup> = 1,000,000
@@ -438,16 +553,12 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
 </ul>
 </div>
 
-<h3 id="infounits-examples">3.2. いろいろな量のめやす</h3>
+<h4>いろいろな量のめやす</h4>
 <ul>
 <li> 一般的なパソコンの動作周波数 … 1GHz = 10<sup>9</sup>回の処理/秒。
 <li> 1回の処理にかかる時間 … 1ナノ秒 = 10<sup>-9</sup>秒。
 <li> メモリの容量 … 4Gバイト。
 <li> ハードディスクの容量 … 500Gバイト。
-<li> 日本から欧米までのネットワーク遅延 … 150ミリ秒。<br>
-(コンピュータが命令を実行する時間を 1秒とすると、これは約12年に相当する。)
-<li> <a href="https://gist.github.com/hellerbarde/2843375">参考資料1</a>,
-  <a href="https://www.prowesscorp.com/computer-latency-at-a-human-scale/">参考資料2</a>
 </ul>
 
 
@@ -456,6 +567,8 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
   <li> グループ自己紹介をおこなった。
   <li> パスワードを変更した。
   <li> コンピュータはすべての情報を 0 と 1 の羅列で扱っている。
+  <li> 文字よりも画像を表すのに必要な情報量は多い。
+    動画に必要な情報量はさらに多い。
 </ol>
 
 <h4>本授業の成績について</h4>

@@ -21,13 +21,32 @@
 
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
-<li> <a href="#parts">コンピュータの原理 (復習)</a>
-<li> <a href="#bits">データの情報量</a>
+<li> <a href="#bits">コンピュータ上の情報 (復習)</a>
+<ul>
+  <li> <a href="#bits-info">情報 (データ) とは何だったか?</a>
+  <li> <a href="#bits-types">データの「形式」とは?</a>
+  <li> <a href="#bits-metadata">「メタデータ」とは?</a>
+</ul>
 <li> <a href="#compression">データ圧縮とは</a>
-<li> <a href="#internet">インターネットの仕組み (復習)</a>
-<li> <a href="#summary">本日のまとめ・小課題</a>
-<li> <a href="#assignment">クラス共通課題2の説明</a>
-<li> <a href="#nextweek">次回予告</a>
+<ul>
+  <li> <a href="#compression-types">データ圧縮技術の種類</a>
+  <li> <a href="#compression-redu">圧縮による情報量の削減</a>
+</ul>
+<li> <a href="#internet">インターネットのしくみ (復習)</a>
+<ul>
+  <li> <a href="#internet-servers">サーバとクライアント</a>
+  <li> <a href="#internet-ipaddrs">IPアドレスとは</a>
+  <li> <a href="#internet-packets">実際のパケット</a>
+  <li> <a href="#internet-urls">URLとは?</a>
+  <li> <a href="#internet-dns">Domain Name System (DNS) とは</a>
+  <li> <a href="#internet-www">World Wide Web (WWW) の動き</a>
+  <li> <a href="#internet-errors">ブラウザがうまく動かない場合</a>
+</ul>
+<li> <a href="#summary">本日のまとめ</a>
+<ul>
+  <li> <a href="#ex-s4">小課題4. テキストファイルの提出 (5月31日締切)</a>
+  <li> <a href="#ex-m2">クラス共通課題2. 「インターネットとウェブ」 (5月31日締切)</a>
+</ul>
 </ol>
 
 
@@ -106,7 +125,7 @@ Wikipedia のウソをグループ発表する。
 
 <h2 id="bits">1. コンピュータ上の情報 (復習)</h2>
 
-<h3>1.1. 情報 (データ) とは何だったか?</h3>
+<h3 id="bits-info">1.1. 情報 (データ) とは何だったか?</h3>
 <ul>
 <li> パソコン上で扱う情報は、すべて 0 と 1 の組み合わせで表される:
   <ul>
@@ -119,7 +138,7 @@ Wikipedia のウソをグループ発表する。
   </ul>
 </ul>
 
-<h3>1.2. データの「形式」とは?</h3>
+<h3 id="bits-types">1.2. データの「形式」とは?</h3>
 <ul>
 <li> パソコン (記憶装置) 上のデータは、
   すべて<u>ファイル</u>に保存される。
@@ -178,7 +197,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
     <div class=figure><img width="434" height="292" src="../../y20-il2/week1/showexts-mac.png"></div>
 </ol>
 
-<h3>1.3. 「メタデータ」とは?</h3>
+<h3 id="bits-metadata">1.3. 「メタデータ」とは?</h3>
 <ul>
 <li> データ (data) … 情報
 <li> メタデータ (metadata) … 情報に関する情報
@@ -227,7 +246,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 <li> データ量を減らす技術: <u>データ圧縮</u>
 </ul>
 
-<h3>2.1. データ圧縮技術の種類</h3>
+<h3 id="compression-types">2.1. データ圧縮技術の種類</h3>
 <ul>
 <li> 可逆圧縮 … もとに戻る (可逆) 圧縮。
 <br> <strong>PNG画像</strong> (くり返しを省く)
@@ -240,7 +259,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 <br> <strong>MPEG動画</strong> (変化しない部分を省く: 約1/100倍)
 </ul>
 
-<h3>2.2. 圧縮による情報量の削減</h3>
+<h3 id="compression-redu">2.2. 圧縮による情報量の削減</h3>
 <p>
 データ圧縮技術は、こんにちデータを送受信する際にはほぼ必須となっている。
 <table border class=figure align=center>
@@ -277,7 +296,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 </div>
 </ul>
 
-<h3>3.1. サーバとクライアント</h3>
+<h3 id="internet-servers">3.1. サーバとクライアント</h3>
 <p>
 ネットワークにつながっているコンピュータには2種類ある:
 <ul>
@@ -295,7 +314,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
     </ul>
 </ul>
 
-<h3>3.2. IPアドレスとは</h3>
+<h3 id="internet-ipaddrs">3.2. IPアドレスとは</h3>
 <ul>
 <li> インターネットにつながっているすべてのコンピュータが持つ固有のアドレス。
 <li> 8ビット(0〜255) × 4つの数字で表される。
@@ -307,7 +326,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
   </ul>
 </ul>
 
-<h3>3.3. 実際のパケット</h3>
+<h3 id="internet-packets">3.3. 実際のパケット</h3>
 <ul>
   <li> ケーブルの中には、複数のデータ (<u>IPパケット</u>) が流れている。
 <div class=figure>
@@ -351,7 +370,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 </ul>
 </ul>
 
-<h3>3.4. URLとは?</h3>
+<h3 id="internet-urls">3.4. URLとは?</h3>
 <ul>
   <li> ブラウザの上に表示されている文字列。<br>
     "Uniform Resource Locator" の略だが、
@@ -366,7 +385,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 </table>
 </ul>
 
-<h3>3.5. Domain Name System (DNS)</h3>
+<h3 id="internet-dns">3.5. Domain Name System (DNS) とは</h3>
 <ul>
 <li> 数字だけの (<code>131.112.244.84</code> のような)
   IPアドレスは覚えにくいので、
@@ -412,7 +431,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 </ol>
 </div>
 
-<h3>3.6. World Wide Web (WWW) の動き</h3>
+<h3 id="internet-www">3.6. World Wide Web (WWW) の動き</h3>
 <div class=figure>
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="510" height="140"
        transform="translate(5,5)">
@@ -485,7 +504,7 @@ Macでは、ファイルの拡張子はふだんは表示されない設定に�
 </ol>
 </div>
 
-<h3>3.7. ブラウザがうまく動かない場合</h3>
+<h3 id="internet-errors">3.7. ブラウザがうまく動かない場合</h3>
 <ol>
 <li> URL の形式がおかしい。
   <br>例: <code>moo://w4i&hearts;zqs&#x266a;x&gt;よ-\o/-</code>

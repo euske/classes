@@ -13,6 +13,7 @@ table { border-collapse: collapse; }
 td { padding: 4px; }
 kbd { outline: 1px solid black; padding: 2px; }
 pre { outline: 1px solid black; padding: 4px; overflow: auto; }
+mark { font-weight: bold; }
 pre, code { background: #ddd; font-size: 150%; font-family: courier; }
 img { max-width: 80vw; height: auto; }
 dt { text-decoration: underline; font-weight: bold; }

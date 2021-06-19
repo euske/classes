@@ -38,6 +38,11 @@
 </ol>
 
 
+<div class=notice>
+今日の講義は 2回分をひとつにまとめたものなので、分量が多いです。
+</div>
+
+
 <h3>雑談: プログラミングをやりたい人に</h3>
 <p>
 「プログラミングをやりたい」 = 「運動をやりたい」<br>
@@ -70,6 +75,7 @@
 <li> 授業の目的と、データ管理の重要性について説明した。
 <li> ファイル形式、拡張子、およびパス名について説明した。
 <li> テキストエディタの使い方を学習した。
+<li> <a href="https://colab.research.google.com/">Google アカウント</a> を作成しておくこと。
 </ul>
 
 <div class=exercise>
@@ -310,7 +316,7 @@ b. を使ってもよい (結果は同じである)。
 <h3 id="matplotlib-plot">1.2. グラフを描画する</h3>
 
 <div class=exercise>
-<div class=header>演習2-2. 最初のグラフを描画する</div>
+<div class=header>演習 2-2. 最初のグラフを描画する</div>
 <p>
 Google Colaboratory (あるいは Jupyter Notebook) で
 以下のプログラムを入力し、
@@ -342,7 +348,7 @@ plt.show()
 時間に余裕があれば、以下もやってみよう:
 
 <div class=exercise>
-<div class=header>演習2-3. いろいろなグラフを描く</div>
+<div class=header>演習 2-3. いろいろなグラフを描く</div>
 <ol>
 <li> 上のプログラムの中で、以下の行
 <blockquote><pre>
@@ -411,6 +417,13 @@ Juypter Notebook では、
 <p>
 (なお、作成した Notebook 自体もホームフォルダ内に保存されている。)
 
+<div class=exercise>
+<div class=header>演習 2-4. グラフを画像ファイルとして保存</div>
+<p>
+上で描画したグラフの画像ファイル <code>sinx.png</code> を
+自分のパソコン上にダウンロードせよ。
+</div>
+
 
 <h2 id="matplotlib-advanced">2. matplotlib の応用</h2>
 <p>
@@ -419,7 +432,7 @@ matplotlib の本当の使い方は sin(x) などのグラフを描くことで�
 テキスト形式のデータを与えることで、任意のグラフを描画する。
 
 <div class=exercise>
-<div class=header>演習2-4. データを使ったグラフ描画</div>
+<div class=header>演習 2-5. データを使ったグラフ描画</div>
 <ol class=spacy>
   <li> 以下のようなテキストファイルを作成し、
     これを <code>data1.txt</code> という名前で保存する:
@@ -465,7 +478,7 @@ plt.show()
 
 <h3 id="matplotlib-code">2.1. matplotlib のプログラム解説</h3>
 <p>
-上の演習 3-5. で使った matplotlib プログラムを簡単に解説する。
+上の演習 2-5. で使った matplotlib プログラムを簡単に解説する。
 <p>
 まず、最初の2行は、<strong>とにかく必要</strong>。
 <blockquote><pre>
@@ -603,17 +616,26 @@ plt.show()
 <a href="../../data/model.pdf">論文</a>で使われる
 本物のグラフを作成しよう。
 まず、図 5. 「実行時間比較」から始めることにする。
+<p>
+最初に、実験結果をあらわす数値データを自分のパソコン上にダウンロードする。
+このファイルは <u>Zip形式</u> であり、
+この中には複数のファイル(フォルダ) が格納されている:
+<ul>
+<li> <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a>
+    (この実験データに関する詳細は
+    <a href="https://titechcomp.github.io/y21-il2j/14-dataset.html">実習に用いるデータセット</a>
+    を参照)
+</ul>
+<h4>Zip形式とは?</h4>
+<p>
+Zip形式のファイルとは、拡張子 <code>.zip</code> をもち、
+複数のファイル・フォルダを圧縮した1個のファイルにまとめることができる。
+こうすると、ただ1つのファイルを送るだけでよいので
+メールで送信したりダウンロードしたりするのが楽である。
 
 <div class=exercise id="ex25">
-<div class=header>演習2-5. 本格的なグラフ描画</div>
+<div class=header>演習 2-6. 本格的なグラフ描画</div>
 <ol class=spacy>
-  <li> まず元データをダウンロードする。
-    このファイルは <u>Zip形式</u> であり、複数のファイル(フォルダ) が圧縮されている:<br>
-    <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a><br>
-    (このデータに関する説明は
-    <a href="https://titechcomp.github.io/y21-il2j/14-dataset.html">実習に用いるデータセット</a>
-    のページにある)
-
   <li> ダウンロードした Zip ファイルを開き、
     <code>kadai-plot-data</code> というフォルダをデスクトップに移動する。<br>
     (Macの場合は、自動的に開かれる。)
@@ -621,8 +643,9 @@ plt.show()
   <li> 次に <a href="https://drive.google.com/">Google Drive</a> を開き、
     ここに取り出した <code>kadai-plot-data</code> フォルダをドラッグ・ドロップする。
     これにより、フォルダの中身が Google Drive にアップロード (送信) される。
+    <p>
     <strong>注意:</strong>
-    zipファイルの中から直接 kadai-plot-data をドラッグ・ドロップしないこと。
+    <mark>zipファイル中から直接 kadai-plot-data をドラッグ・ドロップしない</mark>こと。
     必ず一度、デスクトップ上に出してからでないと、うまく動かない。
     <div class=figure><img src="gdrive.png"></div>
 
@@ -674,26 +697,26 @@ plt.show()
   <li> 締め切り: 6月28日 (1週間後)
   <li> <a href="https://t2schola.titech.ac.jp/course/view.php?id=13914">T2SCHOLA</a> から提出すること。
 </ul>
-<p> <a href="#ex25">演習 2-5.</a> でやったグラフを修正して、以下のようなグラフ
+<p> <a href="#ex25">演習 2-6.</a> でやったグラフを修正して、以下のようなグラフ
   (<a href="../../data/model.pdf">論文</a>の図6) を描け。
   このときの matplotlib の <mark>プログラム</mark> (画像ファイルではない) を
   テキストファイルとして提出せよ。
   ファイル名はなんでもよいが、拡張子は <code>.txt</code> であること。
   <div class=figure><img src="plot3.png"></div>
 <p>
-  演習 2-5. のグラフとの違い:
+  具体的には、演習 2-6. のグラフを以下のように変更すればよい:
   <ul>
-    <li> 前のグラフでは 4つのプロット (CNM, HE', HE, HN) を
-      描いていたが、今回のプロットは 3つ (HE', HE, HN) である。
     <li> 前のグラフでは
       <code>cnm</code>, <code>hn2</code>, <code>hn1</code>, <code>hn</code> の
       各フォルダにある <code>etime-size.txt</code> というデータを使ってプロットしていたが、
       今回のプロットは各フォルダにある <code>etime-size<mark>-M</mark>.txt</code> というデータを
-      使ってプロットすること。
+      使ってプロットする。
+    <li> 前のグラフでは 4つのプロット (CNM, HE', HE, HN) を描いていたが、
+      今回は 3つ (HE', HE, HN) のプロットにする。
   </ul>
 <p>
-  ここで作成したグラフは、今後の課題でも利用するので
-  着実に完成させよう。
+  ここで作成した matplotlib のプログラムは、
+  今後の課題でも利用するので着実に完成させよう。
 </div>
 
 

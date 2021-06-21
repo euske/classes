@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2021年度 情報リテラシ第二 (1a)
+第3回 - LaTeX (Overleaf) の基本、Zipファイル
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第3回 - LaTeX (Overleaf) の基本、Zipファイル</h1>
+<div class=nav>2021年6月28日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#matplotlib">matplotlib つづき</a>
+<li> <a href="#latex">LaTeXとは?</a>
+<li> <a href="#syntax">LaTeX の書き方</a>
+<li> <a href="#summary">本日のまとめ・課題2つ</a>
+</ol>
+
+<div class=notice>
+<strong>注意:</strong>
+今週は、提出課題が 2つ (小課題3 + 中課題1) あります。
+</div>
+
+
+<h3>雑談</h3>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> matplotlib で、実際のデータを使ってグラフを描く方法を学習した。
+</ul>
+
+
+<h2 id="matplotlib">1. matplotlib つづき</h2>
+
+<p>
+今回は、論文の図3 を描くことを考える:
+<div class=figure><img width="432" height="288" src="fig3good.png"></div>
+<p>
+このようなグラフは「<a href="https://titechcomp.github.io/y20-il2j/1b-exercise.html">散布図</a>」と呼ばれている。matplotlib を使って
+このグラフを描くには、前回のつづき (<code>kadai-plot-data</code> フォルダの
+データが使える状態) で、以下のように入力する:
+<blockquote><pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/cnm/ratio-join.txt")
+plt.<mark>scatter</mark>(a[:,0], a[:,1], s=0.1, color="black")
+
+plt.xlabel("#Joins")
+plt.ylabel("Consolidation Ratio (#edges)")
+plt.savefig("fig3.pdf")
+plt.show()
+</pre></blockquote>
+すると、(すごい時間がかかった後) 以下のような図が表れる。
+<div class=figure><img width="386" height="262" src="fig3bad.png"></div>
+<p>
+ここには 2つの問題がある:
+<ul>
+<li> 出力されたファイル (<code>fig3.pdf</code>) をダウンロードすると、
+  時間がかかるうえ、ファイルサイズが巨大 (約1.9MBytes) もある。
+  これは、非効率である。
+<li> 論文の図4は片対数グラフ
+  (縦軸の目盛りが 10<sup>0</sup>, 10<sup>-1</sup>, 10<sup>-2</sup>, ...)
+  であるのに対し、この図はそうなっていない。
+</ul>
+<p>
+画像ファイルが巨大なのは、
+これがPDF形式 (<code>fig3.<mark>pdf</mark></code>) であることによるものである。
+このため、描画も非常に時間がかかってしまう。
+
+<div class=exercise>
+<div class=header>演習 3-1. 散布図を描く</div>
+<ol>
+<li> 上のコードを実行し、<code>fig3.pdf</code> を実際に
+  ダウンロードして拡大せよ。
+<li> 上のコードを変更して、保存するファイル名を
+  <code>fig3.pdf</code> から <code>fig3.png</code> に変更せよ。
+  できたファイルをダウンロードし、違いを確認せよ。
+<li> コード中の適当な位置に以下の1行を挿入し、
+  縦軸を対数グラフにせよ:
+<pre>plt.yscale("log")</pre>
+</ol>
+</div>
+
+<p>
+これまでに学習したことを使えば、
+論文の図をすべて描くことができる:
+
+<div id="ex-m1" class=exercise>
+<div class=header>中課題 1. 論文の図をすべて描く</div>
+<p>
+論文のグラフ 図2 〜 図6 の画像ファイル、
+およびそれを生成する matplotlib のプログラムすべてを
+1個の <u>zipファイル</u> にまとめ、提出せよ:
+<div class=figure>
+<table align=center>
+<tr>
+<td><a href="fig2.png"><img width="432" height="288" style="max-width:15vw;" src="fig2.png"></a></td>
+<td><a href="fig3good.png"><img width="432" height="288" style="max-width:15vw;" src="fig3good.png"></a></td>
+<td><a href="fig4.png"><img width="432" height="288" style="max-width:15vw;" src="fig4.png"></a></td>
+<td><a href="fig5.png"><img width="432" height="288" style="max-width:15vw;" src="fig5.png"></a></td>
+<td><a href="fig6.png"><img width="432" height="288" style="max-width:15vw;" src="fig6.png"></a></td>
+</tr><tr>
+<td>図2</td><td>図3</td><td>図4</td><td>図5</td><td>図6</td>
+</tr></table>
+</div>
+<p>
+以下、描き方に関する説明:
+<ul>
+<li> 図3 … 上で解説した。
+<li> 図4 … 図3 を修正したもの。
+  使用するデータとして
+  <code>cnm/ratio-join.txt</code> ではなく、
+  <code>hn/ratio-join-500K.txt</code> を使えばよい。
+<li> 図5、図6 … 前回の授業で解説した。
+</ul>
+<p>
+図2 だけは特別で、これは以下のプログラムを使って
+棒グラフ (bar) を 5回表示させればよい:
+<blockquote><pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/cnm/time-join-500K.txt")
+plt.bar(a[:,0], a[:,1], 10000, edgecolor="black", color="<mark>???</mark>", label="#Nodes = 500K")
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/cnm/time-join-400K.txt")
+plt.bar(a[:,0], a[:,1], 10000, edgecolor="black", color="<mark>???</mark>", hatch="<mark>???</mark>", label="#Nodes = 400K")
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/cnm/time-join-300K.txt")
+plt.bar(a[:,0], a[:,1], 10000, edgecolor="black", color="<mark>???</mark>", hatch="<mark>???</mark>", label="#Nodes = 300K")
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/cnm/time-join-200K.txt")
+plt.bar(a[:,0], a[:,1], 10000, edgecolor="black", color="<mark>???</mark>", hatch="<mark>???</mark>", label="#Nodes = 200K")
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/cnm/time-join-100K.txt")
+plt.bar(a[:,0], a[:,1], 10000, edgecolor="black", color="<mark>???</mark>", label="#Nodes = 100K")
+
+plt.xlabel("#Joins")
+plt.ylabel("Time [sec]")
+plt.legend()
+plt.show()
+</pre></blockquote>
+<p>
+ここで、<code>color="<mark>???</mark>"</code> の ??? 部分には、
+<code>white</code> あるいは <code>black</code> のどちらかを入れる。
+<code>hatch="<mark>???</mark>"</code> の ??? 部分には、
+<code>//</code>、<code>xx</code> あるいは <code>xxxx</code> のどれかを入れると、
+論文にあるのと同じ模様でグラフが描画できる。
+<p>
+生成する画像ファイルはすべて png形式とする。
+これに加えて matplotlib の各プログラムを txt形式のファイルで保存し、
+これらをひとつのフォルダの中に入れる:
+<div class=figure><img width="856" height="384" src="kadai1.png"></div>
+
+<ul>
+<li> <strong>Windows の場合:</strong>
+フォルダを右クリックし、メニューから
+<kbd>送る(N)</kbd> &gt; <kbd>圧縮 (zip形式) フォルダー</kbd> を選ぶと
+圧縮された zip ファイルが生成される。
+<div class=figure><img width="179" height="79" src="kadai1win.png"></div>
+<li> <strong>Mac の場合:</strong>
+フォルダを右クリックし、メニューから
+<kbd>kadai1 を圧縮</kbd> を選ぶと、圧縮された zip ファイルが生成される。
+<div class=figure><img width="191" height="109" src="kadai1mac.png"></div>
+</ul>
+<p>
+できあがった <code>kadai1.zip</code> を T2SCHOLA で提出すればよい。
+</div>
+
+
+<h3 id="zipfile">1.1. Zipファイルとは?</h3>
+<ul>
+  <li> ファイルまとめ機能 + 圧縮機能:
+    <ul>
+      <li> 複数のファイル・フォルダをひとつのファイルにまとめる。
+      <li> 0・1 の羅列のうち、繰り返されている部分を発見し省く:
+        <code>011011011011011</code> → <code>011</code>×5
+    </ul>
+  <li> 特殊用途のデータ圧縮技術は何だったか?
+    <ul>
+      <li> 画像用
+      <li> 音声(音楽)用
+    </ul>
+</ul>
+
+<div class=exercise>
+<div class=header>問.</div>
+<ol type=a>
+  <li> 以前にダウンロードした
+    <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a>
+    ファイルは何バイトあるか?
+  <li> この zip ファイルを展開したフォルダの容量は合計何バイトあるか?
+  <li> Zip ファイルの圧縮率 (圧縮後サイズ ÷ 圧縮前のサイズ) は何パーセントか?
+</ol>
+</div>
+
+<h4>雑談</h4>
+<ul>
+<li> Zipファイルの中には、展開するとサイズがメチャクチャ増えて迷惑なものがある。
+  これを「Zip爆弾」という。たとえば <a href="https://unforgettable.dk/">42.zip</a> という
+  42Kバイトの圧縮ファイルを全部展開すると、
+  計 4,503,599,626,321,920 (4.5Pバイト、約1000億倍) のファイルになる。
+  <u>決してマネしてはいけません。</u>
+</ul>
+
+
+<h2 id="latex">2. LaTeXとは?</h2>
+<ul>
+  <li> 読み方: 「らてふ」「らてっく」
+  <li> matplotlib と同様、コマンドを与えて文書を生成させる。
+  <li> レイアウトを自動調整してくれる。(逆に、細かいレイアウト調整は苦手)
+  <li> 数式が綺麗に書ける。
+</ul>
+
+<h4>LaTeXによる数式の例</h4>
+<ol>
+<li> <pre class=example>
+x^2 + y^2
+</pre>
+<div class=figure><a href="f_ex1.png"><img width="199" height="75" src="f_ex1.png"></a></div>
+<li> <pre class=example>
+\sqrt{x^2 + y^2}
+</pre>
+<div class=figure><a href="f_ex2.png"><img width="239" height="84" src="f_ex2.png"></a></div>
+<li> <pre class=example>
+\frac{x}{y}
+</pre>
+<div class=figure><a href="f_ex3.png"><img width="53" height="138" src="f_ex3.png"></a></div>
+<li> <pre class=example>
+x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}
+</pre>
+<div class=figure><a href="f_quadratic.png"><img width="460" height="146" src="f_quadratic.png"></a></div>
+<li> <pre class=example>
+f(a) = \frac{1}{2\pi i} \oint\frac{f(z)}{z-a}dz
+</pre>
+<div class=figure><a href="f_cauchy.png"><img width="507" height="128" src="f_cauchy.png"></a></div>
+</ol>
+
+<h4>Word と LaTeX の違い</h4>
+<ul>
+  <li> Word: 人間の操作によって文書のレイアウトが決まる。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="180">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="user" width="50" height="50">
+      <g fill="none" stroke="black" stroke-width="3">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+      </g>
+    </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+    <symbol id="file2" width="75" height="75">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"
+         transform="scale(0.75)">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(0.5,0.5)">
+    <use x="10" y="10" xlink:href="#user" />
+    <use x="0" y="100" xlink:href="#file2" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="70" y1="50" x2="150" y2="80" />
+      <line x1="70" y1="130" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+  <li> LaTeX: コマンド (=プログラム) が文書のレイアウトを決める。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="180">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="user" width="50" height="50">
+      <g fill="none" stroke="black" stroke-width="3">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+      </g>
+    </symbol>
+    <symbol id="file2" width="75" height="75">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"
+         transform="scale(0.75)">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(0.5,0.5)">
+    <use x="0" y="10" xlink:href="#file2" />
+    <use x="0" y="100" xlink:href="#file2" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="70" y1="50" x2="150" y2="80" />
+      <line x1="70" y1="130" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+</ul>
+
+<h3 id="overleaf">2.1. Overleaf を使う</h3>
+<p>
+今回は、<a href="https://ja.overleaf.com/">Overleaf</a>
+というクラウドサービスを使って LaTeX 文書を作成する。
+<p>
+自分の PC にインストールしたい場合は、
+以下を参照のこと:
+<ul>
+<li> <a href="https://texwiki.texjp.org/?TeX%20Live">TeX Live</a> (Windows)
+<li> <a href="https://texwiki.texjp.org/?MacTeX">MacTeX</a> (Mac)
+</ul>
+
+<div class=exercise>
+<div class=header>演習3-2. 最初の Overleaf プロジェクト</div>
+<ol>
+  <li> まず <a href="https://ja.overleaf.com/">Overleaf</a> で
+    <kbd>登録する</kbd> ボタンを押し、メールアドレスとパスワードをつけて
+    アカウントを作成する。
+  <li> 画面左上にある <kbd>新規プロジェクト</kbd> ボタンを押し、
+    さらに <kbd>空のプロジェクト</kbd> を選ぶ。
+    プロジェクト名として、<code>hello</code> と入力する。
+  <li> 画面が変わるので、左上の <kbd>新規ファイル</kbd> ボタンを押す。
+    ファイル名として <code>latexmkrc</code> と入力する。
+    (<strong>注意:</strong>
+    <code>latexmkrc<mark>.tex</mark></code> はダメ、<strong><code>.tex</code> の部分を消すこと</strong>)
+    <div class=figure><img width="545" height="200" src="ov_latexmkrc.png"></div>
+  <li> <code>latexmkrc</code> をクリックし、編集画面で以下の文字をペーストする:
+(赤線が表示されても気にしない)
+<blockquote><pre>
+$latex = 'platex';
+$bibtex = 'pbibtex';
+$dvipdf = 'dvipdfmx %O -o %D %S';
+</pre></blockquote>
+  <li> 左上隅にある <kbd>メニュー</kbd> ボタンをクリックし、設定の
+    「コンパイラ」の部分で <kbd>LaTeX</kbd> を選ぶ。
+    <div class=figure><img width="277" height="593" src="ov_menu.png"></div>
+  <li> <code>main.tex</code> をクリックし、編集画面で以下の文字をペーストする:
+<blockquote><pre>
+\documentclass{jarticle}
+\begin{document}
+こんにちわ。
+\[ \sqrt{a + b} \]
+\end{document}
+</pre></blockquote>
+  <li> 右上にある <kbd>リコンパイル</kbd> ボタンをクリックすると、
+    右半分に完成した文書が表示される。
+    (エラーがある場合は赤い文字が表示される)
+    <div class=figure><img width="1130" height="310" src="ov_hello.png"></div>
+  <li> さらに右の <kbd>ダウンロード</kbd> ボタンをクリックすると、
+    完成した PDFファイルがダウンロードされる。
+</ol>
+</div>
+
+
+<h2 id="syntax">3. LaTeX の書き方</h2>
+
+<h3 id="syntax-basic">3.1. お約束</h3>
+<ul>
+  <li> 最初の1行はかならずコレ:
+<pre>
+\documentclass[a4j,11pt]{jarticle}
+</pre>
+  <li> 文書全体を <code>\begin{document}</code> 〜 <code>\end{document}</code> で囲む:
+<pre>
+\begin{document}
+...
+\end{document}
+</pre>
+  <li> 「<code>%</code>」以降はコメントとして無視される。
+  <li> すべてのコマンドは「<code>\command</code>」などのように
+    バックスラッシュ (<code>\</code>) のあとに書いた英単語で表される。
+  <li> コマンドによっては後にくる文字を <code>{〜}</code> で
+    囲む必要がある<u>場合もある</u>。
+  <li> コマンドは数百種類もあるので、
+    基本的には他人の技をパクって覚える。
+</ul>
+
+<div class=ex>
+<div class=header>演習5-1. LaTeXの基礎</div>
+<ol>
+  <li> 以下のファイルをダウンロードせよ:
+    <a href="https://titechcomp.github.io/y20-il2j/2/sample.tex">sample.tex</a>
+  <li> Overleaf で、新しいプロジェクトを作成せよ (前回の hello プロジェクトを開いてもよい)。
+    前回と同じように <code>latexmkrc</code> を作成すること:
+<pre>
+$latex = 'platex';
+$bibtex = 'pbibtex';
+$dvipdf = 'dvipdfmx %O -o %D %S';
+</pre>
+    (自分のPCにLaTeXをインストールした場合は、新しいフォルダを作成する。)
+  <li> 画面左上にある <kbd>アップロード</kbd> ボタンをクリックし、
+    ダウンロードした sample.tex を Overleaf 上にアップロードせよ。
+<div class=figure><img width="276" height="199" src="ov_upload.png"></div>
+  <li> <code>sample.tex</code> ファイルをクリックして <kbd>リコンパイル</kbd> し、
+    正しく文書が表示されることを確認せよ。
+<div class=figure><img width="937" height="490" src="ov_sample.png"></div>
+  <li> <code>\author</code> の中身を自分の名前に書き換えよ。
+  <li> 見よう見真似で <code>\section</code> コマンドを使って、
+    文書の最後に「<code>おわりに</code>」という節を追加せよ。
+</ol>
+</div>
+
+<h3 id="syntax-commands">3.2. LaTeX コマンドいろいろ</h3>
+
+<h4>参考資料</h4>
+<ul>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y20-il2j/latex/">LaTeX サポートサイト</a>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y20-il2j/theme2.html">科学技術文書執筆</a>
+  <li> <a href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
+</ul>
+
+<h4>技術1. 段落を変える</h4>
+<ul>
+  <li> LaTeX では、ただ改行しても改行にならない。
+    <pre class=example>王様の
+耳は
+ロバの耳。</pre>
+  <li> 1行あけると、次の段落になる。
+    <pre class=example>下の文章のいっていることは本当です。
+
+上の文章がいっていることはウソです。</pre>
+</ul>
+
+<h4>技術2. 数式の埋め込み</h4>
+<ul>
+<li> 文章中に埋め込む: <code>$ 〜 $</code>
+  <pre class=example>以下が成り立つ: $(a+b)^2 = a^2 + 2ab + b^2$</pre>
+<li> ひとつの段落として表示: <code>\[ 〜 \]</code>
+  <pre class=example>以下が成り立つ: \[ (a+b)^2 = a^2 + 2ab + b^2 \]</pre>
+</ul>
+
+<h3 id="syntax-troubleshooting">3.3. エラーが出る場合のチェックリスト</h3>
+<ol type=a>
+<li> <code>latexmkrc</code> は正しく作ったか? (<code>latexmkrc.tex</code> ではダメ)
+<li> 「コンパイラ」を <kbd>pdfLaTeX</kbd> から <kbd>LaTeX</kbd> に変更したか?
+<li> 文書の先頭に <code>\documentclass</code> が正しく書かれているか?
+<li> 文章が正しく
+  <code>\begin{document}</code> 〜 <code>\end{document}</code> で囲まれているか?
+<li> コマンドやファイル名が正しく (全角ではなく) 半角文字で入力されているか?
+</ol>
+
+
+<h2 id="summary">4. 本日のまとめ・課題2つ</h2>
+<ul>
+<li> matplotlibの課題を遂行した。
+<li> LaTeX の基本的な使い方を学習した。
+</ul>
+
+<div class=exercise id="ex-s3">
+<div class=header>小課題3. LaTeX で作った PDF を提出する (7月5日締切)</div>
+<ul>
+  <li> 締め切り: 7月5日 (1週間後)
+  <li> <a href="https://t2schola.titech.ac.jp/course/view.php?id=13914">T2SCHOLA</a> から提出すること。
+</ul>
+<p>
+演習 4-3. で作った PDF ファイルを提出せよ。
+内容は、LaTeX を使ってあれば何でもよいので、
+べつに好きな数式なり文章なりを入れてもかまわない。
+(Overleaf のかわりに、自分の PC にインストールした LaTeX を使ってもよい。)
+ファイル名はなんでもよいが、拡張子は <code>.pdf</code> であること。
+</div>
+
+<div class=exercise>
+<div class=header>中課題 1. 論文の図をすべて描く (7月5日締切)</div>
+<ul>
+  <li> 締め切り: 7月5日 (1週間後)
+  <li> <a href="https://t2schola.titech.ac.jp/course/view.php?id=13914">T2SCHOLA</a> から提出すること。
+</ol>
+</ul>
+<p>
+詳細は <a href="#ex-m1">上に書いた</a>。
+論文のグラフ 図2 〜 図6 の画像ファイル、
+およびそれを生成する matplotlib のプログラムすべてを
+1個の <u>zipファイル</u> にまとめ、提出せよ。
+ファイル名は <code>kadai1.zip</code> であること。
+Zip の中には計10個のファイル (<code>fig2.png</code>, <code>fig2.txt</code>, ...,
+<code>fig6.png</code>, <code>fig6.txt</code>) が含まれていなければならず、
+採点基準は 1つのファイルにつき 2点 (全部で20点) である。
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

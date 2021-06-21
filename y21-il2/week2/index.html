@@ -305,7 +305,7 @@ b. を使ってもよい (結果は同じである)。
   <li> <a href="https://colab.research.google.com/">Google Colaboratory</a> にログインする。
   <li> <kbd>File</kbd> メニューから <kbd>New Notebook</kbd> を選ぶ。
   <li> 以下のような画面が出る。この枠内に文字を入力する。
-    <div class=figure><img src="colab0.png"></div>
+    <div class=figure><img width="791" height="361" src="colab0.png"></div>
 </ol>
 
 <h4>Jupyter Notebook を使う場合</h4>
@@ -313,7 +313,7 @@ b. を使ってもよい (結果は同じである)。
   <li> <kbd>Jupyter Notebook</kbd> を起動する。
   <li> <kbd>New Notebook (Python3)</kbd> を選ぶ。
   <li> 以下のような画面が出る。この枠内に文字を入力する。
-    <div class=figure><img src="jupyter0.png"></div>
+    <div class=figure><img width="810" height="265" src="jupyter0.png"></div>
 </ol>
 
 <h3 id="matplotlib-plot">1.2. グラフを描画する</h3>
@@ -344,7 +344,7 @@ plt.show()
 </pre></blockquote>
 <p>
 正しく動作していれば、以下のような画面が表れるはずである:
-<div class=figure><img src="colab1.png"></div>
+<div class=figure><img width="770" height="701" src="colab1.png"></div>
 </div>
 
 <p>
@@ -408,7 +408,7 @@ Google Colaboratory は、内部にファイルを持っている。
 <li> 初期化にしばらく時間がかかるので、10秒ぐらい待つ。
 <li> <code>sinx.png</code> というファイルが表示されるので、
   右クリックして <kbd>Download</kbd> を選ぶ。
-  <div class=figure><img src="colab2.png"></div>
+  <div class=figure><img width="524" height="719" src="colab2.png"></div>
 <li> ダウンロードしたファイルを PC 上に保存する。
 </ol>
 
@@ -453,7 +453,7 @@ matplotlib の本当の使い方は sin(x) などのグラフを描くことで�
     <br>
     (Jupyter Notebook を使っている場合は、ファイル <code>data1.txt</code> を
     ホームフォルダ (Notebookファイルが入っているフォルダ) の中に置けばよい。)
-    <div class=figure><img src="files1.png"></div>
+    <div class=figure><img width="350" height="254" src="files1.png"></div>
   <li> 以下のプログラムを matplotlib で入力・実行する:
 <blockquote><pre>
 import numpy as np
@@ -473,7 +473,7 @@ plt.savefig("./plot1.png")
 plt.show()
 </pre></blockquote>
     正しく動いていれば、以下のようなグラフが表示されるはずである:
-    <div class=figure><img src="plot1.png"></div>
+    <div class=figure><img width="389" height="278" src="plot1.png"></div>
   <li> <code>data1.txt</code> を開いて中の値を適当に書き換え、
     グラフを再描画させて内容が変化していることを確認する。
 </ol>
@@ -650,14 +650,14 @@ Zip形式のファイルとは、拡張子 <code>.zip</code> をもち、
     <strong>注意:</strong>
     <mark>zipファイル中から直接 kadai-plot-data をドラッグ・ドロップしない</mark>こと。
     必ず一度、デスクトップ上に出してからでないと、うまく動かない。
-    <div class=figure><img src="gdrive.png"></div>
+    <div class=figure><img width="1007" height="608" src="gdrive.png"></div>
 
   <li> ふたたび <a href="https://colab.research.google.com/">Google Colab</a> を開き、
-    「Google Drive アイコン (<img style="vertical-align:bottom;" src="gdicon.png">)」をクリックすると、
+    「Google Drive アイコン (<img width="30" height="26" style="vertical-align:bottom;" src="gdicon.png">)」をクリックすると、
     ファイル一覧部分に先ほどアップロードした <code>kadai-plot-data</code> フォルダが
     表示されているはずである。このフォルダの相対パス名は
     <code>./drive/My Drive/kada-plot-data</code> である。
-    <div class=figure><img src="files2.png"></div>
+    <div class=figure><img width="352" height="443" src="files2.png"></div>
 
   <li> 以下のプログラムを matplotlib で入力・実行する:
 <blockquote><pre>
@@ -682,11 +682,28 @@ plt.legend()
 plt.show()
 </pre></blockquote>
     正しく動いていれば、以下のようなグラフが表示されるはずである:
-    <div class=figure><img src="plot2.png"></div>
+    <div class=figure><img width="401" height="262" src="plot2.png"></div>
+
+  <li> Jupyter Notebook の場合、
+    デスクトップが <code>./Desktop/</code> という相対パス名となるため、
+    たとえばデスクトップ上に <code>kadai-plot-data</code> フォルダがある場合は、
+    プログラム中の相対パス名を以下のように変更すればよい。
+<blockquote><pre>
+変更前: a = np.genfromtxt("<mark>./drive/My Drive/</mark>kadai-plot-data/cnm/etime-size.txt")
+変更後: a = np.genfromtxt("<mark>./Desktop/</mark>kadai-plot-data/cnm/etime-size.txt")
+</pre></blockquote>
 
 </ol>
 </div>
 
+<h4>うまく動かない場合</h4>
+<p>
+以下のようなエラーが出る場合 (再生ボタンが赤くなる)、
+相対パス名 <code>./drive/My Drive/kadai-plot-data/cnm/etime-size.txt</code> に
+ファイルが存在しないことを意味する。
+このような場合は、<code>kadai-plot-data</code> フォルダが
+正しい場所にアップロードされているかどうか確認すること。
+<div class=figure><img width="665" height="465" src="gd_wrong_path.png"></div>
 
 <h2 id="summary">3. 本日のまとめ・小課題</h2>
 <ul>
@@ -705,7 +722,7 @@ plt.show()
   このときの matplotlib の <mark>プログラム</mark> (画像ファイルではない) を
   テキストファイルとして提出せよ。
   ファイル名はなんでもよいが、拡張子は <code>.txt</code> であること。
-  <div class=figure><img src="plot3.png"></div>
+  <div class=figure><img width="407" height="262" src="plot3.png"></div>
 <p>
   具体的には、演習 2-6. のグラフを以下のように変更すればよい:
   <ul>

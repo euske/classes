@@ -21,9 +21,24 @@
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
 <li> <a href="#matplotlib">matplotlib つづき</a>
+<ul>
+  <li> <a href="#zipfile">Zipファイルとは?</a>
+</ul>
 <li> <a href="#latex">LaTeXとは?</a>
+<ul>
+  <li> <a href="#overleaf">Overleaf を使う</a>
+</ul>
 <li> <a href="#syntax">LaTeX の書き方</a>
+<ul>
+  <li> <a href="#syntax-basic">お約束</a>
+  <li> <a href="#syntax-commands">LaTeX コマンドいろいろ</a>
+  <li> <a href="#syntax-troubleshooting">エラーが出る場合のチェックリスト</a>
+</ul>
 <li> <a href="#summary">本日のまとめ・課題2つ</a>
+<ul>
+  <li> <a href="#ex-m1">中課題 1. 論文の図をすべて描く (7月5日締切)</a>
+  <li> <a href="#ex-s3">小課題3. LaTeX で作った PDF を提出する (7月5日締切)</a>
+</ul>
 </ol>
 
 <div class=notice>
@@ -97,12 +112,12 @@ plt.show()
 これまでに学習したことを使えば、
 論文の図をすべて描くことができる:
 
-<div id="ex-m1" class=exercise>
-<div class=header>中課題 1. 論文の図をすべて描く</div>
+<div class=exercise id="ex32">
+<div class=header>演習 3-2. 論文の図をすべて描く (= 中課題 1)</div>
 <p>
 論文のグラフ 図2 〜 図6 の画像ファイル、
 およびそれを生成する matplotlib のプログラムすべてを
-1個の <u>zipファイル</u> にまとめ、提出せよ:
+1個の <u>Zipファイル</u> にまとめよ:
 <div class=figure>
 <table align=center>
 <tr>
@@ -168,11 +183,11 @@ plt.show()
 <li> <strong>Windows の場合:</strong>
 フォルダを右クリックし、メニューから
 <kbd>送る(N)</kbd> &gt; <kbd>圧縮 (zip形式) フォルダー</kbd> を選ぶと
-圧縮された zip ファイルが生成される。
+圧縮された Zip ファイルが生成される。
 <div class=figure><img width="179" height="79" src="kadai1win.png"></div>
 <li> <strong>Mac の場合:</strong>
 フォルダを右クリックし、メニューから
-<kbd>kadai1 を圧縮</kbd> を選ぶと、圧縮された zip ファイルが生成される。
+<kbd>kadai1 を圧縮</kbd> を選ぶと、圧縮された Zip ファイルが生成される。
 <div class=figure><img width="191" height="109" src="kadai1mac.png"></div>
 </ul>
 <p>
@@ -196,12 +211,12 @@ plt.show()
 </ul>
 
 <div class=exercise>
-<div class=header>問.</div>
+<div class=header>演習 3-3. Zipファイルを調べる</div>
 <ol type=a>
   <li> 以前にダウンロードした
     <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a>
     ファイルは何バイトあるか?
-  <li> この zip ファイルを展開したフォルダの容量は合計何バイトあるか?
+  <li> この Zip ファイルを展開したフォルダの容量は合計何バイトあるか?
   <li> Zip ファイルの圧縮率 (圧縮後サイズ ÷ 圧縮前のサイズ) は何パーセントか?
 </ol>
 </div>
@@ -346,17 +361,17 @@ f(a) = \frac{1}{2\pi i} \oint\frac{f(z)}{z-a}dz
 <h3 id="overleaf">2.1. Overleaf を使う</h3>
 <p>
 今回は、<a href="https://ja.overleaf.com/">Overleaf</a>
-というクラウドサービスを使って LaTeX 文書を作成する。
+というクラウド上で使える LaTeX を使って文書を作成する。
 <p>
-自分の PC にインストールしたい場合は、
+クラウド上でなく、LaTeX を自分の PC にインストールして使いたい場合は、
 以下を参照のこと:
 <ul>
 <li> <a href="https://texwiki.texjp.org/?TeX%20Live">TeX Live</a> (Windows)
 <li> <a href="https://texwiki.texjp.org/?MacTeX">MacTeX</a> (Mac)
 </ul>
 
-<div class=exercise>
-<div class=header>演習3-2. 最初の Overleaf プロジェクト</div>
+<div class=exercise id="ex34">
+<div class=header>演習 3-4. 最初の Overleaf プロジェクト</div>
 <ol>
   <li> まず <a href="https://ja.overleaf.com/">Overleaf</a> で
     <kbd>登録する</kbd> ボタンを押し、メールアドレスとパスワードをつけて
@@ -420,8 +435,8 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
     基本的には他人の技をパクって覚える。
 </ul>
 
-<div class=ex>
-<div class=header>演習5-1. LaTeXの基礎</div>
+<div class=exercise>
+<div class=header>演習 3-5. LaTeX の練習</div>
 <ol>
   <li> 以下のファイルをダウンロードせよ:
     <a href="https://titechcomp.github.io/y20-il2j/2/sample.tex">sample.tex</a>
@@ -491,21 +506,7 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
 <li> LaTeX の基本的な使い方を学習した。
 </ul>
 
-<div class=exercise id="ex-s3">
-<div class=header>小課題3. LaTeX で作った PDF を提出する (7月5日締切)</div>
-<ul>
-  <li> 締め切り: 7月5日 (1週間後)
-  <li> <a href="https://t2schola.titech.ac.jp/course/view.php?id=13914">T2SCHOLA</a> から提出すること。
-</ul>
-<p>
-演習 4-3. で作った PDF ファイルを提出せよ。
-内容は、LaTeX を使ってあれば何でもよいので、
-べつに好きな数式なり文章なりを入れてもかまわない。
-(Overleaf のかわりに、自分の PC にインストールした LaTeX を使ってもよい。)
-ファイル名はなんでもよいが、拡張子は <code>.pdf</code> であること。
-</div>
-
-<div class=exercise>
+<div class=exercise id="ex-m1">
 <div class=header>中課題 1. 論文の図をすべて描く (7月5日締切)</div>
 <ul>
   <li> 締め切り: 7月5日 (1週間後)
@@ -513,14 +514,28 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
 </ol>
 </ul>
 <p>
-詳細は <a href="#ex-m1">上に書いた</a>。
+<a href="#ex32">演習 3-2.</a> を完成させよ。
 論文のグラフ 図2 〜 図6 の画像ファイル、
 およびそれを生成する matplotlib のプログラムすべてを
-1個の <u>zipファイル</u> にまとめ、提出せよ。
+1個の <u>Zipファイル</u> にまとめ、提出すること。
 ファイル名は <code>kadai1.zip</code> であること。
 Zip の中には計10個のファイル (<code>fig2.png</code>, <code>fig2.txt</code>, ...,
 <code>fig6.png</code>, <code>fig6.txt</code>) が含まれていなければならず、
 採点基準は 1つのファイルにつき 2点 (全部で20点) である。
+</div>
+
+<div class=exercise id="ex-s3">
+<div class=header>小課題3. LaTeX で作った PDF を提出する (7月5日締切)</div>
+<ul>
+  <li> 締め切り: 7月5日 (1週間後)
+  <li> <a href="https://t2schola.titech.ac.jp/course/view.php?id=13914">T2SCHOLA</a> から提出すること。
+</ul>
+<p>
+<a href="#ex34">演習 3-4.</a> で作った LaTeX 文書の
+PDF ファイルを提出せよ。内容は、LaTeX を使ってあれば何でもよいので、
+べつに好きな数式なり文章なりを入れてもかまわない。
+(Overleaf のかわりに、自分の PC にインストールした LaTeX を使ってもよい。)
+ファイル名はなんでもよいが、拡張子は <code>.pdf</code> であること。
 </div>
 
 

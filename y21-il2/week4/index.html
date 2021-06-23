@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2021年度 情報リテラシ第二 (1a)
+第4回 - LaTeX による図表の埋め込み
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第4回 - LaTeX による図表の埋め込み</h1>
+<div class=nav>2021年7月5日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+</ol>
+
+
+<h3>雑談</h3>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> matplotlib の課題を遂行した。
+<li> LaTeX (Overleaf) を使ってみた。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 4-1. (前回の復習)</div>
+<ol type=a>
+<li> Zipファイル形式は普通のファイルと比べて何が違うのか?
+  2つあげよ。
+<li> LaTeX で、文書の最後に必ず書かねばならないものは?
+  <code>\<span class=bl>end</span>{<span class=bl>document</span>}</code>
+<li> なぜ画像を記録するのに PDF, JPEG, PNG など違う
+  形式がいくつも存在するのか?
+</ol>
+</div>
+
+
+<h2 id="kadai2">1. 中課題2 の説明</h2>
+<ul>
+  <li> 締め切り: 7月19日 (2週間後)。<br>
+    時間がかかるので、いまから始めたほうがよい。
+  <li> やること:
+  <ol>
+    <li> LaTeX でこれを作る:
+      「<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」
+    <li> ダウンロードしたフォルダ中に含まれている <code>hints.pdf</code> を見る。
+    <li> <code>main.tex</code> を修正して (<kbd>空欄</kbd> の部分を埋める)、
+      <code>model.pdf</code> と同じになるように加筆する。
+    <li> matplotlib で作成した図2 〜 図6を挿入する。
+    <li> 完成したプロジェクトをまるごと Zip ファイルにまとめ、
+      T2SCHOLA から提出する。
+  </ol>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 4-2. 中課題2 の準備</div>
+<ol>
+  <li> まず材料となるファイルをダウンロードする:
+    <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a><br>
+    (<strong>注意:</strong> Macを使っている場合は、
+    上のリンクを<mark>直接クリックしない</mark>こと!
+    cf. <a href="#macissues">Mac でうまくコンパイルできない場合</a>)
+  <li> Overleaf の最初の画面に戻り、
+    <kbd>新規プロジェクト</kbd> → <kbd>プロジェクトのアップロード</kbd> を選ぶ。
+  <li> ダウンロードした zip ファイルをアップロードする。
+    <div class=figure><img width="937" height="490" src="ov_upload2.png"></div>
+  <li> 「kadai-latex-overleaf」プロジェクトができるので、
+    またもや画面左上のメニューから設定の
+    「コンパイラ」を <kbd>LaTeX</kbd> に変更。
+    <div class=figure><img width="277" height="593" src="../week3/ov_menu.png"></div>
+  <li> <kbd>リコンパイル</kbd> し、正しく文書が表示されることを確認する。
+</ol>
+</div>
+
+<h4 id="macissues">Mac でうまくコンパイルできない場合</h4>
+<p>
+Mac を使っていて Overleaf でうまくコンパイルできない場合は、
+以下のことを試してみる:
+<ol class=spacy>
+<li> まず上の
+  <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+  をダウンロードするときに、リンクを<mark>直接クリックしない</mark>こと。
+  こうすると Mac は zipファイルを勝手に展開・削除してしまう。
+  これを防ぐためにはリンクを右クリック (あるいは <kbd>Control</kbd>+クリック) して
+  メニューを開き、<kbd>リンク先のファイルをダウンロード</kbd> を選ぶ。
+  こうすると zipファイルがそのまま保存されるので、
+  これを Overleaf にアップロードすればよい。
+<div class=figure><img width="737" height="366" src="downloadzip.png"></div>
+<li> Overleaf にプロジェクトをアップロードするときは、
+  ダウンロードしたzipファイルを<mark>そのまま</mark>アップロードすること。
+  一度、展開したフォルダを再び zip に圧縮してはならない。
+  こうすると以下のようなエラーが出てしまう。
+  (具体的には、Overleaf の画面左上に「kada-latex-overleaf」という余計な
+  フォルダができてしまっている、
+  こうすると latexmkrc が Overleaf に正しく認識されず、エラーとなる) :
+<div class=figure>
+<img width="799" height="430" src="overleaf-ok.png"><br>
+正常な場合
+<p>
+<img width="802" height="391" src="overleaf-ng.png"><br>
+ダメな場合
+</div>
+</ol>
+
+
+<h2 id="latex">2. LaTeX の高度な技</h2>
+
+<h3>2.1. 図の埋め込み</h3>
+<p>
+以下のコマンドを使うと、
+文書中に画像ファイル (.png あるいは .pdf ファイル) を埋め込むことができる。
+<blockquote><pre class=example>
+\begin{figure}
+\includegraphics[width=0.80\linewidth]{<mark>ファイル名</mark>}
+\caption{<mark>図のキャプション</mark>}
+\end{figure}
+</pre></blockquote>
+
+<div class=exercise>
+<div class=header>演習 4-3. 図の埋め込み練習</div>
+<ol>
+  <li> 前回の <A href="../week3/index.html#ex35">演習 3-5.</a> で
+    使ったプロジェクトを開け。
+    (消しちゃった場合は、ふたたび
+    <a href="https://titechcomp.github.io/y20-il2j/2/sample.tex">sample.tex</a>
+    をダウンロードして作成すること。)
+  <li> このプロジェクト内に、matplotlib で作成した論文 図2 の
+    画像ファイル (<code>fig2.png</code>) をアップロードせよ。
+    (ファイル名は違っていてもかまわない)
+  <li> <code>sample.tex</code> の中に、以下の内容を追加せよ:
+<pre class=example>
+\begin{figure}
+\includegraphics[width=0.80 \linewidth] {<mark>fig2.png</mark>}
+\caption{<mark>ネットワークの解析に要した時間の時系列遷移</mark>}
+\end{figure}
+</pre>
+  <li> <kbd>リコンパイル</kbd>し、正しく図が埋めこまれていることを確認せよ。
+    (LaTeX の判断により、図が勝手に次ページに送られることがある)
+  <li> <strong>注意:</strong> 図を埋め込むためには、
+    文書の最初 (<code>\documentclass</code> のあと) に以下の1行が必要である:
+    (<code>sample.tex</code> にはすでに入っている)
+<pre>
+\usepackage [dvipdfmx]{graphicx}
+</pre>
+</ol>
+</div>
+
+<h3>2.2. 表の埋め込み</h3>
+<ul>
+<li> <code>\begin{tabular} 〜 \end{tabular}</code> を使う:
+<pre class=example>
+\begin{center}
+\begin{tabular}{lrr}
+品名 &amp; 値段 &amp; 数量 \\
+チョコレート &amp; 10 &amp; 300 \\
+クッキー &amp; 150 &amp; 20 \\
+アイスクリーム &amp; 200 &amp; 4 \\
+\end{tabular}
+\end{center}</pre>
+<li> 欄の数・書式は、ここで決まる:
+<pre class=example>\begin{tabular}{<mark>lrr</mark>}</pre>
+<kbd>l</kbd>…左寄せ, <kbd>r</kbd>…右寄せ, <kbd>c</kbd>…中央寄せ。
+<li> 縦の罫線を入れるには:
+<pre class=example>\begin{tabular}{<mark>|l|r|r|</mark>}</pre>
+<li> 横の罫線を入れるには:
+<pre class=example>\hline</pre>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 4-4. 表の作成練習</div>
+<ul>
+  <li> 以下の表を LaTeX で作成せよ:
+<table class=figure border>
+  <tr><td class=l>City</td><td class=r>Highest ℃</td><td class=r>Lowest ℃</td></tr>
+  <tr><td class=l>Tokyo</td><td class=r>31</td><td class=r>1</td></tr>
+  <tr><td class=l>Honolulu</td><td class=r>32</td><td class=r>19</td></tr>
+  <tr><td class=l>Yakutsk</td><td class=r>26</td><td class=r>-42</td></tr>
+</table>
+<li> <code>.tex</code>の最初の部分:
+<pre class=example>\documentclass[a4j,11pt]{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\begin{document}
+\begin{center}
+\begin{tabular}
+...</pre>
+</ul>
+</div>
+
+<h3>2.3. 図表へのリンク</h3>
+<ul>
+  <li> 図や表が30枚ぐらい入っている文章を考える:
+    <div class="example gray">詳しくは、表.17 (第6章) を参照のこと。</div>
+    <em>…どこなのよ?</em>
+  <li> LaTeX では、図・表・節に名前 (ラベル) をつけておき、
+    別の場所からリンクできる。
+  <li> 図を参照する:
+<pre class=example>図 \ref{fig:neuman time diff} を参照せよ。</pre>
+これが、こうなる:
+<div class=example>図 1 を参照せよ。</div>
+  <li> 図にラベルをつける:
+<pre class=example>\begin{figure}
+\begin{center}
+\includegraphics[width=0.80\linewidth]
+    {fig2-cnm-joins-time-series.pdf}
+\caption{ネットワークの解析に要した時間の時系列遷移}
+<mark>\label{fig:neuman time diff}</mark>
+\end{center}
+\end{figure}</pre>
+  <li> 図を参照する:
+<pre class=example>図 <mark>\ref{fig:neuman time diff}</mark> を参照せよ。</pre>
+  <li> 表にラベルをつける場合:
+<pre class=example><mark>\begin{table}</mark>
+\begin{center}
+\begin{tabular}{lrr}
+...
+\end{tabular}
+\end{center}
+<mark>\caption{各都市の気温}
+\label{tbl:temp}
+\end{table}</mark></pre>
+  <li> 節にラベルをつける場合:
+<pre class=example>\section{節の名前}
+<mark>\label{sect:nanka}</mark>
+...</pre>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 4-5. 図表へのリンク</div>
+<ol type=a>
+  <li> 演習6-2. で作成した表に
+    見出し「<code>各都市の気温</code>」、
+    およびラベル <code>tbl:temp</code> をつけよ:
+<pre class=example>
+\begin{table}
+...
+\caption{各都市の気温}
+\label{tbl:temp}
+\end{table}
+</pre>
+  <li> 同じく演習6-2. の表を matplotlib で棒グラフとして描画し、
+    <code>fig:temp</code> というラベルをつけよ。
+<div class=figure><img width="" height="" src="temp.png"></div>
+<pre class=example>
+\caption{各都市の気温}
+\label{fig:temp}
+</pre>
+棒グラフを描画するには以下のようにする:
+<pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.bar(['Tokyo','Honolulu','Yakutsk'], [31,32,26], label="Highest", color="red")
+plt.bar(['Tokyo','Honolulu','Yakutsk'], [1,19,-42], label="Lowest", color="blue")
+
+plt.xlabel("City")
+plt.ylabel("Temperature")
+plt.legend()
+plt.savefig("./temp.png")
+plt.show()
+</pre>
+  <li> 上の a. と b. を配置した文書を作成し、
+    以下のような文を入れよ:
+<pre class=example>
+表 \ref{tbl:temp} および
+図 \ref{fig:temp} を参照のこと。
+</pre>
+  <li> 上の文章に正しく番号が挿入されることを確認せよ:
+<pre class=example>
+表 1 および図 1 を参照のこと。
+</pre>
+</ol>
+</div>
+
+<h3>2.4. 論文の引用</h3>
+<ul>
+  <li> 論文を参照する:
+<pre class=example>\cite{kumar-1999-trawling-the-web-for-<br>emerging-cyber-communities}
+は特によく知られている。</pre>
+これが、こうなる:
+<div class=example>[6] は特によく知られている。<br>
+...<br>
+<sub>[6] Ravi Kumar, Prabhakar Raghavan, Sridhar Rajagopalan and Andrew Tomkins,
+Trawling the Web for emerging cyber-communities.</sub>
+</div>
+  <li> これらの対応関係は <code>references.bib</code> ファイルに記載されているので、
+    このファイルを <code>.tex</code> と同じフォルダに置いておけば自動的に利用される。
+</ul>
+
+<div class=exercise id="ex-s4">
+<div class=header>小課題4. LaTeXによる表作成の演習</div>
+<ul>
+  <li> 締め切り: 7月12日 (1週間後)
+  <li> <a href="">演習 6-3.</a> で作成した
+    <code>.tex</code>ファイルを提出せよ。
+    (提出するのは .texファイルのみでよい。)
+    <p>
+    ここには「各都市の気温」表と棒グラフの図がどちらも含まれており、
+    各図表に正しい番号がふられていること。
+
+</ul>
+</div>
+
+<div class=exercise id="ex-m2">
+<div class=header>中課題2. 図を埋めこんだ論文PDFを完成させる</div>
+<ul>
+  <li> 締め切り: 7月19日 (2週間後)
+  <li> 論文「<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」を
+    LaTeX で印刷するのに必要なファイル一式を Zip 形式で T2SCHOLA に提出せよ。(計20点)
+  <li> ここには <code>main.tex</code> ファイルとともに、matplotlib で作成した
+    図も含まれているものとする。
+</ul>
+
+<h4>採点基準</h4>
+<ol type=a>
+  <li> すべてのファイルが揃っており、リコンパイル時にエラーが出なければ 5点。
+  <li> 表がきちんとできていれば +5点。
+  <li> 数式の埋め込みがきちんとできていれば +5点。
+  <li> <code>\cite</code> や <code>\ref</code> を使った引用ができていれば +5点。
+  <li> LaTeXのコマンドが正しく使えているかどうかが採点対象である。
+    文章のタイプミスや、図の多少のズレは減点しない。
+
+</ol>
+
+<h4>参考資料</h4>
+<ul>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y21-il2j/latex/">LaTeX サポートサイト</a>
+  <li> クラス共通: <a href="https://titechcomp.github.io/y21-il2j/theme2.html">科学技術文書執筆</a>
+  <li> <a href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
+</ul>
+</div>
+
+<div class=exercise id="plan">
+<div class=header>宿題. (提出の必要なし)</div>
+<ul>
+<li> 第7回の授業で、スライドを <mark>1枚だけ</mark> 使った
+  プレゼンテーションの練習をするので、自分が話したいテーマを考えてくること。
+<li> PowerPoint を使ってプレゼンしたい人は、
+  Office 365 をインストールしておくこと。(別に使わなくてもよい)<br>
+  Portal から「Office 365 アカウント (テスト公開中)」を選ぶとダウンロードできる。
+  <div class=figure><img src="o365.png"></div>
+</ul>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

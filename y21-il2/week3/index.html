@@ -21,9 +21,7 @@
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
 <li> <a href="#matplotlib">matplotlib つづき</a>
-<ul>
-  <li> <a href="#zipfile">Zipファイルとは?</a>
-</ul>
+<li> <a href="#zipfile">Zipファイルとは?</a>
 <li> <a href="#latex">LaTeXとは?</a>
 <ul>
   <li> <a href="#overleaf">Overleaf を使う</a>
@@ -195,7 +193,7 @@ plt.show()
 </div>
 
 
-<h3 id="zipfile">1.1. Zipファイルとは?</h3>
+<h2 id="zipfile">2. Zipファイルとは?</h2>
 <ul>
   <li> ファイルまとめ機能 + 圧縮機能:
     <ul>
@@ -231,7 +229,7 @@ plt.show()
 </ul>
 
 
-<h2 id="latex">2. LaTeXとは?</h2>
+<h2 id="latex">3. LaTeXとは?</h2>
 <ul>
   <li> 読み方: 「らてふ」「らてっく」
   <li> matplotlib と同様、コマンドを与えて文書を生成させる。
@@ -358,7 +356,7 @@ f(a) = \frac{1}{2\pi i} \oint\frac{f(z)}{z-a}dz
 </div>
 </ul>
 
-<h3 id="overleaf">2.1. Overleaf を使う</h3>
+<h3 id="overleaf">3.1. Overleaf を使う</h3>
 <p>
 今回は、<a href="https://ja.overleaf.com/">Overleaf</a>
 というクラウド上で使える LaTeX を使って文書を作成する。
@@ -412,9 +410,9 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
 </div>
 
 
-<h2 id="syntax">3. LaTeX の書き方</h2>
+<h2 id="syntax">4. LaTeX の書き方</h2>
 
-<h3 id="syntax-basic">3.1. お約束</h3>
+<h3 id="syntax-basic">4.1. お約束</h3>
 <ul>
   <li> 最初の1行はかならずコレ:
 <pre>
@@ -435,7 +433,7 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
     基本的には他人の技をパクって覚える。
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex35">
 <div class=header>演習 3-5. LaTeX の練習</div>
 <ol>
   <li> 以下のファイルをダウンロードせよ:
@@ -458,9 +456,12 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
   <li> 見よう見真似で <code>\section</code> コマンドを使って、
     文書の最後に「<code>おわりに</code>」という節を追加せよ。
 </ol>
+<p>
+なお、この演習で使ったプロジェクトは次回の授業でも使うので、
+消さずに残しておいたほうがよい。
 </div>
 
-<h3 id="syntax-commands">3.2. LaTeX コマンドいろいろ</h3>
+<h3 id="syntax-commands">4.2. LaTeX コマンドいろいろ</h3>
 
 <h4>参考資料</h4>
 <ul>
@@ -500,7 +501,7 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
 </ol>
 
 
-<h2 id="summary">4. 本日のまとめ・課題2つ</h2>
+<h2 id="summary">5. 本日のまとめ・課題2つ</h2>
 <ul>
 <li> matplotlibの課題を遂行した。
 <li> LaTeX の基本的な使い方を学習した。

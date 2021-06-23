@@ -20,6 +20,20 @@
 
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#kadai2">中課題2 の説明</a>
+<li> <a href="#latex">LaTeX の高度な技</a>
+<ul>
+  <li> <a href="#latex-figure">図の埋め込み</a>
+  <li> <a href="#latex-table">表の埋め込み</a>
+  <li> <a href="#latex-ref">図表へのリンク</a>
+  <li> <a href="#latex-cite">論文の引用</a>
+</ul>
+<li> <a href="#summary">本日のまとめ・課題2つ</a>
+<ul>
+  <li> <a href="#ex-s4">小課題4. LaTeXによる表作成の演習 (7月12日締切)<a>
+  <li> <a href="#ex-m2">中課題2. 図を埋めこんだ論文PDFを完成させる (7月19日締切)</a>
+  <li> <a href="#plan">第7回に向けての宿題 (提出の必要なし)</a>
+</ul>
 </ol>
 
 
@@ -52,7 +66,7 @@
   <li> やること:
   <ol>
     <li> LaTeX でこれを作る:
-      「<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」
+      「<a target="_blank" href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」
     <li> ダウンロードしたフォルダ中に含まれている <code>hints.pdf</code> を見る。
     <li> <code>main.tex</code> を修正して (<kbd>空欄</kbd> の部分を埋める)、
       <code>model.pdf</code> と同じになるように加筆する。
@@ -115,7 +129,7 @@ Mac を使っていて Overleaf でうまくコンパイルできない場合は
 
 <h2 id="latex">2. LaTeX の高度な技</h2>
 
-<h3>2.1. 図の埋め込み</h3>
+<h3 id="latex-figure">2.1. 図の埋め込み</h3>
 <p>
 以下のコマンドを使うと、
 文書中に画像ファイル (.png あるいは .pdf ファイル) を埋め込むことができる。
@@ -132,7 +146,7 @@ Mac を使っていて Overleaf でうまくコンパイルできない場合は
   <li> 前回の <A href="../week3/index.html#ex35">演習 3-5.</a> で
     使ったプロジェクトを開け。
     (消しちゃった場合は、ふたたび
-    <a href="https://titechcomp.github.io/y20-il2j/2/sample.tex">sample.tex</a>
+    <a href="https://titechcomp.github.io/y21-il2j/2/sample.tex">sample.tex</a>
     をダウンロードして作成すること。)
   <li> このプロジェクト内に、matplotlib で作成した論文 図2 の
     画像ファイル (<code>fig2.png</code>) をアップロードせよ。
@@ -155,7 +169,7 @@ Mac を使っていて Overleaf でうまくコンパイルできない場合は
 </ol>
 </div>
 
-<h3>2.2. 表の埋め込み</h3>
+<h3 id="latex-table">2.2. 表の埋め込み</h3>
 <ul>
 <li> <code>\begin{tabular} 〜 \end{tabular}</code> を使う:
 <pre class=example>
@@ -176,7 +190,7 @@ Mac を使っていて Overleaf でうまくコンパイルできない場合は
 <pre class=example>\hline</pre>
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex44">
 <div class=header>演習 4-4. 表の作成練習</div>
 <ul>
   <li> 以下の表を LaTeX で作成せよ:
@@ -196,7 +210,7 @@ Mac を使っていて Overleaf でうまくコンパイルできない場合は
 </ul>
 </div>
 
-<h3>2.3. 図表へのリンク</h3>
+<h3 id="latex-ref">2.3. 図表へのリンク</h3>
 <ul>
   <li> 図や表が30枚ぐらい入っている文章を考える:
     <div class="example gray">詳しくは、表.17 (第6章) を参照のこと。</div>
@@ -234,10 +248,10 @@ Mac を使っていて Overleaf でうまくコンパイルできない場合は
 ...</pre>
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex45">
 <div class=header>演習 4-5. 図表へのリンク</div>
 <ol type=a>
-  <li> 演習6-2. で作成した表に
+  <li> <A href="#ex44">演習 4-4.</a> で作成した表に
     見出し「<code>各都市の気温</code>」、
     およびラベル <code>tbl:temp</code> をつけよ:
 <pre class=example>
@@ -247,7 +261,7 @@ Mac を使っていて Overleaf でうまくコンパイルできない場合は
 \label{tbl:temp}
 \end{table}
 </pre>
-  <li> 同じく演習6-2. の表を matplotlib で棒グラフとして描画し、
+  <li> 同じく演習 4-4. の表を matplotlib で棒グラフとして描画し、
     <code>fig:temp</code> というラベルをつけよ。
 <div class=figure><img width="" height="" src="temp.png"></div>
 <pre class=example>
@@ -281,7 +295,7 @@ plt.show()
 </ol>
 </div>
 
-<h3>2.4. 論文の引用</h3>
+<h3 id="latex-cite">2.4. 論文の引用</h3>
 <ul>
   <li> 論文を参照する:
 <pre class=example>\cite{kumar-1999-trawling-the-web-for-<br>emerging-cyber-communities}
@@ -296,14 +310,21 @@ Trawling the Web for emerging cyber-communities.</sub>
     このファイルを <code>.tex</code> と同じフォルダに置いておけば自動的に利用される。
 </ul>
 
+
+<h2 id="summary">3. 本日のまとめ・課題2つ</h2>
+<ul>
+<li> 中課題2 の説明をおこなった。
+<li> LaTeX の高度な使い方を学習した。
+</ul>
+
 <div class=exercise id="ex-s4">
-<div class=header>小課題4. LaTeXによる表作成の演習</div>
+<div class=header>小課題4. LaTeXによる表作成の演習 (7月12日締切)</div>
 <ul>
   <li> 締め切り: 7月12日 (1週間後)
-  <li> <a href="">演習 6-3.</a> で作成した
+  <li> <a href="#ex45">演習 4-5.</a> で作成した
     <code>.tex</code>ファイルを提出せよ。
     (提出するのは .texファイルのみでよい。)
-    <p>
+    <br>
     ここには「各都市の気温」表と棒グラフの図がどちらも含まれており、
     各図表に正しい番号がふられていること。
 
@@ -311,10 +332,10 @@ Trawling the Web for emerging cyber-communities.</sub>
 </div>
 
 <div class=exercise id="ex-m2">
-<div class=header>中課題2. 図を埋めこんだ論文PDFを完成させる</div>
+<div class=header>中課題2. 図を埋めこんだ論文PDFを完成させる (7月19日締切)</div>
 <ul>
   <li> 締め切り: 7月19日 (2週間後)
-  <li> 論文「<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」を
+  <li> 論文「<a target="_blank" href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」を
     LaTeX で印刷するのに必要なファイル一式を Zip 形式で T2SCHOLA に提出せよ。(計20点)
   <li> ここには <code>main.tex</code> ファイルとともに、matplotlib で作成した
     図も含まれているものとする。
@@ -333,14 +354,14 @@ Trawling the Web for emerging cyber-communities.</sub>
 
 <h4>参考資料</h4>
 <ul>
-  <li> クラス共通: <a href="https://titechcomp.github.io/y21-il2j/latex/">LaTeX サポートサイト</a>
-  <li> クラス共通: <a href="https://titechcomp.github.io/y21-il2j/theme2.html">科学技術文書執筆</a>
-  <li> <a href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
+  <li> クラス共通: <a target="_blank" href="https://titechcomp.github.io/y21-il2j/latex/">LaTeX サポートサイト</a>
+  <li> クラス共通: <a target="_blank" href="https://titechcomp.github.io/y21-il2j/theme2.html">科学技術文書執筆</a>
+  <li> <a target="_blank" href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a target="_blank" href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
 </ul>
 </div>
 
 <div class=exercise id="plan">
-<div class=header>宿題. (提出の必要なし)</div>
+<div class=header>第7回に向けての宿題 (提出の必要なし)</div>
 <ul>
 <li> 第7回の授業で、スライドを <mark>1枚だけ</mark> 使った
   プレゼンテーションの練習をするので、自分が話したいテーマを考えてくること。
@@ -350,6 +371,13 @@ Trawling the Web for emerging cyber-communities.</sub>
   <div class=figure><img src="o365.png"></div>
 </ul>
 </div>
+
+<h4>次週予告</h4>
+<ul>
+<li> 来週 (12日) および再来週 (19日) は、長橋先生による
+  データサイエンス・AI に関する特別講義です。
+<li> 参加方法: TBA
+</ul>
 
 <hr>
 <address>

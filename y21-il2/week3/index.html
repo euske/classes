@@ -134,7 +134,7 @@ plt.show()
 <div class=exercise id="ex32">
 <div class=header>演習 3-2. 論文の図をすべて描く (= 中課題 1)</div>
 <p>
-論文のグラフ 図2 〜 図6 の画像ファイル、
+論文のグラフ 図2 〜 図7 の画像ファイル、
 およびそれを生成する matplotlib のプログラムすべてを
 1個の <u>Zipファイル</u> にまとめよ:
 <div class=figure>
@@ -142,22 +142,22 @@ plt.show()
 <tr>
 <td><a href="fig2.png"><img width="432" height="288" style="max-width:15vw;" src="fig2.png"></a></td>
 <td><a href="fig3good.png"><img width="432" height="288" style="max-width:15vw;" src="fig3good.png"></a></td>
-<td><a href="fig4.png"><img width="432" height="288" style="max-width:15vw;" src="fig4.png"></a></td>
 <td><a href="fig5.png"><img width="432" height="288" style="max-width:15vw;" src="fig5.png"></a></td>
 <td><a href="fig6.png"><img width="432" height="288" style="max-width:15vw;" src="fig6.png"></a></td>
+<td><a href="fig7.png"><img width="432" height="288" style="max-width:15vw;" src="fig7.png"></a></td>
 </tr><tr>
-<td>図2</td><td>図3</td><td>図4</td><td>図5</td><td>図6</td>
+<td>図2</td><td>図3</td><td>図5</td><td>図6</td><td>図7</td>
 </tr></table>
 </div>
 <p>
 以下、描き方に関する説明:
 <ul>
 <li> 図3 … 上で解説した。
-<li> 図4 … 図3 を修正したもの。
+<li> 図5、図6 … 前回の授業で解説した。
+<li> 図7 … 図3 を修正したもの。
   使用するデータとして
   <code>cnm/ratio-join.txt</code> ではなく、
   <code>hn/ratio-join-500K.txt</code> を使えばよい。
-<li> 図5、図6 … 前回の授業で解説した。
 </ul>
 <p>
 図2 だけは特別で、これは以下のプログラムを使って
@@ -537,13 +537,16 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
 </ul>
 <p>
 <a href="#ex32">演習 3-2.</a> を完成させよ。
-論文のグラフ 図2 〜 図6 の画像ファイル、
+論文のグラフ 図2 〜 図7 の画像ファイル、
 およびそれを生成する matplotlib のプログラムすべてを
 1個の <u>Zipファイル</u> にまとめ、提出すること。
 ファイル名は <code>kadai1.zip</code> であること。
 Zip の中には計10個のファイル (<code>fig2.png</code>, <code>fig2.txt</code>, ...,
-<code>fig6.png</code>, <code>fig6.txt</code>) が含まれていなければならず、
+<code>fig7.png</code>, <code>fig7.txt</code>) が含まれていなければならず、
 採点基準は 1つのファイルにつき 2点 (全部で20点) である。
+<p>
+(授業中は間違って図7 を「図4」と説明していたので、
+名前は <code>fig4</code> でも <code>fig7</code> でもよい。)
 </div>
 
 <div class=exercise id="ex-s3">

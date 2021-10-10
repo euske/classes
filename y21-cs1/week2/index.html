@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<link rel="icon" href="../favicon.png" />
+<title>2021年度 コンピュータサイエンス第一 (1a)
+第2回 - コンピュータの原理、数値の比較と条件式、繰り返し処理
+/ 新山 祐介</title>
+<style><!--
+.bin { font-family: Courier New, Courier, monospace; font-style: italic; font-weight: 900; color: blue; }
+.dec { font-family: serif; font-style: italic; font-weight: 900; color: red; }
+.counter { margin: 1em; padding: 1em; outline: 2pt solid black; }
+.digit { font-family: Courier New, Courier, monospace; font-weight: 900; font-size: 38px; }
+--></style>
+<script src="counter.js"></script>
+<script>
+var counter = null;
+function setupCounter() {
+  counter = new Counter(document.getElementById("divCounter"),
+                        document.getElementById("divDecimal"));
+  counter.setBaseSelector(document.getElementById("baseSelector"));
+  counter.setRunningBox(document.getElementById("checkRun"));
+  counter.setVisibleBox(document.getElementById("checkVis"));
+}
+</script>
+</head>
+<body onload="setupCounter()">
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第2回 - コンピュータの原理、数値の比較と条件式、繰り返し処理</h1>
+<div class=nav>2021年10月11日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回の復習</a>
+<ul>
+  <li> <a href="#intropc">パソコンの基礎</a>
+  <ul class=ex>
+    <li> <a href="#ex2-1">演習 2-1. ファイルとフォルダのパス名 (復習)</a>
+  </ul>
+  <li> <a href="#intropython">Python プログラミングの基礎</a>
+  <ul class=ex>
+    <li> <a href="#ex2-2">演習 2-2. 変数の内容の交換 (復習)</a>
+  </ul>
+</ul>
+<li> <a href="#computers">コンピュータの原理</a>
+<ul>
+  <li> <a href="#components">コンピュータの4大要素</a>
+  <ul class=ex>
+    <li> <a href="#ex2-3">演習 2-3. 入力装置と出力装置</a>
+  </ul>
+  <li> <a href="#bits">情報とは何か?</a>
+  <li> <a href="#numerics">数値を 0 と 1 であらわす</a>
+  <ul class=ex>
+    <li> <a href="#ex2-3">演習 2-4. 2進数と10進数の変換</a>
+  </ul>
+  <li> <a href="#strings">文字を 0 と 1 であらわす</a>
+  <li> <a href="#images">画像を 0 と 1 であらわす</a>
+  <li> <a href="#audios">音声を 0 と 1 であらわす</a>
+  <li> <a href="#datatypes">データの「形式」</a>
+</ul>
+<li> <a href="#python">Python - 前回までのあらすじ</a>
+<ul>
+  <li> <a href="#firstpython">最初の Python プログラム (再掲)</a>
+  <li> <a href="#print">print関数 - 文字を表示する</a>
+  <li> <a href="#input">input関数 - 文字を入力する</a>
+</ul>
+<li> <a href="#number">Pythonで数値を表示・入力する</a>
+<ul>
+  <li> <a href="#typein">数値の入力</a>
+  <ul class=ex>
+    <li> <a href="#ex2-5">演習 2-5. 数値の入力</a>
+  </ul>
+</ul>
+<li> <a href="#compute">数値を計算する</a>
+  <ul class=ex>
+    <li> <a href="#ex2-6">演習 2-6. 数値の計算</a>
+  </ul>
+<li> <a href="#compare">数値を比較する</a>
+<ul>
+  <ul class=ex>
+    <li> <a href="#ex2-7">演習 2-7. 条件分岐の実行</a>
+  </ul>
+  <li> <a href="#if1">if文 (パターン1)</a>
+  <ul class=ex>
+    <li> <a href="#ex2-8">演習 2-8. 条件式の変更</a>
+  </ul>
+  <li> <a href="#conds">条件式とは</a>
+  <ul class=ex>
+    <li> <a href="#ex2-9">演習 2-9. 条件式の練習</a>
+  </ul>
+  <li> <a href="#if2">if文 (パターン2)</a>
+</ul>
+<li> <a href="#loop">繰り返し処理をおこなう</a>
+<ul>
+  <li> <a href="#while">while文</a>
+  <ul class=ex>
+    <li> <a href="#ex2-10">演習 2-10. 繰り返し</a>
+  </ul>
+</ul>
+<li> <a href="#addmult">足し算・掛け算を実現する</a>
+<ul>
+  <li> <a href="#plusandmult">足し算を使って掛け算を実現する</a>
+  <ul class=ex>
+    <li> <a href="#ex2-11">演習 2-11. 足し算プログラム・掛け算プログラムの実行</a>
+  </ul>
+</ul>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<ul class=ex>
+  <li> <a href="#kadai-s3">小課題 3. 引き算および割り算をするプログラム (10月18日締切)</a>
+</ul>
+</ol>
+
+
+<h2>雑談</h2>
+<ul>
+<li> 世間が知らない大学の先生の秘密:
+<ul>
+<li> ほとんどの先生は、パソコンの使い方をよく知らない。
+<li> 多くの先生は、朝早いのが苦手である (そのくせ、学生には早く来させる)。
+</ul>
+<li> なぜプログラミングは油絵のようにいかないのか?
+<ul>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=lLWEXRAnQd0">「ボブ・ロスの絵画教室」</a>
+(2:30, 5:00, 7:00, 8:00, 10:00, 12:00, 20:00)
+</ul>
+<li> <a target="_blank" href="https://axisofordinary.substack.com/p/the-most-counterintuitive-facts-in">数学、物理、計算機科学の直観に反する面白い雑学一覧</a>
+</ul>
+
+
+<h2 id="prev">0. 前回の復習</h2>
+
+<h3 id="intropc">0.1. パソコンの基礎</h3>
+<ul>
+<li> タイピングの練習。
+<li> <u>ファイル</u>と<u>フォルダ</u>。
+<li> <u>ファイル形式</u>とは何か?
+<li> コマンド プロンプト (ターミナル) の使い方。
+<li> スクリーンショットの撮り方。
+</ul>
+
+<div class=exercise id="ex2-1">
+<div class=header>演習 2-1. ファイルとフォルダのパス名 (復習)</div>
+<p>
+以下のようなフォルダ構造を考える。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g text-anchor="end">
+      <text x="300" y="50">ディスク</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+    </g>
+    <g style="font-family: monospace;">
+      <text x="400" y="50">/</text>
+    </g>
+  </g>
+</svg>
+</div>
+<p>
+以下の問に答えよ。
+パスの区切り文字は「<code>/</code> (スラッシュ)」とする。
+<ol type=a>
+  <li> <u>フォルダ X</u> へのパス名 を答えよ。
+  <li> <u>ファイル H</u> へのパス名を答えよ。
+  <li> <u>ファイル C</u> へのパス名 (複数) をすべて答えよ。
+</ol>
+</div>
+
+<h3 id="intropython">0.2. Python プログラミングの基礎</h3>
+
+<ol>
+<li> コマンド プロンプト (ターミナル) を起動する。
+<li> デスクトップ上に "<code>cs1</code>" という名前のフォルダをひとつ作成し、
+  そこに <code>hello.py</code> というテキスト形式のファイルを新規作成する。
+  ここでは Windows であれば「メモ帳 (notepad)」、
+  Mac であれば「IDLE」を使う。
+  このようなアプリを以後<u>テキストエディタ</u> (あるいは単にエディタ) と呼ぶ。
+<li> 以下のプログラムを入力する。
+<div class=file>
+greetings.py
+<pre>
+print("What is your name?")
+x = input("name:")
+print(f"Good morning {x}!")
+</pre>
+</div>
+<li> 完成したプログラム <code>greetings.py</code> を実行する。
+<ul>
+<li> <strong>Windowsの場合</strong>:
+<pre>
+C:\Users\euske\Desktop\cs1&gt; <strong>python greetings.py</strong>
+</pre>
+<li> <strong>Macの場合</strong>:<br>
+<pre>
+euske@shinyama-mbpro cs1 % <strong>python<mark>3</mark> greetings.py</strong>
+</pre>
+</ul>
+</ol>
+
+<ul>
+<li> Python プログラムは、いくつかの <u>文</u> からなっている。
+<li> 各文は、<strong>書かれている順序</strong>で実行される。
+<li> プログラム中で<u>変数</u>を定義できる。
+<li> <code>print(...)</code> や <code>input(...)</code> などの<u>関数</u>を使用できる。
+<li> ひとつの変数は、何度でも<u>上書き</u>できる。
+</ul>
+
+<div class=exercise id="ex2-2">
+<div class=header>演習 2-2. 変数の内容の交換 (復習)</div>
+<p>
+以下のプログラムで、変数 x と変数 y の値を交換するにはどうするか。
+<code class=qqq>???</code> の部分を埋めよ。
+<pre>
+p = 2
+q = 3
+<div class=qqq>???
+???
+???</div>
+</pre>
+</div>
+
+
+<h2 id="computers">1. コンピュータの原理</h2>
+<p>
+<u>コンピュータ</u> =
+おそろしく単純な動作 (後述) を大量に組み合わせて、複雑な処理をおこなう。
+<ul>
+<li> 単純な操作 × 膨大な数 = 複雑な処理
+</ul>
+
+<h3 id="components">1.1. コンピュータの4大要素</h3>
+<p>
+すべてのコンピュータは
+以下の4つの部分から成り立っている。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="130">
+    <g stroke="black" stroke-width="2" fill="none">
+      <rect x="10" y="10" width="80" height="40" />
+      <rect x="120" y="10" width="80" height="40" />
+      <rect x="230" y="10" width="80" height="40" />
+      <rect x="120" y="80" width="80" height="40" />
+      <line x1="90" y1="30" x2="120" y2="30" />
+      <line x1="200" y1="30" x2="230" y2="30" />
+      <line x1="160" y1="50" x2="160" y2="80" />
+    </g>
+    <g style="dominant-baseline:central;" text-anchor="middle">
+      <text x="50" y="30">入力装置</text>
+      <text x="160" y="30">演算装置</text>
+      <text x="270" y="30">出力装置</text>
+      <text x="160" y="100">記憶装置</text>
+    </g>
+  </svg>
+</div>
+<ol>
+<li> 入力装置 … マウス、キーボードなど
+<li> 出力装置 … 画面、スピーカなど
+<li> 記憶装置 … メモリ、ハードディスクなど
+<li> 演算装置
+</ol>
+
+<p>
+スマートフォンも炊飯器もエレベータも、
+コンピュータにしてみれば、やっていることは一緒。
+入力装置から来た情報を演算装置であれこれ処理して、出力装置に渡しているにすぎない。
+(人間さえ、コンピュータからみれば単なる外部装置のひとつにすぎない。)
+
+<div class=exercise id="ex2-3">
+<div class=header>演習 2-3. 入力装置と出力装置</div>
+<ol type=a>
+<li> 炊飯器をコンピュータで制御する場合、その入力装置・出力装置を答えよ。
+<li> エレベータをコンピュータで制御する場合、その入力装置・出力装置を答えよ。
+</ol>
+</div>
+
+<h3 id="bits">1.2. 情報とは何か?</h3>
+<p>
+コンピュータ上の情報は、
+2種類の異なる状態の組み合わせで表される。
+<ul>
+<li> スイッチの入／切
+<li> <span class=bin>0</span> と <span class=bin>1</span>
+</ul>
+<p>
+数字、文字、画像、音声などをコンピュータで扱うためには、
+これらの情報をすべて <span class=bin>0</span> と <span class=bin>1</span> だけで表す必要がある。
+
+<h4>プログラムとは何か</h4>
+<p>
+プログラムも情報である。
+コンピュータ・プログラムとは、
+コンピュータがおこなう処理 (計算過程、プロセス) を
+いくつかの<u>命令</u>の列によって表現し、
+それを<u>実行</u>することにより処理する。
+プログラムは、記憶装置に入っている。
+
+<ul>
+<li> 2つの値を足す。
+<li> メモリ上のある値を別の場所にコピーする。
+<li> 繰り返し処理をおこなう。
+<li> …
+</ul>
+
+<p>
+(注意: これは実際には数値の列なのだが、
+現代は文字によって表せるようになっているので、
+この授業ではもっぱらプログラミング言語を使って表現する)
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="180">
+    <g stroke="black" stroke-width="2" fill="none">
+      <rect x="10" y="10" width="100" height="160" />
+      <rect x="210" y="10" width="100" height="160" />
+      <rect x="220" y="70" width="80" height="40" />
+      <rect x="220" y="120" width="80" height="40" />
+      <line x1="110" y1="90" x2="210" y2="90" stroke-width="8" />
+    </g>
+    <g text-anchor="middle">
+      <text x="60" y="40">演算装置</text>
+      <text x="260" y="40">メモリ</text>
+      <text x="260" y="90" style="font-size:80%;">プログラム</text>
+      <text x="260" y="140" style="font-size:80%;">データ</text>
+    </g>
+  </svg>
+</div>
+
+<h3 id="numerics">1.3. 数値を 0 と 1 であらわす</h3>
+<ul>
+<li> アホな方法A:
+<code>1</code>, <code>11</code>, <code>111</code>, <code>1111</code>, <code>11111</code>, ...
+<li> アホな方法B:
+<code>0</code>, <code>1</code>, <code>0</code>, <code>1</code>, <code>0</code>, <code>1</code>, <code>0</code>, ...
+</ul>
+<p>
+我々がふだん使っている数 (10進数) は 「12345」を表すのに
+1万文字を書いたりする必要はない。<br>
+「桁上がり」の考え方。
+
+<ul>
+<li> 10進数: <span class=dec>0</span>, <span class=dec>1</span>, <span class=dec>2</span>, <span class=dec>3</span>, <span class=dec>4</span>, <span class=dec>5</span>, <span class=dec>6</span>, <span class=dec>7</span>, <span class=dec>8</span>, <span class=dec>9</span>, <span class=dec>10</span>, <span class=dec>11</span>, ..., <span class=dec>19</span>, <span class=dec>20</span>, ...
+<li> 8進数: 0, 1, 2, 3, 4, 5, 6, 7, 10, 11, ..., 17, 20, ...
+<li> 2進数: <span class=bin>0</span>, <span class=bin>1</span>, <span class=bin>10</span>, <span class=bin>11</span>, ..., <span class=bin>100</span>, ...
+</ul>
+
+<div class=nop>
+<div class=counter>
+  <select id="baseSelector">
+    <option>選択</option>
+    <option value="10">10進数</option>
+    <option value="8">8進数</option>
+    <option value="2">2進数</option>
+    <option value="16">16進数</option>
+  </select> &nbsp;
+  <label><input id="checkRun" type=checkbox checked> 動作中</label>
+  <label><input id="checkVis" type=checkbox> 10進数を表示</label>
+  <div id="divCounter" style="position:relative; height:3em;">
+   <div id="divDecimal" style="position:absolute; top:0; left:200px;">
+   </div>
+  </div>
+</div>
+</div>
+
+<p>
+なぜ人間は10進数を使っているのか? →
+5進数を使っている言語もあるらしい。
+
+<h4>10進数と2進数の変換</h4>
+<table border align=center>
+<tr><th>10進数</th><th>2進数</th></tr>
+<tr><td><span class=dec>0</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>1</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>2</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>3</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>4</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>5</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>6</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>7</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>8</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>9</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>10</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>11</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>12</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>13</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>14</span></td><td><input size="5"></td></tr>
+<tr><td><span class=dec>15</span></td><td><input size="5"></td></tr>
+</table>
+
+<div class=exercise id="ex2-4">
+<div class=header>演習 2-4. 2進数と10進数の変換</div>
+<ol type=a>
+<li> 上の表を完成させよ。
+<li> <span class=dec>20</span> (10進数) を 2進数であらわせ。
+<li> <span class=bin>10001</span> (2進数) を 10進数であらわせ。
+</ol>
+</div>
+
+<h4>重要な用語</h4>
+<ul>
+<li> <u>1ビット</u> (bit) …
+  2進数における1桁の「<span class=bin>0</span>か/<span class=bin>1</span>か」の情報。
+<li> <u>1バイト</u> (byte) = <u>8ビット</u> …
+  8桁の2進数で表せる情報 (0〜255)。16進数だと2桁で表せる。
+</ul>
+
+<h3 id="strings">1.4. 文字を 0 と 1 であらわす</h3>
+<p>
+1文字 = 1つの数値と考え、
+数値の列を<strong>文字列</strong>とする。
+
+<ul>
+<li> <strong>ASCII</strong> コード= 0〜127 (1バイト)。
+<li> <strong>Unicode</strong> = 0〜113021 (最高4バイト)。
+<a target="_blank" href="http://www.unicode.org/charts/">Unicode 12.1</a>
+(<a target="_blank" href="http://www.unicode.org/charts/PDF/U0000.pdf">U0000</a>,
+<a target="_blank" href="http://www.unicode.org/charts/PDF/U0900.pdf">U0900</a>,
+<a target="_blank" href="http://www.unicode.org/charts/PDF/U4E00.pdf">U4E00</a>)
+<li> JIS X 0208 = 0x2121〜0x7E7E (2バイト)。
+<a target="_blank" href="http://www.pcinfo.jpo.go.jp/site/4_news/pdf/zenkaku.pdf">JIS X 0208</a>
+<li> GB 2312 (国標) = 0xA1A1〜0xFEFE (2バイト)。
+<a target="_blank" href="https://web.archive.org/web/20170327170906/https://www.itscj.ipsj.or.jp/iso-ir/058.pdf">GB 2312</a>
+</ul>
+
+<h3 id="images">1.5. 画像を 0 と 1 であらわす</h3>
+<p>
+ひとつの点 = 「<u>ピクセル</u>」
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="310" height="164">
+  <g style="font-family: monospace;" transform="translate(170,20)">
+    <text x="0" y="0">00000000</text>
+    <text x="0" y="20">00011000</text>
+    <text x="0" y="40">00100100</text>
+    <text x="0" y="60">01000010</text>
+    <text x="0" y="80">01111110</text>
+    <text x="0" y="100">01000010</text>
+    <text x="0" y="120">01000010</text>
+    <text x="0" y="140">01000010</text>
+  </g>
+  <g fill="none" stroke="black" transform="translate(1,1) scale(2,2)">
+    <line x1="0" y1="0" x2="0" y2="80" />
+    <line x1="10" y1="0" x2="10" y2="80" />
+    <line x1="20" y1="0" x2="20" y2="80" />
+    <line x1="30" y1="0" x2="30" y2="80" />
+    <line x1="40" y1="0" x2="40" y2="80" />
+    <line x1="50" y1="0" x2="50" y2="80" />
+    <line x1="60" y1="0" x2="60" y2="80" />
+    <line x1="70" y1="0" x2="70" y2="80" />
+    <line x1="80" y1="0" x2="80" y2="80" />
+    <line x1="0" y1="0" x2="80" y2="0" />
+    <line x1="0" y1="10" x2="80" y2="10" />
+    <line x1="0" y1="20" x2="80" y2="20" />
+    <line x1="0" y1="30" x2="80" y2="30" />
+    <line x1="0" y1="40" x2="80" y2="40" />
+    <line x1="0" y1="50" x2="80" y2="50" />
+    <line x1="0" y1="60" x2="80" y2="60" />
+    <line x1="0" y1="70" x2="80" y2="70" />
+    <line x1="0" y1="80" x2="80" y2="80" />
+  </g>
+  <g fill="black" stroke="none" transform="translate(1,1) scale(2,2)">
+    <rect x="10" y="60" width="10" height="10" />
+    <rect x="10" y="50" width="10" height="10" />
+    <rect x="10" y="40" width="10" height="10" />
+    <rect x="10" y="30" width="10" height="10" />
+    <rect x="20" y="20" width="10" height="10" />
+    <rect x="30" y="10" width="10" height="10" />
+    <rect x="40" y="10" width="10" height="10" />
+    <rect x="50" y="20" width="10" height="10" />
+    <rect x="60" y="30" width="10" height="10" />
+    <rect x="60" y="40" width="10" height="10" />
+    <rect x="60" y="50" width="10" height="10" />
+    <rect x="60" y="60" width="10" height="10" />
+    <rect x="20" y="40" width="10" height="10" />
+    <rect x="30" y="40" width="10" height="10" />
+    <rect x="40" y="40" width="10" height="10" />
+    <rect x="50" y="40" width="10" height="10" />
+  </g>
+</svg>
+</div>
+<p>
+ここでは、0 と 1 を数字でなく、ただ単に点の羅列として扱っている。
+このように2進数以外の目的で 0 と 1 を並べたものを
+<u>ビットマップ</u>という。
+
+<h4>色を 0 と 1 であらわす</h4>
+<p>
+そもそも、色とは何か?
+<ul>
+<li> 桿体細胞 (明るさを認識する)
+<li> 錐体細胞 (色を認識する -
+<strong style="color:red;">赤</strong>、
+<strong style="color:green;">緑</strong>、
+<strong style="color:blue;">青</strong>のあたりにピークがある)
+</ul>
+<div class=figure>
+<a target="_blank" href="https://en.wikipedia.org/wiki/File:Spectrum4websiteEval.png"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spectrum4websiteEval.png" width="600" height="72"></a>
+</div>
+<div class=figure>
+<a target="_blank" href="https://en.wikipedia.org/wiki/File:Cone-response.png"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Cone-response-en.png" width="550" height="346"></a>
+</div>
+
+<h4>文字と画像の変換</h4>
+<ul>
+<li> 文字の描画: 文字コード → 画像データ → 出力装置
+<li> 文字の認識: 入力装置 → 画像データ → 文字コード
+</ul>
+
+<h3 id="audios">1.6. 音声を 0 と 1 であらわす</h3>
+
+<p>音とは何か?
+<div class=figure>
+<svg width="400" height="160"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:svg="http://www.w3.org/2000/svg">
+  <text x="10" y="105">0</text>
+  <g transform="translate(20,0)">
+  <g fill="none" stroke="black">
+    <path d="m55,192.98218c25.28706,-49.47075 56.62101,-46.49506 87.40526,-0.37196c30.78423,46.12309 55.52156,42.77545 79.70918,-0.74391c24.18762,-43.51938 28.03564,-34.96429 40.67917,5.95135c12.64352,40.91565 1.64917,75.50797 14.29269,-1.48784c12.64352,-76.99581 12.64352,-101.5452 21.43903,-41.28761c8.7955,60.2576 16.49155,60.62956 26.93619,37.93997c10.44467,-22.68959 12.64355,-11.90274 17.591,-3.7196l4.94748,8.18314" transform="translate(-40,-100)" stroke-width="2" />
+    <line x1="0" y1="100" x2="320" y2="100" />
+    <line x1="10" y1="30" x2="10" y2="160" />
+  </g>
+  <g fill="none" stroke="gray">
+    <rect x="10" y="90" width="10" height="10" />
+    <rect x="20" y="75" width="10" height="25" />
+    <rect x="30" y="65" width="10" height="35" />
+    <rect x="40" y="60" width="10" height="40" />
+    <rect x="50" y="55" width="10" height="45" />
+    <rect x="60" y="60" width="10" height="40" />
+    <rect x="70" y="65" width="10" height="35" />
+    <rect x="80" y="75" width="10" height="25" />
+    <rect x="90" y="90" width="10" height="10" />
+    <rect x="100" y="100" width="10" height="2" />
+    <rect x="110" y="100" width="10" height="10" />
+    <rect x="120" y="100" width="10" height="20" />
+    <rect x="130" y="100" width="10" height="25" />
+    <rect x="140" y="100" width="10" height="28" />
+    <rect x="150" y="100" width="10" height="25" />
+    <rect x="160" y="100" width="10" height="15" />
+    <rect x="170" y="100" width="10" height="5" />
+    <rect x="180" y="85" width="10" height="15" />
+    <rect x="190" y="70" width="10" height="30" />
+    <rect x="200" y="65" width="10" height="35" />
+    <rect x="210" y="75" width="10" height="25" />
+    <rect x="220" y="100" width="10" height="10" />
+    <rect x="230" y="100" width="10" height="30" />
+    <rect x="240" y="60" width="10" height="40" />
+    <rect x="250" y="25" width="10" height="75" />
+    <rect x="260" y="80" width="10" height="20" />
+    <rect x="270" y="100" width="10" height="5" />
+    <rect x="280" y="90" width="10" height="10" />
+    <rect x="290" y="80" width="10" height="20" />
+    <rect x="300" y="85" width="10" height="15" />
+  </g>
+  </g>
+</svg>
+</div>
+
+<ul>
+<li> すべては波形 (スピーカーの振動板の動き) で表現される。
+<li> 一定時間おきに波形の高さを測定し (<u>サンプリング</u>)、
+その形を数値の列によって表す:
+<p> 10, 25, 35, 40, 45, 40, 35, ...
+</ul>
+
+<h4>音声合成と音声認識</h4>
+<ul>
+<li> 音声合成: 文字コード → 波形データ → 出力装置
+<li> 音声認識: 入力装置 → 波形データ → 文字コード
+</ul>
+
+<h3 id="datatypes">1.7. データの「形式」</h3>
+<p>
+コンピュータ上では、すべての情報は 0 と 1 からなる。
+その意味は、<strong>解釈する方法によって決まる</strong>。
+<ul>
+<li> <span class=bin>01100101</span> を数値として解釈した場合 … 65
+<li> <span class=bin>01100101</span> を文字として解釈した場合 … 「A」
+<li> <span class=bin>01100101</span> を2×4ピクセル画像として解釈した場合 …
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="42" height="22">
+  <g fill="none" stroke="black" transform="translate(0.5,0.5)">
+    <rect x="0" y="0" width="10" height="10" />
+    <rect x="10" y="0" width="10" height="10" fill="black" />
+    <rect x="20" y="0" width="10" height="10" fill="black" />
+    <rect x="30" y="0" width="10" height="10" />
+    <rect x="0" y="10" width="10" height="10" />
+    <rect x="10" y="10" width="10" height="10" fill="black" />
+    <rect x="20" y="10" width="10" height="10" />
+    <rect x="30" y="10" width="10" height="10" fill="black" />
+  </g>
+</svg>
+</ul>
+<p>
+0と1をどのように解釈するかがわからないと、正しく表示できない。
+パソコンでは、ファイル名の<u>拡張子</u>によって、
+その情報 (0と1) をどのように解釈するかを決めている。
+
+<h4>テキストファイルとは</h4>
+<p>
+ただ文字コードを羅列したファイル。
+文字の大きさや色、図表などの情報は含まれていない。
+<ul>
+<li> <a target="_blank" href="ascii.txt">ascii.txt</a>
+<pre>
+Hello!
+01001000 01100101 01101100 01101100 01101111 00100001
+</pre>
+<li> <a target="_blank" href="utf8.txt">utf8.txt</a>
+<pre>
+日本
+11100110 10010111 10100101 11100110 10011100 10101100
+</pre>
+</ul>
+
+
+<h2 id="python">2. Python - 前回までのあらすじ</h2>
+
+<h3 id="firstpython">2.1. 最初の Python プログラム (再掲)</h3>
+<ol>
+<li> 「ターミナル」を起動する。
+<li> 先ほど作成したフォルダに <code>cd</code> する。
+<li> テキストエディタを使って <code>greetings.py</code>
+  というテキストファイルを作成する。<Br>
+  <strong>1文字</strong>も間違えないように!
+
+<div class=file>
+greetings.py
+<pre>
+print("What is your name?")
+x = input("name:")
+print(f"Good morning {x}!")
+</pre>
+</div>
+
+<li> プログラム <code>greetings.py</code> を実行する。
+<pre>
+$ <strong>python greetings.py</strong>
+What is your name?
+name=<strong>euske</strong>
+Good morning euske!
+</pre>
+</ol>
+
+<h3 id="print">2.2. print関数 - 文字を表示する</h3>
+<dl>
+<dt> 構文:
+<dd> <pre>
+print("<em>文字列</em>")
+print(<mark>f</mark>"<em>文字列</em>")
+</pre>
+<dt> 例1:
+<dd> <pre>
+print("おおさまのみみはろばのみみ")
+</pre>
+<dt> 例2:
+<dd> <pre>
+donkey = "ろばのみみ"
+print(<mark>f</mark>"おおさまのみみは{donkey}")
+</pre>
+<p>
+<code><mark>f</mark>"〜"</code> のようにすると、
+<code>{〜}</code> で囲まれた部分が変数の内容になる。
+<dt> 例3:
+<dd> <pre>
+donkey = "ろばのみみ"
+print("おおさまのみみは{donkey}")
+</pre>
+<code>f</code> をつけない場合、
+<code>{donkey}</code> はただ文字列として表示される。
+</dl>
+
+<h3 id="input">2.3. input関数 - 文字を入力する</h3>
+<dl>
+<dt> 構文:
+<dd> <pre>
+<em>変数名</em> = input("<em>質問</em>")
+</pre>
+<dt> 例1:
+<dd> <pre>
+x = input("x:")
+</pre>
+<dt> 例2:
+<dd> <pre>
+name = input("name:")
+print(f"Hello, {name}")
+</pre>
+</dl>
+<p>
+<strong>問.</strong>
+例2. のプログラムが何をしているか、日本語で説明せよ。
+
+<h2 id="number">3. Pythonで数値を表示・入力する</h2>
+<p>
+以下の2つのプログラムは、どう違うのか?
+<div class=file>
+letter.py
+<pre>
+x = input("x:")
+print(f"x is {x}")
+</pre>
+</div>
+
+<div class=file>
+value.py
+<pre>
+x = <mark>int(</mark>input("x:")<mark>)</mark>
+print(f"x is {x}")
+</pre>
+</div>
+
+<div class=exercise id="ex2-5">
+<div class=header>演習 2-5. 数値の入力</div>
+<ol type=a>
+  <li> 上の2つのプログラムを実行し、それぞれ x の値として
+    <code>123</code> を入力して実行結果を観察せよ。
+  <li> 上の2つのプログラムを実行し、それぞれ x の値として
+    <code>abc</code> を入力して実行結果を観察せよ。
+</ol>
+</div>
+
+<h3 id="typein">3.1. 数値の入力</h3>
+<p>
+<code>input()</code> 関数を <code>int(...)</code> 関数で囲むと、
+キーボードからの入力を<strong>文字ではなく数値として</strong>
+処理することができる。
+<dl>
+<dt> 構文:
+<dd> <pre>
+<em>変数名</em> = int(input("<em>質問</em>"))
+</pre>
+<dt> 例1:
+<dd> <pre>
+y = int(input("y:"))
+</pre>
+</dl>
+
+<p>
+…これの何が面白いのか?
+
+<h2 id="compute">4. 数値を計算する</h2>
+<p>
+本授業で最初に使うのは、この<strong>2つだけ</strong>。
+<ul>
+<li> <code><em>変数名</em> = <em>変数名</em> + 1</code> (変数の値に1を足す)
+<li> <code><em>変数名</em> = <em>変数名</em> - 1</code> (変数の値から1を引く)
+</ul>
+
+<div class=file>
+inc.py
+<pre>
+x = int(input("x:"))
+x = x + 1
+x = x + 1
+print(f"x is {x}")
+</pre>
+</div>
+
+<div class=exercise id="ex2-6">
+<div class=header>演習 2-6. 数値の計算</div>
+<ol type=a>
+  <li> 上のプログラム <code>inc.py</code> を実行し、
+    いろいろな数値を与えて結果を観察せよ。
+</ol>
+</div>
+
+
+<h2 id="compare">5. 数値を比較する</h2>
+<p>
+Python では、2つの数値を比較し、
+その結果によって異なる動作をさせることができる。
+このような機能を <u>条件分岐</u> (conditional branch) という。
+
+<div class=file>
+conditional.py
+<pre>
+x = int(input("x:"))
+print(f"x is {x}")
+if x == 0:
+    print("x is zero.")
+else:
+    print("x is not zero.")
+</pre>
+</div>
+
+<p>
+上の <code>if</code>文のあとは、かならず
+<u>インデント</u> (indentation、字下げ) が必要である。
+上の例をたとえば以下のようにすると動作しない:
+<blockquote class=file>
+エラーになる例:
+<pre>
+x = int(input("x:"))
+print(f"x is {x}")
+if x == 0:
+print("x is zero.")
+else:
+print("x is not zero.")
+</pre>
+</blockquote>
+<p>
+メモ帳を使っている場合は、インデントには<strong>半角スペース4個</strong>を使う。
+IDLEを使っている場合は、<kbd>TAB</kbd>キーを押すとインデントされる。
+
+
+<div class=exercise id="ex2-7">
+<div class=header>演習 2-7. 条件分岐の実行</div>
+<ol type=a>
+  <li> 上のプログラム <code>conditional.py</code> を実行し、
+    <code>x</code> に正の値と負の値を与えて結果を観察せよ。
+</ol>
+</div>
+
+<h3 id="if1">5.1. if文 (パターン1)</h3>
+<dl>
+<dt> 構文:
+<dd> <pre>
+if <em>条件式</em>:
+    <em>条件式が真で<strong>ある</strong>ときに実行される文</em>
+else:
+    <em>条件式が真で<strong>ない</strong>ときに実行される文</em>
+</pre>
+
+<dt> 例1:
+<dd> <pre>
+password = int(input("password:"))
+if password == 1234:
+    print("Correct.")
+    print("Good.")
+else:
+    print("Wrong.")
+    print("Baka.")
+</pre>
+<p>
+<code>if</code> や <code>else</code> の内側に
+複数の文を入れることもできる。
+この場合も、インデントが重要。
+
+<dt> 例2:
+<dd> <pre>
+x = int(input("x:"))
+if x &lt; 0:
+    print("x is negative.")
+else:
+    print("x is positive.")
+</pre>
+<p>
+<strong>問.</strong>
+このプログラムは正しくない。どこがどう正しくないのか?
+<dt> 例3:
+<dd> <pre>
+x = int(input("x:"))
+if x &lt; 0:
+<span class=ind1>    </span>print("x is negative.")
+else:
+<span class=ind1>    </span>if 0 &lt; x:
+<span class=ind1>    </span><span class=ind2>    </span>print("x is positive.")
+<span class=ind1>    </span>else:
+<span class=ind1>    </span><span class=ind2>    </span>print("x is zero.")
+</pre>
+<p>
+<code>if</code>や<code>else</code>のなかに、さらにif文が入ることもありうる。
+この場合、「内側のif文」は2重に字下げされる。
+</dl>
+
+<div class=exercise id="ex2-8">
+<div class=header>演習 2-8. 条件式の変更</div>
+<ol type=a>
+  <li> 上のプログラム <code>conditional.py</code> を変更し、年齢を入力させて
+    20歳未満であれば "<code>young!</code>"、
+    20歳以上であれば "<code>old!</code>" と表示するようにせよ。
+</ol>
+</div>
+
+<h3 id="conds">5.2. 条件式とは</h3>
+<p>
+Python では、条件式は if 文の中で変数の値の大小比較をするのに使う。
+<dl>
+<dt> 構文:
+<dd> <pre>
+<em>変数名あるいは数値</em> &lt; <em>変数名あるいは数値</em>
+<em>変数名あるいは数値</em> &gt; <em>変数名あるいは数値</em>
+<em>変数名あるいは数値</em> == <em>変数名あるいは数値</em>
+<em>変数名あるいは数値</em> != <em>変数名あるいは数値</em>
+<em>変数名あるいは数値</em> &lt;= <em>変数名あるいは数値</em>
+<em>変数名あるいは数値</em> &gt;= <em>変数名あるいは数値</em>
+</pre>
+<dt> 例1:
+<dd> <pre>
+if <mark>x &lt; 0</mark>:
+    ... (x は 0 より小さい) ...
+</pre>
+<dt> 例2:
+<dd> <pre>
+if <mark>t == 33</mark>:
+    ... (t は 33 と等しい) ...
+</pre>
+<dt> 例3:
+<dd> <pre>
+if <mark>4 &gt;= y</mark>:
+    ... (y は 4 以下) ...
+</pre>
+</dl>
+
+<div class=exercise id="ex2-9">
+<div class=header>演習 2-9. 条件式の練習</div>
+<ol type=a>
+  <li> <code>x</code> が 3 のとき、<code>x &gt; 2</code> は成り立つか?
+  <li> <code>y</code> が 0 のとき、<code>y &lt; 0</code> は成り立つか?
+  <li> <code>z</code> が 1 のとき、<code>1 != z</code> は成り立つか?
+  <li> <code>t</code> が 7 のとき、<code>3 &gt; 7</code> は成り立つか?
+</ol>
+</div>
+
+<h3 id="if2">5.3. if文 (パターン2)</h3>
+
+<dl>
+<dt> 構文:
+<dd> <pre>
+if <em>条件式</em>:
+<span class=ind1>    </span><em>条件式が真で<strong>ある</strong>ときに実行される文</em>
+</pre>
+条件式が真のときのみ何かを実行させたい場合、
+<code>else:</code> 以降は省略できる。
+
+<dt> 例1:
+<dd> <pre>
+x = int(input("x:"))
+if x &lt; 0:
+<span class=ind1>    </span>print("x is negative.")
+print(f"x is {x}")
+</pre>
+<dt> 例2:
+<dd> <pre>
+x = int(input("x:"))
+if x &lt; 0:
+    print("x is negative.")
+<span class=ind1>    </span>print(f"x is {x}")
+</pre>
+<dt> 例3:
+<dd> <pre>
+x = int(input("x:"))
+if x &lt; 0:
+    print("x is negative.")
+if 0 &lt; x:
+    print("x is positive.")
+if x == 0:
+    print("x is zero.")
+</pre>
+</dl>
+
+
+<h2 id="loop">6. 繰り返し処理をおこなう</h2>
+<p>
+Python ではある条件が真である間、
+同じ動作を繰り返し実行 (<u>ループ</u>) させることができる。
+
+<div class=file>
+loop.py
+<pre>
+i = 0
+while i &lt; 10:
+    print(f"i={i}")
+    i = i + 1
+print("end")
+</pre>
+</div>
+<p>
+上のプログラム loop.py は、次のように実行される:
+<ul>
+  <li> まず i = 0 とする。
+  <li> i = 0 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 1 となる。
+  <li> i = 1 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 2 となる。
+  <li> i = 2 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 3 となる。
+  <li> i = 3 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 4 となる。
+  <li> i = 4 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 5 となる。
+  <li> i = 5 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 6 となる。
+  <li> i = 6 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 7 となる。
+  <li> i = 7 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 8 となる。
+  <li> i = 8 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 9 となる。
+  <li> i = 9 なので <code>i &lt; 10</code> である。したがって while文中の <code>i = i + 1</code> が実行され、 i = 10 となる。
+  <li> i = 10 なので <code>i &lt; 10</code> では<strong>ない</strong>。したがって while文の次の文である
+    <code>print("end")</code> が実行される。
+</ul>
+
+<h3 id="while">6.1. while文</h3>
+<dl>
+<dt> 構文:
+<dd> <pre>
+while <em>条件式</em>:
+<span class=ind1>    </span><em>条件式が真の間、繰り返し実行される文</em>
+</pre>
+<p>
+条件式の中には、通常、変数が入っている。
+この値が変化すると条件式の真偽も変わる。
+<dt> 例1:
+<dd> <pre>
+i = 10
+while i &gt; 0:
+    print(f"i={i}")
+    i = i - 1
+print("end")
+</pre>
+<dt> 例2:
+<dd> <pre>
+i = 10
+while i &gt; 0:
+    print(f"i={i}")
+i = i - 1
+print("end")
+</pre>
+<strong>問.</strong>
+上の 例2. と違っている箇所はどこか?
+<p>
+<strong>注意:</strong>
+プログラムの繰り返しが止まらない (無限ループ) 場合は、
+<kbd>Control</kbd> + <kbd>C</kbd> を押して止めること。
+<dt> 例3:
+<dd> <pre>
+x = 1
+while x != 0:
+    x = int(input("x:"))
+print("end")
+</pre>
+この繰り返しは変数 <code>x</code> に 0 が入力されるまで続く。
+</dl>
+
+<div class=exercise id="ex2-10">
+<div class=header>演習 2-10. 繰り返し</div>
+<ol type=a>
+  <li> 上のプログラム <code>loop.py</code> を変更し、0 から 20 までの数を
+    <strong>2きざみで</strong>表示するようにせよ。
+<pre>
+i= 0
+i= 2
+i= 4
+i= 6
+i= 8
+i= 10
+i= 12
+i= 14
+i= 18
+i= 20
+end
+</pre>
+  <li> さらにこのプログラムを変更し、<code>i</code> が 10 になった直後に
+    "<code>ten!</code>" と表示せよ。
+    (ヒント: while文の中で if 文を使うこと)
+<pre>
+i= 0
+i= 2
+i= 4
+i= 6
+i= 8
+i= 10
+ten!
+i= 12
+i= 14
+i= 18
+i= 20
+end
+</pre>
+</ol>
+</div>
+
+
+<h2 id="addmult">7. 足し算・掛け算を実現する</h2>
+<p>
+これまでの成果を使うと、「1を足す」「1を引く」だけの計算を使って、
+任意の正の整数の和 a + b を計算することができる。
+(なお、ここでは簡単のため正の数のみを考える。)
+
+<div class=file>
+add.py (未完成)
+<pre>
+a = int(input("a:"))
+b = int(input("b:"))
+a = a + 1
+b = b - 1
+a = a + 1
+b = b - 1
+<em>(... b が 0 になるまで繰り返す ...)</em>
+print(f"answer={a}")
+</pre>
+</div>
+
+<p>
+この「b が 0 になるまで繰り返す」という処理を
+while文を使って書くと、以下のようになる:
+
+<div class=file>
+add.py (完成版)
+<pre>
+a = int(input("a:"))
+b = int(input("b:"))
+while 0 &lt; b:
+    a = a + 1
+    b = b - 1
+print(f"answer={a}")
+</pre>
+</div>
+<p>
+ここで
+<code>0 &lt; b</code> のかわりに
+<code>b &gt; 0</code> や、
+<code>b != 0</code> などの条件式を使ってもかまわない。
+
+<h3 id="plusandmult">7.1. 足し算を使って掛け算を実現する</h3>
+<p>
+さらに上の結果を使って、今度は掛け算を実現することを考える。
+以下のプログラムは与えられた整数 p と q に対して p × q を計算する。
+<div class=file>
+mult.py (未完成)
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+<div class=qqq>    (変数 a に p の値を足す)
+</div>    q = q - 1
+print(f"answer={a}")
+</pre>
+</div>
+<p>
+ここで <span class=qqq>(変数 a に p の値を足す)</span> の部分に
+上の add.py の処理を埋め込むと、以下のようになる:
+
+<div class=file>
+mult.py (完成版)
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+    b = p
+<div class=qqq>    while 0 &lt; b:
+        a = a + 1
+        b = b - 1
+</div>    q = q - 1
+print(f"answer={a}")
+</pre>
+</div>
+
+<div class=exercise id="ex2-11">
+<div class=header>演習 2-11. 足し算プログラム・掛け算プログラムの実行</div>
+<ol type=a>
+  <li> 上のプログラム <code>add.py</code>、 <code>mult.py</code> をそれぞれ実行せよ。
+  <li> <code>mult.py</code> を短くしようとして
+    「<code>b = p</code>」の部分を削って以下のようにするとうまく動かなくなる。
+    なぜか考えよ。
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+    while 0 &lt; <mark>p</mark>:
+        a = a + 1
+        <mark>p</mark> = <mark>p</mark> - 1
+    q = q - 1
+print(f"answer={a}")
+</pre>
+</ol>
+</div>
+
+
+<h2 id="summary">9. 本日のまとめ・小課題</h2>
+<ul>
+<li> コンピュータの原理。
+<li> すべての情報を 0 と 1 だけで表現する方法。
+<li> Python で数値を扱う方法。
+<li> 繰り返し処理。
+</ul>
+
+<div class=exercise id="kadai-s3">
+<div class=header>小課題 3. 引き算および割り算をするプログラム (10月18日締切)</div>
+<ul>
+  <li> 提出期限: <strong>10月18日</strong> (1週間後)
+  <li> 引き算をするプログラム「<code>sub.py</code>」と
+    および割り算をするプログラム「<code>div.py</code>」を完成させよ。<br>
+    <strong>注意:</strong> 計算は「1を足す」「1を引く」<strong>のみ</strong>を使うこと。
+    どちらも負の数が入力される可能性は考えなくてよい。
+  <li> 2つのファイルを .zip 形式にまとめ、
+    <a target="_blank" href="https://t2schola.titech.ac.jp/course/view.php?id=13932">T2SCHOLA</a> から提出せよ。
+</ul>
+
+<ol>
+<li> まず引き算をするプログラム <code>sub.py</code> から完成させよう。
+これは a - b を計算するものである。
+ここでも正の整数のみを考える。
+上の <code>add.py</code> を少し変更すればできる:
+<div class=file>
+a-b を求めるプログラム sub.py (未完成)
+<pre>
+a = int(input("a:"))
+b = int(input("b:"))
+while <span class=qqq> ? </span>:
+    a = <span class=qqq> ? </span>
+    b = <span class=qqq> ? </span>
+print(f"answer={a}")
+</pre>
+</div>
+
+<li> つぎに、<code>sub.py</code> の一部をさらに <code>div.py</code> の中で
+使って割り算をおこなう。ここでの割り算は原始的に「引けなくなるまで繰り返し引く」
+方法を使う。したがって、商 (quotient) と余り (remainder) の両方を計算する必要がある。
+<div class=file>
+x ÷ y を求めるプログラム div.py (未完成)
+<pre>
+x = int(input("x:"))
+y = int(input("y:"))
+q = 0
+while y &lt;= x:
+<div class=qqq>
+(変数 x から y を引く)
+
+</div>print(f"quotient = {q}")
+print(f"remainder = {<span class=qqq> ? </span>}")
+</pre>
+</ol>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

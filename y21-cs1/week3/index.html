@@ -35,6 +35,7 @@
   <ul class=ex>
     <li> <a href="#ex3-3">演習 3-3. 条件式の書き換え</a>
   </ul>
+  <li> <a href="#debug">プログラム中に測定器を挿入する</h3>
   </ul>
 <li> <a href="#binary">2進数を使った計算</a>
   <ul>
@@ -198,6 +199,117 @@ print(f"answer={a}")
 </ol>
 </div>
 
+<h3 id="debug">0.3. プログラム中に測定器を挿入する</h3>
+<p>
+前回の演習 2-11. 問題 b を考えてみる:
+<div class=exercise>
+<div class=header>演習 2-11. 足し算プログラム・掛け算プログラムの実行</div>
+<ol type=a start="2">
+  <li> <code>mult.py</code> を短くしようとして
+    「<code>b = p</code>」の部分を削るとうまく動かなくなる。
+    なぜか考えよ。
+</ol>
+</div>
+
+<div class=file>
+元の mult.py
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+    <mark>b = p</mark>
+    while 0 &lt; b:
+        a = a + 1
+        b = b - 1
+    q = q - 1
+print(f"answer={a}")
+</pre></div>
+<p>
+上のプログラムを見て「わざわざ変数 <code>b</code> なんか使う必要ないジャン」と考えて
+削ったものが、以下のバージョンである:
+<div class=file>
+b = p を削ったバージョン
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+    while 0 &lt; <mark>p</mark>:
+        a = a + 1
+        <mark>p</mark> = <mark>p</mark> - 1
+    q = q - 1
+print(f"answer={a}")
+</pre></div>
+<p>
+これはうまく動かないのだが「なぜ動かないのか?」を頭だけで
+考えると難しいので、実際にプログラム中に<strong>測定器</strong>を入れて
+動作を観察するという方法がある。
+<p>
+測定器とは何か? <code>print</code>関数である:
+<div class=file>
+測定器を入れた mult.py
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+    <mark>print(f"p={p}, q={q}")</mark>
+    b = p
+    while 0 &lt; b:
+        a = a + 1
+        b = b - 1
+    q = q - 1
+print(f"answer={a}")
+</pre></div>
+<p>
+上の例では、1つめの <code>while</code>文の中に
+<code>p</code> と <code>q</code> の値をそれぞれ表示する
+<code>print</code>関数を入れている。
+このプログラムを実行すると、次のように表示される:
+<blockquote><pre>
+p:<strong>2</strong>
+q:<strong>3</strong>
+p=2, q=3
+p=2, q=2
+p=2, q=1
+answer=6
+</pre></blockquote>
+<p>
+同様に、動かないバージョンにも測定器を入れてみる:
+<div class=file>
+測定器を入れた b = p を削ったバージョン
+<pre>
+p = int(input("p:"))
+q = int(input("q:"))
+a = 0
+while 0 &lt; q:
+    <mark>print(f"p={p}, q={q}")</mark>
+    while 0 &lt; p:
+        a = a + 1
+        p = p - 1
+    q = q - 1
+print(f"answer={a}")
+</pre></div>
+<p>
+結果はこのようになる:
+<blockquote><pre>
+p:<strong>2</strong>
+q:<strong>3</strong>
+p=2, q=3
+p=<mark>0</mark>, q=2
+p=<mark>0</mark>, q=1
+answer=6
+</pre></blockquote>
+<p>
+つまり、なぜ <code>b = p</code> を削ってはダメだったのか?
+<div class=formula>
+<strong>結論:</strong>
+プログラム中に測定のための <code>print</code>関数を挿入すると、ものすごい役に立つ。
+</div>
+<p>
+今後は動作がよくわからないプログラムに対しては、
+積極的に <code>print</code> を入れて動きを探ってみよう。
 
 <h2 id="binary">1. 2進数を使った計算</h2>
 <p>

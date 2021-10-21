@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<link rel="icon" href="../favicon.png" />
+<title>2021年度 コンピュータサイエンス第一 (1a)
+第4回 - 条件式のつづき、リストの使い方
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第4回 - 条件式のつづき、リストの使い方</h1>
+<div class=nav>2021年10月25日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回の復習</a>
+  <ul class=ex>
+  <li> <a href="#ex1">演習 4-1. ループ (繰り返し) の動きを予測する</a>
+  <li> <a href="#ex2">演習 4-2. Pythonを日本語に翻訳する</a>
+  </ul>
+<li> <a href="#compound">条件式について・つづき</a>
+<ul>
+  <li> <a href="#not">not による否定</a>
+  <ul class=ex>
+  <li> <a href="#ex3">演習 4-3. 条件式の変形</a>
+  </ul>
+  <li> <a href="#andor">and, or による組み合せ</a>
+  <ul class=ex>
+  <li> <a href="#ex4">演習 4-4. 条件式の計算・整理</a>
+  </ul>
+</ul>
+<li> <a href="#list">リストとは?</a>
+<ul>
+  <li> <a href="#nolist">通常の変数を使うとなにが問題か?</a>
+  <li> <a href="#list">リストの使い方</a>
+  <ul class=ex>
+  <li> <a href="#ex5">演習 4-5. 投票集計プログラム</a>
+  </ul>
+</ul>
+<li> <a href="#application">リストの応用例</a>
+<ul>
+  <li> <a href="#vector">ベクトルとして利用する</a>
+  <li> <a href="#database">データベースとして利用する</a>
+  <li> <a href="#image">画像として利用する</a>
+  <li> <a href="#set">集合として利用する</a>
+</ul>
+<li> <a href="#assignment">本日の課題</a>
+  <ul class=ex>
+  <li> <a href="#kadai-s5">小課題 5. maxi.py を完成させる (11月1日締切)</a>
+  <li> <a href="#kadai-m2">中課題 2. 循環小数の「循環」を検出する (11月8日締切)</a>
+  </ul>
+</ol>
+
+
+<h2>雑談</h2>
+<p>
+航空機の安全性について:
+<ul>
+<li> 航空機の事故における乗客の生存確率は 95% である。
+<ul>
+<li> そもそも航空機の事故自体が非常にまれなので、
+  航空機で死ぬ確率よりも、雷に打たれて死んだり、
+  サメに食べられて死んだりする確率のほうが高い。
+</ul>
+<li> 航空機の事故で亡くなった人の 80% は、離陸時の 3分間あるいは
+着陸時の 8分間で死んでいる。
+(<A href="http://www.planecrashinfo.com/cause.htm">資料1</a>,
+<A href="https://www.aviation-safety.net/statistics/">資料2</a>)。
+<ul>
+<li> これは全体の飛行時間のうち、わずか 6% である。
+<li> この間に乗客が注意していれば、多くの死亡事故が防げる。
+<li> 離陸時に携帯電話をオフにさせるのは電波障害のためでなく、実は乗客を冷静にさせるため。
+<li> 夜間の着陸時に機内のライトを消すのは、実は万が一避難のときに乗客の目を暗闇に慣れさせるため。
+</ul>
+<li> さらに、多くの人は衝撃ではなく火災で死んでいる。
+火災の多くは焼け死ぬのではなく、煙による窒息死。
+<ul>
+<li> つまり、さっさと逃げることが重要。
+<li> しかし事故が起きたときは機内はめちゃくちゃで、
+天地が逆になっていることもある。
+ほとんどの人は目が見えず、息ができないため、頭がパニックしてしまう。
+シートベルトをはずせなくなる人も多い。
+<li> 緊急時には、90秒以内に機内から脱出しなければならない。
+考えこんでいたら死んでしまう。
+<li> 考えなくても行動できるようにするには、避難訓練が重要。
+<li> フライトアテンダントは、緊急時に口調を変えるよう訓練を受けている。
+<li> 救命胴衣はほとんど役に立たない。
+1996年の事故では、救命胴衣が邪魔になって逃げ遅れた犠牲者が大勢いた。
+</ul>
+<li> しかし普通の人は飛行機の避難訓練などしたことがない。
+  <ul>
+    <li> 安全ビデオで「ヴァーチャル避難訓練」させる。
+  </ul>
+<li> 最近の安全ビデオは、わざと奇抜にして人の注意を引きつけるようにできている。
+  <ul>
+    <li> <a href="https://www.youtube.com/watch?v=nU7fm302UjY">全日空 (ANA)</a> - 古いバージョン
+    <li> <a href="https://www.youtube.com/watch?v=z1A5BtqsaPM">Virgin America (米国)</a> - 奇抜
+    <li> <a href="https://www.youtube.com/watch?v=zQtod9801j0">Turkish Airlines (トルコ)</a> - ウケ狙い
+    <li> <a href="https://www.youtube.com/watch?v=h2btt98pKlA">カンタス航空 (オーストラリア)</a> - 泣かせる
+    <li> <a href="https://www.youtube.com/watch?v=T0Zkey8LMHU">全日空 (ANA)</a> - 新しいバージョン
+  </ul>
+<li> 避難訓練・安全ビデオをあなどってはならない。
+</ul>
+<div class=formula>
+  結論: (飛行機にかぎらず) 出先ではつねに非常口の場所をチェックすること。
+</div>
+
+
+<h2 id="prev">0. 前回の復習</h2>
+<ul>
+<li> Python では、四則演算を使った計算ができる。
+<li> 使える演算子の種類: <code>+</code>, <code>-</code>, <code>*</code>, <code>//</code>, <code>%</code>, <code>/</code>, <code>**</code>
+<li> 文字表示を使ったアニメーションをおこなった。
+</ul>
+
+<div class=exercise id="ex1">
+<div class=header>演習 4-1. ループ (繰り返し) の動きを予測する</div>
+次のプログラムの出力を予測せよ:
+<ol type=a>
+<li> <pre>
+a = 1
+b = 0
+while b &lt; 5:
+    a = a * 2
+    b = b + 1
+print(f"a={a}")
+</pre>
+
+<li> <pre>
+x = 0
+y = 32
+while y &gt; 1:
+    x = x + 1
+    y = y // 2
+print(f"x={x}")
+</pre>
+
+<li> <pre>
+i = 0
+while i &lt;= 10:
+    print(f"i={i % 3}")
+    i = i + 1
+</pre>
+</ol>
+</div>
+
+<div class=exercise id="ex2">
+<div class=header>演習 4-2. Pythonを日本語に翻訳する</div>
+次のプログラムが何をするか、日本語で説明せよ:
+<pre>
+ok = 0
+while ok == 0:
+    x = int(input("password:"))
+    if x == 1234:
+        print("good")
+        ok = 1
+    else:
+        print("bad")
+</pre>
+</div>
+
+
+<h2 id="compound">1. 条件式について・つづき</h2>
+
+<h3 id="not">1.1. not による否定</h3>
+<p>
+ある条件式があるとき、その条件式の「否定」は以下のようにして表せる:
+<dl>
+<dt> 構文:
+<dd> <pre>
+if <mark>not</mark> (<em>条件式1</em>):
+    <em>条件式1が真で<strong>ない</strong>ときに実行される文</em>
+    ...
+</pre>
+<dt> 例1:
+<dd> <pre>
+if not (x &lt; 0):
+    print("x is non-negative.")
+</pre>
+これは、以下と同じである:
+<pre>
+if <strong>x &gt;= 0</strong>:
+    print("x is non-negative.")
+</pre>
+</dl>
+
+<div class=exercise id="ex3">
+<div class=header>演習 4-3. 条件式の変形</div>
+<p>
+つぎの <code>not</code> を含んだ条件式を、
+<code>not</code> を含まない条件式に直せ:
+<ol type=a>
+<li> <code>not (a != b)</code>
+<li> <code>not (y &gt; x)</code>
+<li> <code>not (1 &lt;= 0)</code>
+</ol>
+</div>
+
+<h3 id="andor">1.2. and, or による組み合せ</h3>
+<p>
+複数の条件式を <code>and</code>、<code>or</code> 演算子によって
+組み合わせることができる。
+<dl>
+<dt> 構文:
+<dd> <pre>
+if (<em>条件式1</em>) and (<em style="color:blue;">条件式2</em>):
+    <em>条件式1</em>および<em style="color:blue;">条件式2</em>の<strong>両方が</strong>真のときに実行される文
+
+if (<em>条件式1</em>) or (<em style="color:blue;">条件式2</em>):
+    <em>条件式1</em>または<em style="color:blue;">条件式2</em>の<strong>一方が</strong>真のときに実行される文
+</pre>
+<dt> 例1:
+<dd> <pre>
+if (a &lt; 0) and (b &lt; 0):
+    print("both a and b are negative.")
+</pre>
+<dt> 例2:
+<dd> <pre>
+if (10 &lt;= x) and (x &lt;= 20):
+    print("x is between [10,20].")
+</pre>
+<dt> 例3:
+<dd> <pre>
+if (0 &lt; a) or (0 &lt; b):
+    print("either a or b is positive.")
+</pre>
+<dt> 例4:
+<dd> <pre>
+if (x &lt; 10) or (20 &lt; x):
+    print("x is out of [10,20].")
+</pre>
+<dt> 例5:
+<dd> <pre>
+if ((10 &lt;= x) and (x &lt;= 20)) or (y == 0):
+    print("x is between [10,20] or y is zero")
+</pre>
+<dt> 例6:
+<dd> <pre>
+if (a == 1) and (a != 1):
+    print("impossiburu!")
+</pre>
+</dl>
+
+<div class=exercise id="ex4">
+<div class=header>演習 4-4. 条件式の計算・整理</div>
+<ol type=a>
+<li> <code>a=2</code> かつ <code>b=-1</code> のとき、
+  <code>(0 &lt; a) and (0 &lt; b)</code> は成り立つか?
+<li> <code>a=3</code> かつ <code>b=4</code> のとき、
+  <code>(0 &lt; a) or (0 &lt; b)</code> は成り立つか?
+<li> <code>(i &lt;= 10) and (i &lt;= 20)</code> を簡単にせよ。
+<li> <code>not ((x == 0) and (y == 0))</code> を
+  <code>and</code> ではなく <code>or</code> を使って表せ。
+</ol>
+</div>
+
+
+<h2 id="list">2. リストとは?</h2>
+<p>
+たとえば以下のようなプログラムを考えてみる:
+<ul>
+<li> 3人の候補 (a, b, c) の投票結果を集計するプログラム。
+<li> 候補者の番号 1〜3 の数値で入力する。
+<li> 0 が入力されたら、3人の投票結果を表示する。
+</ul>
+
+<div class=file>
+vote1.py
+<pre>
+<span class=comment># 3人の得票数をゼロにする。</span>
+a = 0
+b = 0
+c = 0
+x = 1
+while x != 0:
+    <span class=comment># 数をひとつ入力する。</span>
+    x = int(input("vote:"))
+    if x == 1:
+        a = a + 1  <span class=comment># 1が入力された場合。</span>
+    elif x == 2:
+        b = b + 1  <span class=comment># 2が入力された場合。</span>
+    elif x == 3:
+        c = c + 1  <span class=comment># 3が入力された場合。</span>
+<span class=comment># 3人の得票数を表示する。</span>
+print(f"a={a}")
+print(f"b={b}")
+print(f"c={c}")
+</pre>
+</div>
+
+<dl>
+<dt> if文 (パターン3):
+<dd> <code>if〜else</code> のパターンをさらに発展させたもの。
+<pre>
+if <em>条件式1</em>:
+    <em><strong>条件式1が真である</strong>ときに実行される文</em>
+elif <em>条件式2</em>:
+    <em><strong>そうではなく、条件式2が真である</strong>ときに実行される文</em>
+elif <em>条件式3</em>:
+    <em><strong>そうではなく、条件式3が真である</strong>ときに実行される文</em>
+    ...
+else:
+    <em><strong>どの条件式も真でなかった</strong>ときに実行される文</em>
+</pre>
+</dl>
+
+<h4>if〜else と if〜elif〜else の違い</h4>
+<p>
+<code>elif</code> 句は <code>else</code> + <code>if</code> を
+ひとつにまとめたもので「そうではなく…」という意味を含んでいる。
+個々の <code>elif</code> は上から見ていくため、最初に真であった条件式に
+対応する部分が実行され、<strong>それ以降の部分は実行されない</strong>。
+たとえば
+<pre>
+if <em>条件式1</em>:
+    print("X")
+if <em>条件式2</em>:
+    print("Y")
+</pre>
+は、<em>条件式1</em> および <em>条件式2</em> が両方成り立つ場合、
+<code>print("X")</code> および <code>print("Y")</code> の両方が実行されるが、
+<pre>
+if <em>条件式1</em>:
+    print("X")
+<mark>elif</mark> <em>条件式2</em>:
+    print("Y")
+</pre>
+の場合は、<code>print("X")</code> しか実行されない。
+なぜなら <em>条件式1</em> が成り立っている時点で、
+もう「そうではなく」ないので、それ以降の
+<code>elif</code>句がチェックされないからである。
+
+
+<h3 id="nolist">2.1. 通常の変数を使うとなにが問題か?</h3>
+<p>
+上の例では、候補者それぞれに
+<code>a</code>, <code>b</code>, <code>c</code> という変数を使っていた。
+もし候補者が10人とか、100人だったらどうする?
+<div class=file>
+アホな方法:
+<pre>
+v1 = 0
+v2 = 0
+...
+v100 = 0
+...
+if x == 1:
+   v1 = v1 + 1  <span class=comment># 1が入力された場合。</span>
+elif x == 2:
+   v2 = v2 + 1  <span class=comment># 2が入力された場合。</span>
+...
+elif x == 100:
+   v100 = v100 + 1  <span class=comment># 100が入力された場合。</span>
+</pre>
+</div>
+<p>
+ここでは、<code>a</code> や <code>v1</code> などの決まった名前の変数ではなく、
+「“i番目の変数”に代入する」などと言えるようにしたい。
+これを可能にするのが <u>リスト</u> (list) である。
+(一般的には、<u>配列</u> (array) とか <u>ベクタ</u> (vector) などとも呼ぶ。)
+
+<h3 id="list">2.2. リストの使い方</h3>
+
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>リスト名 = [0, 0, ...]</code> … リストを準備する。
+    <li> 変数名 = <code>リスト名[i]</code> … リストの <em>i</em>番目の値を変数に入れる。
+    <li> <code>リスト名[i]</code> = 変数名 … 変数の値をリストの <em>i</em>番目の要素に入れる。
+    <li> <code>リスト名 = リスト名 + [0, 0, ...]</code> … 2つのリストを連結する。
+    <li> <code>len(リスト名)</code> … リストの長さ (要素の数) を計算する。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+a = [0, 0, 0, 0]
+a[0] = 4
+a[1] = 6
+a[2] = 4
+a[3] = 9
+x = a[1]  <span class=comment># x は 6 になる</span>
+</pre>
+  <p> リストの中の各変数を <u>要素</u> (element) と呼ぶ。
+    また、リストの要素はつねに <strong>0番目から始まる</strong>。
+    なお、<code>[ ]</code> のようなカッコを <u>ブラケット</u> (bracket) という。
+<dt> 例2:
+<dd> <pre>
+a = [4, 6, 4, 9]
+print(a[0], a[1], a[2], a[3])
+</pre>
+  <p> リストの中身を直接書いてもよい。
+<dt> 例3:
+<dd> <pre>
+a = [4, 6, 4, 9]
+i = 0
+while i &lt;= 3:
+    print(a[i])
+    i = i + 1
+</pre>
+  <p> ループの中でリストを使うことにより、
+    リスト<code>a</code> の <strong>i番目の要素</strong> を表示できる。
+    なお、このときの <code>i</code> のような値を、<u>添え字</u> (index) と呼ぶ。
+<dt> 例4:
+<dd> <pre>
+b = [4, 6, 4, 9]
+x = 0
+while x &lt;= 3:
+    print(b[3 - x])
+    x = x + 1
+</pre>
+  <p> リストの添え字として、式を使ってもかまわない。
+    また、リスト名や添え字として任意の変数名を使うことができる。
+<dt> 例5:
+<dd> <pre>
+a = [4, 6, 4, 9]
+print(a[7])  <span class=comment># エラー!</span>
+a[4] = 2     <span class=comment># エラー!</span>
+</pre>
+  <p> 存在しない要素を代入・参照することはできない。
+    また、添え字はつねに 0 から始まるので、
+    4個の要素があるリストの場合、<strong>添え字の範囲は 0 〜 3</strong> である。
+<dt> 例6:
+<dd> <pre>
+a = [4, 6]
+b = 9
+print(a + b)  <span class=comment># エラー!</span>
+</pre>
+  <p> リスト名と変数名は区別すること。
+    一般的には、リストと通常の整数を演算することはできない。
+<dt> 例7:
+<dd> <pre>
+a = [4, 6]
+b = [4, 9]
+c = a + b
+</pre>
+  <p> リストどうしは <code>+</code> 演算子を使って連結することができる。
+<dt> 例8:
+<dd> <pre>
+z = [4, 6, 4, 9, 7]
+print(len(z))  <span class=comment># 5を表示する。</span>
+</pre>
+  <p> <code>len()</code> 関数を使うことで、リストの長さを知ることができる。
+<dt> 例9:
+<dd> <pre>
+e = []
+print(len(e))  <span class=comment># 0を表示する。</span>
+</pre>
+  <p> 要素がひとつもない「空のリスト」というものも存在する。
+</dl>
+
+<div class=file>
+vote2.py (リストを使ったバージョン)
+<pre>
+<span class=comment>##  投票集計プログラム</span>
+
+<span class=comment># 3人の得票数をゼロにする。</span>
+votes = [0, 0, 0]
+x = 1
+while x != 0:
+    <span class=comment># 数をひとつ入力する。</span>
+    x = int(input("vote:"))
+    <span class=comment># x番目の得票数を増やす。</span>
+    votes[x] = votes[x] + 1
+<span class=comment># 3人の得票数を表示する。</span>
+i = 0
+while i &lt; 3:
+    print(votes[i])
+    i = i + 1
+</pre>
+</div>
+
+<div class=exercise id="ex5">
+<div class=header>演習 4-5. 投票集計プログラム</div>
+<ol type=a>
+  <li> 上のプログラム <code>vote2.py</code> を入力・実行せよ。
+    正しく動くか?
+  <li> このプログラムは、候補者の番号として 1〜3 ではなく、
+    0〜2 を入力しなければならない。
+    これを 1〜3 で正しく動くようにプログラムを修正せよ。
+  <li> 3人ではなく、10人の候補者を扱えるようにプログラムを変更せよ。
+</ol>
+</div>
+
+
+<h2 id="application">3. リストの応用例</h2>
+<p>
+リストはコンピュータにおける
+処理の中心ともいえる機能であり、さまざまな用途が存在する。
+
+<h3 id="vector">3.1. ベクトルとして利用する</h3>
+<div class=file>
+vector.py
+<pre>
+<span class=comment># ベクトルの計算</span>
+p = [-2, 3]  <span class=comment># (X座標, Y座標)</span>
+q = [1, 4]   <span class=comment># (X座標, Y座標)</span>
+r = [p[0]+q[0], p[1]+q[1]]  <span class=comment># ベクトルの和</span>
+n = p[0]*q[0] + p[1]*q[1]   <span class=comment># ベクトルの内積</span>
+</pre>
+</div>
+
+<h3 id="database">3.2. データベースとして利用する</h3>
+<div class=file>
+booking.py
+<pre>
+<span class=comment>##  座席予約システム</span>
+<span class=comment>##  0〜4 の座席番号を与える。</span>
+
+<span class=comment># 5個の座席を仮定する。</span>
+seats = [0, 0, 0, 0, 0]
+while True:  <span class=comment># 0 &lt; 1 などと同じ (永久にくりかえす)</span>
+    <span class=comment># 座席番号を入力する。</span>
+    n = int(input("seat:"))
+    if seats[n] == 0:
+        <span class=comment># 空席の場合。</span>
+        print("available.")
+        <span class=comment># その席を「占有」にする。</span>
+        seats[n] = 1
+    else:
+        <span class=comment># ふさがっていた。</span>
+        print("unavailable.")
+</pre>
+</div>
+
+<h3 id="image">3.3. 画像として利用する</h3>
+<p>
+つまるところ、画像とはピクセルの列である。
+ひとつの数字を「ピクセル」と考えると、これは数値のリストで表せる。
+
+<div class=file>
+anim2.py (リストを使ったバージョン)
+<pre>
+<span class=comment># アニメーションをおこなう</span>
+
+import time
+img = [0,0,0,0,0,0,0,0,0,0]
+<span class=comment># 最初の画像。</span>
+img[0] = 11111111111111111111
+img[1] = 11111100111100111111
+img[2] = 11111100111100111111
+img[3] = 11111111111111111111
+img[4] = 11001111111111110011
+img[5] = 11100111111111100111
+img[6] = 11110011111111001111
+img[7] = 11111100000000111111
+img[8] = 11111111111111111111
+img[9] = 11111111111111111111
+t = 0
+while t &lt; 20:
+    i = 0
+    <span class=comment># img[0] 〜 img[9] を表示。</span>
+    while i &lt; 10:
+        print(img[i])
+        i = i + 1
+    <span class=comment># img[0] 〜 img[9] をずらす。</span>
+    while i &lt; 10:
+        img[i] = img[i] // 10
+        i = i + 1
+    time.sleep(0.1)
+    t = t + 1
+</pre>
+</div>
+
+<p>
+「中課題 1. アニメーションプログラム」では、
+リストを使ってアニメーションを表してもよい。
+
+<h3 id="set">3.4. 集合として利用する</h3>
+<div class=file>
+falling.py
+<pre>
+<span class=comment># 落第者リスト</span>
+rakudai = [1234, 4567, 7890, 1111, 9999]
+<span class=comment># 学籍番号を入力する</span>
+gakuseki = int(input("gakuseki:"))
+i = 0
+while i &lt; 5:
+    <span class=comment># どれかの番号に一致したら留年。</span>
+    if gakuseki == rakudai[i]:
+        print("あなたは留年です。")
+    i = i + 1
+</pre>
+</div>
+
+
+<h2 id="assignment">4. 本日の課題</h2>
+
+<div class=exercise id="kadai-s5">
+<div class=header>小課題 5. maxi.py を完成させる (11月1日締切)</div>
+<ul>
+  <li> 提出期限: <strong>11月1日</strong> (1週間後)
+  <li> 本日の成果を使って、リストの最大値を求める以下のプログラム
+    <code>maxi.py</code> を完成させ、
+    T2SCHOLA から提出せよ。
+</ul>
+<div class=file>
+maxi.py
+<p>
+このプログラムの方針:
+<ul>
+<li> <code>i</code> = 0〜3 までループする。
+<li> <code>maxi</code>番目の数と <code>i</code>番目の数を比較する。
+<li> もし <code>i</code>番目の数のほうが大きければ、<code>maxi</code> の値を更新する。
+</ul>
+<pre>
+<span class=comment># リストの最大値を求める</span>
+a = [-3, 8, 19, -4]
+maxi = 0
+i = 0
+while i &lt; len(a):
+<div class=qqq>    ???
+    ...
+</div>print(f"max index = {maxi}")
+print(f"max value = {a[maxi]}")
+</pre>
+</div>
+</div>
+
+<div class=exercise id="kadai-m2">
+<div class=header>中課題 2. 循環小数の「循環」を検出する (11月8日締切)</div>
+<ul>
+  <li> 提出期限: <strong>11月8日</strong> (2週間後)
+  <li> 本日の成果を使って、循環小数の「循環」を検出するプログラム
+    <code>frac.py</code> を完成させ、
+    T2SCHOLA から提出せよ。
+    今回はレポートはなく、プログラム本体のファイルのみを提出すればよい。
+    ただし、以下のものを必ずPythonコード中に
+    <u>コメントとして</u>含めること:
+    <ul>
+      <li> 氏名・学籍番号。
+      <li> プログラムの動作説明。(適切な場所に解説を入れること)
+      <li> その他工夫したこと。
+    </ul>
+  <li> 入力される x の値は 2〜20 の範囲と仮定してよい。
+</ul>
+<div class=file>
+frac1.py (未完成版)
+<p>
+これは入力した値 x に対して、
+1 ÷ x の小数部分を表示するものである (x &gt; 1 とする)。
+<pre>
+<span class=comment>##  筆算を使って10進数の割り算をおこなう</span>
+<span class=comment>##  入力された値xに対して1/xの小数を表示する。</span>
+<span class=comment>##  バグ: 循環小数だと永久に止まらない。</span>
+a = 1
+x = int(input("x:"))
+a = a % x
+<span class=comment># 余りがゼロになるまで続ける。</span>
+while a != 0:
+    a = a * 10
+    d = a // x   <span class=comment># 商を求める。</span>
+    a = a % x
+    print(f"digit={d}, remainder={a}")
+</pre>
+</div>
+
+<h4>中課題2 のヒント</h4>
+<p>
+まず、上のプログラムを実行してみよう。
+<blockquote><pre>
+$ <strong>python frac1.py</strong>
+x:<strong>4</strong>
+digit=2 remainder=2
+digit=5 remainder=0
+<span class=comment>(つまり 1÷4 = 0.25)</span>
+
+$ <strong>python frac1.py</strong>
+x:<strong>1000</strong>
+digit=0 remainder=0
+digit=0 remainder=0
+digit=1 remainder=0
+<span class=comment>(つまり 1÷1000 = 0.001)</span>
+
+$ <strong>python frac1.py</strong>
+x:<strong>256</strong>
+digit=0 remainder=10
+digit=0 remainder=100
+digit=3 remainder=232
+digit=9 remainder=16
+digit=0 remainder=160
+digit=6 remainder=64
+digit=2 remainder=128
+digit=5 remainder=0
+<span class=comment>(つまり 1÷256 = 0.00390625)</span>
+
+$ <strong>python frac1.py</strong>
+x:<strong>3</strong>
+digit=3 remainder=1
+digit=3 remainder=1
+digit=3 remainder=1
+digit=3 remainder=1
+...
+</pre></blockquote>
+<ul>
+<li> 問題: 答えが循環小数になったとき、これを繰り返す部分で止めるにはどうするか?
+<li> 解法: これまでに出た reminder をすべて記録しておき、
+  同じものが再び現れた時点でループを停止する。
+<li> ヒント: リストを使いましょう。
+</ul>
+
+<p>
+完成版では、以下のように表示されるものとする:
+<blockquote><pre>
+$ <strong>python frac.py</strong>
+x:3
+digit=3 remainder=1
+digit=3 remainder=1
+junkan
+
+$ <strong>python frac.py</strong>
+x:7
+digit=1 remainder=3
+digit=4 remainder=2
+digit=2 remainder=6
+digit=8 remainder=4
+digit=5 remainder=5
+digit=7 remainder=1
+digit=1 remainder=3
+junkan
+</pre></blockquote>
+
+<div class=file>
+frac.py (未完成版)
+<pre>
+<span class=comment>##  筆算を使って10進数の割り算をおこなう</span>
+<span class=comment>##  入力された値xに対して1/xの小数を表示する。</span>
+<span class=comment>##  循環小数を検出して止まる。</span>
+a = 1
+x = int(input("x:"))
+a = a % x
+# 20個分の余りを記録できるようにする。
+r = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+<span class=comment># 余りがゼロになるか、循環するまで続ける。</span>
+while <span class=qqq>       ???       </span>:
+    a = a * 10
+    d = a // x   <span class=comment># 商を求める。</span>
+    a = a % x
+    print(f"digit={d}, remainder={a}")
+<div class=qqq>    ???
+    ...
+</div>if 循環した:
+    print("junkan")
+</pre>
+</div>
+
+<h4>便利な小技</h4>
+<p>
+画面があっという間にスクロールしてしまうとキツイので、
+作業中は以下のようにするとよい:
+<ol type=a>
+<li> ループの途中で <code>time.sleep(1)</code> を入れて、表示を遅くする。
+<pre>
+<mark>import time</mark>
+...
+while a != 0:
+    ...
+    print(f"digit={d}, remainder={a}")
+    <mark>time.sleep(1)</mark>
+</pre>
+<li> たとえ無限にループしても20桁で止めるようにしておく。
+  (注意: これだけでは正解とはみなしません)
+<pre>
+i = 0
+...
+while a != 0 <mark>and i &lt; 20</mark>:
+    ...
+    i = i + 1
+</pre>
+</ol>
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

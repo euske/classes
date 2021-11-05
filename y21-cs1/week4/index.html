@@ -653,6 +653,8 @@ frac1.py (未完成版)
 a = 1
 x = int(input("x:"))
 a = a % x
+<span class=comment># 最初の商はつねに0。</span>
+print(f"digit=0, remainder={a}")
 <span class=comment># 余りがゼロになるまで続ける。</span>
 while a != 0:
     a = a * 10
@@ -668,12 +670,14 @@ while a != 0:
 <blockquote><pre>
 $ <strong>python frac1.py</strong>
 x:<strong>4</strong>
+digit=0 remainder=1
 digit=2 remainder=2
 digit=5 remainder=0
 <span class=comment>(つまり 1÷4 = 0.25)</span>
 
 $ <strong>python frac1.py</strong>
 x:<strong>1000</strong>
+digit=0 remainder=1
 digit=0 remainder=0
 digit=0 remainder=0
 digit=1 remainder=0
@@ -681,6 +685,7 @@ digit=1 remainder=0
 
 $ <strong>python frac1.py</strong>
 x:<strong>256</strong>
+digit=0 remainder=1
 digit=0 remainder=10
 digit=0 remainder=100
 digit=3 remainder=232
@@ -693,6 +698,7 @@ digit=5 remainder=0
 
 $ <strong>python frac1.py</strong>
 x:<strong>3</strong>
+digit=0 remainder=1
 digit=3 remainder=1
 digit=3 remainder=1
 digit=3 remainder=1
@@ -701,8 +707,8 @@ digit=3 remainder=1
 </pre></blockquote>
 <ul>
 <li> 問題: 答えが循環小数になったとき、これを繰り返す部分で止めるにはどうするか?
-<li> 解法: これまでに出た reminder をすべて記録しておき、
-  同じものが再び現れた時点でループを停止する。
+<li> 解法: これまでに出た remainder をすべて記録しておき、
+  同じ remainder が再び現れた時点でループを停止する。
 <li> ヒント: リストを使いましょう。
 </ul>
 
@@ -711,19 +717,19 @@ digit=3 remainder=1
 <blockquote><pre>
 $ <strong>python frac.py</strong>
 x:3
-digit=3 remainder=1
+digit=0 remainder=1
 digit=3 remainder=1
 junkan
 
 $ <strong>python frac.py</strong>
 x:7
+digit=0 remainder=1
 digit=1 remainder=3
 digit=4 remainder=2
 digit=2 remainder=6
 digit=8 remainder=4
 digit=5 remainder=5
 digit=7 remainder=1
-digit=1 remainder=3
 junkan
 </pre></blockquote>
 
@@ -736,6 +742,8 @@ frac.py (未完成版)
 a = 1
 x = int(input("x:"))
 a = a % x
+<span class=comment># 最初の商はつねに0。</span>
+print(f"digit=0, remainder={a}")
 <span class=comment># 20個分の余りを記録できるようにする。</span>
 r = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 <span class=comment># 余りがゼロになるか、循環するまで続ける。</span>

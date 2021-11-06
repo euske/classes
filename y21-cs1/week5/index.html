@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<link rel="icon" href="../favicon.png" />
+<title>2021年度 コンピュータサイエンス第一 (1a)
+第5回 - for文、文字列、データの型
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第5回 - for文、文字列、データの型</h1>
+<div class=nav>2021年11月8日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回の復習</a>
+  <ul class=ex>
+  <li> <a href="#ex1">演習 5-1. うるう年の判定</a>
+  <li> <a href="#ex2">演習 5-2. 画像サイズの計算</a>
+  </ul>
+<ul>
+  <li> <a href="#prev-assn">前回の課題について・補足</a>
+</ul>
+<li> <a href="#programming">プログラミングが苦手な人へ</a>
+<li> <a href="#break">条件式 True と break文</a>
+  <ul class=ex>
+  <li> <a href="#ex3">演習 5-3. ループ実行の予想</a>
+  </ul>
+<li> <a href="#for">For文</a>
+<li> <a href="#string">文字列</a>
+  <ul class=ex>
+  <li> <a href="#ex4">演習 5-4. 図形を描く</a>
+  </ul>
+<ul>
+  <li> <a href="#string-list">リスト + 文字列</a>
+  <ul class=ex>
+  <li> <a href="#ex5">演習 5-5. 投票集計プログラムの改良</a>
+  </ul>
+</ul>
+<li> <a href="#datatype">データの「型」について</a>
+<ul>
+  <li> <a href="#conv-toint">文字(列)型 → 整数型への変換</a>
+  <ul class=ex>
+  <li> <a href="#ex6">演習 5-6. 「日本」の文字コード</a>
+  </ul>
+  <li> <a href="#conv-tostr">整数型 → 文字(列)型への変換</a>
+  <ul class=ex>
+  <li> <a href="#ex7">演習 5-7. 英小文字だけを表示するプログラム</a>
+  </ul>
+  <li> <a href="#formatting">print関数における <code>f"〜"</code> と <code>"〜"</code> の違い</a>
+</ul>
+<li> <a href="#assignment">本日の課題</a>
+<ul>
+  <ul class=ex>
+  <li> <a href="#kadai-s6">小課題 6. 投票集計プログラム vote3.py</a>
+  </ul>
+</ul>
+</ol>
+
+
+<h2>雑談</h2>
+<p>
+ゲームジャム (game jam) とは何か?
+<ul>
+<li> 48時間以内にゲームを1本作って発表する競技。競技開始時に発表される「お題」に沿って作らねばならない。
+<li> 「お題」の例:
+<ul>
+<li> 「You only get one (いっこしか持てない)」
+<li> 「10 seconds (10秒間)」
+<li> 「The more you have, the worse it is (あればあるほど悪いもの)」
+</ul>
+<li> プログラミング・絵・音楽をすべて1人でやるソロ部門と、
+チーム参加が認められるジャム部門がある。
+<li> 終了後、各参加者がお互いのゲームを点数評価し、優勝を決める。
+<li> <a href="https://ja.wikipedia.org/wiki/Ludum_Dare">Ludum Dare</a>は国際的に有名なゲームジャムで、多くの有名人
+ (<a href="http://ludumdare.com/compo/author/notch/">notch</a> など)
+が参加している。
+<li> これ以外にも多くのゲームジャムが<a href="http://www.indiegamejams.com/">日々開催されている</a>。
+<li> <a href="https://ldjam.com/users/euske/games">新山のこれまでの参加履歴</a> (<a href="https://alakajam.com/user/euske#entries-ext">さらに昔のもの</a>)。
+<li> <a href="https://ldjam.com/events/ludum-dare/49/results/overall/compo">LD49 (お題: Unstable) の優勝者</a>
+</ul>
+
+
+<h2 id="prev">0. 前回の復習</h2>
+
+<ul>
+<li> 条件式は and, or, not でまとめることができる。
+<li> リストの応用例: ベクトル、データベース、画像、集合、etc.
+<li> リストの最初の要素は、<strong>第0要素</strong>である。
+</ul>
+
+<div class=exercise id="ex1">
+<div class=header>演習 5-1. うるう年の判定</div>
+<p>
+西暦 <em>y</em> 年がうるう年かどうかを判定するプログラムを作りたい。
+<div class=formula>
+<a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AC%E3%82%B4%E3%83%AA%E3%82%AA%E6%9A%A6">グレゴリオ暦</a>:
+“4年に1度うるう年があるが、100年に1度はない、しかし400年に1度はうるう年がある”
+</div>
+<ol type=a>
+  <li> 「変数 y が 4 で割り切れる」を表す条件式を Python で書け。
+  <li> 「変数 y が 4 で割り切れるが、100 では割り切れない」を表す条件式を書け。
+  <li> 「変数 y が 4 で割り切れるが、100 では割り切れない、あるいは 400 で割り切れる」を表す条件式を書け。
+</ol>
+</div>
+
+<div class=exercise id="ex2">
+<div class=header>演習 5-2. 画像サイズの計算</div>
+<p>
+(<em>x</em> &times; <em>y</em>) ピクセルの画像がある。
+これを、(<em>w</em> &times; <em>h</em>) ピクセルの画面に
+フィットするように表示したい。
+幅と高さ (<em>x'</em>, <em>y'</em>) の値を計算せよ。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="700" height="170">
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <g fill="none" stroke="black" transform="translate(21,16)">
+    <image x="0" y="30" width="80" height="60" xlink:href="image.jpg" />
+    <image x="140" y="23" width="100" height="75" xlink:href="image.jpg" />
+    <rect x="0" y="30" width="80" height="60" />
+    <rect x="140" y="0" width="100" height="120" />
+    <line y1="60" y2="60" x1="90" x2="115"
+          stroke-width="4" marker-end="url(#arrow)" />
+    <g fill="black" stroke="none" text-anchor="middle">
+      <text x="40" y="25">x</text>
+      <text x="-10" y="65">y</text>
+      <text x="190" y="-5">w</text>
+      <text x="130" y="65">h</text>
+      <text x="110" y="140">横フィット</text>
+    </g>
+  </g>
+  <g fill="none" stroke="black" transform="translate(321,16)">
+    <image x="0" y="30" width="80" height="60" xlink:href="image.jpg" />
+    <image x="155" y="15" width="120" height="90" xlink:href="image.jpg" />
+    <rect x="0" y="30" width="80" height="60" />
+    <rect x="140" y="15" width="150" height="90" />
+    <line y1="60" y2="60" x1="90" x2="115"
+          stroke-width="4" marker-end="url(#arrow)" />
+    <g fill="black" stroke="none" text-anchor="middle">
+      <text x="40" y="25">x</text>
+      <text x="-10" y="65">y</text>
+      <text x="215" y="10">w</text>
+      <text x="130" y="65">h</text>
+      <text x="120" y="140">縦フィット</text>
+    </g>
+  </g>
+</svg>
+</div>
+<ol type=a>
+  <li> 横フィットの場合、<em>x'</em>, <em>y'</em> を計算する式を書け。
+  <li> 縦フィットの場合、<em>x'</em>, <em>y'</em> を計算する式を書け。
+  <li> <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em> の値が与えられたとき、
+    この画像が横フィットになるような条件式を書け。
+</ol>
+</div>
+
+<h3 id="prev-assn">前回の課題について・補足</h3>
+
+<div class=file>
+maxi.py
+<pre>
+<span class=comment># リストの最大値を求める</span>
+a = [-3, 8, 19, -4]
+maxi = 0
+i = 0
+while i &lt; len(a):
+<div class=qqq>    ???
+    ...
+</div>print(f"max index = {maxi}")
+print(f"max value = {a[maxi]}")
+</pre>
+</div>
+
+<p>
+なぜ最大値そのものの値ではなく、<code>maxi</code> を求める必要があるのか?
+こうしておくと、以下のようなことが可能になるからである:
+<div class=file>
+best_student.py
+<pre>
+<span class=comment># 得点がもっとも高い学生の番号を表示する</span>
+<mark>student = [1234, 3456, 7890, 1111]</mark>
+a = [-3, 8, 19, -4]
+maxi = 0
+i = 0
+while i &lt; len(a):
+<div class=qqq>    ???
+    ...
+</div>print(f"max index = {maxi}")
+print(f"max value = {a[maxi]}")
+print(f"best student = {<mark>student[maxi]</mark>}")
+</pre>
+</div>
+
+
+<h2 id="programming">1. プログラミングが苦手な人へ</h2>
+<p>
+有名な格言:
+<div class=formula>
+「プログラムは思ったようには動かないが、書いたようには動く」
+</div>
+<ol>
+<li> <strong>やることを自分の言葉で説明できなければ、プログラムは書けない</strong><br>
+  繰り返すが、プログラミングに特別な能力は何も必要ない。
+  「自分のやらせたいことを、ひたすら書く」だけである。
+  しかし実は「自分のやらせたいこと」を
+  日本語で具体的に説明すること自体が簡単ではない。
+  これができるようになれば、あとはその説明を特定の
+  プログラミング言語に変換するだけの機械的な作業である。
+
+<li> <strong>「何」ではなく「どうやって」に集中する</strong><br>
+  たとえば小課題 3. でやった掛け算プログラムを考えてみよう:
+<pre>
+<span class=comment># 加減算のみを使って p×q を計算する。</span>
+def multiple(p, q):
+    a = 0
+    while 0 &lt; q:  <span class=comment># q回、p を足す。</span>
+        a = a + p
+        q = q - 1
+    return a
+</pre>
+  ここで「掛け算ではなく、割り算を計算するプログラムを書け」と言われたらどうするだろうか。
+  「掛け算と割り算は逆だから、逆にすりゃいいだろう」と思って、
+  単純に <code>+</code> を <code>-</code> 演算子にするだけでは<strong>動かない</strong>:
+<pre>
+<span class=comment># 加減算のみを使って p÷q を計算する。</span>
+def divide(p, q):
+    a = 0
+    while 0 &lt; q:
+        a = a <mark>-</mark> p
+        q = q <mark>+</mark> 1
+    return a
+</pre>
+  これは、考えてみれば当然である。
+  上の関数は <code>divide</code> と名前がついている
+  (し、コメントにも ÷ と書いてある) が、本当に割り算をしているわけではない。
+  割り算をさせるには、見よう見真似でプログラムを「逆」にするだけではだめで、
+  実際に割り算をさせる手順を自分で考えて書かないとだめなのである。
+  しかし表面的な置換を「プログラミング」と勘違いしている人は時々いる。
+  プログラミングは、ファンタジーに出てくる魔法ではない。
+
+<li> <strong>1文字も間違わないように注意する</strong><br>
+  「ちょっとぐらい違ってもいいじゃん」というタイプの人はプログラミングには向かない。
+  <ul>
+    <li> <code>print("foo)</code> … エラー!
+    <li> <code>print{"foo"}</code> … エラー!
+    <li> <code>print(f”x={x}")</code> … エラー!
+    <li> <code>print("x={x}")</code> … エラーじゃないけど変な動作
+  </ul>
+
+<li> <strong>ただひたすら訓練が必要な場合もある</strong><br>
+  プログラミングが「得意」に見える人はただ Python などの言語に
+  慣れているだけで、別に頭が良いわけではない。
+  (本質的に難しい問題は、誰にとっても難しい。)
+  ただし、ある程度訓練することで、プログラミングのかなりの部分は
+  たいして考えなくてもできるようになる。
+
+</ol>
+<p>
+ここで格言をもう一度:
+<div class=formula>
+「プログラムは思ったようには動かないが、書いたようには動く」
+</div>
+
+
+<h2 id="break">2. 条件式 True と break文</h2>
+<p>
+以下のようなループを考える:
+<blockquote><pre>
+<span class=comment># 0から9まで表示する。</span>
+i = 0
+while i &lt; 10:
+    print(i)
+    i = i + 1
+</pre></blockquote>
+<p>
+これと同じ処理は、条件式 <code>True</code> と <code>break</code>文を使って、
+以下のように書くこともできる:
+<blockquote><pre>
+i = 0
+while <mark>True</mark>:  <span class=comment># つねに真</span>
+    print(i)
+    if i == 10:
+        <mark>break</mark>  <span class=comment># i==10ならば抜ける</span>
+    i = i + 1
+</pre></blockquote>
+<p>
+<code>break</code>文を実行すると、
+一番近い <code>while</code>文から抜ける。
+
+<div class=exercise id="ex3">
+<div class=header>演習 5-3. ループ実行の予想</div>
+<p>
+以下のようにすると出力結果はどう変わるか予想せよ。
+実際に実行し、結果を確認せよ。
+<blockquote><pre>
+i = 0
+while True:  <span class=comment># つねに真</span>
+    print(i)
+    <mark>i = i + 1</mark>
+    if i == 10:
+        break  <span class=comment># i==10ならば抜ける</span>
+</pre></blockquote>
+</div>
+
+<h2 id="for">3. For文</h2>
+<p>
+ふたたび同じループを考える:
+<blockquote><pre>
+<span class=comment># 0から9まで表示する。</span>
+i = 0
+while i &lt; 10:
+    print(i)
+    i = i + 1
+</pre></blockquote>
+<p>
+上のようなループは、<code>for</code>文を使うとより簡潔に書ける:
+<blockquote><pre>
+<span class=comment># 0から9まで表示する。</span>
+for i in range(10):
+    print(i)
+</pre></blockquote>
+
+<dl>
+  <dt> 構文:
+<dd> <pre>
+for <em>変数名</em> in range(<em>繰り返し数</em>):
+    繰り返す文
+    ...
+</pre>
+  <p> このとき、<em>変数名</em> の値は
+    <code>0</code> 〜 <code>(<em>繰り返し数</em> - 1)</code> まで変化する。
+
+  <dt> 例1: ループ中で条件分岐
+<dd> <pre>
+for n in range(10):
+    if (n % 2) == 0:
+        print(f"{n}は偶数")
+    else:
+        print(f"{n}は奇数")
+</pre>
+  <p> <code>for</code>文の中に <code>if</code>文などを書くこともできる。
+
+  <dt> 例2: 九九の表示
+<dd> <pre>
+for i in range(9):
+    for j in range(9):
+        x = i+1
+        y = j+1
+        print(f"{x} * {y} = {x*y}")
+</pre>
+  <p> <code>for</code>文を二重にすると、
+    外側の<code>for</code>文が一回まわるごとに
+    内側の<code>for</code>文がすべて実行される。
+
+  <dt> 例3: リストでfor文
+<dd> <pre>
+a = [5, 9, 4, 0]
+for i in range(len(a)):
+    print(f"{i}番目の要素は {a[i]}")
+</pre>
+  <p> <code>range()</code> 中は決まった数でなくてもよい。
+    <code>len(a)</code> (リスト <code>a</code> の長さ) を入れることで、
+    リストの全要素を表示できる。
+</dl>
+
+<h2 id="string">4. 文字列</h2>
+<p>
+Python における文字列 (string) とは、
+文字のリストである。
+<p>
+<strong>復習:</strong>
+<a href="../week2/index.html#string">コンピュータでは文字はどうやって表現されていたか?</a>
+
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>変数名 = "文字列"</code> … 文字列を変数に代入する。
+    <li> <code>変数名[i]</code> … 文字列中の <em>i</em>番目の文字をとりだす。
+    <li> <code>文字列 + 文字列</code> … 2つの文字列を連結する。
+    <li> <code>len(文字列)</code> … 文字列の長さ (文字数) を計算する。
+    <li> <code>文字列 == 文字列</code> または <code>文字列 != 文字列</code>,
+      … 2つの文字列が等しい (等しくない) かどうかを判定する。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+s = "おうさまのみみはろばのみみ"
+print(s[8])    <span class=comment># 「ろ」が表示される</span>
+print(len(s))  <span class=comment># 13</span>
+</pre>
+<p>
+リストと同じように、文字列も最初の文字は「<strong>0文字目</strong>」です。
+<dt> 例2:
+<dd> <pre>
+a = "お"
+for i in range(4):
+    a = a + "よ"
+print(a)  <span class=comment># およよよよ</span>
+</pre>
+<p>
+文字列はいくらでも + 記号で連結できる。
+<dt> 例3:
+<dd> <pre>
+print("よろ" + "よろ")  # <span class=comment>「よろよろ」</span>
+print("よろ" - "よろ")  # <span class=comment>エラー!</span>
+</pre>
+<p>
+文字列は <code>+</code> 記号で連結できるが、引くことはできない。
+<dt> 例4:
+<dd> <pre>
+a = "東工大"
+a[1] = "京"  # <span class=comment>エラー!</span>
+</pre>
+<p>
+リストとは違って、Python では文字列の要素は<strong>変更できない</strong>。
+<dt> 例5:
+<dd> <pre>
+password = input("password:")
+if password == "sesami":
+    print("Correct!")
+else:
+    print("Wrong!")
+</pre>
+<p>
+数値と同じように、文字列に対しても
+<code>==</code> および <code>!=</code> を使った条件式が使える。
+<dt> 例6:
+<dd> 空のリストがあるのと同様に、「空の文字列」というものも存在する。
+<pre>
+name = ""
+</pre>
+<p>
+なお、<code>input()</code> 関数で何も入力せずにただ <kbd>Enter</kbd> を押すと、
+空の文字列が返される。
+</dl>
+
+<div class=exercise id="ex4">
+<div class=header>演習 5-4. 図形を描く</div>
+<p>
+以下のプログラムを実行すると、次の図形が表示される。
+<div class=file>
+triangle.py:
+<pre>
+<span class=comment># 三角形を表示する</span>
+for i in range(5):  <span class=comment># iは0〜4まで変化する。</span>
+    s = ""          <span class=comment># 空の文字列を準備する。</span>
+    for j in range(i+1):  <span class=comment># i+1回だけ繰り返す。</span>
+        s = s + "O"       <span class=comment># 文字列を延長する。</span>
+    print(s)
+</pre>
+</div>
+<blockquote><pre>
+$ <strong>python triangle.py</strong>
+O
+OO
+OOO
+OOOO
+OOOOO
+</pre></blockquote>
+<p>
+このプログラムを改造して、
+以下のような図形が表示されるプログラムを書け。
+(行頭の部分は空白文字 <code>" "</code> を入れること)
+<blockquote><pre>
+OOOOO
+ OOOO
+  OOO
+   OO
+    O
+</pre></blockquote>
+</div>
+
+<h3 id="string-list">4.1. リスト + 文字列</h3>
+<p>
+リストの中に文字列を入れることもできる。
+<blockquote><pre>
+names = ["睦月", "如月", "弥生", "卯月", "皐月", "水無月",
+         "文月", "葉月", "長月", "神無月", "霜月", "師走"]
+for m in range(12):
+    print(f"{m+1}月は{names[m]}")
+</pre></blockquote>
+
+<div class=exercise id="ex5">
+<div class=header>演習 5-5. 投票集計プログラムの改良 (本日の小課題)</div>
+<p>
+前回の投票集計プログラムを改良し、番号でなく
+候補者の名前を入力して投票できるようにしたい。
+(ただ <kbd>Enter</kbd> のみが押されたらループを抜けるものとする。)
+以下のプログラム vote3.py を完成させよ。
+<p>
+このプログラムを実行すると、以下のように動作する:
+<blockquote><pre>
+$ <strong>python vote3.py</strong>
+name:<strong>trump</strong>
+name:<strong>kim</strong>
+name:<strong>abe</strong>
+name:<strong>kim</strong>
+name:<strong></strong>    (<kbd>Enter</kbd> のみを押す)
+abe: 1
+trump: 1
+kim: 2
+</pre></blockquote>
+<p>
+なお、不正な文字列 (候補者のどれでもなく、空文字でもない文字列) が
+入力される可能性は考えなくてよい。
+<div class=file>
+vote3.py
+<pre>
+<span class=comment># 候補者の名前</span>
+cands = ["abe", "trump", "kim"]
+votes = [0, 0, 0]
+while True:
+    <span class=comment># 候補者の名前を入力する。</span>
+    name = input("name:")
+    <span class=comment># name を候補者の名前と比較し、一致した候補者の票を増やす。</span>
+<div class=qqq>    ???
+    ...
+</div><span class=comment># 3人の得票数を表示する。</span>
+for i in range(3):
+    print(f"{cands[i]}: {votes[i]}")
+</pre>
+</div>
+</div>
+
+
+<h2 id="datatype">5. データの「型」について</h2>
+<p>
+Python の変数に格納されるデータは、
+実はいくつかの「<u>型</u> (type)」に分類されている:
+<ul>
+<li> 数値型 (整数・実数) … <code>3</code>, <code>-15.7</code> など。
+<li> 文字列型 … <code>"abc"</code> など。
+<li> リスト型 (配列型) … <code>[4, 6, 4, 9]</code> など。<br>
+  リストの中にはさらに整数・文字列・リストを入れることができる。
+  <ul>
+    <li> <code>["月", "火", "水", "木", "金", "土", "日"]</code>
+    <li> <code>[ [9,6,3], [8,5,2], [7,4,1] ]</code>
+  </ul>
+<li> (真理値型 … 条件式で使われる値。<code>True</code>と
+  <code>False</code>の2種類の値しかない。)
+</ul>
+<p>
+<code>+</code> 演算子の意味は、計算対象のデータ型によって異なる。
+<blockquote><pre>
+print(123+456)      <span class=comment># 整数 + 整数: 579</span>
+print("123"+"456")  <span class=comment># 文字列 + 文字列: "123456"</span>
+print(123+"456")    <span class=comment># 整数 + 文字列: エラー!</span>
+</pre></blockquote>
+<p>
+型が異なるデータの計算は意味をなさないので、ふつうはエラーが発生する。
+<ul>
+<li> <code>"abc" - 5</code> … エラー!
+<li> <code>[3,1,4] + "moo"</code> … エラー!
+<li> 9.8m/s<sup>2</sup> + 1kg … エラー!
+</ul>
+
+<h3 id="conv-toint">5.1. 文字(列)型 → 整数型への変換</h3>
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>int(文字列)</code> … 文字列を整数として解釈する。
+    <li> <code>ord(文字列)</code> … 1文字の文字コード (Unicode) を整数として返す。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+a = 123         <span class=comment># a は整数の 123</span>
+b = int("123")  <span class=comment># b は整数の 123</span>
+print(a+b)      <span class=comment># 整数+整数: 246</span>
+</pre>
+<dt> 例2:
+<dd> <pre>
+print(ord("A"))   <span class=comment># "A"の文字コード: 65</span>
+print(ord("あ"))  <span class=comment># 「あ」の文字コード: 12354</span>
+</pre>
+<dt> 例3:
+<dd> <pre>
+s = input("string:")
+for i in range(len(s)):  <span class=comment># i は 0〜(文字数-1) まで変化する。</span>
+    print(ord(s[i]))     <span class=comment># i番目の文字コードを表示。</span>
+</pre>
+</dl>
+
+<div class=exercise id="ex6">
+<div class=header>演習 5-6. 「日本」の文字コード</div>
+<p>
+上の例3. のプログラムを実行し「日」「本」の各文字コードを調べよ。
+</div>
+
+<h4>input関数の動き</h4>
+<p>
+本来、Pythonの<code>input</code>関数は入力された <u>文字列</u> (string) を返す。
+<blockquote><pre>
+s = input("string:")  <span class=comment># s は文字列型</span>
+print(s)
+</pre></blockquote>
+<p>
+ここに <code>int()</code> 関数を適用することで、
+文字列を整数型として利用できる。
+<blockquote><pre>
+s = input("number:")
+x = int(s)  <span class=comment># x は文字列型</span>
+print(x)
+</pre></blockquote>
+
+<h3 id="conv-tostr">5.2. 整数型 → 文字(列)型への変換</h3>
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>str(数値)</code> … 整数を文字列として表す。<code>int()</code> の逆。
+    <li> <code>chr(数値)</code> … 整数で表される文字コードの文字を返す。<code>ord()</code> の逆。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+a = 123        <span class=comment># a は整数の 123</span>
+b = str(a)     <span class=comment># b は文字列の "123"</span>
+print(b+"0")   <span class=comment># 文字列+文字列: 1230</span>
+</pre>
+<dt> 例2:
+<dd> <pre>
+a = 9829
+b = chr(a)         <span class=comment># b は Unicode 9829番 で表される文字</span>
+print("I"+b+"NY")  <span class=comment># I&hearts;NY</span>
+</pre>
+<p>
+<code>chr()</code>関数に与える文字コードは
+<a href="https://unicode.org/charts/">Unicode</a> で定義されている。
+<dt> 例3:
+<dd> <pre>
+for i in range(26):   <span class=comment># 26回繰り返す。</span>
+    print(chr(65+i))  <span class=comment># (65+i) で表されるUnicodeの文字を表示する。</span>
+</pre>
+<p>
+このプログラムを実行すると、A から Z までの文字が表示される。
+</dl>
+
+<p>
+まとめると、以下のような関係がなりたつ:
+<table border>
+<tr><th></th><th>文字 → 数値</th><th>数値 → 文字</th></tr>
+<tr><td>文字列</td><td><code>int(x)</code></td><td><code>str(x)</code></td></tr>
+<tr><td>文字</td><td><code>chr(x)</code></td><td><code>ord(x)</code></td></tr>
+</table>
+
+<div class=exercise id="ex7">
+<div class=header>演習 5-7. 英小文字だけを表示するプログラム</div>
+<p>
+入力された文字列の中から英小文字だけを取り出して表示するプログラム
+<code>loweronly.py</code> を書け。
+このプログラムを実行すると、次のように動作する:
+<blockquote><pre>
+$ <strong>python loweronly.py</strong>
+string:<strong>ABCdef</strong>
+def
+$ <strong>python loweronly.py</strong>
+string:<strong>123xyzFooBaa</strong>
+xyzooaa
+</pre></blockquote>
+<p>
+英小文字の文字コードは、
+<a href="https://en.wiktionary.org/wiki/Appendix:Unicode/Basic_Latin">このページ</a>
+で調べることができる。
+<div class=file>
+loweronly.py
+<pre>
+<span class=comment># 入力された文字列のうち、英小文字だけを表示する。</span>
+s = input("string:")
+t = ""
+for i in range(len(s)):
+    c = ord(s[i])  <span class=comment># i番目の文字の文字コードをとりだす。</span>
+    <span class=comment># 英小文字であれば、変数 t の末尾に加える。</span>
+<div class=qqq>    ???
+    ...
+</div><span class=comment># tの文字列を表示。</span>
+print(t)
+</pre>
+</div>
+</div>
+
+<h3 id="formatting">5.3. print関数における <code>f"〜"</code> と <code>"〜"</code> の違い</h3>
+<p>
+じつは、<code>print</code>関数の機能は
+<dl>
+  <dt> 構文:
+<dd> <pre>
+print(<em>文字列</em>)  <span class=comment># 文字列を表示する。</span>
+</pre>
+</dl>
+だけであった。
+<blockquote><pre>
+print("hello")
+print(f"x={x}")
+</pre></blockquote>
+
+などの書き方は、以下のようにもできる:
+<blockquote><pre>
+s = "hello"    <span class=comment># s は文字列型</span>
+print(s)       <span class=comment># s の内容を表示</span>
+t = f"x={x}"   <span class=comment># t は文字列型</span>
+print(t)       <span class=comment># t の内容を表示</span>
+</pre></blockquote>
+<p>
+さらに、
+<code>f"x={x}"</code> は、
+文字列の連結と <code>str(x)</code> 関数を
+組み合わせたものと同じである:
+<blockquote><pre>
+t = "x=" + str(x)
+</pre></blockquote>
+
+
+<h2 id="assignment">6. 本日の課題</h2>
+
+<div class=exercise id="kadai-s6">
+<div class=header>小課題 6. 投票集計プログラム vote3.py (11月15日締切)</div>
+<ul>
+  <li> 提出期限: <strong>11月15日</strong> (1週間後)
+  <li> <a href="#ex5">演習 5-5.</a> で完成させたプログラム
+    <code>vote3.py</code> を T2SCHOLA から提出せよ。
+</ul>
+<div class=file>
+vote3.py (再掲)
+<pre>
+<span class=comment># 候補者の名前</span>
+cands = ["abe", "trump", "kim"]
+votes = [0, 0, 0]
+while True:
+    <span class=comment># 候補者の名前を入力する。</span>
+    name = input("name:")
+    <span class=comment># name を候補者の名前と比較し、一致した候補者の票を増やす。</span>
+<div class=qqq>    ???
+    ...
+</div><span class=comment># 3人の得票数を表示する。</span>
+for i in range(3):
+    print(f"{cands[i]}: {votes[i]}")
+</pre>
+</div>
+
+<h4>ヒント</h4>
+<ul>
+<li> まず変数 <code>name</code> に入っている文字列が何番目の候補者名と等しいか?
+  を求める必要がある。
+  この「候補者番号」を入れる変数をたとえば <code>found</code> としよう。
+  すると、この部分はこんなふうに書ける:
+<pre>
+found = -1
+for i in range(3):
+    <span class=comment># i番目の候補者名と name が等しければ、found に i を代入する。</span>
+    ...
+</pre>
+<li> 次に <kbd>Enter</kbd> だけが押されたケースを考える。
+  文字を入力せずに <kbd>Enter</kbd> だけが押された場合、
+  変数 <code>name</code> の内容が空文字列 <code>""</code> になる。
+  この場合はどうすればよいのか? を考えよう。
+</ul>
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

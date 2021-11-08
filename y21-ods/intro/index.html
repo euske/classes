@@ -65,12 +65,23 @@ One Day School (人工知能) に参加される方々に向けて、
 <ol>
   <li> 本講座では GPU の機能を利用しますので、
     <mark>Nvidia製GPU</mark> と
-    <mark>6GB程度のディスク空き容量</mark> をもった PC が必要になります。
+    <mark>18GB程度のディスク空き容量</mark> をもった PC が必要になります。
   <li> まず
       <a target="_blank" href="https://www.anaconda.com/products/individual">Anaconda システム</a>
       をダウンロードしてインストールします。
   <li> <kbd>Anaconda Prompt</kbd> を起動し、以下のように入力します:
-    <pre>C:\&gt; <strong>conda install -c pytorch pytorch</strong></pre>
+<pre>
+(base) C:\Users\euske&gt;<strong>conda install -c pytorch pytorch</strong>
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+...
+Proceed ([y]/n)? <strong>y</strong>
+...
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+</pre>
   <li> <kbd>Jupyter Notebook</kbd> を起動します。
   <li> <kbd>New Notebook (Python3)</kbd> を選びます。
   <li> 以下のような画面が表示されますので、この枠内にプログラムを入力します。

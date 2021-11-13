@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2021年度 コンピュータサイエンス第一 (1a)
+第6回 - 関数の定義、シーザー暗号の解析、アニメーションコンテスト投票
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第6回 - 関数の定義、シーザー暗号の解析、アニメーションコンテスト投票</h1>
+<div class=nav>2021年11月15日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回の復習</a>
+  <ul class=ex>
+  <li> <a href="#ex1">演習 6-1. リストの要素の追加・削除</a>
+  </ul>
+<li> <a href="#datatype">データの「型」について (再掲)</a>
+<ul>
+  <li> <a href="#conv-toint">文字(列)型 → 整数型への変換</a>
+  <li> <a href="#conv-tostr">整数型 → 文字(列)型への変換</a>
+  <li> <a href="#formatting">print関数における <code>f"〜"</code> と <code>"〜"</code> の違い</a>
+</ul>
+<li> <a href="#function">Python における関数 (function) とは?</a>
+  <ul>
+    <li> <a href="#function-learned">これまでに習ったPython関数</a>
+    <li> <a href="#function-other">いろいろな関数</a>
+  </ul>
+<li> <a href="#userfunc">自前の関数を定義する</a>
+  <ul>
+    <li> <a href="#userfunc-def">関数を定義するには</a>
+    <li> <a href="#userfunc-call">定義した関数を利用するには</a>
+      <ul class=ex>
+        <li> <a href="#ex2">演習 6-2. 自前の関数の呼び出し</a>
+      </ul>
+    <li> <a href="#userfunc-examples">いろいろな関数の例</a>
+    <li> <a href="#userfunc-vars">関数内における変数の扱い</a>
+      <ul class=ex>
+        <li> <a href="#ex3">演習 6-3. 関数の練習いろいろ</a>
+      </ul>
+  </ul>
+<li> <a href="#anim-voting">アニメーション・コンテスト投票</a>
+      <ul class=ex>
+        <li> <a href="#ex4">アニメーション・コンテスト投票</a>
+      </ul>
+<li> <a href="#crypto-caesar">シーザー暗号とは何か?</a>
+  <ul>
+    <li> <a href="#crypto-analysis">暗号解析とは?</a>
+  </ul>
+<li> <a href="#assignment">本日の課題</a>
+  <ul>
+    <li> <a href="#kadai-s7">小課題 7. 関数barおよび関数triangleの完成 (11月22日締切)</a>
+    <li> <a href="#kadai-m3">中課題 3. シーザー暗号の暗号解析をおこなうプログラム (11月29日締切)</a>
+  </ul>
+</ol>
+
+
+<div class=notice>
+今回の授業中に <a href="#anim-voting">アニメーション・コンテストの投票</a> をおこないます。
+</div>
+
+
+<h2>雑談</h2>
+
+
+
+<h2 id="prev">0. 前回の復習</h2>
+
+<ul>
+<li> <code>break</code>文はループから抜け出すのに使える。
+<li> <code>for</code>文は便利だ。
+  <dl>
+    <dt> 使用前:
+    <dd> <pre>
+i = 0
+while i &lt; 10:
+    print(i)
+    i = i + 1
+</pre>
+    <dt> 使用後:
+    <dd> <pre>
+for i in range(10):
+    print(i)
+</pre>
+  </dl>
+<li> Pythonで扱えるデータ型:
+  <ul>
+    <li> 数値型
+    <li> 文字列型
+    <li> リスト型
+    <li> ...
+  </ul>
+</ul>
+
+<div class=exercise id="ex1">
+<div class=header>演習 6-1. リストの要素の追加・削除</div>
+<ol type=a>
+<li> 以下のプログラムで、リスト a の先頭の要素 (<code>a[0]</code>) を削除して
+<code>a = [9,4,7,0,0]</code> となるようにしたい。
+<span class=qqq>???</span> の中を埋めよ。
+<pre>
+a = [5,9,4,7,0]
+i = 0
+while i < 4:
+   a[<span class=qqq>???</span>] = a[<span class=qqq>???</span>]
+   i = i + 1
+</pre>
+<li> 今度は逆に、先頭の要素をひとつ空けて
+<code>a = [5,5,9,4,7]</code> となるようにしたい。が…
+以下のプログラムを実行したとき
+<code>a</code> の中身がどうなるかを予測せよ。
+<pre>
+a = [5,9,4,7,0]
+i = 0
+while i < 4:
+   a[i+1] = a[i]
+   i = i + 1
+</pre>
+<li> 前回の教訓を生かし、今度こそ
+<code>a = [5,5,9,4,7]</code> となるようにしたい。
+<span class=qqq>???</span> の中を埋めよ。
+<pre>
+a = [5,9,4,7,0]
+i = <span class=qqq>???</span>
+while <span class=qqq>???</span>:
+   a[i+1] = a[i]
+   i = <span class=qqq>???</span>
+</pre>
+</ol>
+<p>
+実際には、Python にはリストの途中の要素を削除したり
+途中から挿入したりするためのもっと簡単な方法がある。
+しかし、実際に内部で起きているのはこういうことである。
+<p>
+類似の問題:
+0〜4までの番号がついた5個のイスが並んでいる。
+0番目のイスをはずして残りを詰めるにはどうすればよいか?
+</div>
+
+<h2 id="datatype">1. データの「型」について (再掲)</h2>
+<p>
+Python の変数に格納されるデータは、
+実はいくつかの「<u>型</u> (type)」に分類されている:
+<ul>
+<li> 数値型 (整数・実数) … <code>3</code>, <code>-15.7</code> など。
+<li> 文字列型 … <code>"abc"</code> など。
+<li> リスト型 (配列型) … <code>[4, 6, 4, 9]</code> など。<br>
+  リストの中にはさらに整数・文字列・リストを入れることができる。
+  <ul>
+    <li> <code>["月", "火", "水", "木", "金", "土", "日"]</code>
+    <li> <code>[ [9,6,3], [8,5,2], [7,4,1] ]</code>
+  </ul>
+<li> (真理値型 … 条件式で使われる値。<code>True</code>と
+  <code>False</code>の2種類の値しかない。)
+</ul>
+<p>
+<code>+</code> 演算子の意味は、計算対象のデータ型によって異なる。
+<blockquote><pre>
+print(123+456)      <span class=comment># 整数 + 整数: 579</span>
+print("123"+"456")  <span class=comment># 文字列 + 文字列: "123456"</span>
+print(123+"456")    <span class=comment># 整数 + 文字列: エラー!</span>
+</pre></blockquote>
+<p>
+型が異なるデータの計算は意味をなさないので、ふつうはエラーが発生する。
+<ul>
+<li> <code>"abc" - 5</code> … エラー!
+<li> <code>[3,1,4] + "moo"</code> … エラー!
+<li> 9.8m/s<sup>2</sup> + 1kg … エラー!
+</ul>
+
+<h3 id="conv-toint">1.1. 文字(列)型 → 整数型への変換</h3>
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>int(文字列)</code> … 文字列を整数として解釈する。
+    <li> <code>ord(文字列)</code> … 1文字の文字コード (Unicode) を整数として返す。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+a = 123         <span class=comment># a は整数の 123</span>
+b = int("123")  <span class=comment># b は整数の 123</span>
+print(a+b)      <span class=comment># 整数+整数: 246</span>
+</pre>
+<dt> 例2:
+<dd> <pre>
+print(ord("A"))   <span class=comment># "A"の文字コード: 65</span>
+print(ord("あ"))  <span class=comment># 「あ」の文字コード: 12354</span>
+</pre>
+<dt> 例3:
+<dd> <pre>
+s = input("string:")
+for i in range(len(s)):  <span class=comment># i は 0〜(文字数-1) まで変化する。</span>
+    print(ord(s[i]))     <span class=comment># i番目の文字コードを表示。</span>
+</pre>
+</dl>
+
+<h4>input関数の動き</h4>
+<p>
+本来、Pythonの<code>input</code>関数は入力された <u>文字列</u> (string) を返す。
+<blockquote><pre>
+s = input("string:")  <span class=comment># s は文字列型</span>
+print(s)
+</pre></blockquote>
+<p>
+ここに <code>int()</code> 関数を適用することで、
+文字列を整数型として利用できる。
+<blockquote><pre>
+s = input("number:")
+x = int(s)  <span class=comment># x は文字列型</span>
+print(x)
+</pre></blockquote>
+
+<h3 id="conv-tostr">1.2. 整数型 → 文字(列)型への変換</h3>
+<dl>
+<dt> 構文:
+<dd>
+  <ul>
+    <li> <code>str(数値)</code> … 整数を文字列として表す。<code>int()</code> の逆。
+    <li> <code>chr(数値)</code> … 整数で表される文字コードの文字を返す。<code>ord()</code> の逆。
+  </ul>
+<dt> 例1:
+<dd> <pre>
+a = 123        <span class=comment># a は整数の 123</span>
+b = str(a)     <span class=comment># b は文字列の "123"</span>
+print(b+"0")   <span class=comment># 文字列+文字列: 1230</span>
+</pre>
+<dt> 例2:
+<dd> <pre>
+a = 9829
+b = chr(a)         <span class=comment># b は Unicode 9829番 で表される文字</span>
+print("I"+b+"NY")  <span class=comment># I&hearts;NY</span>
+</pre>
+<p>
+<code>chr()</code>関数に与える文字コードは
+<a href="https://unicode.org/charts/">Unicode</a> で定義されている。
+<dt> 例3:
+<dd> <pre>
+for i in range(26):   <span class=comment># 26回繰り返す。</span>
+    print(chr(65+i))  <span class=comment># (65+i) で表されるUnicodeの文字を表示する。</span>
+</pre>
+<p>
+このプログラムを実行すると、A から Z までの文字が表示される。
+</dl>
+
+<p>
+まとめると、以下のような関係がなりたつ:
+<table border>
+<tr><th></th><th>文字 → 数値</th><th>数値 → 文字</th></tr>
+<tr><td>文字列</td><td><code>int(x)</code></td><td><code>str(x)</code></td></tr>
+<tr><td>文字</td><td><code>chr(x)</code></td><td><code>ord(x)</code></td></tr>
+</table>
+
+<h3 id="formatting">1.3. print関数における <code>f"〜"</code> と <code>"〜"</code> の違い</h3>
+<p>
+じつは、<code>print</code>関数の機能は
+<dl>
+  <dt> 構文:
+<dd> <pre>
+print(<em>文字列</em>)  <span class=comment># 文字列を表示する。</span>
+</pre>
+</dl>
+だけであった。
+<blockquote><pre>
+print("hello")
+print(f"x={x}")
+</pre></blockquote>
+
+などの書き方は、以下のようにもできる:
+<blockquote><pre>
+s = "hello"    <span class=comment># s は文字列型</span>
+print(s)       <span class=comment># s の内容を表示</span>
+t = f"x={x}"   <span class=comment># t は文字列型</span>
+print(t)       <span class=comment># t の内容を表示</span>
+</pre></blockquote>
+<p>
+さらに、
+<code>f"x={x}"</code> は、
+文字列の連結と <code>str(x)</code> 関数を
+組み合わせたものと同じである:
+<blockquote><pre>
+t = "x=" + str(x)
+</pre></blockquote>
+
+
+<h2 id="function">2. Python における関数 (function) とは?</h2>
+
+<code>print(...)</code>、<code>input(...)</code> のような部分。
+<u>引数</u> (ひきすう, arguments) をとり、値を返す。
+
+<h3 id="function-learned">2.1. これまでに習ったPython関数</h3>
+<ul>
+<li> <code>print(...)</code> … 文字列を表示する。
+<li> <code>input(...)</code> … 文字列を入力する。
+<li> <code>int(...)</code> … 文字列を数値に変換。
+<li> <code>str(...)</code> … 数値を文字列に変換。
+<li> <code>ord(...)</code> … 文字を文字コード(数値)に変換。
+<li> <code>chr(...)</code> … 文字コード(数値)を文字に変換。
+<li> <code>time.sleep(...)</code> … 一定時間だけ待つ。 (アニメーションで使用)
+</ul>
+<p>
+<strong>注意:</strong>
+<code>if</code>文, <code>while</code>文, <code>for</code> 文などは
+「文」であって関数ではない。
+
+<h3 id="function-other">2.2. いろいろな関数</h3>
+<dl>
+<dt> <code>abs</code>: 絶対値を求める。
+<dd> 簡単な処理だが、よく使われるので Python に組み込まれている。
+<pre>
+&gt;&gt;&gt; <strong>abs(2)</strong>
+2
+&gt;&gt;&gt; <strong>abs(-11)</strong>
+11
+</pre>
+
+<dt> <code>pow</code>: べき乗を求める。
+<dd> 関数によっては、2つの値をとることがある。
+<pre>
+&gt;&gt;&gt; <strong>pow(3, 4)</strong>
+81
+&gt;&gt;&gt; <strong>pow(2, 0.5)</strong>
+1.4142135623730951
+&gt;&gt;&gt; <strong>3 ** 4</strong>
+81  <span class=comment># **演算子を使っても同じ</span>
+</pre>
+
+<dt> <code>sum</code>: リストの和を求める。
+<dd> リストを与えるような関数も存在する。
+<pre>
+&gt;&gt;&gt; <strong>a = [5,9,4,0]</strong>
+&gt;&gt;&gt; <strong>sum(a)</strong>
+18
+</pre>
+
+<dt> 注意事項
+<dd>
+各関数によって、とれる値の数、およびそのデータ型が決まっている。
+<pre>
+&gt;&gt;&gt; <strong>chr("a")</strong>
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: an integer is required (got type str)
+<div class=err>エラー: chr関数には、数値型を与えなければならない。</div>
+&gt;&gt;&gt; <strong>sum(4)</strong>
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'int' object is not iterable
+<div class=err>エラー: sum関数には、リスト型を与えなければならない。</div>
+&gt;&gt;&gt; <strong>input("x:", "y:")</strong>
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: input expected at most 1 arguments, got 2
+<div class=err>エラー: input関数は、値を1つだけしか与えてはいけない。</div>
+</pre>
+</dl>
+
+<h4>プログラムを書かずにPythonを使う</h4>
+<p>
+ターミナルで、プログラム (<code>.py</code>ファイル) を書かずに、ただ
+<blockquote><pre>
+$ <strong>python</strong>
+</pre></blockquote>
+とだけ入力すると、Pythonが「対話モード」で起動する。
+この場合、Pythonのプログラムを1行ずつ直接入力して実行することができる。
+これは、ちょっとした動きを確かめたいときなどに便利だが、
+複雑なプログラムは書けない。
+<blockquote><pre>
+$ <strong>python</strong>
+Python 3.7.4 (default, Oct  4 2019, 06:57:26)
+[GCC 9.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; <strong>x=2</strong>
+&gt;&gt;&gt; <strong>y=3</strong>
+&gt;&gt;&gt; <strong>x+y</strong>
+&gt;&gt;&gt; <strong>print(x,y)</strong>
+2 3
+</pre></blockquote>
+
+
+<h2 id="userfunc">3. 自前の関数を定義する</h2>
+<p>
+Python では、自前の関数を新しく定義することができる。
+新しく定義された関数は、従来からある関数とまったく同じように使える:
+<blockquote><pre>
+<span class=comment># 関数 plus(a, b) … aとbの和を求める。</span>
+def plus(a, b):
+    return a + b
+
+x = 2
+y = 3
+z = plus(x, y)  <span class=comment># zの値は 5。</span>
+</pre></blockquote>
+
+<p>
+プログラムが複雑になってくると、プログラムを全部一度に書くのではなく、
+部分ごとに分けて書く、ということが必要になってくる。
+関数はもともと数学の概念だが、Python における関数とは、
+プログラムの処理の一部をおこなう<strong>部品</strong>である。
+ここでは入力と出力をもった「ブラックボックス」に近い。
+
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="100">
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <g transform="translate(1,1)">
+    <g fill="none" stroke="black" stroke-width="2">
+      <rect x="80" y="30" width="80" height="40" />
+      <g marker-end="url(#arrow)">
+	<line x1="160" y1="50" x2="200" y2="50" />
+	<line x1="45" y1="20" x2="75" y2="40" />
+	<line x1="45" y1="50" x2="75" y2="50" />
+	<line x1="45" y1="80" x2="75" y2="60" />
+      </g>
+    </g>
+    <g text-anchor="middle">
+      <text x="120" y="50" dy="0.5em">関数</text>
+      <text x="20" y="10" dy="0.5em">入力A</text>
+      <text x="20" y="50" dy="0.5em">入力B</text>
+      <text x="20" y="90" dy="0.5em">入力C</text>
+      <text x="230" y="50" dy="0.5em">出力</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<h3 id="userfunc-def">3.1. 関数を定義するには</h3>
+
+<blockquote><pre>
+def <em>関数名</em>(<em>変数名1</em>, <em>変数名2</em>, ...):
+    関数の中身
+    ...
+    return <em>関数が返す値</em>
+</pre></blockquote>
+<ul>
+<li> <em>変数名1</em>, <em>変数名2</em> ... を関数の<u>引数</u> (ひきすう) と呼ぶ。
+  (「いんすう」ではない)
+<li> 関数の中には、なんらかの処理を書く。
+<li> 関数は、<strong>定義しただけでは実行されない。</strong>
+  (「武器は、装備しないと役に立たない」)
+<li> 最後に <code>return</code> 文を実行し、ある値を返す。
+この値を関数の<u>返り値</u> (あるいは戻り値) と呼ぶ。
+<li> 関数の定義は、かならずそれが<strong>使われるよりも前に</strong>書くこと。
+</ul>
+
+<h3 id="userfunc-call">3.2. 定義した関数を利用するには</h3>
+
+<blockquote><pre>
+<em>変数名</em> = <em>関数名</em>(<em>値1</em>, <em>値2</em>, ...)
+</pre></blockquote>
+<ul>
+<li> 新しく定義した関数は、他の関数と同じように使うことができる。
+<li> 文 <code>z = plus(x, y)</code> を実行したとき、
+  関数 <code>plus()</code> の中で定義されているプログラムが実行される。
+  これを「関数の<u>呼び出し</u>」という。
+<li> 関数が呼び出されたとき、<code>x</code> と <code>y</code> の値は
+  それぞれ <code>plus</code>内の変数 <code>a</code> と <code>b</code> に
+  コピーされて実行される。これを「関数に<u>値を渡す</u>」という。
+<li> <code>return</code> 文が実行されると
+  その関数は終了し、<code>return</code> の直後の値が
+  変数 <code>z</code> の値に代入される。
+  これは「関数から<u>値を受けとる</u>」ことになる。
+</ul>
+<p>
+図示すると、以下のようになる:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="200">
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <g transform="translate(1,1)">
+    <g fill="none" stroke="black" stroke-width="2">
+      <rect x="10" y="100" width="300" height="90" />
+      <rect x="120" y="10" width="100" height="80" />
+      <rect x="40" y="130" width="40" height="20" />
+      <rect x="40" y="160" width="40" height="20" />
+      <rect x="250" y="140" width="40" height="20" />
+      <rect x="115" y="35" width="40" height="20" fill="white" />
+      <rect x="115" y="65" width="40" height="20" fill="white" />
+      <g marker-end="url(#arrow)">
+	<polyline points="80,140 90,140 90,45 110,45" />
+	<polyline points="80,170 100,170 100,75 110,75" />
+	<polyline points="220,50 230,50 230,150 245,150" />
+      </g>
+    </g>
+    <g>
+      <text x="115" y="15" dy="0.5em" text-anchor="end">plus</text>
+      <text x="215" y="45" dy="0.5em" text-anchor="end">return</text>
+    </g>
+    <g text-anchor="middle">
+      <text x="30" y="140" dy="0.5em">2</text>
+      <text x="30" y="170" dy="0.5em">3</text>
+      <text x="60" y="140" dy="0.5em">x</text>
+      <text x="60" y="170" dy="0.5em">y</text>
+      <text x="240" y="130" dy="0.5em">5</text>
+      <text x="270" y="150" dy="0.5em">z</text>
+      <text x="135" y="45" dy="0.5em">a</text>
+      <text x="135" y="75" dy="0.5em">b</text>
+    </g>
+  </g>
+</svg>
+</div>
+<blockquote><pre>
+def plus(a, b):
+    return a + b
+
+x = 2
+y = 3
+z = plus(x, y)
+</pre></blockquote>
+
+<div class=exercise id="ex2">
+<div class=header>演習 6-2. 自前の関数の呼び出し</div>
+<ol>
+<li> 上のプログラムで関数 <code>plus(x, y)</code> を呼び出したとき、
+  関数の中で変数 <code>a</code>, <code>b</code> に入る値は何か?
+<li> 以下のように呼び出したとき、
+  関数の中で変数 <code>a</code>, <code>b</code> に入る値は何か?
+<pre>
+p = 1
+z = plus(3, p)
+</pre>
+</ol>
+</div>
+
+<h3 id="userfunc-examples">3.3. いろいろな関数の例</h3>
+
+<h4>2つの値の平均を求める関数</h4>
+<div class=file>
+<pre>
+def avg(a, b):
+    c = (a+b)/2
+    return c
+
+print(avg(3, 5))  <span class=comment># 4</span>
+</pre>
+<p>
+関数の中で別の変数を使うこともできる。
+</div>
+
+<h4>関数の中で関数</h4>
+<div class=file>
+<pre>
+print(1 + avg(3, 5))      <span class=comment># 5</span>
+print(avg(avg(3, 5), 8))  <span class=comment># 6</span>
+</pre>
+<p>
+関数の返り値を計算したり、それをさらに関数を渡すこともできる。
+</div>
+
+<h4>文字列を返す関数</h4>
+<div class=file>
+<pre>
+def sign(x):
+    if x < 0:
+        return "negative"
+    elif 0 < x:
+        return "positive"
+    else:
+        return "zero"
+
+print(sign(-3))  <span class=comment># "negative"と表示される。</span>
+print(sign(4))   <span class=comment># "positive"と表示される。</span>
+</pre>
+関数の中で <code>if</code>文や <code>while</code>文を使うこともできる。
+関数が返すデータの型は、数値以外のものでもOK。
+また、関数の中に <code>return</code>文を複数書いてもよい。
+</div>
+
+<h4>値を返さない関数</h4>
+<div class=file>
+<pre>
+def greet(name):
+    print(f"Good morning, {name}")
+    return
+
+greet("euske")  <span class=comment># "Good morning, euske"と表示される。</span>
+</pre>
+<p>
+(数学ではありえない) 値を返さない関数というものも存在する。
+この場合、関数の中で <code>print</code>文を実行させることで
+画面にものを表示させることのみが目的となる。
+</div>
+
+<h4>引数をとらない関数</h4>
+<div class=file>
+<pre>
+def constant():
+    return 1279
+
+print(constant())  <span class=comment># 1279</span>
+print(constant())  <span class=comment># 1279</span>
+print(constant())  <span class=comment># 1279</span>
+</pre>
+<p>
+引数をとらない関数は、何回実行しても同じ結果となる (当然)。
+</div>
+
+<h4>リストを返す関数</h4>
+<div class=file>
+<pre>
+<span class=comment># 与えられた画面にフィットする<a href="../week5/index.html#ex2">画像の大きさ</a>を計算する。</span>
+def fitsize(x, y, w, h):
+    if w*y < x*h:
+        return [w, y*w/x]  <span class=comment># 横フィットの場合</span>
+    else:
+        return [x*h/y, h]  <span class=comment># 縦フィットの場合</span>
+
+print(fitsize(20,10,100,100))  <span class=comment># [100, 50]</span>
+print(fitsize(20,10,400,100))  <span class=comment># [200, 100]</span>
+</pre>
+<p>
+リストを返すこともできる。
+</div>
+
+<h4>関数の中でさらに関数</h4>
+<div class=file>
+<pre>
+<span class=comment># aとbを足す</span>
+def plus(a, b):
+    return a + b
+
+<span class=comment># xに2を足す</span>
+def add2(x):
+    <span class=comment># 定義した関数を使っている。</span>
+    return plus(x, 2)
+
+print(add2(3))  <span class=comment># 5</span>
+</pre>
+<p>
+一度定義した関数は他の関数と同じように使えるので、
+さらに別の関数からも使える。
+</div>
+
+<h4>複数のreturn文</h4>
+<div class=file>
+<pre>
+def navi():
+    print("Hey!")
+    return
+    print("Listen!")  <span class=comment># 表示されない。</span>
+    return
+
+navi()  <span class=comment># "Hey!" のみが表示される。</span>
+</pre>
+<p>
+関数の実行は、最初の <code>return</code>文を実行した時点で終了する。
+</div>
+
+<h3 id="userfunc-vars">3.4. 関数内における変数の扱い</h3>
+<p>
+<strong>注意:</strong>
+関数の内と外で同じ名前の変数を使っている場合、
+関数内の変数は、外の変数とは<strong>別物として</strong>扱われる:
+<blockquote><pre>
+def plus(x, y):
+    print(f"x={<mark>x</mark>}")  <span class=comment># ???</span>
+    print(f"y={<mark>y</mark>}")  <span class=comment># ???</span>
+    z = x + y
+    print(f"z={<mark>z</mark>}")  <span class=comment># ???</span>
+    return z
+
+x = 100
+y = 200
+z = 300
+a = 2
+b = 3
+print(plus(a,b))  <span class=comment># 5</span>
+print(f"x={<mark>x</mark>}")    <span class=comment># ???</span>
+print(f"y={<mark>y</mark>}")    <span class=comment># ???</span>
+print(f"z={<mark>z</mark>}")    <span class=comment># ???</span>
+</pre></blockquote>
+<p>
+これは、関数がプログラムの他の部分とは完全に独立した
+プログラムと考えられているためである。
+関数の外でどんな名前の変数を使っていようが、
+関数の実行結果が影響を受けるべきではないからである。
+関数内で使われる変数には、引数の値が<strong>一時的にコピーされるだけ</strong>と
+考えるのがよい。
+
+<div class=exercise id="ex3">
+<div class=header>演習 6-3. 関数の練習いろいろ (本日の小課題)</div>
+<ol>
+<li> 上の例を実行して、関数の内と外で
+<code>x</code>, <code>y</code>, <code>z</code> の値が
+それぞれどう表示されるかを確認せよ。
+
+<li> 以下のリストの平均値を求める関数 <code>average</code>を完成させよ:
+<pre>
+def average(a):
+    x = 0
+    for i in range(len(a)):
+        x = x + <span class=qqq>???</span>
+    return <span class=qqq>???</span>
+
+print(average([1,2,3]))        # 2
+print(average([10,15,17,20]))  # 15.5
+</pre>
+
+<li> 与えられた個数のアスタリスクを表示する関数 <code>bar</code> を書け。
+<pre>
+bar(3)  <span class=comment># "***" を表示する</span>
+bar(5)  <span class=comment># "*****" を表示する</span>
+</pre>
+
+<li> 3. で定義した関数を <code>bar</code> を使って、
+与えられた大きさの三角形を表示する関数 <code>triangle</code> を書け。
+<pre>
+<span class=comment># 以下のように表示する:</span>
+<span class=comment># *</span>
+<span class=comment># **</span>
+<span class=comment># ***</span>
+triangle(3)
+
+<span class=comment># 以下のように表示する:</span>
+<span class=comment># *</span>
+<span class=comment># **</span>
+<span class=comment># ***</span>
+<span class=comment># ****</span>
+<span class=comment># *****</span>
+triangle(5)
+</pre>
+</ul>
+</div>
+
+<h2 id="anim-voting">4. アニメーション・コンテスト投票</h2>
+<p>
+演習の合間に、11月1日に提出したアニメーション・コンテストの
+投票をおこなう。
+<div class=exercise id="ex4">
+<div class=header>アニメーション・コンテスト投票</div>
+<p>
+以下のページから、1a クラスの参加作品一覧が見られる。
+いくつかのアニメーションは1度目の再生ではブラウザの反応が遅くなり、
+うまく動かないことがある。おそらくこれは表示が速すぎてブラウザが
+追いつかないためだと思われる (2度目の再生ではうまく動くことが多い)。
+<code>time.sleep(0.01)</code> は毎秒100コマという意味であり、
+ほとんどのPCはこんな速度は描画を行うことはできない。
+<strong>教訓:</strong> 欲張りすぎると損をする。
+<ul>
+<li> <a href="./anim/index.html">参加作品一覧</a> (名前・学籍番号は隠してあります)
+</ul>
+<p>
+投票は、以下のページからおこなう:
+<ul>
+<li> (授業中にリンクを配布する)
+</ul>
+<p>
+投票の結果、本授業の最後に優秀者を決定する。
+</div>
+
+
+<h2 id="crypto-caesar">5. シーザー暗号とは何か?</h2>
+<p>
+「シーザー暗号」とは、ジュリアス・シーザー (Julius Caesar, ユリウス・カエサル) が
+使ったと言われる暗号で、アルファベットの順番をずらして文を作成する方法である。
+暗号を元にもどす (復号) ためには、順番を逆方向にずらせばよい。
+このとき、ずらす回数 <em>k</em> をその暗号の<u>鍵</u> (key) とよぶ。
+
+<h4>シーザー暗号の例:</h4>
+<ul>
+<li> <code>hello!</code> → <code>ifmmp!</code> (k=1, 1つ先の文字を使った場合)
+<li> <code>hello!</code> → <code>rovvy!</code> (k=10, 10個先の文字を使った場合)
+</ul>
+
+<p>
+このような暗号は、Python のプログラムで簡単に作ることができる。
+入力された文字が英文のアルファベットであると仮定して、
+各文字コードに与えられた数 <span class=comment>k</span> を足せばよい:
+
+<div class=file>
+caesar.py
+<pre>
+<span class=comment># 与えられた文字列 text を k回先にずらす。</span>
+def caesar(text, k):
+    <span class=comment># 結果を入れる文字列変数を準備する。</span>
+    result = ""
+    for i in range(len(text)):
+        c1 = text[i]  <span class=comment># i番目の文字を取得する。</span>
+        n1 = ord(c1)  <span class=comment># その文字コード。</span>
+        n2 = n1 + k   <span class=comment># k 回ずらした文字コード。</span>
+        <span class=comment># ずらした文字を結果に追加する。</span>
+        result = result + chr(n2)
+    <span class=comment># できた文字列を返す。</span>
+    return result
+
+print(caesar("HELLO", 1))   <span class=comment># "IFMMP" と表示する。</span>
+print(caesar("IFMMP", -1))  <span class=comment># "HELLO" と表示する。</span>
+</pre>
+</div>
+
+<div class=exercise>
+<div class=header>演習 6-2.</div>
+<ol start="5">
+<li> 上のプログラム caesar.py にはバグがある。
+  入力した文字列が <code>hello</code> で k=1 の場合はよいのだが…
+<pre>
+print(caesar("HEY!", 2))
+<span class=comment># "JG[#" と表示される。</span>
+</pre>
+問題は、文字コードをずらしたときに
+A〜Z の範囲を超えてしまうことである。
+このような場合でもうまく動くように、以下の改良を加えよ:
+<ol type=a>
+  <li> 英文アルファベット (A〜Z) 以外の文字は変更せず、そのまま表示する。
+  <li> 「"Z" の 1つ先の文字」が "A" になるようにする。(2つ先の文字は "B")<br>
+    ヒント: <code>%</code> を使うべし。
+</ol>
+</ol>
+</div>
+
+<h3 id="crypto-analysis">5.1. 暗号解析とは?</h3>
+<p>
+上のような簡単な英文のシーザー暗号は、すぐに解読することができる。
+エドガー・アラン・ポーが 19世紀に発表した推理小説
+「<a href="https://ja.wikipedia.org/wiki/%E9%BB%84%E9%87%91%E8%99%AB">黄金虫</a>」では、
+このような暗号が使われていた (こちらは任意の文字が別の文字と対応するので、より難しい)。
+暗号解析 (cryptoanalysis) とは、暗号の鍵がわからない状態で
+暗号文だけからもとの文を推測 (解読) することである。
+暗号解析技術は、現在でも各国の軍事機関でさかんに研究されている。
+<p>
+<a href="https://en.wikipedia.org/wiki/The_Gold-Bug#Analysis">英文でもっともよく現れる文字は "e" である</a>ことから、
+ある英文がシーザー暗号で書かれていると仮定すると、
+暗号解析は以下のように行える:
+<ol>
+<li> 暗号の中でもっとも多く現れている文字をさがす。
+<li> その文字が <code>E</code> になるように、シーザー暗号の鍵 <em>k</em> を決定する。
+<li> その値を使って文字を <em>k</em>回文だけ逆にずらし、元の文を復元する。
+</ol>
+
+<p>
+「暗号の中でもっとも多く現れている文字をさがす」処理は、
+前々回にやった投票システムの課題と似ている。
+つまり、暗号中の各文字をその文字に対する票と考え、
+もっとも票の多かった文字を見つければよい。
+<div class=file>
+暗号解析をおこなう関数 analyze.py (未完成版):
+<pre>
+def analyze(text):
+    <span class=comment># 26文字分の投票結果を用意する。</span>
+    votes = [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0]
+    <span class=comment># 1文字ずつ調べる。</span>
+    for i in range(len(text)):
+        c = ord(text[i])  <span class=comment># i番目の文字の文字コードをとりだす。</span>
+        <span class=comment># それが英大文字の範囲であれば、票を1増やす。</span>
+<div class=qqq>        ???
+        ...
+</div>    <span class=comment># votes の中で、最も多く得票したものを見つける。</span>
+    maxi = 0
+    for i in range(len(votes)):
+<div class=qqq>        ???
+        ...
+</div>    <span class=comment># この時点で、「maxi番目の文字」がもっとも多く現れることが判明。</span>
+    <span class=comment># これが "E" を表すように、k の値を計算する。</span>
+    k = <span class=qqq>???</span>
+    return k
+</pre></blockquote>
+</div>
+
+
+<div class=exercise id="kadai-s7">
+<div class=header>小課題 7. 関数barおよび関数triangleの完成 (11月22日締切)</div>
+<ul>
+  <li> 提出期限: <strong>11月22日</strong> (1週間後)
+  <li> 本日の<a href="#ex3">演習 6-3.</a>で作成した
+    関数<code>bar</code>および関数<code>triangle</code>を完成させよ。
+</ul>
+<p>
+  以下のようなプログラムとして T2SCHOLA から提出すること。
+<div class=file>
+triangle.py
+<pre>
+<span class=comment># bar(n): n個のアスタリスクを表示する。</span>
+def bar(n):
+    ...
+
+<span class=comment># triangle(h): 高さhの三角形を表示する。</span>
+def triangle(h):
+    ...
+
+<span class=comment># 高さ3の三角形を表示する。</span>
+triangle(3)
+<span class=comment># 高さ7の三角形を表示する。</span>
+triangle(7)
+</pre>
+</div>
+</div>
+
+<h2 id="assignment">6. 本日の課題</h2>
+
+<div class=exercise id="kadai-m3">
+<div class=header>中課題 3. シーザー暗号の暗号解析をおこなうプログラム (11月29日締切)</div>
+<ul>
+  <li> 提出期限: <strong>11月29日</strong> (2週間後)
+  <li> 本日の成果を使って、
+<a href="cipher.txt">この英文</a>のシーザー暗号の暗号解析をおこなう
+プログラムを作成し、その動作原理と実行結果を説明するレポートを T2SCHOLA から提出せよ。
+今回は、PDFだけを提出すればよい。プログラムは全部自力で書いてもよい。
+<ul>
+  <li> <strong>PDF形式</strong> で提出すること。
+    (これ以外の形式で提出した場合は減点する)
+  <li> プログラムを提示し、その動作原理を日本語で説明すること。<br>
+    読者は一般的なプログラミングの知識があると仮定してよい。
+  <li> 何か工夫した点があれば書くこと。
+</ul>
+</ul>
+<div class=file>
+analyze.py (未完成版)
+<pre>
+<span class=comment># 関数 caesar の定義</span>
+def caesar(text, k):
+    ...
+
+<span class=comment># 関数 analyze の定義</span>
+def analyze(text):
+    ...
+
+<span class=comment># 解読対象の暗号文。</span>
+cipher = (
+ "JXU ISYUDJYIJ XQI Q BEJ EV UNFUHYUDSU MYJX YWDEHQDS"
+ "U QDT TEKRJ QDT KDSUHJQYDJO, QDT JXYI UNFUHYUDSU YI"
+ " EV LUHO WHUQJ YCFEHJQDSU. MXUD Q ISYUDJYIJ TEUID’J"
+ " ADEM JXU QDIMUH JE Q FHERBUC, XU YI YWDEHQDJ. MXUD"
+ " XU XQI Q XKDSX QI JE MXQJ JXU HUIKBJ YI, XU YI KDS"
+ "UHJQYD. QDT MXUD XU YI FHUJJO TQHD IKHU EV MXQJ JXU"
+ " HUIKBJ YI WEYDW JE RU, XU YI IJYBB YD IECU TEKRJ. "
+ "MU XQLU VEKDT YJ EV FQHQCEKDJ YCFEHJQDSU JXQJ YD EH"
+ "TUH JE FHEWHUII MU CKIJ HUSEWDYPU EKH YWDEHQDSU QDT"
+ " BUQLU HEEC VEH TEKRJ. ISYUDJYVYS ADEMBUTWU YI Q RE"
+ "TO EV IJQJUCUDJI EV LQHOYDW TUWHUUI EV SUHJQYDJO — "
+ "IECU CEIJ KDIKHU, IECU DUQHBO IKHU, RKJ DEDU QRIEBK"
+ "JUBO SUHJQYD.")
+
+<span class=comment># 暗号解析をおこない、鍵の値 k を決定する。</span>
+k = analyze(cipher)
+<span class=comment># その値を使って暗号文を元にもどす。</span>
+text = caesar(cipher, -k)
+<span class=comment># 復号した文字列を表示する。</span>
+print(text)
+</pre>
+</div>
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

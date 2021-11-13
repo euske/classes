@@ -1,0 +1,8 @@
+{"version": 2, "width": 120, "height": 30, "timestamp": 1635918781, "env": {"SHELL": "/bin/bash", "TERM": "xterm"}}
+[0.082975, "o", "11111100111100111111\r\n\r\n11111001111001111111\r\n\r\n"]
+[0.18314, "o", "11110011110011111111\r\n\r\n"]
+[0.283356, "o", "11100111100111111111\r\n\r\n"]
+[0.383583, "o", "11001111001111111111\r\n\r\n"]
+[0.483792, "o", "10011110011111111111\r\n\r\n"]
+[0.584088, "o", "Traceback (most recent call last):\r\n  File \"/home/euske/work/titech/eval/y21-cs1/m1/py/entry_055.py\", line 19, in <module>\r\n"]
+[0.584159, "o", "    b[i] = img1 // n\r\nZeroDivisionError: integer division or modulo by zero\r\n"]

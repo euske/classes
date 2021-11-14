@@ -54,6 +54,9 @@
 <li> <a href="#crypto-caesar">シーザー暗号とは何か?</a>
   <ul>
     <li> <a href="#crypto-analysis">暗号解析とは?</a>
+      <ul class=ex>
+        <li> <a href="#ex5">演習 6-4. 関数caeserの改良</a>
+      </ul>
   </ul>
 <li> <a href="#assignment">本日の課題</a>
   <ul>
@@ -823,8 +826,8 @@ triangle(5)
 
 <h4>シーザー暗号の例:</h4>
 <ul>
-<li> <code>hello!</code> → <code>ifmmp!</code> (k=1, 1つ先の文字を使った場合)
-<li> <code>hello!</code> → <code>rovvy!</code> (k=10, 10個先の文字を使った場合)
+<li> <code>HELLO!</code> → <code>IFMMP!</code> (k=1, 1つ先の文字を使った場合)
+<li> <code>HELLO!</code> → <code>ROVVY!</code> (k=10, 10個先の文字を使った場合)
 </ul>
 
 <p>
@@ -853,11 +856,11 @@ print(caesar("IFMMP", -1))  <span class=comment># "HELLO" と表示する。</sp
 </pre>
 </div>
 
-<div class=exercise>
-<div class=header>演習 6-2.</div>
+<div class=exercise id="ex5">
+<div class=header>演習 6-4. 関数caeserの改良</div>
 <ol start="5">
 <li> 上のプログラム caesar.py にはバグがある。
-  入力した文字列が <code>hello</code> で k=1 の場合はよいのだが…
+  入力した文字列が <code>HELLO</code> で k=1 の場合はよいのだが…
 <pre>
 print(caesar("HEY!", 2))
 <span class=comment># "JG[#" と表示される。</span>
@@ -879,8 +882,8 @@ A〜Z の範囲を超えてしまうことである。
 エドガー・アラン・ポーが 19世紀に発表した推理小説
 「<a href="https://ja.wikipedia.org/wiki/%E9%BB%84%E9%87%91%E8%99%AB">黄金虫</a>」では、
 このような暗号が使われていた (こちらは任意の文字が別の文字と対応するので、より難しい)。
-暗号解析 (cryptoanalysis) とは、暗号の鍵がわからない状態で
-暗号文だけからもとの文を推測 (解読) することである。
+暗号解析 (cryptoanalysis) とは、暗号の鍵がわからない状態で、
+暗号文だけを頼りにもとの文を推測 (解読) することである。
 暗号解析技術は、現在でも各国の軍事機関でさかんに研究されている。
 <p>
 <a href="https://en.wikipedia.org/wiki/The_Gold-Bug#Analysis">英文でもっともよく現れる文字は "e" である</a>ことから、
@@ -942,10 +945,9 @@ def bar(n):
 def triangle(h):
     ...
 
-<span class=comment># 高さ3の三角形を表示する。</span>
-triangle(3)
-<span class=comment># 高さ7の三角形を表示する。</span>
-triangle(7)
+<span class=comment># inputで与えられた高さxの三角形を表示する。</span>
+x = int(input("height:"))
+triangle(x)
 </pre>
 </div>
 </div>
@@ -965,7 +967,9 @@ triangle(7)
     (これ以外の形式で提出した場合は減点する)
   <li> プログラムを提示し、その動作原理を日本語で説明すること。<br>
     読者は一般的なプログラミングの知識があると仮定してよい。
-  <li> 何か工夫した点があれば書くこと。
+  <li> (追加点) この暗号文に対しては、どんな鍵を使っても暗号解析できてしまうことを証明したい。
+    そのためには、どうすればよいか。それを証明するためのプログラムを書き、実行結果を示せ。
+  <li> その他、何か工夫した点があれば書くこと。
 </ul>
 </ul>
 <div class=file>

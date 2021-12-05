@@ -118,6 +118,23 @@ certain.
   <li> プログラムだけで説明が書かれていないものは減点。
 </ul>
 <li> 追加問題:
+  「任意の k」といっても実際には暗号は k = 0〜25 で閉じているので、
+  この範囲の k だけについて示せばよい。
+  もとの文を記録しておき、すべて k について暗号化・暗号解析し、
+  同じ文が復元できることを<strong>プログラムによって</strong>チェックしているものを正解とみなす。
+  <p>
+回答例:
+<pre>
+<span class=comment># もとの文章を求める。</span>
+original = ceaser(text, analyze(text))
+<span class=comment># 鍵を 0〜25 まで変化させ、同じ文章が解読できるかどうかを見る。</span>
+for k in range(26):
+    enc = ceaser(original, k)      <span class=comment># 鍵kによる暗号文</span>
+    dec = ceaser(enc, analyze(s))  <span class=comment># それを暗号解析した文</span>
+    if dec != original:
+        print("FAIL!")
+<span class=comment># FAIL! が表示されなければ、すべての k に対して成功。</span>
+</pre>
 <li> 秀逸なレポートの例 (抜粋)
 <ul>
 <li> 例. 処理の流れを図で示しており、わかりやすい。

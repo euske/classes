@@ -1124,14 +1124,13 @@ perm(a, 3)
 </pre>
 </blockquote>
 <p id="perm">
-この関数を使って、以下の結果を出力するプログラム
-<code>perm.py</code> を提出せよ。
-<blockquote><pre>
-b = ["R", "G", "B", "C", "M", "Y"]
-perm(b, 6)
-</pre></blockquote>
+この関数を使って、リスト
+<code>["R", "G", "B", "C", "M", "Y"]</code> の
+要素すべての組み合せを出力するプログラム
+<code>perm.py</code> を提出せよ:
 <h4>実行結果 (一部)</h4>
 <blockquote><pre>
+$ <strong>python perm.py</strong>
 ['R', 'G', 'B', 'C', 'M', 'Y']
 ['G', 'R', 'B', 'C', 'M', 'Y']
 ...(中略)...
@@ -1147,6 +1146,8 @@ perm(b, 6)
 <ul>
 <li> 再帰を使うこと。
 <li> 新山の場合は、以下のような構成にした。
+<div class=file>
+perm.py
 <pre>
 def perm(a, n):
     if n == 0:
@@ -1156,7 +1157,11 @@ def perm(a, n):
 <div class=qqq>        ????
         ...
 </div>        return
+
+b = ["R", "G", "B", "C", "M", "Y"]
+perm(b, 6)
 </pre>
+</div>
 <li> より詳しいヒントは来週の授業で。
 </ul>
 </div>

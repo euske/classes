@@ -25,9 +25,18 @@
 <li> <a href="#searches">逐次探索と二分探索</a>
 <ul>
   <li> <a href="#search-sequential">逐次探索とは</a>
-  <li> <a href="#search-binary">二分探索とは</a>
+<ul class=ex>
+  <li> <a href="#ex3-1">演習 3-1. 逐次探索の計算量</a>
 </ul>
-<li> <a href="#bsearch">二分探索の計算量</a>
+  <li> <a href="#search-binary">二分探索とは</a>
+<ul class=ex>
+  <li> <a href="#ex3-2">演習 3-2. 手動で二分探索</a>
+</ul>
+</ul>
+<li> <a href="#bsearch">二分探索を実装する</a>
+<ul class=ex>
+  <li> <a href="#ex3-3">演習 3-3. 二分探索の実行</a>
+</ul>
 <ul>
   <li> <a href="#bsearch-orders">関数 <code>bsearch()</code> の計算量</a>
   <li> <a href="#bsearch-halting">このプログラムは必ず停止するのか?</a>
@@ -35,11 +44,19 @@
 <li> <a href="#sorting">ソート (並べ替え) アルゴリズムとは</a>
 <ul>
   <li> <a href="#sorting-insertion">挿入法 (insertion sort)</a>
+<ul class=ex>
+  <li> <a href="#ex3-4">演習 3-4. 手動で挿入法をやってみる</a>
+  <li> <a href="#ex3-5">演習 3-5. 挿入法の実行</a>
+</ul>
   <li> <a href="#sorting-mergesort">マージソート (merge sort)</a>
 </ul>
 <li> <a href="#breakout">ブレイクアウトルーム練習</a>
+<ul class=ex>
+  <li> <a href="#ex3-6">演習 3-6. bsearch に「not found」を追加する</a>
+  <li> <a href="#ex3-7">演習 3-7. 挿入法の最悪計算量を測定する</a>
+</ul>
 <li> <a href="#assignments">本日の課題</a>
-<ul>
+<ul class=ex>
   <li> <a href="#kadai-s3">小課題 3. 挿入法の改良 (12月27日締切)</a>
   <li> <a href="#kadai-m1">中課題 1. マージソートの実装 (2022年1月11日締切)</a>
 </ul>
@@ -148,7 +165,7 @@ for i in range(n):
         print(f"found {i}")
 </pre></blockquote>
 
-<div class=exercise>
+<div class=exercise id="ex3-1">
 <div class=header>演習 3-1. 逐次探索の計算量</div>
 <P>
 上のコードの n に対する計算量はいくらか。Big-O 記法で答えよ。
@@ -293,7 +310,7 @@ for i in range(n):
 たとえばリストの要素数が 1万倍になったとしても、
 実行回数はたかだか 14回増えるだけである (2<sup>14</sup> = 16384)。
 
-<div class=exercise>
+<div class=exercise id="ex3-2">
 <div class=header>演習 3-2. 手動で二分探索</div>
 <ol type=i>
   <li> 上の例 <code>a = [0, 1, 3, 4, 8, 9, 13]</code> の場合について
@@ -568,8 +585,8 @@ bsearch(a, 63, 0, len(a))
 そのどちらかの半分に対して再帰的に <code>bsearch()</code> を呼び出す。
 以後、これは範囲がただ 1つの要素に絞られるまで続く。
 
-<div class=exercise>
-<div class=header>演習 3-3. 逐次探索の実行</div>
+<div class=exercise id="ex3-3">
+<div class=header>演習 3-3. 二分探索の実行</div>
 <P>
 上のプログラム <code>bsearch.py</code> を実際に実行せよ。
 <code>print()</code>関数のコメントをはずし、内部の動きを観察せよ。
@@ -892,7 +909,7 @@ def col(n):
 <code>i</code> がリストの終わりに到達するまでこれを続ければ、
 すべての要素が正しく並んだことになる。
 
-<div class=exercise>
+<div class=exercise id="ex3-4">
 <div class=header>演習 3-4. 手動で挿入法をやってみる</div>
 <p>
 挿入法を使って、リスト <code>[7, 3, 1, 8, 6, 2]</code> を昇順にソートせよ。
@@ -942,7 +959,7 @@ insort(a)
 print(a)
 </pre></div>
 
-<div class=exercise>
+<div class=exercise id="ex3-5">
 <div class=header>演習 3-5. 挿入法の実行</div>
 <P>
 上のプログラムを実行し、結果を確認せよ。
@@ -1344,7 +1361,7 @@ def mergesort(a):
 <li> 終わったら、次の担当者が次の問題をやる。これを繰り返す。
 </ol>
 
-<div class=exercise>
+<div class=exercise id="ex3-6">
 <div class=header>演習 3-6. bsearch に「not found」を追加する</div>
 <p>
 <a href="#bsearch.py">bsearch.py</a> における
@@ -1367,8 +1384,8 @@ bsearch(a, 5, 0, len(a))
 "<code>not found</code>" と表示して終了するようにせよ。
 </div>
 
-<div class=exercise>
-<div class=header>演習 3-7. 挿入法の最悪計算量は?</div>
+<div class=exercise id="ex3-7">
+<div class=header>演習 3-7. 挿入法の最悪計算量を測定する</div>
 <p>
 <a href="#insort.py">insort.py</a> で、
 リスト <code>[5, 4, 3, 2, 1, 0]</code> をソートしたときに、

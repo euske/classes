@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2021年度 コンピュータサイエンス第二 (1a)
+第4回 - 乱数の発生、ランダムな迷路の生成
+/ 新山 祐介</title>
+<style><!--
+dd { margin-bottom: 1em; }
+.yellow { background: #ffff88; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第4回 - 乱数の発生、ランダムな迷路の生成</h1>
+<div class=nav>2022年1月13日</div>
+
+<ol start="1">
+<li> <a href="#prng">乱数とは</a>
+<li> <a href="#lists">リストについて・さらに補足</a>
+<li> <a href="#maze">迷路生成プログラム</a>
+<li> <a href="#breakout">ブレイクアウトルーム練習</a>
+<ul class=ex>
+  <li> <a href="#ex4-4">演習 4-4. サイコロの合計値の統計をとる</a>
+</ul>
+<li> <a href="#assignments">本日の課題</a>
+<ul class=ex>
+  <li> <a href="#kadai-s4">小課題4. モンテカルロ法で円周率を求める (1月20日締切)</a>
+  <li> <a href="#kadai-m2">中課題2. 迷路の生成 (1月27日締切)</a>
+</ul>
+</ol>
+
+
+<h2>雑談</h2>
+
+<h4>アルゴリズムを舞踊で表現する</h4>
+<ul>
+<li> <a href="https://www.youtube.com/watch?v=iP897Z5Nerk">フラメンコによる二分探索</a>
+<li> <a href="https://www.youtube.com/watch?v=ROalU379l3U">ルーマニアの民族舞踊で挿入法</a>
+<li> <a href="https://www.youtube.com/watch?v=XaqR3G_NVoo">トランシルヴァニア・ザクソンの民族舞踊でマージソート</a>
+<li> <a href="https://www.youtube.com/watch?v=o2Yim7vTsWw">おまけ・ソートする女の子</a>
+</ul>
+
+<h4>アホなソート法</h4>
+<blockquote><pre>
+a = [5,9,4,0,7,3,1,8,6,2]
+while aのすべての順列を試す:
+    if aがソートされていたら:
+        print(a)
+        break
+</pre></blockquote>
+
+当然、 <i>O</i>(2<sup>n</sup>) &lt; <i>O</i>(n!) であるので、
+これは非常に効率が悪い。
+
+<h4>ソーティング・ゲーム</h4>
+<ul>
+<li> 東工大の学生が以前に開発した、<a href="http://www.e.gsic.titech.ac.jp/~kashima/SortGame/cs.html">ソートを手動でやってみるゲーム</a>がある。
+</ul>
+
+
+<h2 id="prng">1. 乱数とは</h2>
+<p>
+<u>乱数</u> (random number) とは、決められた範囲
+(たとえば 0〜1) の間で一様に分布する、
+ランダムな (予測できない) 数のことである。
+こんにち、乱数はゲームやシミュレーションなどで使われているが、
+実際には、真の乱数はコンピュータプログラムでは
+<strong>絶対に</strong>生成できない。なぜなら、
+プログラムというのは常に決まった動作をするからである。
+<blockquote class=quote>
+“四則演算のみを使って乱数を生成しようとする者は、言うまでもなく背徳的なのだ。”<br>
+(Anyone who attempts to generate random numbers by deterministic means is, of course, living in a state of sin.)
+<div align=right><em>-- John von Neumann</em></div>
+</blockquote>
+
+<p>
+多くの場合、コンピュータ上で実際に生成しているのは
+「一見、乱数っぽく見える」数である。これを<u>疑似乱数</u>という。
+たとえば、以下のプログラムを使うと疑似乱数を発生させることができる:
+
+<div class=file>
+rand.py
+<pre>
+<mark>seed</mark> = 1  <span class=comment># 乱数の「シード」(種)</span>
+
+def rand():
+    <span class=comment># 関数の外にある変数seedを変更できるようにする。</span>
+    <mark>global seed</mark>
+    <span class=comment># seed の値を更新する。</span>
+    seed = ((seed * 1103515245) + 12345) % 134217727
+    return seed / 134217727
+
+<span class=comment># 10個の疑似乱数を表示する。</span>
+for i in range(10):
+    print(rand())
+</pre></div>
+
+<p>
+ここで使っている <code>global</code> という文は、
+関数の外で定義されている変数を関数の中から参照・変更するためのものである。
+関数 <code>rand()</code> は区間 <code>[0, 1)</code> の
+疑似乱数 (0 〜 0.99999...) を発生させるが、実際にやっていることは
+変数 <code>seed</code> の値に適当な値を掛けたり足したりしているだけで、
+ちっともランダムではない。しかしこの関数はカオス的なふるまいを示すため、
+人間が見ると「乱数っぽい値」に見える。
+
+<div class=exercise id="ex4-1">
+<div class=header>演習 4-1. 疑似乱数の生成</div>
+<ol type=i>
+<li> 上のプログラム <code>rand.py</code> を実際に実行し、結果を確認せよ。
+<li> 変数 <code>seed</code> の初期値を変えると、どのように結果が変わるか?
+</ol>
+</div>
+
+<h4>実際の乱数生成アルゴリズム</h4>
+<p>
+<blockquote><pre>
+import time
+seed = time.time()
+</pre></blockquote>
+
+
+<h3 id="prng-dice">1.1. サイコロを振るプログラム</h3>
+<p>
+関数 <code>rand()</code> の値を <em>n</em>倍すると、
+[0,1) の範囲を <em>n</em>倍するから [0,<em>n</em>) の範囲になる。
+したがって 0〜(<em>n</em>-1) までの疑似乱数を生成できることになる:
+<blockquote><pre>
+x = int(rand()*6)+1
+print(x)                      <span class=comment># 1から6のどれかの数。</span>
+</pre></blockquote>
+じつは <code>int()</code> 関数は文字列を整数にするだけでなく、
+小数を切り捨てて整数に変換する機能もある:
+<blockquote><pre>
+x = 3.14
+print(x)       <span class=comment># 3.14</span>
+print(int(x))  <span class=comment># 3</span>
+</pre></blockquote>
+
+<h3>1.2. サイコロを1000回振って出た目の統計をとるプログラム</h3>
+<p>
+Python の乱数は一様分布であるので、以下のプログラムを実行すると
+ほぼすべての数が同じ頻度になるはずである:
+<blockquote><pre>
+# dice.py
+a = [0] * 6
+for i in range(1000):
+    x = int(rand()*6)
+    a[x] = a[x] + 1
+print(a)
+</pre></blockquote>
+(注意: 上のプログラムでは、サイコロの値 x を 1〜6 ではなく 0〜5 として計算している)
+
+
+<h2 id="lists">2. リストについて・さらに補足</h2>
+<p>
+Python では、<code>print()</code> や <code>str()</code> などの関数は
+自分で定義しなくても最初から使える。このような関数を<u>組み込み関数</u>という。
+いっぽう、リスト <code>a</code> をコピーする場合、
+<code>copy(a)</code> ではなく <code>a<mark>.copy()</mark></code> のようにする。
+この <code>.copy()</code> の部分は <u>メソッド</u> と呼ばれる。
+本当は <code>copy()</code> のような組み込み関数にしてもよかったはずだが、
+おそらく組み込み関数の数を増やしすぎると名前がカブってしまう
+(誰か他の人が <code>copy()</code> という関数を作りたくても作れない)
+ためであると思われる。
+<p>
+以下では、リストの操作をするためのいくつかのメソッドを紹介する。
+
+<dl>
+  <dt> リストをコピーして新しいものを作成する:
+  <dd> <pre>
+b = a.copy()
+</pre>
+  n要素のリストをコピーするのにかかる計算量は <i>O</i>(n) である。
+
+  <dt> リストの末尾に要素を追加する (<u>破壊的</u>):
+  <dd> <pre>
+a.append(<em>値</em>)
+</pre>
+   例:
+<pre>
+x = ["dog", "cat"]
+x.append("cow")
+print(x)   <span class=comment># ["dog", "cat", "cow"]</span>
+</pre>
+  ひとつの要素を追加するのにかかる計算量は <i>O</i>(1) である。
+  ちなみに、同じ処理は <code>+</code> 記号を使ってもできる:
+<pre>
+x = x + [ "cow" ]
+</pre>
+
+  <dt> リストの途中に要素を挿入する (<u>破壊的</u>):
+  <dd> <pre>
+a.insert(<em>位置</em>, <em>値</em>)
+</pre>
+  例:
+<pre>
+x = ["dog", "cat", "cow"]
+<span class=comment>#   0      1      2</span>
+x.insert(1, "penguin")
+print(x)   <span class=comment># ["dog", "penguin", "cat", "cow"]</span>
+</pre>
+  n要素のリストに新たに要素を挿入する場合、後続の要素をずらす必要があるため
+  最悪で <i>O</i>(n) の計算量がかかる。
+
+  <dt> リストの要素を削除する (破壊的):
+  <dd> <pre>
+del a[<em>位置</em>]
+</pre>
+  例:
+<pre>
+x = ["dog", "penguin", "cat", "cow"]
+del x[2]
+print(x)   <span class=comment># ["dog", "penguin", "cow"]</span>
+</pre>
+</dl>
+
+<div class=exercise id="ex4-2">
+<div class=header>演習 4-2. 要素の削除にかかる計算量</div>
+<p>
+n要素のリストから要素を削除する場合にかかる最悪計算量はいくらか?
+またそれはどのような場合か?
+</div>
+
+
+<h2 id="maze">3. 迷路生成プログラム</h2>
+<p>
+以下のような迷路を自動生成するプログラム <code>genmaze.py</code> を作成したい。
+<blockquote><pre style="line-height: 1.0;">
+$ <strong>python genmaze.py 15 15</strong>
+###############
+#     #       #
+# ##### #######
+#         #   #
+# ##### ### ###
+#     #       #
+# # ####### # #
+# #       # # #
+# # # ### # # #
+# # #   # # # #
+# # # ##### # #
+# # #     # # #
+### ##### # # #
+#       # # # #
+###############
+</pre></blockquote>
+
+<h3>3.1. プログラムの構造</h3>
+<p>
+まずプログラム全体の構造を以下のように考える。
+関数 <code>genmaze(<mark>w</mark>, <mark>h</mark>)</code> は、
+<mark>w</mark> × <mark>h</mark> マスの迷路データを生成し、
+返すものとする。迷路は 2次元の配列 (配列の配列) として表現する。
+迷路の 1マスは、<code>0</code> または <code>1</code> の数によって表す。
+ここでは <code>1</code> が壁のある部分、
+<code>0</code> が壁のない部分 (通路) とする。
+<blockquote><pre>
+<span class=comment># genmaze: w×h の迷路を生成する。</span>
+def genmaze(w, h):
+    m = []
+    for i in range(h):
+        m.append([1]*w)
+    <span class=comment># ... 迷路生成アルゴリズム ...</span>
+    return m
+</pre></blockquote>
+<p>
+さらに 0 と 1 でできた迷路を実際に表示する関数 <code>showmaze()</code> を用意する:
+<blockquote><pre>
+<span class=comment># showmaze: 与えらえた迷路を表示する。</span>
+def showmaze(m):
+    for y in range(len(m)):
+        <span class=comment># 空の文字列を用意し、1文字ずつ足していく。</span>
+        s = ""
+        for x in range(len(m[y])):
+            # 座標 (x,y) に壁があるかどうかを判定する。
+            if m[y][x] == 1:
+                s = s + "#"
+            else:
+                s = s + " "
+        print(s)
+    return
+</pre></blockquote>
+<p>
+あとはコマンド引数を使ってこれを呼び出す部分を書けばよい:
+<blockquote><pre>
+import sys
+...
+width = int(sys.argv[1])
+height = int(sys.argv[2])
+m = genmaze(width, height)
+showmaze(m)
+</pre></blockquote>
+
+<h3>3.2. 迷路生成アルゴリズム</h3>
+<p>
+実際には、
+<a href="http://www.astrolog.org/labyrnth/algrithm.htm">迷路を生成するアルゴリズムはいくつもある</a>。
+ここでは、<a href="https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AA%E3%83%A0%E6%B3%95">Primの方法</a>を使う。
+いわゆる「根っこ伸ばし方式」:
+<ol>
+<li> 迷路のすべての部分を「土」とする。
+<li> 迷路の中の適当な位置に「種」をおき、そこから根を伸ばす。
+<li> 根はあらゆる方向に、同時に、伸びられるだけ伸びる。
+<li> 迷路の中が根っこで一杯になったら (伸びる場所がなくなったら) 完了し、
+根っこのあった部分を通路とする。
+</ol>
+<div class=figure>
+<img src="root.png">
+</div>
+<p>
+この方法がなぜいいのかというと、
+<ul>
+<li> 根が迷路中のすべての位置をカバーしている。
+<li> すべての部分がつながっている。
+  つまり、あらゆる地点から、任意の地点に行く経路が存在する。
+<li> 根はループしない。別の根にぶつかったら、もうそれ以上伸びない。
+</ul>
+<p>
+「根っこのある部分」は、
+迷路中の位置 (座標) の配列として表現する。
+各座標は 2要素の配列 <code>[x, y]</code> で表現する。
+<blockquote><pre>
+root = [[3,4], [3,5], [4,5], ...]
+</pre></blockquote>
+<p>
+実際には「同時に伸びる」というのはプログラムで実現するのは難しいので、
+「根のあるランダムな部分が毎回少しずつ伸びていく」ことにする。
+ループを設定し、1ターンごとに、根の中のランダムな部分が
+四方に1マス分だけ伸びることにする。これを、すべての部分についてくりかえす。
+全体のアルゴリズムは以下のようになる:
+<blockquote><pre>
+root = [<em>スタート座標</em>]
+while 0 &lt; len(root):
+    root 中の座標ひとつを取り出す。
+    for 隣接する座標のうち、まだ伸びていない場所に対して:
+        その場所に新しく根を伸ばし、root に入れる。
+</pre></blockquote>
+<p>
+スタート座標は、迷路の中であればどこでもよく、
+(1,1) のような固定された値でもよい。
+どちらにせよ、結果はランダムになるはずだからである。
+
+<h4>3.2.1. 配列から要素を取り出す</h4>
+<p>
+配列 <code>root</code> には <code>len(root)</code> 個の要素がある。
+この中からひとつをランダムに取り出す。まず乱数をひとつ取得する。
+<blockquote><pre>
+i = int(rand()*len(root))
+</pre></blockquote>
+で、<u>i</u> 番目の要素が決定する。
+<blockquote><pre>
+p = root[i]
+x = p[0]
+y = p[1]
+</pre></blockquote>
+その後、取り出した要素をリスト中から削除する。
+<blockquote><pre>
+del root[i]
+</pre></blockquote>
+
+<h4>3.2.2. 隣接する座標を選ぶ</h4>
+<p>
+次に、その座標 <code>[x,y]</code> から
+上下左右の隣の位置に根が伸びることができるかどうか判定する。
+ここでも、伸びる方向はランダムでなければならない。
+ここでは以下のどれかの選択肢をランダムな順序で試すことを考える:
+<ol type=a>
+<li> 上方向 <code>[0, -1]</code> に伸びることができるか?
+<li> 下方向 <code>[0, 1]</code> に伸びることができるか?
+<li> 左方向 <code>[-1, 0]</code> に伸びることができるか?
+<li> 右方向 <code>[1, 0]</code> に伸びることができるか?
+</ol>
+<p>
+これを実現するために、上下左右をあらわすベクトルを
+4種類用意し、それをシャッフルしてから順番に試すことにする
+(座標と方向ベクトルは、どちらも同じ 2要素の配列で表せる)。
+配列の要素をシャッフルするには、配列の中から
+ランダムな位置の要素を2つ選び、それらを入れ替える。
+これをだいたい配列の要素数ぶんだけ繰り返せば、
+結果として得られる配列はほぼシャッフルされているといえる。
+<blockquote><pre>
+def shuffle(a):
+    <span class=comment># 配列の要素数ぶんだけ繰り返す。</span>
+    n = len(a)
+    for k in range(n):
+        <span class=comment># i, j: a中のランダムな位置</span>
+        i = <span class=bl>????</span>
+        j = <span class=bl>????</span>
+        <span class=comment># a[i] と a[j]を入れ替える。</span>
+        <span class=bl>????????</span>
+    return a
+
+dirs = [[0,-1], [0,+1], [-1,0], [+1,0]]
+shuffle(dirs)
+print(dirs)
+</pre></blockquote>
+
+<div class=exercise id="ex4-3">
+<div class=header>演習 4-3. 関数 <code>shuffle()</code> の完成</div>
+<ol type=i>
+<li> 上の関数 <code>shuffle()</code> を完成させよ。
+</ol>
+</div>
+
+<h4>3.2.3. 伸ばせるかどうかチェックする</h4>
+<p>
+<code>shuffle()</code>関数を使って、
+ランダムな順で試す 4通りのベクトルを得られたとする。
+ここからひとつずつベクトルの x成分と y成分を取り出し、
+その方向に根を伸ばせるかどうかチェックする。
+<blockquote><pre>
+for i in range(4):
+    v = dirs[i]
+    vx = v[0]
+    vy = v[1]
+    <span class=comment># [vx,vy] の方向に伸ばせるかどうかチェックする。</span>
+    ...
+</pre></blockquote>
+<p>
+根っこが伸ばせるかどうかを判定するには、
+以下の2つのマスが壁である (まだ根が伸びていない) かどうかを
+判定すればよい:
+<ul>
+<li> 点 <code>[x,y]</code> に対して、隣の位置 = <code>[x+vx, y+vy]</code>
+<li> 点 <code>[x,y]</code> に対して、2マス隣の位置 = <code>[x+2*vx, y+2*vy]</code>
+</ul>
+<p>
+迷路の情報は変数 <code>m</code> に入っている。
+これは行、列ごとの配列であるので、ある座標
+<code>[nx, ny]</code> に壁が存在するかどうかは
+<code>m[ny][nx]</code> の値をチェックすればよい。
+<blockquote><pre>
+if m[ny][nx] == 1:
+    <span class=comment># ...壁があるときの処理...</span>
+else:
+    <span class=comment># ...壁がないときの処理...</span>
+</pre></blockquote>
+<p>
+もし根が伸ばせるときは、その新しい座標を
+配列 <code>root</code> に追加し、処理を続行する。
+いずれ迷路の中で根がいっぱいになると、
+それ以上伸ばせなくなり、<code>root</code> 内の
+要素は減っていくはずである。
+<blockquote><pre>
+root.append([nx, ny])
+</pre></blockquote>
+
+<div class=notice>
+迷路の外側はすべて (ここには表示されていないが) 壁であるということに注意。
+迷路の端を超えて進もうとすると「配列の範囲を超えた」エラー
+(<code>IndexError</code>) が出てしまうので、
+これを防ぐような仕組みを入れる必要がある。
+</div>
+
+
+<h2 id="breakout">4. ブレイクアウトルーム演習</h2>
+<p>
+ブレイクアウトルーム演習の方法:
+<ol>
+<li> ブレイクアウトルーム中はカメラを使うこと。
+<li> まず自己紹介をする。名前・所属・趣味などを簡単に説明する。
+<li> 最初の問題をやる担当者が PC の画面共有をおこない、課題のプログラムを考えながら書く。
+  このとき周囲の人は手助けする。
+<li> 終わったら、次の担当者が次の問題をやる。これを繰り返す。
+<li> 全部終わったら、適当に雑談する (← これが本当の目的)。
+</ol>
+
+<div class=exercise id="ex4-4">
+<div class=header>演習 4-4. サイコロの合計値の統計をとる</div>
+<ol type=i>
+<li> 上のプログラム <code>dice.py</code> を改造して、
+サイコロひとつの値の頻度ではなく、
+<mark>2つの</mark>サイコロの合計値の頻度を表示するようにせよ。
+<li> 上のプログラムをさらに改良し、
+任意のn個の合計値の頻度を測定するようにせよ。
+nが 5とか 6ぐらいになると、この分布はどのような形をとりうるか?
+</ol>
+</div>
+
+<h3>ほぼ雑談・コンピュータサイエンスと直接関係ない統計の話</h3>
+<p>
+統計学では、ある分布 (どんな分布でもよい) をもつ複数の
+確率変数を足し合わせると、多くの変数を足せば足すほど、
+それらの合計値の分布は正規分布に近くなることが知られている
+(<a href="https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%BF%83%E6%A5%B5%E9%99%90%E5%AE%9A%E7%90%86">中心極限定理</a>)。
+<p>
+自然界の量 (身長、平均寿命、テストの成績など) にこれほど
+正規分布を示すものが多いのは、これらの量が多くの
+異なるファクターの和によって表されるためであると推測される。
+<div class=formula>
+<i>F</i> = <i>f</i><sub>1</sub> + <i>f</i><sub>2</sub> + ... + <i>f</i><sub>m</sub>
+</div>
+
+<p>
+なお、「トム・ソーヤーの冒険」などで知られる
+米国の作家マーク・トウェインは次のような言葉を残している:
+<blockquote class=quote>
+まず嘘があり、次に恥知らずな嘘がある。最悪なのが、統計だ。<br>
+(Lies, damned lies and statistics.)
+<div align=right>-- Mark Twain</div>
+</blockquote>
+
+
+<h2 id="assignments">5. 本日の課題</h2>
+
+<div class=exercise id="kadai-s4">
+<div class=header>小課題4. モンテカルロ法で円周率を求める</div>
+<ul>
+  <li> 提出するファイル: <code>montecarlo.py</code>
+  <li> 締め切り: 1月20日 (1週間後)
+</ul>
+<p>
+乱数を使って、一見、計算不可能そうに見える数を
+シミュレーションによって求める方法がある。
+これを<a href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%83%86%E3%82%AB%E3%83%AB%E3%83%AD%E6%B3%95">モンテカルロ法</a>という。
+<p>
+(0,0) 〜 (1,1) の領域中にランダムな n個の点を打ったとする。
+そのうちのいくつかは (0,0) を中心とする 1/4円の中に入る。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
+    <g stroke="black" fill="none" stroke-width="1">
+      <line x1="10" x2="10" y1="0" y2="100" />
+      <line x1="0" x2="100" y1="90" y2="90" />
+      <rect x="10" y="10" width="80" height="80" fill="#8888ff" />
+      <path d="M10,90 l80,0 a80,80,0,0,0,-80,-80 Z" fill="#ff8888" />
+    </g>
+    <g text-anchor="middle">
+      <text x="5" y="80" dy="0.5em">0</text>
+    </g>
+  </svg>
+</div>
+<p>
+ここで次のものを数えると:
+<ol type=a>
+<li> 打った点の総数 n
+<li> 1/4円の中に入った点の数 m
+</ol>
+この数の比 m/n は、ほぼ 1/4円の面積に等しくなるはずである。
+円の面積は &pi;<i>r</i><sup>2</sup> で表されるから、
+この値は &pi;<i>1</i><sup>2</sup> ÷ 4 に近いはずだ。
+このようにして円周率 &pi; の近似値が求められる。
+コマンド引数から与えた n個のランダムな点から、モンテカルロ法を使って
+円周率の近似値を求めるプログラム <code>montecarlo.py</code> を書け。
+<h4>実行例 (いつもこの値になるとは限らない)</h4>
+<blockquote><pre>
+$ <span class=comment>python montecarlo.py 100</span>
+3.28
+$ <span class=comment>python montecarlo.py 1000</span>
+3.234
+$ <span class=comment>python montecarlo.py 10000</span>
+3.1232
+</pre></blockquote>
+</div>
+
+<div class=exercise id="kadai-m2">
+<div class=header>中課題2. 迷路の生成</div>
+<ul>
+  <li> 提出するファイル: 完成した <code>genmaze.py</code>
+  <li> 締め切り: 1月27日 (2週間後)
+</ul>
+<p>
+授業中に説明した迷路生成プログラム
+<code>genmaze.py</code> を完成させ、提出せよ。
+これはコマンド引数から「<code>幅 高さ</code>」の2つの値をとるものとする。
+ちなみに、生成する迷路はランダムで必ず解が存在する
+(あらゆる地点から任意の地点に行ける) ものであれば、
+授業中で説明した方法でなくともかまわない。
+また、幅・高さはつねに奇数であると仮定してよい。
+
+<h4>実行例 (いつもこの表示になるとは限らない)</h4>
+<blockquote><pre style="line-height: 1.0;">
+$ <strong>python genmaze.py 15 15</strong>
+###############
+#     #       #
+# ##### #######
+#         #   #
+# ##### ### ###
+#     #       #
+# # ####### # #
+# #       # # #
+# # # ### # # #
+# # #   # # # #
+# # # ##### # #
+# # #     # # #
+### ##### # # #
+#       # # # #
+###############
+</pre></blockquote>
+
+<p>
+プログラム中の適切な場所にコメントを入れ、
+以下のことを説明すること。
+<ol type=a>
+  <li> 各関数がどのように動くか。
+  <li> 迷路をそれらしく生成するために工夫した点。
+</ol>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

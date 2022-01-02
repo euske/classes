@@ -22,16 +22,29 @@ dd { margin-bottom: 1em; }
 
 <ol start="1">
 <li> <a href="#prng">乱数とは</a>
+<ul>
+  <li class=ex> <a href="#ex4-1">演習 4-1. 疑似乱数の生成</a>
+  <li> <a href="#prng-seed">実際の乱数生成</a>
+  <li> <a href="#prng-dice">サイコロを振るプログラム</a>
+</ul>
 <li> <a href="#lists">リストについて・さらに補足</a>
+<ul>
+  <li class=ex> <a href="#ex4-2">演習 4-2. 要素の削除にかかる計算量</a>
+</ul>
 <li> <a href="#maze">迷路生成プログラム</a>
+<ul>
+  <li> <a href="#maze-overview">プログラムの構造</a>
+  <li> <a href="#maze-algorithm">迷路生成アルゴリズム</a>
+  <li class=ex> <a href="#ex4-3">演習 4-3. 関数 <code>shuffle()</code> の完成</a>
+</ul>
 <li> <a href="#breakout">ブレイクアウトルーム練習</a>
-<ul class=ex>
-  <li> <a href="#ex4-4">演習 4-4. サイコロの合計値の統計をとる</a>
+<ul>
+  <li class=ex> <a href="#ex4-4">演習 4-4. サイコロの合計値の統計をとる</a>
 </ul>
 <li> <a href="#assignments">本日の課題</a>
-<ul class=ex>
-  <li> <a href="#kadai-s4">小課題4. モンテカルロ法で円周率を求める (1月20日締切)</a>
-  <li> <a href="#kadai-m2">中課題2. 迷路の生成 (1月27日締切)</a>
+<ul>
+  <li class=ex> <a href="#kadai-s4">小課題4. モンテカルロ法で円周率を求める (1月20日締切)</a>
+  <li class=ex> <a href="#kadai-m2">中課題2. 迷路の生成 (1月27日締切)</a>
 </ul>
 </ol>
 
@@ -116,7 +129,7 @@ for i in range(10):
 <h3 id="prng-seed">1.1. 実際の乱数生成</h3>
 <p>
 上のプログラムでは seed の値を定数にしているため、
-実行するたびに同じ疑似乱数が発生する。乱数は 
+実行するたびに同じ疑似乱数が発生する。乱数は
 <a href="../../y21-cs1/week6/index.html#crypto-ceaser">シーザー暗号</a>などの
 鍵を生成するのに使われているため、この値が予測可能になってしまうのは
 大きな問題である。(実際にこれで暗号が破られ、
@@ -269,7 +282,7 @@ $ <strong>python genmaze.py 15 15</strong>
 ###############
 </pre></blockquote>
 
-<h3>3.1. プログラムの構造</h3>
+<h3 id="maze-overview">3.1. プログラムの構造</h3>
 <p>
 まずプログラム全体の構造を以下のように考える。
 関数 <code>genmaze(<mark>w</mark>, <mark>h</mark>)</code> は、
@@ -315,7 +328,7 @@ m = genmaze(width, height)
 showmaze(m)
 </pre></blockquote>
 
-<h3>3.2. 迷路生成アルゴリズム</h3>
+<h3 id="maze-algorithm">3.2. 迷路生成アルゴリズム</h3>
 <p>
 実際には、
 <a href="http://www.astrolog.org/labyrnth/algrithm.htm">迷路を生成するアルゴリズムはいくつもある</a>。
@@ -501,7 +514,7 @@ nが 5とか 6ぐらいになると、この分布はどのような形をとり
 </ol>
 </div>
 
-<h3>ほぼ雑談・コンピュータサイエンスと直接関係ない統計の話</h3>
+<h3 id="central-limiting-theorem">ほぼ雑談・コンピュータサイエンスと直接関係ない統計の話</h3>
 <p>
 統計学では、ある分布 (どんな分布でもよい) をもつ複数の
 確率変数を足し合わせると、多くの変数を足せば足すほど、

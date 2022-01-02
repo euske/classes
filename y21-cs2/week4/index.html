@@ -9,7 +9,7 @@
 / 新山 祐介</title>
 <style><!--
 dd { margin-bottom: 1em; }
-.yellow { background: #ffff88; }
+.sym { font-size: 125%; font-family: serif; }
 --></style>
 </head>
 <body>
@@ -87,46 +87,62 @@ while aのすべての順列を試す:
 <div class=file>
 rand.py
 <pre>
-<mark>seed</mark> = 1  <span class=comment># 乱数の「シード」(種)</span>
+<span class=comment># 乱数の「シード」(種)</span>
+seed = 1
+<span class=comment># 10個の疑似乱数を表示する。</span>
+for i in range(10):
+    <span class=comment># seed の値を更新する。</span>
+    seed = ((seed * 1103515245) + 12345) % 134217727
+    print(seed / 134217727)
+</pre></div>
 
+<div class=exercise id="ex4-1">
+<div class=header>演習 4-1. 疑似乱数の生成</div>
+<ol type=i>
+<li> 上のプログラム <code>rand.py</code> を実行し、
+100個の疑似乱数を生成して結果を確認せよ。
+<li> 変数 <code>seed</code> の初期値を変えると、どのように結果が変わるか?
+</ol>
+</div>
+
+<p>
+このプログラムは区間 <code>[0, 1)</code> の
+疑似乱数 (0 〜 0.99999...) を発生させるが、実際にやっていることは
+変数 <code>seed</code> に適当な計算をほどこしているだけで、
+<code>seed</code> の値がわかれば、以後の結果は完全に予測可能である。
+しかしこの関数はカオス的なふるまいを示すため、
+人間が見ると「乱数っぽい値」に見える。
+
+<h3 id="prng-seed">1.1. 実際の乱数生成</h3>
+<p>
+上のプログラムでは seed の値を定数にしているため、
+実行するたびに同じ疑似乱数が発生する。乱数は 
+<a href="../../y21-cs1/week6/index.html#crypto-ceaser">シーザー暗号</a>などの
+鍵を生成するのに使われているため、この値が予測可能になってしまうのは
+大きな問題である。(実際にこれで暗号が破られ、
+<a href="https://en.wikipedia.org/wiki/Random_number_generator_attack">秘密の情報が漏洩してしまう事故がある</a>。)
+そのため、通常は疑似乱数のシードとして、
+なんらかの外部から入力した値を使う。ここでは簡単な例として、
+現在の時刻を使ってみる:
+
+<blockquote><pre>
+<span class=comment># 乱数の「シード」(種) として、現在時刻 (の秒数) を設定する。</span>
+import time
+<mark>seed</mark> = time.time()
 def rand():
     <span class=comment># 関数の外にある変数seedを変更できるようにする。</span>
     <mark>global seed</mark>
     <span class=comment># seed の値を更新する。</span>
     seed = ((seed * 1103515245) + 12345) % 134217727
     return seed / 134217727
-
-<span class=comment># 10個の疑似乱数を表示する。</span>
-for i in range(10):
-    print(rand())
-</pre></div>
-
+</pre></blockquote>
 <p>
+この関数 <code>rand()</code> は現在時刻をシードとして使い、
+呼び出すたびに疑似乱数を生成する。
 ここで使っている <code>global</code> という文は、
 関数の外で定義されている変数を関数の中から参照・変更するためのものである。
-関数 <code>rand()</code> は区間 <code>[0, 1)</code> の
-疑似乱数 (0 〜 0.99999...) を発生させるが、実際にやっていることは
-変数 <code>seed</code> の値に適当な値を掛けたり足したりしているだけで、
-ちっともランダムではない。しかしこの関数はカオス的なふるまいを示すため、
-人間が見ると「乱数っぽい値」に見える。
 
-<div class=exercise id="ex4-1">
-<div class=header>演習 4-1. 疑似乱数の生成</div>
-<ol type=i>
-<li> 上のプログラム <code>rand.py</code> を実際に実行し、結果を確認せよ。
-<li> 変数 <code>seed</code> の初期値を変えると、どのように結果が変わるか?
-</ol>
-</div>
-
-<h4>実際の乱数生成アルゴリズム</h4>
-<p>
-<blockquote><pre>
-import time
-seed = time.time()
-</pre></blockquote>
-
-
-<h3 id="prng-dice">1.1. サイコロを振るプログラム</h3>
+<h3 id="prng-dice">1.2. サイコロを振るプログラム</h3>
 <p>
 関数 <code>rand()</code> の値を <em>n</em>倍すると、
 [0,1) の範囲を <em>n</em>倍するから [0,<em>n</em>) の範囲になる。
@@ -143,19 +159,21 @@ print(x)       <span class=comment># 3.14</span>
 print(int(x))  <span class=comment># 3</span>
 </pre></blockquote>
 
-<h3>1.2. サイコロを1000回振って出た目の統計をとるプログラム</h3>
 <p>
-Python の乱数は一様分布であるので、以下のプログラムを実行すると
+なお、<code>rand()</code> の乱数はほぼ
+一様分布を示すので、以下のプログラムを実行すると
 ほぼすべての数が同じ頻度になるはずである:
-<blockquote><pre>
-# dice.py
+<div class=file id="dice.py">
+dice.py
+<pre>
+<span class=comment># サイコロを1000回振って、出た目の統計をとるプログラム</span>
 a = [0] * 6
 for i in range(1000):
     x = int(rand()*6)
     a[x] = a[x] + 1
 print(a)
-</pre></blockquote>
-(注意: 上のプログラムでは、サイコロの値 x を 1〜6 ではなく 0〜5 として計算している)
+</pre></div>
+(注意: このプログラムでは、サイコロの値 x を 1〜6 ではなく 0〜5 として計算している)
 
 
 <h2 id="lists">2. リストについて・さらに補足</h2>
@@ -474,9 +492,9 @@ root.append([nx, ny])
 <div class=exercise id="ex4-4">
 <div class=header>演習 4-4. サイコロの合計値の統計をとる</div>
 <ol type=i>
-<li> 上のプログラム <code>dice.py</code> を改造して、
+<li> <a href="#dice.py"><code>dice.py</code></a> を改造して、
 サイコロひとつの値の頻度ではなく、
-<mark>2つの</mark>サイコロの合計値の頻度を表示するようにせよ。
+<strong>2つのサイコロの合計</strong>の頻度を表示するようにせよ。
 <li> 上のプログラムをさらに改良し、
 任意のn個の合計値の頻度を測定するようにせよ。
 nが 5とか 6ぐらいになると、この分布はどのような形をとりうるか?
@@ -516,7 +534,7 @@ nが 5とか 6ぐらいになると、この分布はどのような形をとり
   <li> 締め切り: 1月20日 (1週間後)
 </ul>
 <p>
-乱数を使って、一見、計算不可能そうに見える数を
+(疑似)乱数を使って、一見、計算不可能そうに見える数を
 シミュレーションによって求める方法がある。
 これを<a href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%83%86%E3%82%AB%E3%83%AB%E3%83%AD%E6%B3%95">モンテカルロ法</a>という。
 <p>
@@ -542,11 +560,13 @@ nが 5とか 6ぐらいになると、この分布はどのような形をとり
 <li> 1/4円の中に入った点の数 m
 </ol>
 この数の比 m/n は、ほぼ 1/4円の面積に等しくなるはずである。
-円の面積は &pi;<i>r</i><sup>2</sup> で表されるから、
-この値は &pi;<i>1</i><sup>2</sup> ÷ 4 に近いはずだ。
-このようにして円周率 &pi; の近似値が求められる。
+円の面積は <span class=sym>&pi;</span><i>r</i><sup>2</sup> で表されるから、
+この値は <span class=sym>&pi;</span> ÷ 4 に近いはずだ。
+このようにして円周率 <span class=sym>&pi;</span> の近似値が求められる。
 コマンド引数から与えた n個のランダムな点から、モンテカルロ法を使って
 円周率の近似値を求めるプログラム <code>montecarlo.py</code> を書け。
+疑似乱数を生成する関数には上の <code>rand()</code> を使ってよい。
+
 <h4>実行例 (いつもこの値になるとは限らない)</h4>
 <blockquote><pre>
 $ <span class=comment>python montecarlo.py 100</span>

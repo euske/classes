@@ -20,26 +20,30 @@ dd { margin-bottom: 1em; }
 <h1>第4回 - 乱数の発生、ランダムな迷路の生成</h1>
 <div class=nav>2022年1月13日</div>
 
-<ol start="1">
+<ol start="0">
+<li> <a href="#prev">前回の復習</a>
+<ul>
+  <li class=ex> <a href="#ex4-1">演習 4-1. リストの参照について・復習</a>
+</ul>
 <li> <a href="#prng">乱数とは</a>
 <ul>
-  <li class=ex> <a href="#ex4-1">演習 4-1. 疑似乱数の生成</a>
+  <li class=ex> <a href="#ex4-2">演習 4-2. 疑似乱数の生成</a>
   <li> <a href="#prng-seed">実際の乱数生成</a>
   <li> <a href="#prng-dice">サイコロを振るプログラム</a>
 </ul>
 <li> <a href="#lists">リストについて・さらに補足</a>
 <ul>
-  <li class=ex> <a href="#ex4-2">演習 4-2. 要素の削除にかかる計算量</a>
+  <li class=ex> <a href="#ex4-3">演習 4-3. 要素の削除にかかる計算量</a>
 </ul>
 <li> <a href="#maze">迷路生成プログラム</a>
 <ul>
   <li> <a href="#maze-overview">プログラムの構造</a>
   <li> <a href="#maze-algorithm">迷路生成アルゴリズム</a>
-  <li class=ex> <a href="#ex4-3">演習 4-3. 関数 <code>shuffle()</code> の完成</a>
+  <li class=ex> <a href="#ex4-4">演習 4-4. 関数 <code>shuffle()</code> の完成</a>
 </ul>
 <li> <a href="#breakout">ブレイクアウトルーム練習</a>
 <ul>
-  <li class=ex> <a href="#ex4-4">演習 4-4. サイコロの合計値の統計をとる</a>
+  <li class=ex> <a href="#ex4-5">演習 4-5. サイコロの合計値の統計をとる</a>
 </ul>
 <li> <a href="#assignments">本日の課題</a>
 <ul>
@@ -77,6 +81,38 @@ while aのすべての順列を試す:
 </ul>
 
 
+<h2 id="prev">0. 前回の復習</h2>
+<ul>
+<li> 逐次探索と二分探索の違いについて学習した。
+<li> 挿入法とマージソートについて学習した。
+</ul>
+
+<div class=exercise id="ex4-1">
+<div class=header>演習 4-1. リストの参照について・復習</div>
+<p>
+次のプログラムで <code>print</code>が表示する値を答えよ:
+<ol type=i>
+<li> <pre>
+a = [5,9,4,0]
+b = a
+a[0] = 1
+print(b[0])
+</pre>
+<li> <pre>
+a = [5,9,4,0]
+b = [5,9,4,0]
+a[0] = 1
+print(b[0])
+</pre>
+<li> <pre>
+a = [5,9,4,0]
+b = a[0]
+print(b[0])
+</pre>
+</ol>
+</div>
+
+
 <h2 id="prng">1. 乱数とは</h2>
 <p>
 <u>乱数</u> (random number) とは、決められた範囲
@@ -109,8 +145,8 @@ for i in range(10):
     print(seed / 134217727)
 </pre></div>
 
-<div class=exercise id="ex4-1">
-<div class=header>演習 4-1. 疑似乱数の生成</div>
+<div class=exercise id="ex4-2">
+<div class=header>演習 4-2. 疑似乱数の生成</div>
 <ol type=i>
 <li> 上のプログラム <code>rand.py</code> を実行し、
 100個の疑似乱数を生成して結果を確認せよ。
@@ -252,8 +288,8 @@ print(x)   <span class=comment># ["dog", "penguin", "cow"]</span>
 </pre>
 </dl>
 
-<div class=exercise id="ex4-2">
-<div class=header>演習 4-2. 要素の削除にかかる計算量</div>
+<div class=exercise id="ex4-3">
+<div class=header>演習 4-3. 要素の削除にかかる計算量</div>
 <p>
 n要素のリストから要素を削除する場合にかかる最悪計算量はいくらか?
 またそれはどのような場合か?
@@ -432,8 +468,8 @@ shuffle(dirs)
 print(dirs)
 </pre></blockquote>
 
-<div class=exercise id="ex4-3">
-<div class=header>演習 4-3. 関数 <code>shuffle()</code> の完成</div>
+<div class=exercise id="ex4-4">
+<div class=header>演習 4-4. 関数 <code>shuffle()</code> の完成</div>
 <ol type=i>
 <li> 上の関数 <code>shuffle()</code> を完成させよ。
 </ol>
@@ -502,8 +538,8 @@ root.append([nx, ny])
 <li> 全部終わったら、適当に雑談する (← これが本当の目的)。
 </ol>
 
-<div class=exercise id="ex4-4">
-<div class=header>演習 4-4. サイコロの合計値の統計をとる</div>
+<div class=exercise id="ex4-5">
+<div class=header>演習 4-5. サイコロの合計値の統計をとる</div>
 <ol type=i>
 <li> <a href="#dice.py"><code>dice.py</code></a> を改造して、
 サイコロひとつの値の頻度ではなく、

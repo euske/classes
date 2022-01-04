@@ -368,6 +368,69 @@ print(b)
 </ol>
 </div>
 
+<h4>同じリストを2度作成する</h4>
+<p>
+リストは <code>[5,9,4,0,7,3]</code> などという式を<u>評価</u>した時点で
+作成される。つまり、リストが2度書かれている場合、
+<code>a</code>, <code>b</code> は実際に別々のリストとなり、
+不動産の法則は成りたたない:
+<blockquote><pre>
+a = [5,9,4,0,7,3]  <span class=comment># 新しいリストが作成される。</span>
+b = [5,9,4,0,7,3]  <span class=comment># 新しいリストが作成される。</span>
+b[0] = 1     <span class=comment># b[0] に 1を代入。</span>
+print(b)     <span class=comment># [1,9,4,0,7,3]</span>
+print(a)     <span class=comment># [5,9,4,0,7,3]</span>
+</pre></blockquote>
+<p>
+この場合、メモリの内容は次のようになっている:
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="370" height="100">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" fill="none" stroke-width="2">
+      <rect x="10" y="10" width="40" height="30" />
+      <rect x="10" y="60" width="40" height="30" />
+      <rect x="50" y="10" width="50" height="30" />
+      <rect x="50" y="60" width="50" height="30" />
+      <rect x="120" y="10" width="40" height="30" />
+      <rect x="160" y="10" width="40" height="30" />
+      <rect x="200" y="10" width="40" height="30" />
+      <rect x="240" y="10" width="40" height="30" />
+      <rect x="280" y="10" width="40" height="30" />
+      <rect x="320" y="10" width="40" height="30" />
+      <rect x="120" y="60" width="40" height="30" />
+      <rect x="160" y="60" width="40" height="30" />
+      <rect x="200" y="60" width="40" height="30" />
+      <rect x="240" y="60" width="40" height="30" />
+      <rect x="280" y="60" width="40" height="30" />
+      <rect x="320" y="60" width="40" height="30" />
+      <g stroke-width="3" marker-end="url(#arrow)">
+      <line x1="55" x2="110" y1="25" y2="25" />
+      <line x1="55" x2="110" y1="75" y2="75" />
+      </g>
+    </g>
+    <g text-anchor="middle">
+      <text x="30" y="20" dy="0.5em">a</text>
+      <text x="30" y="70" dy="0.5em">b</text>
+      <g style="font-family:monospace;">
+      <text x="140" y="25" dy="0.5em">5</text>
+      <text x="180" y="25" dy="0.5em">9</text>
+      <text x="220" y="25" dy="0.5em">4</text>
+      <text x="260" y="25" dy="0.5em">0</text>
+      <text x="300" y="25" dy="0.5em">7</text>
+      <text x="340" y="25" dy="0.5em">3</text>
+      <text x="140" y="75" dy="0.5em" fill="red">1</text>
+      <text x="180" y="75" dy="0.5em">9</text>
+      <text x="220" y="75" dy="0.5em">4</text>
+      <text x="260" y="75" dy="0.5em">0</text>
+      <text x="300" y="75" dy="0.5em">7</text>
+      <text x="340" y="75" dy="0.5em">3</text>
+      </g>
+    </g>
+  </svg>
+</div>
+
 <h4>リストを本当にコピーする</h4>
 <p>
 しかし、どうしても本当にデータをコピーしたい時もある。

@@ -8,7 +8,7 @@
 第5回 - CSV形式の読み込み、ハッシュテーブルの原理
 / 新山 祐介</title>
 <style><!--
-dd { margin-bottom: 1em; }
+.small { font-size: 75%; }
 .yellow { background: #ffff88; }
 --></style>
 </head>
@@ -20,25 +20,27 @@ dd { margin-bottom: 1em; }
 <h1>第5回 - CSV形式の読み込み、ハッシュテーブルの原理</h1>
 <div class=nav>2021年1月17日</div>
 
-<ol start="0">
-<li> <a href="#prev">前回の復習</a>
+<ol start="1">
 <li> <a href="#readcsv">PythonでCSV形式を読み込む</a>
 <ul>
   <li class=ex> <a href="#ex5-1">演習 5-1. CSVファイルの読み込み</a>
-  <li> <a href="#for-alt">for文のもうひとつの使い方</a>
   <li class=ex> <a href="#ex5-2">演習 5-2. 郵便番号データベースを読み込む</a>
+  <li> <a href="#for-alt">for文のもうひとつの使い方</a>
+  <li> <a href="#str-slice">文字列のスライス</a>
+  <li class=ex> <a href="#ex5-3">演習 5-3. 文字列のスライス</a>
+  <li> <a href="#str-find">文字列の検索</a>
 </ul>
 <li> <a href="#hashtable">ハッシュテーブルとは</a>
 <ul>
   <li> <a href="#hash-seq">逐次探索</a>
   <li> <a href="#hash-seq2">逐次探索・改</a>
-  <li class=ex> <a href="#ex5-3">演習 5-3. 逐次検索・改を実行する</a>
+  <li class=ex> <a href="#ex5-4">演習 5-4. 逐次検索・改を実行する</a>
   <li> <a href="#hash-hash">ハッシュテーブル</a>
-  <li class=ex> <a href="#ex5-4">演習 5-4. ハッシュテーブルの計算量</a>
+  <li class=ex> <a href="#ex5-5">演習 5-5. ハッシュテーブルの計算量</a>
 </ul>
 <li> <a href="#breakout">ブレイクアウトルーム練習</a>
 <ul>
-  <li class=ex> <a href="#ex5-5">演習 5-5. </a>
+  <li class=ex> <a href="#ex5-6">演習 5-6. 文字列の検索</a>
 </ul>
 <li> <a href="#assignments">本日の課題</a>
 <ul>
@@ -49,12 +51,41 @@ dd { margin-bottom: 1em; }
 
 
 <h2>雑談</h2>
-
-
-<h2 id="prev">0. 前回の復習</h2>
+<p>
+IT業界における女性の社会進出はとくに遅れている:
+<a href="https://www.npr.org/sections/money/2014/10/21/357629765/when-women-stopped-coding">米国における統計</a>
+<p>
+1980年代になにが起こったのか? 「<strong>パソコン</strong>」の登場である。
+当時、パソコンは「男の子向けのオモチャ」という位置づけで販売されていた:
 <ul>
-<li>
+<li> <a href="https://www.youtube.com/watch?v=ZekAbt2o6Ms">Commodore 64 CM (米国)</a>
+<li> <a href="https://www.youtube.com/watch?v=-FqrmB1hi7o">TRS-80 CM (米国)</a>
+<li> <a href="https://www.youtube.com/watch?v=OZgG8QK5N04">SEGA SC-3000H CM (日本)</a>
+<li> <a href="https://www.youtube.com/watch?v=BEnf3L0S5Q8">SHARP X1F CM (日本)</a>
 </ul>
+<p>
+この傾向は、消費者に対してある一定のメッセージを送っている。
+<blockquote class=box>
+<a href="http://www.smbc-comics.com/index.php?db=comics&id=1883">Saturday Morning Breakfast Cereal</a> (漫画)
+<ol>
+<li> 男の子向けのオモチャ: 「メカブロックスだよ! 何通りにも組み合わせができて遠隔操作できるんだ!」
+<li> 女の子向けのオモチャ: 「人形だよ!」
+<li> 後年… 「なんでこの業界はみんな野郎ばっかりなんだ?」
+</ol>
+</blockquote>
+<p>
+しかし、女性でもコンピュータ・サイエンスのパイオニアは存在する:
+<ul>
+<li> <a href="https://en.wikipedia.org/wiki/Ada_Lovelace">Ada Lovelace</a>
+  - 世界初のプログラマとも言われる。
+  蒸気で動くコンピュータ (解析機関、未完成) のために
+  <a href="https://commons.wikimedia.org/wiki/File:Diagram_for_the_computation_of_Bernoulli_numbers.jpg">ベルヌーイ数を計算するプログラム</a>を書いた。
+<li> <a href="https://www.youtube.com/watch?v=pzhBmlkRd0U">Grace Hopper</a>
+  - 米国海軍准将のプログラマ。「バグ」という言葉を広めたとされる。
+<li> <a href="https://en.wikipedia.org/wiki/Margaret_Hamilton_(scientist)">Margaret Hamilton</a>
+  - NASAで アポロ11号の飛行制御プログラムの開発責任者。
+</ul>
+
 
 <h2 id="readcsv">1. PythonでCSV形式を読み込む</h2>
 <p>
@@ -115,9 +146,53 @@ Python で上の CSV ファイルを読み込むと、
 その各要素は1行のカラム (列) に相当する。
 なお、すべての内容は (<code>22</code> のような数字でも)
 文字列型になっていることに注意。これを数値として正しく処理するためには、
+特定の要素に対して
 <code>int()</code> 関数などを使う必要がある。
 
+<div class=exercise id="ex5-2">
+<div class=header>演習 5-2. 郵便番号データベースを読み込む</div>
+<p>
+以下の zip ファイルをダウンロードせよ
+(元のデータは郵便局の
+<a href="https://www.post.japanpost.jp/zipcode/download.html">郵便番号データダウンロード</a>ページから取得した):
+<ul>
+<li> <a href="../../data/ken_all_rome.zip">全国の郵便番号リスト (ローマ字読みつき)</a>
+</ul>
+<p>
+この表は全国の郵便番号一覧を記した、約12万行の巨大な CSV ファイルである。
+以下のプログラムを使って、この表を1行ずつ表示せよ:
+<div class=file>
+postal.py
+<pre>
+<span class=comment># CSVファイルを読み込む。</span>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 表を1行(row)ずつ処理する。</span>
+for row in table:
+    print(row)
+</pre>
+</div>
+</div>
+
 <h3 id="for-alt">1.1. for文のもうひとつの使い方</h3>
+<p>
+演習 5-2. のプログラムを実行すると、以下のような内容が表示される:
+<blockquote><pre class=small>
+['0600000', '北海道', '札幌市\u3000中央区', '以下に掲載がない場合', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'IKANIKEISAIGANAIBAAI']
+['0640941', '北海道', '札幌市\u3000中央区', '旭ケ丘', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ASAHIGAOKA']
+['0600041', '北海道', '札幌市\u3000中央区', '大通東', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ODORIHIGASHI']
+...
+(<kbd>Control</kbd> + <kbd>C</kbd> を押して止める。)
+</pre></blockquote>
+<p>
+このプログラムの中で、次の部分に着目しよう:
+<blockquote><pre>
+<span class=comment># 表を1行(row)ずつ処理する。</span>
+for row in table:
+    print(row)
+</pre></blockquote>
+
 <p>
 これまではリストの要素をひとつずつ表示するのに、
 以下のようにしていた:
@@ -147,68 +222,158 @@ for i in range(n):
 「結果として <code>i</code> が 0 から <em>n-1</em> まで
 変化しているように見えた」のである。
 
-<div class=exercise id="ex5-2">
-<div class=header>演習 5-2. 郵便番号データベースを読み込む</div>
-以下の zip ファイルをダウンロードし、
-その中に含まれる全国の郵便番号一覧を記した <code>.csv</code> ファイルを
-Python で読み込むと、以下のようなリストのリストができる:
-<ul>
-<li> <a href="../../data/ken_all_rome.zip">全国の郵便番号リスト (ローマ字読みつき)</a>
-</ul>
-<blockquote><pre class=small>
-['0600000', '北海道', '札幌市\u3000中央区', '以下に掲載がない場合', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'IKANIKEISAIGANAIBAAI']
-['0640941', '北海道', '札幌市\u3000中央区', '旭ケ丘', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ASAHIGAOKA']
-['0600041', '北海道', '札幌市\u3000中央区', '大通東', 'HOKKAIDO', 'SAPPORO SHI CHUO KU', 'ODORIHIGASHI']
-...
+<h3 id="str-slice">1.2. 文字列のスライス</h3>
+<p>
+Python では、
+<a href="../week2/index.html#lists-slice">リストと同じく</a>、文字列も<u>スライス</u>が可能である。
+<blockquote><pre>
+s = "HEADACHE"
 </pre></blockquote>
 <p>
-この一覧の中から、<mark>東京都の郵便番号だけ</mark>を
-表示するプログラムを書くと、こうなる。
-<div class=file>
-postal.py
-<pre>
-import csv
-with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
-    table = list(csv.reader(fp))
-<span class=comment># 表を1行(row)ずつ処理する。</span>
-for row in table:
-    <span class=comment># 各行の0番目の要素 (郵便番号) をとりだす。</span>
-    p = row[0]
-    if p[0] == "1":
-        <span class=comment># 東京都の番号は 1 から始まるので、それを表示。</span>
-        print(p)
-</pre>
+この場合、<code>s</code>のスライスは、以下のようになる:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="350" height="230">
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+    <rect x="130" y="10" width="40" height="40" />
+    <rect x="170" y="10" width="40" height="40" />
+    <rect x="210" y="10" width="40" height="40" />
+    <rect x="250" y="10" width="40" height="40" />
+    <rect x="290" y="10" width="40" height="40" />
+  </g>
+  <g fill="#88ff88" stroke="black">
+    <rect x="10" y="80" width="40" height="25" />
+    <rect x="290" y="80" width="40" height="25" />
+    <rect x="90" y="110" width="80" height="25" />
+    <rect x="130" y="140" width="120" height="25" />
+    <rect x="10" y="170" width="80" height="25" />
+    <rect x="210" y="200" width="120" height="25" />
+  </g>
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">H</text>
+    <text x="70" y="35">E</text>
+    <text x="110" y="35">A</text>
+    <text x="150" y="35">D</text>
+    <text x="190" y="35">A</text>
+    <text x="230" y="35">C</text>
+    <text x="270" y="35">H</text>
+    <text x="310" y="35">E</text>
+    </g>
+    <text x="10" y="70">0</text>
+    <text x="50" y="70">1</text>
+    <text x="90" y="70">2</text>
+    <text x="130" y="70">3</text>
+    <text x="170" y="70">4</text>
+    <text x="210" y="70">5</text>
+    <text x="250" y="70">6</text>
+    <text x="290" y="70">7</text>
+    <text x="330" y="70">8</text>
+    <g style="font-family: monospace;">
+      <text x="30" y="100">s[0]</text>
+      <text x="310" y="100">s[-1]</text>
+      <text x="130" y="130">s[2:4]</text>
+      <text x="190" y="160">s[3:-2]</text>
+      <text x="50" y="190">s[:2]</text>
+      <text x="270" y="220">s[5:]</text>
+    </g>
+  </g>
+</svg>
 </div>
 
-<p>
-(ちなみに、このデータは郵便局の
-<a href="https://www.post.japanpost.jp/zipcode/download.html">郵便番号データダウンロード</a>ページから取得したものである。)
-
+<div class=exercise id="ex5-3">
+<div class=header>演習 5-3. 文字列のスライス</div>
 <ol type=i>
-<li> 上のプログラムを変更し、コマンド引数から入力された
-  郵便番号から住所を検索できるようにせよ:
-<pre>
-$ <strong>python postal.py 1520001</strong>
-東京都目黒区中央町
-</pre>
-<li> 以下の関数 <code>find</code> を定義する。
-  これは与えられた文字列 x のなかに文字列 y が含まれていれば 1 を、
-  そうでなければ 0 を返すものである:
-<pre>
-<span class=comment># 与えられた文字列 x の中に y が含まれていれば 1 を返す。</span>
-def find(x, y):
-    <span class=comment># x の各位置から切り出した部分文字列と y を比較する。</span>
-    for i in range(len(x)-len(y)+1):
-        <span class=comment># この部分の書き方 (文字列のスライス) は次回の授業で説明する。</span>
-        if x[i:i+len(y)] == y:
-            return 1
-    return 0
-</pre>
-  この関数を使って、
-  「東京都にあって、住所に『<code>が丘</code>』が含まれる郵便番号」を
-   すべて表示させよ。
+  <li> <code>s[2:6]</code> の文字列を答えよ。
+  <li> <code>s[4:]</code> の文字列を答えよ。
+  <li> <code>s[:2]</code> の文字列を答えよ。
+  <li> <code>s[-2:]</code> の文字列を答えよ。
+  <li> <code>s[-2:-1]</code> の文字列を答えよ。
 </ol>
 </div>
+
+<h3 id="str-find">1.3. 文字列の検索</h3>
+<p>
+文字列に対してスライスが使えると、
+ある文字列の中に含まれる<u>部分文字列</u>の検索をおこなうことができる。
+これは、検索したい文字列をスライドさせながら各位置と比較することでおこなう:
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="350" height="150">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+    <rect x="130" y="10" width="40" height="40" />
+    <rect x="170" y="10" width="40" height="40" />
+    <rect x="210" y="10" width="40" height="40" />
+    <rect x="250" y="10" width="40" height="40" />
+    <rect x="290" y="10" width="40" height="40" />
+  </g>
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">V</text>
+    <text x="70" y="35">A</text>
+    <text x="110" y="35">C</text>
+    <text x="150" y="35">A</text>
+    <text x="190" y="35">T</text>
+    <text x="230" y="35">I</text>
+    <text x="270" y="35">O</text>
+    <text x="310" y="35">N</text>
+    </g>
+    <text x="10" y="70">0</text>
+    <text x="50" y="70">1</text>
+    <text x="90" y="70">2</text>
+    <text x="130" y="70">3</text>
+    <text x="170" y="70">4</text>
+    <text x="210" y="70">5</text>
+    <text x="250" y="70">6</text>
+    <text x="290" y="70">7</text>
+    <text x="330" y="70">8</text>
+  </g>
+  <g transform="translate(20,75)">
+  <g fill="#ffccff" stroke="black" stroke-width="2">
+    <rect x="10" y="10" width="40" height="40" />
+    <rect x="50" y="10" width="40" height="40" />
+    <rect x="90" y="10" width="40" height="40" />
+  </g>
+  <line fill="none" stroke="black" stroke-width="6" marker-end="url(#arrow)"
+        x1="140" x2="190" y1="30" y2="30" />
+  <g text-anchor="middle">
+    <g style="font-size:120%; font-weight:bold;">
+    <text x="30" y="35">C</text>
+    <text x="70" y="35">A</text>
+    <text x="110" y="35">T</text>
+    </g>
+    <text x="10" y="70">i</text>
+    <text x="50" y="70">i+1</text>
+    <text x="90" y="70">i+2</text>
+    <text x="130" y="70">i+3</text>
+  </g>
+  </g>
+</svg>
+</div>
+
+<div class=file id="find.py">
+find.py
+<pre>
+<span class=comment># ある文字列に含まれる部分文字列を発見する。</span>
+s = "VACATION"  <span class=comment># 検索対象の文字列</span>
+t = "CAT"       <span class=comment># 含まれる文字列</span>
+for i in range(6):  <span class=comment># 0〜5</span>
+    if s[i:i+3] == t:
+        print("found", i)
+</pre></div>
 
 
 <h2 id="hashtable">2. ハッシュテーブルとは</h2>
@@ -243,18 +408,26 @@ $ <strong>python postal.py 1520001</strong>
 今回の例では<span class=key>郵便番号</span> (<code>row[0]</code>) がキー、
 <span class=value>住所</span> (<code>row[1]+row[2]+row[3]</code>)
 がバリューということになる。
-<blockquote><pre>
+これを使ってプログラム postal.py を改造すると、以下のようになる:
+<div class=file>
+postal.py
+<pre>
+<span class=comment># CSVファイルを読み込む。</span>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 郵便番号 (キー) を取得する。</span>
 import sys
 key = sys.argv[1]
-...
+<span class=comment># 表を1行ずつ処理する。</span>
 for row in table:
     if row[0] == key:
-        <span class=comment># キーに対応するバリューを表示する。</span>
+        <span class=comment># キーが一致したら、それに対応するバリューを表示する。</span>
         value = row[1]+row[2]+row[3]
         print(value)
-</pre></blockquote>
+</pre></div>
 <p>
-郵便番号データ (<code>KEN_ALL_ROME.CSV</code>) は 12万行以上あるので、
+郵便番号データは 12万行以上あるので、
 逐次探索をすると毎回 (最悪) 12万回のループを実行することになり、
 効率が悪い。<em>n</em>件のデータに対して、<em>O</em>(<em>n</em>) の計算量が必要である。
 <p>
@@ -424,8 +597,8 @@ print(value)
 検索時間だけをみると、このようにリストを10個に分割すれば
 時間は約 1/10 に短縮されると思われる、が…
 
-<div class=exercise id="ex5-3">
-<div class=header>演習 5-3. 逐次検索・改を実行する</div>
+<div class=exercise id="ex5-4">
+<div class=header>演習 5-4. 逐次検索・改を実行する</div>
 <ol type=i>
   <li> この方法の計算量を Big-O 記法で答えよ。
   <li> 実際には、ここでの検索時間は厳密に 1/10 にはならない。その理由を説明せよ。
@@ -575,8 +748,8 @@ def lookup(index, key):
 キーの追加や変更の処理が簡単なため広く利用されている。
 また、ハッシュテーブルによる検索時間は k の値に調整できるところも有利である。
 
-<div class=exercise id="ex5-4">
-<div class=header>演習 5-4. ハッシュテーブルの計算量</div>
+<div class=exercise id="ex5-5">
+<div class=header>演習 5-5. ハッシュテーブルの計算量</div>
 <ol type=i>
   <li> k = 1 の場合、この方式の実行時間はどうなるか。
   <li> k = n の場合、
@@ -624,6 +797,10 @@ def h(x):
 と呼ばれるものを使っており、これはたとえハッシュ値がわかっても
 元のデータを容易に推測できないようになっている。
 </ol>
+<p>
+ハッシュ関数の別の応用としてビットコインに代表される
+<A href="https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E3%83%81%E3%82%A7%E3%83%BC%E3%83%B3">ブロックチェーン</a>技術があるが、
+ここでは触れない。
 
 
 <h2 id="breakout">3. ブレイクアウトルーム演習</h2>
@@ -638,8 +815,38 @@ def h(x):
 <li> 全部終わったら、適当に雑談する (← これが本当の目的)。
 </ol>
 
-<div class=exercise id="ex5-5">
-<div class=header>演習 5-5. </div>
+<div class=exercise id="ex5-6">
+<div class=header>演習 5-6. 文字列の検索</div>
+<ol type=i>
+  <li> <a href="#find.py">文字列検索プログラム find.py</a> を一般化し、
+    関数 <code>find(s, t)</code> として実現せよ。
+    これは与えられた文字列 <code>s</code> の中に含まれる <code>t</code> の位置を
+    整数として返し、見つからなければ <code>-1</code> を返すものとする:
+<pre>
+def find(s, t):
+    ...
+
+print(find("VACATION", "CAT"))  <span class=comment># 2</span>
+print(find("VACATION", "DOG"))  <span class=comment># -1</span>
+</pre>
+  <li> 以下のプログラムは「東京都」の中のすべての住所を表示するものである。
+    上の関数 find を使って、
+    「東京都にあって、『<code>が丘</code>』が含まれる住所」を
+    すべて表示させよ。
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 表を1行(row)ずつ処理する。</span>
+for row in table:
+    <span class=comment># 各行の0番目の要素 (郵便番号) をとりだす。</span>
+    p = row[0]
+    if p[0] == "1":
+        <span class=comment># 東京都の番号は 1 から始まるので、それを表示。</span>
+        print(p)
+</pre>
+
+</ol>
 </div>
 
 
@@ -703,7 +910,7 @@ for row in table:
     a = index[i]
     a.append([key, value])
 
-<span class=comment># ランダムな郵便番号 1000件を検索し、実行時間を計測する。</span>
+<span class=comment># 指定された住所から郵便番号を検索し、実行時間を計測する。</span>
 import sys
 key = sys.argv[1]
 import time

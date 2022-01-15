@@ -865,7 +865,7 @@ for row in table:
 それを使って住所から郵便番号を検索している。
 ところが、ここで使っているハッシュ関数 h は、
 つねに同じ値を返す「<strong>最悪の関数</strong>」になっているため、
-このままで実行すると1回の検索に1秒程度の時間がかかる。
+このままで実行すると1回の検索に時間がかかる。
 ハッシュ関数を改良して、実行時間を 1/10以下に短縮せよ。
 <div class=file>
 findcode.py
@@ -902,8 +902,8 @@ for i in range(100):
 
 <span class=comment># このリストを使ったハッシュテーブルを作成する。</span>
 for row in table:
-    key = row[1]+row[2]+row[3]
-    value = row[0]
+    key = row[1]+row[2]+row[3]  <span class=comment># キー: 住所</span>
+    value = row[0]              <span class=comment># バリュー: 郵便番号</span>
     <span class=comment># キーをハッシュに変換する。</span>
     i = h(key) % 100
     <span class=comment># i番目のリストにキーとバリューの組を追加する。</span>
@@ -924,6 +924,16 @@ print(value)
 print(t1 - t0)
 </pre>
 </div>
+<p>
+<strong>実行例 (実行時間は正確にこの値になるとは限らない):</strong>
+<blockquote><pre>
+$ <strong>python findcode.py 東京都目黒区大岡山</strong>
+1520033
+0.021525859832763672
+$ <strong>python findcode.py 長野県中野市中野</strong>
+3830013
+0.02087545394897461
+</pre></blockquote>
 </div>
 
 <div class=exercise id="kadai-cb">

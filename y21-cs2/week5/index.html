@@ -825,25 +825,24 @@ def h(x):
 <pre>
 def find(s, t):
     ...
+    return i
 
 print(find("VACATION", "CAT"))  <span class=comment># 2</span>
 print(find("VACATION", "DOG"))  <span class=comment># -1</span>
 </pre>
   <li> 以下のプログラムは「東京都」の中のすべての住所を表示するものである。
-    上の関数 find を使って、
-    「東京都にあって、『<code>が丘</code>』が含まれる住所」を
-    すべて表示させよ。
+    このプログラムを改良し、上の関数 <code>find</code> を使って、
+    「東京都にあって、なおかつ『<code>が丘</code>』が含まれる住所」を
+    表示させよ。全部でいくつあるか?
 <pre>
 import csv
 with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
     table = list(csv.reader(fp))
 <span class=comment># 表を1行(row)ずつ処理する。</span>
 for row in table:
-    <span class=comment># 各行の0番目の要素 (郵便番号) をとりだす。</span>
-    p = row[0]
-    if p[0] == "1":
-        <span class=comment># 東京都の番号は 1 から始まるので、それを表示。</span>
-        print(p)
+    <span class=comment># 都道府県名 (1番目の要素) が東京都の住所を表示。</span>
+    if row[1] == "東京都":
+        print(row[1]+row[2]+row[3])
 </pre>
 
 </ol>
@@ -915,8 +914,9 @@ import sys
 key = sys.argv[1]
 import time
 t0 = time.time()  <span class=comment># 最初の時刻 (秒数) を取得する。</span>
-<span class=comment># 郵便番号を検索する。</span>
-value = lookup(index, key)
+<span class=comment># 郵便番号を検索する (時間計測のため、1000回繰り返している)。</span>
+for i in range(1000):
+    value = lookup(index, key)
 t1 = time.time()  <span class=comment># 最後の時刻 (秒数) を取得する。</span>
 <span class=comment># 見つかった郵便番号を表示する。</span>
 print(value)

@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2021年度 コンピュータサイエンス第二 (1a)
+第6回 - 辞書の使い方、最短経路アルゴリズムを使った迷路の解法
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第6回 - 辞書の使い方、最短経路アルゴリズムを使った迷路の解法</h1>
+<div class=nav>2022年1月24日</div>
+
+<ol start="1">
+<li> <a href="#dictionary">Python のハッシュテーブル (辞書)</a>
+<li> <a href="#shortest">最短経路探索アルゴリズム</a>
+<ul>
+  <li> <a href="#shortest-what">最短経路とは?</a>
+  <li> <a href="#shortest-dijkstra">Dijkstra (ダイクストラ) の方法</a>
+  <li> <a href="#shortest-impl">Pythonによる実装</a>
+  <li> <a href="#shortest-find">最短経路を発見する</a>
+</ul>
+<li> <a href="#pathfind">迷路探索への応用</a>
+<li> <a href="#assignments">本日の課題</a>
+<ul>
+  <li class=ex> <a href="#kadai-s6">小課題6. 最短経路の探索 (1月31日締切)</a>
+  <li class=ex> <a href="#kadai-m3">中課題3. 迷路の最短経路を求める (2月7日締切)</a>
+</ul>
+<ul>
+</ul>
+</ol>
+
+
+<h2>雑談 - Pythonでゲームを作るには</h2>
+<p>
+Python には、<a href="https://www.pygame.org/">Pygame</a> という拡張機能を
+追加することでPC上のゲームを作成することができる。
+<p>
+まず、以下のようにして pygame を自分のPCにインストールする:
+<blockquote><pre>
+C:\Users\euske&gt;<strong>pip install pygame</strong>
+Collecting pygame
+  Downloading pygame-2.0.1-cp39-cp39-win_amd64.whl (5.2 MB)
+     |████████████████████████████████| 5.2 MB 6.4 MB/s
+Installing collected packages: pygame
+Successfully installed pygame-2.0.1
+</pre></blockquote>
+<p>
+実際に使ってみるには、以下のようにする:
+<blockquote><pre>
+C:\Users\euske&gt;<strong>python</strong>  <span class=comment># まず python を開始する</span>
+Python 3.9.1 (...) [MSC v.1927 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; <strong>import pygame</strong>      <span class=comment># pygame モジュールを使用</span>
+pygame 2.0.1 (SDL 2.0.14, Python 3.9.1)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+&gt;&gt;&gt; <strong>pygame.init()</strong>      <span class=comment># 各種機能を初期化</span>
+(7, 0)
+&gt;&gt;&gt; <strong>disp = pygame.display.set_mode((600,400))</strong> <span class=comment># 画面を600×400のサイズで作成</span>
+&gt;&gt;&gt; <strong>disp.fill((0,0,255))</strong>  <span class=comment># 画面を青色で塗る (実際の画面はまだ変化しない)</span>
+&lt;rect(0, 0, 600, 400)&gt;
+&gt;&gt;&gt; <strong>pygame.display.flip()</strong> <span class=comment># 画面を実際に更新</span>
+&gt;&gt;&gt; <strong>pygame.display.get()</strong>  <span class=comment># イベント列を取得</span>
+</pre></blockquote>
+<p>
+ここで出てくる <u>イベント</u> (event) とは、
+Python プログラムへの「入力」である。
+コマンド・プロンプトから実行するプログラムと違い、
+GUI (グラフィカルユーザインターフェイス) プログラムでは、
+一口に「入力」といっても多様な種類 (キーボードからの入力、
+マウスからの入力、ウィンドウの操作等) があるため、
+これらをひとつにまとめて「イベント」と呼んでいる。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="300" height="120">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="2">
+    <rect x="190" y="25" width="80" height="60" />
+    <path d="M130,30 l20,20 h30 v10 h-30 l-20,20 Z" />
+  </g>
+  <g fill="none" stroke="black" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M105,20 l20,10" />
+    <path d="M105,40 l20,5" />
+    <path d="M105,60 l20,0" />
+    <path d="M105,80 l20,-5" />
+  </g>
+  <g text-anchor="middle">
+    <text x="230" y="55" dy="0.4em">Python</text>
+  </g>
+  <g text-anchor="middle" style="font-size:80%; font-weight: bold;">
+    <text x="150" y="90" dy="0.4em">イベント</text>
+    <text x="150" y="90" dy="1.4em">キュー</text>
+  </g>
+  <g text-anchor="end" style="font-size:80%;">
+    <text x="100" y="20" dy="0.4em">キーボード</text>
+    <text x="100" y="40" dy="0.4em">マウス</text>
+    <text x="100" y="60" dy="0.4em">タッチパネル</text>
+    <text x="100" y="80" dy="0.4em">ウィンドウ操作</text>
+    <text x="100" y="100" dy="0.4em">...</text>
+  </g>
+</svg>
+</div>
+<p>
+以上をふまえて、四角形が動くだけのゲーム(?) を
+プログラムすると、以下のようになる:
+<div class=file>
+game.py
+<pre>
+<span class=comment># pygameを初期化。</span>
+import pygame
+pygame.init()
+<span class=comment># ウィンドウを開く。</span>
+window = pygame.display.set_mode((600,400))
+<span class=comment># 初期位置を (0,0) に設定。</span>
+x = 0
+y = 0
+<span class=comment># 初期状態を設定。</span>
+state = 0
+<span class=comment># 有限状態機械。</span>
+while True:
+    <span class=comment># たまっているイベントをひとつずつ処理する。</span>
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            <span class=comment># ウィンドウの「閉じる」ボタンが押されたら終了状態に遷移。</span>
+            state = 1
+        elif e.type == pygame.KEYDOWN:
+            <span class=comment># キーが押されたら、押されたキーに応じた各種処理。</span>
+            if e.key == pygame.K_LEFT:
+                x = x - 1
+            elif e.key == pygame.K_RIGHT:
+                x = x + 1
+            elif e.key == pygame.K_UP:
+                y = y - 1
+            elif e.key == pygame.K_DOWN:
+                y = y + 1
+    <span class=comment># ウィンドウを青で塗る。</span>
+    window.fill((0,0,255))
+    <span class=comment># 自分の位置(x,y) に緑で 10x10 の大きさの四角形を描画。</span>
+    window.fill((0,255,0), (x,y,10,10))
+    <span class=comment># 画面を更新。</span>
+    pygame.display.flip()
+    <span class=comment># 終了状態になったら終了。</span>
+    if state == 1:
+        break
+</pre>
+</div>
+
+
+<h2 id="dictionary">1. Python 内蔵のハッシュテーブル (辞書)</h2>
+<p>
+Python には、実はハッシュテーブル
+(Python の用語では <u>辞書</u> (dictionary) という)
+を簡単に使う機能がすでに備わっている。
+
+<blockquote><pre>
+<span class=comment># d という辞書を新たに作成する。</span>
+d = {}
+<span class=comment># キー "abc" に対応するバリュー "def" を代入する。</span>
+d["abc"] = "def"
+<span class=comment># キー "12345" に対応するバリュー "wxyz" を代入する。</span>
+d["12345"] = "wxyz"
+print(d["abc"])    <span class=comment># def</span>
+print(d["12345"])  <span class=comment># wxyz</span>
+</pre></blockquote>
+
+<p>
+ここで使われている辞書 (ハッシュテーブル) <code>d</code> は、
+ひとつの<u>データ型</u>である。リストなどと同様に、
+まるごとひとつの変数に入れることができる。
+ここでも <code>d[ ]</code> の中に入る値を<u>キー</u> (key) と呼び、
+それに対応する値を<u>バリュー</u> (value) と呼ぶ。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="230" height="110">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="black" stroke-width="2">
+    <line x1="20" y1="40" x2="50" y2="40" stroke-width="3" marker-end="url(#arrow)" />
+    <rect x="60" y="25" width="80" height="30" />
+    <rect x="140" y="25" width="80" height="30" />
+    <rect x="60" y="65" width="80" height="30" />
+    <rect x="140" y="65" width="80" height="30" />
+    <rect x="55" y="20" width="170" height="80" />
+  </g>
+  <g style="font-family:monospace;">
+    <text x="10" y="40" dy="0.4em">d</text>
+    <text x="65" y="40" dy="0.4em">"abc"</text>
+    <text x="145" y="40" dy="0.4em">"def"</text>
+    <text x="65" y="80" dy="0.4em">"12345"</text>
+    <text x="145" y="80" dy="0.4em">"wxyz"</text>
+  </g>
+  <g style="font-weight:bold; font-size:75%;">
+    <text x="70" y="10" dy="0.4em">キー</text>
+    <text x="150" y="10" dy="0.4em">バリュー</text>
+  </g>
+</svg>
+</div>
+<p>
+なお、リストと同じく、辞書もメモリ使用量が
+大きくなる可能性があるので、
+<a href="../week2/index.html#realestate">不動産の法則</a> が成り立っている。
+(したがって変数 <code>d</code> に入っているのは、
+辞書そのものではなく辞書への<u>参照</u>である。)
+
+<dl>
+<dt> 構文
+<dd> <pre>
+d = {}            <span class=comment># 空の辞書を変数 d に入れる。</span>
+d["abc"] = "def"  <span class=comment># キー "abc" に対応するバリュー "def" を d に格納する。</span>
+v = d["abc"]      <span class=comment># キー "abc" に対応するバリューを得る。</span>
+d["abc"] = "xyz"  <span class=comment># バリューを書き換える。</span>
+</pre>
+<p>
+キーはいくつでも追加することができ、
+バリューはあとから書き換えることもできる。
+
+<dt> 文字のかわりに数値を使う
+<dd> キーやバリューとして文字列のかわりに数値を使うこともできる。
+(一見するとリストのように見えるが、リストではない。)
+<pre>
+p = {}
+p[123] = 456      <span class=comment># キー 123 に対応するバリュー 456 を p に格納する。</span>
+print(p[123])     <span class=comment># キー 123 に対応するバリューを得る。</span>
+</pre>
+<p>
+<strong>注意:</strong> ただし Python では<strong>リスト型はキーとしては使えない</strong>。
+
+<dt> 辞書の直接定義
+<dd> リストと同様、辞書の中身を直接プログラムに書くこともできる。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(price["chocolate"])
+</pre>
+
+<dt> 存在しないキー
+<dd> 存在しないキーのバリューを参照しようとすると、エラーが発生する。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(price["ramen"])
+<span class=err>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+KeyError: 'ramen'</span>
+</pre>
+
+<dt> キーの存在確認
+<dd> あるキーが辞書中に存在するかどうかを調べるには、
+文字列・リストと同じ <code>in</code> 演算子を使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+if "ramen" in price:
+    print("ラーメンいる")
+else:
+    print("ラーメンいない")
+</pre>
+
+<dt> キーの一覧
+<dd> ある辞書に含まれているキーの一覧を表示するには <code>.keys()</code> メソッドを使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+for k in price.keys():
+    print(k, price[k])
+</pre>
+これは以下のように表示される。
+<pre>
+chocolate 100
+cookie 150
+</pre>
+<p>
+<strong>注意:</strong> 辞書のキーが表示される順序はランダムである。
+あとから代入されたキーが最初に出てくる場合がある。
+
+<dt> キーの個数
+<dd> リストと同じく、ある辞書に含まれているキー・バリュー対の個数を表示するには
+<code>len()</code> 関数を使う。
+<pre>
+price = { "chocolate": 100, "cookie": 150 }
+print(len(price))  <span class=comment># 2</span>
+</pre>
+
+<dt> キーの削除
+<dd> 辞書からキー・バリュー対を削除するには、
+リストのときと同じように <code>del</code> 文を使う。
+<pre>
+d = { "X": 1, "Y": 2, "Z": 3 }
+del d["Y"]
+print(d)    <span class=comment># {'X': 1, 'Z': 3}</span>
+</pre>
+
+</dl>
+
+<div class=exercise id="ex6-1">
+<div class=header>演習 6-1. Pythonの辞書を使う</div>
+<ol type=i>
+<li> 第5回の授業で出てきた
+<A href="../week5/index.html#ex5-2">郵便番号から住所を検索するプログラム</a> を
+Pythonの辞書を使って書け。
+<div class=file>
+postcode.py
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 郵便番号 → 住所に対応させるハッシュテーブル(辞書)を作成。</span>
+postcode = {}
+for row in table:
+    <span class=comment># row[0] に郵便番号、row[1]+row[2]+row[3] に住所が書かれている。</span>
+    key = <span class=bl>            </span>
+    value = <span class=bl>            </span>
+    postcode[key] = value
+<span class=comment># 実際に検索する (キーに対するバリューを取得する)。</span>
+import sys
+key = sys.argv[1]
+value = <span class=bl>            </span>
+print(value)
+</pre>
+</div>
+<li> Pythonでは、リストを辞書のキーとして使うと「ある不都合」が起こるので、
+意図的にリストは辞書のキーにはできなくしてある。その不都合とは何か考えよ。
+<pre>
+k = [1,2,3]
+d = {}
+d[k] = "abc"  <span class=comment># エラー</span>
+k.append(4)
+</pre>
+</ol>
+</div>
+
+
+<h2 id="shortest">2. 最短経路探索アルゴリズム</h2>
+<p>
+最短経路探索 (pathfinding) とは、
+迷路やら何やらの中から、最短経路を探し出すことである。
+以下のような用途に利用されている:
+<ul>
+<li> カーナビ、地図アプリ
+<li> 乗り換え案内
+<li> ネットワーク経路制御
+<li> ゲームにおけるキャラクタの動き
+</ul>
+
+<h3 id="shortest-what">2.1. 最短経路とは?</h3>
+<p>
+以下のような「ネットワーク」を考える
+(数学用語では、これを<u>グラフ</u> graph と呼ぶ)。
+これは、<u>ノード</u> (Node, 点) と <u>エッジ</u> (Edge, 線) で構成される。
+
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="220" height="220">
+<g transform="translate(10,10)">
+<g fill="none" stroke="black" stroke-width="2">
+ <line x1="153" y1="144" x2="149" y2="37" />
+ <line x1="153" y1="144" x2="76" y2="171" />
+ <line x1="85" y1="71" x2="76" y2="171" />
+ <line x1="153" y1="144" x2="85" y2="71" />
+ <line x1="190" y1="190" x2="149" y2="37" />
+ <line x1="10" y1="10" x2="34" y2="50" />
+ <line x1="76" y1="171" x2="34" y2="50" />
+ <line x1="190" y1="190" x2="153" y2="144" />
+ <line x1="190" y1="190" x2="76" y2="171" />
+ <line x1="10" y1="10" x2="22" y2="105" />
+ <line x1="149" y1="37" x2="34" y2="50" />
+ <line x1="10" y1="10" x2="149" y2="37" />
+ <line x1="85" y1="71" x2="34" y2="50" />
+</g>
+<g fill="white" stroke="black">
+ <circle cx="10" cy="10" r="4" />
+ <circle cx="22" cy="105" r="4" />
+ <circle cx="34" cy="50" r="4" />
+ <circle cx="76" cy="171" r="4" />
+ <circle cx="85" cy="71" r="4" />
+ <circle cx="149" cy="37" r="4" />
+ <circle cx="153" cy="144" r="4" />
+ <circle cx="190" cy="190" r="4" />
+</g>
+<g text-anchor="middle">
+<g fill="blue" style="font-weight:bold;">
+<text x="0" y="10">A</text>
+<text x="20" y="125">B</text>
+<text x="30" y="70">C</text>
+<text x="70" y="190">D</text>
+<text x="85" y="65">E</text>
+<text x="160" y="30">F</text>
+<text x="135" y="145">G</text>
+<text x="200" y="200">Z</text>
+</g>
+<text x="10" y="67">4</text>
+<text x="25" y="30">2</text>
+<text x="45" y="105">8</text>
+<text x="59" y="65">2</text>
+<text x="75" y="121">5</text>
+<text x="79" y="23">7</text>
+<text x="91" y="43">4</text>
+<text x="119" y="100">4</text>
+<text x="114" y="157">4</text>
+<text x="133" y="178">3</text>
+<text x="145" y="90">5</text>
+<text x="173" y="165">5</text>
+<text x="175" y="113">7</text>
+</g>
+</g>
+</svg>
+</div>
+
+<p>
+各エッジには「距離」がついている。
+<span class=node>A地点</span>から始めて、もっとも少ない距離で
+<span class=node>Z地点</span>にたどりつくには、
+どのエッジをたどればよいだろうか? これが最短経路探索である。
+
+<h4>アホな方法:</h4>
+<ol>
+<li> すべての可能な経路をかたっぱしから列挙する。
+<li> もっとも合計距離が短いものを選ぶ。
+<li> 計算量 O(2<sup>n</sup>) 以上 <strong>(組み合わせ数の爆発)</strong>
+</ol>
+
+<h3 id="shortest-dijkstra">2.2. Dijkstra (ダイクストラ) の方法</h3>
+<p>
+ある意味、迷路でやった「根っこ伸ばし方式」に似ている:
+<ol>
+<li> まず根っこがゴール (<span class=node>Z地点</span>) から伸びると仮定する。
+  最初のノードの<u>総コスト</u>を「0」とする。
+  それ以外のすべてのノードの<u>総コスト</u>を「∞ (無限大)」とする。<br>
+  (別にスタートから始めてもよいのだが、ゴールから始めると、あとあと便利)
+<li> 根の終端は、現在のノードから出ているエッジをひとつずつたどって、
+  隣のノードに伸びようとする。このとき、始点から到達した点までの総距離を
+  新たな総コストとして計算する。
+<li> 根は、最小のコストで到達できるときにのみ
+  そのノードに伸びることができるとする。
+  伸びたときそのノードの総コストは更新される。
+<li> すべてのノードに根が伸びるまで 2., 3. をくり返す。
+</ol>
+
+<p>
+これを Python 風に書くと以下のようになる:
+<blockquote><pre>
+<span class=comment># 各ノードのコストを初期化する。</span>
+cost = {各ノードのコスト}
+<span class=comment># ゴールから始める。</span>
+root = [ゴール]
+
+while 0 &lt; len(root):
+    <span class=comment># rootから点をひとつ取り出す。</span>
+    p = root[0]
+    del root[0]
+    c0 = cost[p]
+    for q in (pの隣のノード):
+        <span class=comment># 隣に伸びたときのコストを計算。</span>
+        c1 = c0 + (p,q間の距離)
+        <span class=comment># 従来のコストより小さいか?</span>
+        if c1 &lt; cost[q]:
+            <span class=comment># コストを更新、根を伸ばす。</span>
+            cost[q] = c1
+            root.append(q)
+</pre></blockquote>
+
+<p>
+上のプログラムは、根がすべての点に到達したときに終了する。
+このときスタート地点における<u>コスト</u>は、
+スタートからゴールまでの最短距離になっているはずである。
+
+<h3 id="shortest-impl">2.3. Pythonによる実装</h3>
+<p>
+では実際に Python を使って実装してみる。
+簡単のため、グラフは以下のようなものにする。
+(ここでは各ノード間のエッジは距離ではなく所要時間を表しているが、
+やることは同じである)
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="120">
+<g transform="translate(30,10)">
+<g fill="none" stroke="black" stroke-width="2">
+ <line x1="50" y1="50" x2="140" y2="10" />
+ <line x1="50" y1="50" x2="140" y2="90" />
+ <line x1="140" y1="10" x2="140" y2="90" />
+ <line x1="140" y1="10" x2="200" y2="10" />
+ <line x1="140" y1="90" x2="200" y2="90" />
+ <line x1="200" y1="10" x2="200" y2="90" />
+</g>
+<g fill="white" stroke="black">
+ <circle cx="50" cy="50" r="4" />
+ <circle cx="140" cy="10" r="4" />
+ <circle cx="140" cy="90" r="4" />
+ <circle cx="200" cy="10" r="4" />
+ <circle cx="200" cy="90" r="4" />
+</g>
+<g text-anchor="middle">
+<g fill="blue" style="font-weight:bold;">
+<text x="40" y="50" dy="0.5em" text-anchor="end">田園調布</text>
+<text x="130" y="5" dy="0.5em" text-anchor="end">自由が丘</text>
+<text x="130" y="90" dy="0.6em" text-anchor="end">大岡山</text>
+<text x="210" y="10" dy="0.5em" text-anchor="start">渋谷</text>
+<text x="210" y="90" dy="0.5em" text-anchor="start">目黒</text>
+</g>
+<text x="80" y="30">2</text>
+<text x="80" y="80">4</text>
+<text x="130" y="55">3</text>
+<text x="210" y="55">5</text>
+<text x="170" y="25">12</text>
+<text x="170" y="85">9</text>
+</g>
+</g>
+</svg>
+</div>
+
+<h4>下準備</h4>
+<p>
+まず上のグラフを Python の配列 (の配列) で表すことを考える。
+各エッジを <code>[地点1, 地点2, コスト]</code> のように表すと、以下のようになる:
+<blockquote><pre>
+route = [
+    ["jiyugaoka",  "denenchofu", 2],
+    ["jiyugaoka",  "shibuya",    12],
+    ["denenchofu", "oookayama",  4],
+    ["jiyugaoka",  "oookayama",  3],
+    ["shibuya",    "meguro",     5],
+    ["oookayama",  "meguro",     9],
+]
+</pre></blockquote>
+<p>
+さらに、与えられた 2点 x, y間の距離 (コスト) を返す
+関数 <code>getcost()</code> を定義する。
+ここでは <code>route</code>中に書かれているのが
+(x,y) および (y,x) のどちらでもよいように、2通りの検査をしている。
+<blockquote><pre>
+<span class=comment># 2点 x, y間の距離 (コスト) を返す。</span>
+def getcost(x, y):
+    <span class=comment># すべてのエッジを探索する。</span>
+    for p in route:
+        <span class=comment># p[0] に地点1, p[1] に地点2, p[2] にコストが入っている。</span>
+        if ((x == <span class=bl>    </span> and y == <span class=bl>    </span>) or
+            (x == <span class=bl>    </span> and y == <span class=bl>    </span>)):
+            return <span class=bl>    </span>
+    <span class=comment># 見つからない場合は -1 を返す。</span>
+    return -1
+
+print(getcost("oookayama", "jiyugaoka"))  <span class=comment># 3</span>
+print(getcost("oookayama", "shibuya"))    <span class=comment># -1</span>
+</pre></blockquote>
+<p>
+また、あるノード x と接続されている隣のノード名の一覧を
+配列として返す関数 <code>neighbors()</code> を定義する。
+ここでも x がエッジのどちら側であってもよいように、
+2通りの検査をしている。
+<blockquote><pre>
+<span class=comment># ノード x の隣のノード名一覧を返す。</span>
+def neighbors(x):
+    a = []
+    <span class=comment># すべてのエッジを探索する。</span>
+    for p in route:
+        <span class=comment># エッジのどちらかが x であれば、相手のノードを返す。</span>
+        if x == <span class=bl>    </span>:
+            a.append(<span class=bl>    </span>)
+        elif x == <span class=bl>    </span>:
+            a.append(<span class=bl>    </span>)
+    return a
+
+print(neighbors("oookayama"))  <span class=comment># ['denenchofu', 'jiyugaoka', 'meguro']</span>
+print(neighbors("shibuya"))    <span class=comment># ['jiyugaoka, 'meguro']</span>
+</pre></blockquote>
+<p>
+次に、各ノードの総コストを無限大に初期化する。
+とはいっても Python では無限大は扱えないので、
+ここでは単に大きい数 (9999) を代入しておく。
+<blockquote><pre>
+cost = {}
+for p in route:
+    cost[p[0]] = 9999
+    cost[p[1]] = 9999
+</pre></blockquote>
+
+<h4>実際のアルゴリズム</h4>
+<p>
+ここまでくれば、あとはダイクストラの方法をそのまま書くだけである:
+<blockquote><pre>
+<span class=comment># 各ノードから goal に到達する最短距離を求める。</span>
+def shortest(goal):
+    <span class=comment># 各ノードのコスト初期化。</span>
+    cost = {}
+    for p in route:
+        cost[p[0]] = 9999
+        cost[p[1]] = 9999
+    cost[goal] = 0
+    <span class=comment># ゴールから始める。</span>
+    root = [goal]
+
+    while 0 &lt; len(root):
+        <span class=comment># rootから点をひとつ取り出す。</span>
+        p = root[0]
+        del root[0]
+        <span class=comment># c0: ノード p における総コスト。</span>
+        c0 = cost[p]
+        print("node", p, "cost", c0)
+        <span class=comment># p の隣のノードをすべて試す。</span>
+        for q in neighbors(p):
+            <span class=comment># c1: p→q に伸びたときの総コスト。</span>
+            c1 = c0 + getcost(p, q)
+            print("neighbor", q, "cost", c1)
+            <span class=comment># 従来のコストより小さいか?</span>
+            if c1 &lt; cost[q]:
+                <span class=comment># コストを更新、根を伸ばす。</span>
+                cost[q] = c1
+                root.append(q)
+                print("update", q)
+    <span class=comment># 各ノードにおける総コスト一覧を表示する。</span>
+    print(cost)
+    return
+</pre></blockquote>
+
+<div class=exercise id="ex6-2">
+<div class=header>演習 6-2. 最短距離を求める</div>
+<ol type=i>
+<li> 上の関数 <code>getcost()</code> および <code>neighbors()</code> を完成させ、
+<code>"shibuya"</code> に到達する最短距離を求めるプログラム
+<code>shortest.py</code> を書け。
+<li> ダイクストラの方法は、<u>ノード間のコストが必ず 0 以上</u>でないと
+うまくいかない。これを確かめるために、上の例で、たとえば
+「<span class=node>自由が丘</span> - <span class=node>大岡山</span>」のコストを
+<code>-10</code> に設定し、プログラムがどう動作するか観察せよ。
+</ol>
+</div>
+
+<h3 id="shortest-find">2.4. 最短経路を発見する</h3>
+<p>
+上のプログラムでは、ゴールから各ノードまでの最短距離は計算できたが、
+実際の経路はわからなかった。ここで上のプログラムを以下のように変更すると、
+最短経路を発見できる。
+<ul>
+<li> 根っこがあるノードに到達してその最小コストを更新するとき、
+  <u>更新した根がどのノードから来たか</u>を記録しておくようにする
+</ul>
+<p>
+このようにすると、すべての処理が終わったとき、
+スタートからゴールまで最小のコストとなる
+ノードを順にだとることができるようになっている。
+<ol>
+<li> 最初の状態。渋谷から開始する。
+渋谷における総コストは 0 である。(他のノードはすべて ∞)
+<div>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="120">
+<g transform="translate(30,10)">
+<g fill="none" stroke="gray" stroke-width="1">
+ <line x1="50" y1="50" x2="140" y2="10" />
+ <line x1="50" y1="50" x2="140" y2="90" />
+ <line x1="140" y1="10" x2="140" y2="90" />
+ <line x1="140" y1="10" x2="200" y2="10" />
+ <line x1="140" y1="90" x2="200" y2="90" />
+ <line x1="200" y1="10" x2="200" y2="90" />
+</g>
+<g fill="white" stroke="black">
+ <circle cx="50" cy="50" r="4" />
+ <circle cx="140" cy="10" r="4" />
+ <circle cx="140" cy="90" r="4" />
+ <circle cx="200" cy="10" r="4" fill="red" />
+ <circle cx="200" cy="90" r="4" />
+</g>
+<g text-anchor="middle">
+<g fill="blue" style="font-weight:bold;">
+<text x="40" y="50" dy="0.5em" text-anchor="end">田園調布</text>
+<text x="130" y="5" dy="0.5em" text-anchor="end">自由が丘</text>
+<text x="130" y="90" dy="0.6em" text-anchor="end">大岡山</text>
+<text x="210" y="10" dy="0.5em" text-anchor="start">渋谷</text>
+<text x="210" y="90" dy="0.5em" text-anchor="start">目黒</text>
+</g>
+<text x="190" y="25" fill="black">0</text>
+</g>
+</g>
+</svg>
+</div>
+
+<li> 根を自由が丘と目黒に伸ばし、最小コストを更新したところ。
+  このとき、コストを更新した根がどこから来たかを記録する矢印を書いておく。
+<div>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="120">
+<defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+</defs>
+<g transform="translate(30,10)">
+<g fill="none" stroke="gray" stroke-width="1">
+ <line x1="50" y1="50" x2="140" y2="10" />
+ <line x1="50" y1="50" x2="140" y2="90" />
+ <line x1="140" y1="10" x2="140" y2="90" />
+ <line x1="140" y1="90" x2="200" y2="90" />
+ <g marker-end="url(#arrow)" stroke="black" stroke-width="3">
+   <line x1="140" y1="10" x2="190" y2="10" />
+   <line x1="200" y1="90" x2="200" y2="20" />
+ </g>
+</g>
+<g fill="white" stroke="black">
+ <circle cx="50" cy="50" r="4" />
+ <circle cx="140" cy="10" r="4" fill="red" />
+ <circle cx="140" cy="90" r="4" />
+ <circle cx="200" cy="10" r="4" />
+ <circle cx="200" cy="90" r="4" fill="red" />
+</g>
+<g text-anchor="middle">
+<g fill="blue" style="font-weight:bold;">
+<text x="40" y="50" dy="0.5em" text-anchor="end">田園調布</text>
+<text x="130" y="5" dy="0.5em" text-anchor="end">自由が丘</text>
+<text x="130" y="90" dy="0.6em" text-anchor="end">大岡山</text>
+<text x="210" y="10" dy="0.5em" text-anchor="start">渋谷</text>
+<text x="210" y="90" dy="0.5em" text-anchor="start">目黒</text>
+</g>
+<text x="190" y="25" fill="black">0</text>
+<text x="190" y="85" fill="black">5</text>
+<text x="150" y="25" fill="black">12</text>
+</g>
+</g>
+</g>
+</svg>
+</div>
+
+<li> 根がすべて伸びたところ。
+  各ノードからの矢印は、渋谷へ向かう最短経路を示している。
+<div>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="120">
+<defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+</defs>
+<g transform="translate(30,10)">
+<g fill="none" stroke="gray" stroke-width="1">
+ <line x1="50" y1="50" x2="140" y2="90" />
+ <line x1="140" y1="10" x2="140" y2="90" />
+ <g marker-end="url(#arrow)" stroke="black" stroke-width="3">
+ <line x1="50" y1="50" x2="132" y2="13" />
+ <line x1="140" y1="10" x2="190" y2="10" />
+ <line x1="140" y1="90" x2="190" y2="90" />
+ <line x1="200" y1="90" x2="200" y2="20" />
+ </g>
+</g>
+<g fill="white" stroke="black">
+ <circle cx="50" cy="50" r="4" />
+ <circle cx="140" cy="10" r="4" />
+ <circle cx="140" cy="90" r="4" />
+ <circle cx="200" cy="10" r="4" />
+ <circle cx="200" cy="90" r="4" />
+</g>
+<g text-anchor="middle">
+<g fill="blue" style="font-weight:bold;">
+<text x="40" y="50" dy="0.5em" text-anchor="end">田園調布</text>
+<text x="130" y="5" dy="0.5em" text-anchor="end">自由が丘</text>
+<text x="130" y="90" dy="0.6em" text-anchor="end">大岡山</text>
+<text x="210" y="10" dy="0.5em" text-anchor="start">渋谷</text>
+<text x="210" y="90" dy="0.5em" text-anchor="start">目黒</text>
+</g>
+<text x="190" y="25" fill="black">0</text>
+<text x="190" y="85" fill="black">5</text>
+<text x="150" y="25" fill="black">12</text>
+<text x="50" y="40" fill="black">14</text>
+<text x="150" y="85" fill="black">14</text>
+</g>
+</g>
+</g>
+</svg>
+</div>
+</ol>
+<p>
+(最初に根っこをゴールから伸ばしたのはこの理由である。
+スタートからゴールに向かって根を伸ばすようにすると、
+あとで順序を入れ変えねばならない。)
+
+<h4>最短経路を求めるアルゴリズム</h4>
+<blockquote><pre>
+<span class=comment># 各ノードから goal に到達する最短経路を求める。</span>
+def shortest(goal):
+    ...
+    <span class=comment># ゴールから始める。</span>
+    root = [goal]
+    <span class=comment># 各ノードにおける、更新元のノード名。</span>
+    <mark>origin = {}</mark>
+
+    while 0 &lt; len(root):
+        <span class=comment># rootから点をひとつ取り出す。</span>
+        p = root[0]
+        del root[0]
+        <span class=comment># c0: ノード p における総コスト。</span>
+        c0 = cost[p]
+        print("node", p, "cost", c0)
+        <span class=comment># p の隣のノードをすべて試す。</span>
+        for q in neighbors(p):
+            <span class=comment># c1: p→q に伸びたときの総コスト。</span>
+            c1 = c0 + getcost(p, q)
+            print("neighbor", q, "cost", c1)
+            <span class=comment># 従来のコストより小さいか?</span>
+            if c1 &lt; cost[q]:
+                <span class=comment># コストを更新、根を伸ばす。</span>
+                cost[q] = c1
+                root.append(q)
+                print("update", q)
+                <span class=comment># 更新した根がどのノードから来たかを覚えておく。</span>
+                <mark>origin[q] = p</mark>
+    <span class=comment># 各ノードにおける総コスト一覧を表示する。</span>
+    print(cost)
+    <span class=comment># 各ノードからゴールへ向かう最短ノードを表示する。</span>
+    <mark>print(origin)</mark>
+</pre></blockquote>
+
+<div class=exercise id="ex6-3">
+<div class=header>演習 6-3. 最短距離の表示</div>
+<ol type=i>
+<li> 上のプログラムの変数 <code>origin</code> を使って、
+実際に <code>oookayama</code> から <code>shibuya</code> まで各ノードをたどって
+最短経路を表示する処理を追加せよ。
+<pre>
+oookayama
+meguro
+shibuya
+</pre>
+ヒント: <code>while</code>文を使って現在地が <code>goal</code> になるまで繰り返す。
+<li> 変数 <code>route</code> の内容を変更し、
+  もし <code>oookayama</code> - <code>meguro</code> のコストが 15 だったとすると、
+  別の経路が選ばれることを確認せよ。
+</ol>
+</div>
+<p>
+最短経路探索アルゴリズムはさまざまな用途に応用できる。
+「コスト」の概念を時間や金額などにすることで、
+最短時間経路や最低運賃経路なども計算できる。
+
+
+<h2 id="pathfind">3. 迷路探索への応用</h2>
+<p>
+中課題2. で生成したような迷路に対して最短経路探索を適用すると、
+スタートからゴールへ向かう最短経路を求めることができる。
+<blockquote><pre style="line-height: 1.0;">
+#########
+#<mark>S</mark>#     #
+# # # # #
+#   # # #
+##### # #
+#       #
+# # #####
+# #    <mark>G</mark>#
+#########
+</pre></blockquote>
+
+<ol>
+<li> まず、通路の各マスをすべて個別のノードとみなす。
+  ここでは辞書で使うキーとして、名前のかわりに、<code>"1,1"</code> のように
+  X,Y座標をカンマでつなげた文字列を使うことにする。
+<li> 各マス間の距離は同じなので、<u>エッジのコストはすべて 1</u> とみなせる。
+  つまり <code>getcost()</code> 関数は必要なくなる。
+  <code>neighbors()</code> 関数は書き直す必要があるが、
+  これは与えられた座標から上下左右にある進めるマスの座標 (最大4個) を返せばよい。
+<pre>
+def neighbors(p):
+    x = p[0]
+    y = p[1]
+    a = []
+    <span class=comment># (x,y) の上下左右のマスのうち、進めるものを返す。</span>
+    ...
+    return a
+</pre>
+<li> 右下の座標をゴールとして設定し、最短経路探索を実行する。
+  たとえば 9×9 の迷路なら <code>[7,7]</code> の位置から始める。
+<pre>
+goal = [7,7]
+cost["7,7"] = 0
+root = [goal]
+</pre>
+<li> 処理が終わったら、スタート <code>[1,1]</code> から始めて
+  ゴールまでの各ノードをたどり、通った各マスに
+  <code>2</code> を代入していく。
+<li> 最後に <code>2</code> のあるマスを「<code>.</code>」で表示する。
+<pre style="line-height: 1.0;">
+#########
+#.#...  #
+#.#.#.# #
+#...#.# #
+#####.# #
+#  ...  #
+# #.#####
+# #.....#
+#########
+</pre>
+</ol>
+<p>
+なお中課題2. で生成した迷路はループが存在しなかったが、
+ダイクストラの方法はループが存在する迷路に対しても
+正しく動作する。
+
+
+<h2 id="assignments">4. 本日の課題</h2>
+
+<div class=exercise id="kadai-s6">
+<div class=header>小課題6. 最短経路の探索 (1月31日締切)</div>
+<ul>
+  <li> 締め切り: 1月31日 (1週間後)
+  <li> 提出するファイル: <code>shortest.py</code>
+</ul>
+<p>
+授業中にやった最短経路を求めるプログラム
+<code>shortest.py</code> を改良し、
+任意の2駅間の最短経路が求められるようにせよ。
+このプログラムはコマンド引数から始点・終点を入力するものとする。
+<blockquote><pre>
+$ <strong>python shortest.py shibuya oookayama</strong>
+shibuya
+meguro
+oookayama
+</pre></blockquote>
+
+<h4>プログラムの構成</h4>
+<blockquote><pre>
+<span class=comment># shortest.py</span>
+import sys
+
+<span class=comment># エッジの一覧。</span>
+route = [
+    ["jiyugaoka",  "denenchofu", 2],
+    ["jiyugaoka",  "shibuya",    12],
+    ["denenchofu", "oookayama",  4],
+    ["jiyugaoka",  "oookayama",  3],
+    ["shibuya",    "meguro",     5],
+    ["oookayama",  "meguro",     9],
+]
+
+<span class=comment># 2点 x, y間の距離 (コスト) を返す。</span>
+def getcost(x, y):
+    ...
+
+<span class=comment># ノード x の隣のノード名一覧を返す。</span>
+def neighbors(x):
+    ...
+
+<span class=comment># 最短経路探索を実行し、</span>
+<span class=comment># start から goal へノードをたどる。</span>
+def shortest(start, goal):
+    ...
+
+start = sys.argv[1]  <span class=comment># 始点</span>
+goal = sys.argv[2]   <span class=comment># 終点</span>
+shortest(start, goal)
+</pre></blockquote>
+</div>
+
+<div class=exercise id="kadai-m3">
+<div class=header>中課題3. 迷路の最短経路を求める (2月7日締切)</div>
+<ul>
+  <li> 締め切り: 2月7日 (2週間後)
+  <li> 提出するファイル: <code>solvemaze.py</code>
+</ul>
+<p>
+ダイクストラの方法を使って、与えられた迷路の解法を表示するプログラム
+<code>solvemaze.py</code> を作成せよ。ここでは迷路の生成部分は考えなくてよい。
+迷路はつねに固定で、以下のもの使うこと。
+スタート・ゴールも固定である。
+<blockquote><pre style="line-height: 1.0;">
+<span class=comment># 壁があるマスは 1 で、通路は 0 で表す。</span>
+m = [
+    [1,1,1,1,1,1,1,1,1],
+    [1,0,1,0,0,0,0,0,1],
+    [1,0,1,0,1,0,1,0,1],
+    [1,0,0,0,1,0,1,0,1],
+    [1,1,1,1,1,0,1,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,1,0,1,1,1,1,1],
+    [1,0,1,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1],
+]
+
+<span class=comment># スタートとゴールをそれぞれ (1,1) および (7,7) に定める。</span>
+start = [1,1]
+goal = [7,7]
+</pre></blockquote>
+<p>
+このプログラムを実行すると、以下のように表示して終了するようにする。
+<blockquote><pre style="line-height: 1.0;">
+$ <strong>python solvemaze.py</strong>
+#########
+#.#...  #
+#.#.#.# #
+#...#.# #
+#####.# #
+#  ...  #
+# #.#####
+# #.....#
+#########
+</pre></blockquote>
+<p>
+プログラム中の適切な場所にコメントを入れ、
+各部分がどのように動くかを説明すること。
+
+<h4>プログラムの構成</h4>
+<p>
+基本的に小課題 6. のプログラムと構成は同じである。
+が、各エッジのコストは必ず 1 なので <code>getcost()</code> 関数は必要なく、
+<code>neighbors()</code> 関数は書き直す必要がある。
+
+<blockquote><pre>
+<span class=comment># solvemaze.py</span>
+
+<span class=comment># 迷路とスタート・ゴールの定義。</span>
+m = [ ... ]
+start = [1,1]
+goal = [7,7]
+
+<span class=comment># 与えられたマス (ノード) p から進めるマスの座標一覧を返す。</span>
+def neighbors(p):
+    ...
+
+<span class=comment># 最短経路探索を実行する。</span>
+def shortest(start, goal):
+   ...
+
+<span class=comment># 完成した解法を表示する。</span>
+for y in range(len(m)):
+    s = ""
+    for x in range(len(m[y])):
+        if m[y][x] == 1:    <span class=comment># 壁</span>
+            s = s + "#"
+        elif m[y][x] == 2:  <span class=comment># 最短経路</span>
+            s = s + "."
+        else:               <span class=comment># その他 (通路)</span>
+            s = s + " "
+    print(s)
+</pre></blockquote>
+
+<h4>ヒント</h4>
+<ul>
+<li> <code>[x,y]</code> のような配列を辞書のキーとして使うために、
+  <code>str(x)+","+str(y)</code> などとして座標を文字列に変換する。
+<li> 最初にすべてのノードの <code>cost</code> を 9999 にするのは面倒くさいので、
+  「<code>cost</code> 中に登録されていない場所はすべて 9999 とみなす」という処理をしてもよい。
+  これは、以下のような if 文で実現できる:
+<pre>
+k = str(x)+","+str(y)
+if k in cost:
+    <span class=comment># (x,y) が存在する場合。</span>
+    c0 = cost[k]
+else:
+    <span class=comment># (x,y) が存在しない場合、コストは 9999 とみなす。</span>
+    c0 = 9999
+</pre>
+<li> 処理中、<code>origin</code> にたどるノードを入れておきたいが、
+  これまた <code>[x,y]</code> のような配列は辞書のキーとして使えないので、
+  文字列に変換する。ただし辞書の<u>バリュー部分には配列が入れられる</u>ので、
+  たとえば
+<pre>
+origin["3,5"] = [3, 6]
+</pre>
+  などとすれば、たどるべき座標が取り出せる。
+  (もちろん、これ以外のやり方をしてもよい)
+</ul>
+</div>
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

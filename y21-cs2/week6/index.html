@@ -8,6 +8,7 @@
 第6回 - 辞書の使い方、最短経路アルゴリズムを使った迷路の解法
 / 新山 祐介</title>
 <style><!--
+.node { color: blue; font-weight: bold; }
 --></style>
 </head>
 <body>
@@ -20,14 +21,24 @@
 
 <ol start="1">
 <li> <a href="#dictionary">Python のハッシュテーブル (辞書)</a>
+<ul>
+  <li class=ex> <a href="#ex6-1">演習 6-1. Python辞書の不都合な真実</a>
+</ul>
 <li> <a href="#shortest">最短経路探索アルゴリズム</a>
 <ul>
   <li> <a href="#shortest-what">最短経路とは?</a>
+  <li class=ex> <a href="#ex6-2">演習 6-2. 最短距離を手動で求める</a>
   <li> <a href="#shortest-dijkstra">Dijkstra (ダイクストラ) の方法</a>
   <li> <a href="#shortest-impl">Pythonによる実装</a>
+  <li class=ex> <a href="#ex6-3">演習 6-3. Pythonで最短距離を求める</a>
   <li> <a href="#shortest-find">最短経路を発見する</a>
+  <li class=ex> <a href="#ex6-4">演習 6-4. 最短距離の表示</a>
 </ul>
 <li> <a href="#pathfind">迷路探索への応用</a>
+<li> <a href="#breakout">ブレイクアウトルーム練習</a>
+<ul>
+  <li class=ex> <a href="#ex6-5">演習 6-5. Pythonの辞書を使った郵便番号検索</a>
+</ul>
 <li> <a href="#assignments">本日の課題</a>
 <ul>
   <li class=ex> <a href="#kadai-s6">小課題6. 最短経路の探索 (1月31日締切)</a>
@@ -47,22 +58,22 @@ Python には、<a href="https://www.pygame.org/">Pygame</a> という拡張機�
 <blockquote><pre>
 C:\Users\euske&gt;<strong>pip install pygame</strong>
 Collecting pygame
-  Downloading pygame-2.0.1-cp39-cp39-win_amd64.whl (5.2 MB)
-     |████████████████████████████████| 5.2 MB 6.4 MB/s
+  Downloading pygame-2.1.2-cp39-cp39-win_amd64.whl (8.4 MB)
+     |████████████████████████████████| 8.4 MB 6.4 MB/s
 Installing collected packages: pygame
-Successfully installed pygame-2.0.1
+Successfully installed pygame-2.1.2
 </pre></blockquote>
 <p>
 実際に使ってみるには、以下のようにする:
 <blockquote><pre>
 C:\Users\euske&gt;<strong>python</strong>  <span class=comment># まず python を開始する</span>
-Python 3.9.1 (...) [MSC v.1927 64 bit (AMD64)] on win32
+Python 3.9.9 (...) [MSC v.1929 64 bit (AMD64)] on win32
 Type "help", "copyright", "credits" or "license" for more information.
 &gt;&gt;&gt; <strong>import pygame</strong>      <span class=comment># pygame モジュールを使用</span>
-pygame 2.0.1 (SDL 2.0.14, Python 3.9.1)
+pygame 2.1.2 (SDL 2.0.18, Python 3.9.9)
 Hello from the pygame community. https://www.pygame.org/contribute.html
 &gt;&gt;&gt; <strong>pygame.init()</strong>      <span class=comment># 各種機能を初期化</span>
-(7, 0)
+(5, 0)
 &gt;&gt;&gt; <strong>disp = pygame.display.set_mode((600,400))</strong> <span class=comment># 画面を600×400のサイズで作成</span>
 &gt;&gt;&gt; <strong>disp.fill((0,0,255))</strong>  <span class=comment># 画面を青色で塗る (実際の画面はまだ変化しない)</span>
 &lt;rect(0, 0, 600, 400)&gt;
@@ -305,32 +316,9 @@ print(d)    <span class=comment># {'X': 1, 'Z': 3}</span>
 </dl>
 
 <div class=exercise id="ex6-1">
-<div class=header>演習 6-1. Pythonの辞書を使う</div>
-<ol type=i>
-<li> 第5回の授業で出てきた
-<A href="../week5/index.html#ex5-2">郵便番号から住所を検索するプログラム</a> を
-Pythonの辞書を使って書け。
-<div class=file>
-postcode.py
-<pre>
-import csv
-with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
-    table = list(csv.reader(fp))
-<span class=comment># 郵便番号 → 住所に対応させるハッシュテーブル(辞書)を作成。</span>
-postcode = {}
-for row in table:
-    <span class=comment># row[0] に郵便番号、row[1]+row[2]+row[3] に住所が書かれている。</span>
-    key = <span class=bl>            </span>
-    value = <span class=bl>            </span>
-    postcode[key] = value
-<span class=comment># 実際に検索する (キーに対するバリューを取得する)。</span>
-import sys
-key = sys.argv[1]
-value = <span class=bl>            </span>
-print(value)
-</pre>
-</div>
-<li> Pythonでは、リストを辞書のキーとして使うと「ある不都合」が起こるので、
+<div class=header>演習 6-1. Python辞書の不都合な真実</div>
+<p>
+Pythonでは、リストを辞書のキーとして使うと「ある不都合」が起こるので、
 意図的にリストは辞書のキーにはできなくしてある。その不都合とは何か考えよ。
 <pre>
 k = [1,2,3]
@@ -338,7 +326,6 @@ d = {}
 d[k] = "abc"  <span class=comment># エラー</span>
 k.append(4)
 </pre>
-</ol>
 </div>
 
 
@@ -422,6 +409,14 @@ k.append(4)
 <span class=node>A地点</span>から始めて、もっとも少ない距離で
 <span class=node>Z地点</span>にたどりつくには、
 どのエッジをたどればよいだろうか? これが最短経路探索である。
+
+<div class=exercise id="ex6-2">
+<div class=header>演習 6-2. 最短距離を手動で求める</div>
+<p>
+上の図で、
+<span class=node>A地点</span>から始めて、もっとも少ない距離で
+<span class=node>Z地点</span>にたどりつく経路を答えよ。
+</div>
 
 <h4>アホな方法:</h4>
 <ol>
@@ -520,7 +515,7 @@ while 0 &lt; len(root):
 
 <h4>下準備</h4>
 <p>
-まず上のグラフを Python の配列 (の配列) で表すことを考える。
+まず上のグラフを Python のリスト (のリスト) で表すことを考える。
 各エッジを <code>[地点1, 地点2, コスト]</code> のように表すと、以下のようになる:
 <blockquote><pre>
 route = [
@@ -533,18 +528,18 @@ route = [
 ]
 </pre></blockquote>
 <p>
-さらに、与えられた 2点 x, y間の距離 (コスト) を返す
+さらに、与えられた 2点 a, b間の距離 (コスト) を返す
 関数 <code>getcost()</code> を定義する。
 ここでは <code>route</code>中に書かれているのが
-(x,y) および (y,x) のどちらでもよいように、2通りの検査をしている。
+(a,b) および (b,a) のどちらでもよいように、2通りの検査をしている。
 <blockquote><pre>
-<span class=comment># 2点 x, y間の距離 (コスト) を返す。</span>
-def getcost(x, y):
+<span class=comment># 2点 a, b間の距離 (コスト) を返す。</span>
+def getcost(a, b):
     <span class=comment># すべてのエッジを探索する。</span>
     for p in route:
         <span class=comment># p[0] に地点1, p[1] に地点2, p[2] にコストが入っている。</span>
-        if ((x == <span class=bl>    </span> and y == <span class=bl>    </span>) or
-            (x == <span class=bl>    </span> and y == <span class=bl>    </span>)):
+        if ((a == <span class=bl>    </span> and b == <span class=bl>    </span>) or
+            (a == <span class=bl>    </span> and b == <span class=bl>    </span>)):
             return <span class=bl>    </span>
     <span class=comment># 見つからない場合は -1 を返す。</span>
     return -1
@@ -554,7 +549,7 @@ print(getcost("oookayama", "shibuya"))    <span class=comment># -1</span>
 </pre></blockquote>
 <p>
 また、あるノード x と接続されている隣のノード名の一覧を
-配列として返す関数 <code>neighbors()</code> を定義する。
+リストとして返す関数 <code>neighbors()</code> を定義する。
 ここでも x がエッジのどちら側であってもよいように、
 2通りの検査をしている。
 <blockquote><pre>
@@ -622,13 +617,13 @@ def shortest(goal):
     return
 </pre></blockquote>
 
-<div class=exercise id="ex6-2">
-<div class=header>演習 6-2. 最短距離を求める</div>
+<div class=exercise id="ex6-3">
+<div class=header>演習 6-3. Pythonで最短距離を求める</div>
 <ol type=i>
 <li> 上の関数 <code>getcost()</code> および <code>neighbors()</code> を完成させ、
 <code>"shibuya"</code> に到達する最短距離を求めるプログラム
 <code>shortest.py</code> を書け。
-<li> ダイクストラの方法は、<u>ノード間のコストが必ず 0 以上</u>でないと
+<li> ダイクストラの方法は、<strong>ノード間のコストが必ず 0 以上</strong>でないと
 うまくいかない。これを確かめるために、上の例で、たとえば
 「<span class=node>自由が丘</span> - <span class=node>大岡山</span>」のコストを
 <code>-10</code> に設定し、プログラムがどう動作するか観察せよ。
@@ -642,7 +637,7 @@ def shortest(goal):
 最短経路を発見できる。
 <ul>
 <li> 根っこがあるノードに到達してその最小コストを更新するとき、
-  <u>更新した根がどのノードから来たか</u>を記録しておくようにする
+  <strong>更新した根がどのノードから来たか</strong>を記録しておくようにする
 </ul>
 <p>
 このようにすると、すべての処理が終わったとき、
@@ -814,8 +809,8 @@ def shortest(goal):
     <mark>print(origin)</mark>
 </pre></blockquote>
 
-<div class=exercise id="ex6-3">
-<div class=header>演習 6-3. 最短距離の表示</div>
+<div class=exercise id="ex6-4">
+<div class=header>演習 6-4. 最短距離の表示</div>
 <ol type=i>
 <li> 上のプログラムの変数 <code>origin</code> を使って、
 実際に <code>oookayama</code> から <code>shibuya</code> まで各ノードをたどって
@@ -857,7 +852,8 @@ shibuya
 <li> まず、通路の各マスをすべて個別のノードとみなす。
   ここでは辞書で使うキーとして、名前のかわりに、<code>"1,1"</code> のように
   X,Y座標をカンマでつなげた文字列を使うことにする。
-<li> 各マス間の距離は同じなので、<u>エッジのコストはすべて 1</u> とみなせる。
+<li> 各マス間の距離は同じなので、
+  <strong>エッジのコストはすべて 1</strong> とみなせる。
   つまり <code>getcost()</code> 関数は必要なくなる。
   <code>neighbors()</code> 関数は書き直す必要があるが、
   これは与えられた座標から上下左右にある進めるマスの座標 (最大4個) を返せばよい。
@@ -899,7 +895,49 @@ root = [goal]
 正しく動作する。
 
 
-<h2 id="assignments">4. 本日の課題</h2>
+<h2 id="breakout">4. ブレイクアウトルーム演習</h2>
+<p>
+ブレイクアウトルーム演習の方法:
+<ol>
+<li> ブレイクアウトルーム中はカメラを使うこと。
+<li> まず自己紹介をする。名前・所属・趣味などを簡単に説明する。
+<li> 最初の問題をやる担当者が PC の画面共有をおこない、課題のプログラムを考えながら書く。
+  このとき周囲の人は手助けする。
+<li> 終わったら、今日の演習でできなかったところを教えあう。
+<li> 全部終わったら、適当に雑談する (← これが本当の目的)。
+</ol>
+
+<div class=exercise id="ex6-5">
+<div class=header>演習 6-5. Pythonの辞書を使った郵便番号検索</div>
+<ol type=i>
+<li> 第5回の授業で出てきた
+<A href="../week5/index.html#ex5-2">郵便番号から住所を検索するプログラム</a> を
+Pythonの辞書を使って書け。
+<div class=file>
+postcode.py
+<pre>
+import csv
+with open("KEN_ALL_ROME.CSV", encoding="utf-8") as fp:
+    table = list(csv.reader(fp))
+<span class=comment># 郵便番号 → 住所に対応させるハッシュテーブル(辞書)を作成。</span>
+postcode = {}
+for row in table:
+    <span class=comment># row[0] に郵便番号、row[1]+row[2]+row[3] に住所が書かれている。</span>
+    key = <span class=bl>            </span>
+    value = <span class=bl>            </span>
+    postcode[key] = value
+<span class=comment># 実際に検索する (キーに対するバリューを取得する)。</span>
+import sys
+key = sys.argv[1]
+value = <span class=bl>            </span>
+print(value)
+</pre>
+</div>
+</ol>
+</div>
+
+
+<h2 id="assignments">5. 本日の課題</h2>
 
 <div class=exercise id="kadai-s6">
 <div class=header>小課題6. 最短経路の探索 (1月31日締切)</div>
@@ -934,8 +972,8 @@ route = [
     ["oookayama",  "meguro",     9],
 ]
 
-<span class=comment># 2点 x, y間の距離 (コスト) を返す。</span>
-def getcost(x, y):
+<span class=comment># 2点 a, b間の距離 (コスト) を返す。</span>
+def getcost(a, b):
     ...
 
 <span class=comment># ノード x の隣のノード名一覧を返す。</span>
@@ -1037,7 +1075,7 @@ for y in range(len(m)):
 
 <h4>ヒント</h4>
 <ul>
-<li> <code>[x,y]</code> のような配列を辞書のキーとして使うために、
+<li> <code>[x,y]</code> のようなリストを辞書のキーとして使うために、
   <code>str(x)+","+str(y)</code> などとして座標を文字列に変換する。
 <li> 最初にすべてのノードの <code>cost</code> を 9999 にするのは面倒くさいので、
   「<code>cost</code> 中に登録されていない場所はすべて 9999 とみなす」という処理をしてもよい。
@@ -1052,8 +1090,8 @@ else:
     c0 = 9999
 </pre>
 <li> 処理中、<code>origin</code> にたどるノードを入れておきたいが、
-  これまた <code>[x,y]</code> のような配列は辞書のキーとして使えないので、
-  文字列に変換する。ただし辞書の<u>バリュー部分には配列が入れられる</u>ので、
+  これまた <code>[x,y]</code> のようなリストは辞書のキーとして使えないので、
+  文字列に変換する。ただし辞書の<strong>バリュー部分にはリストが入れられる</strong>ので、
   たとえば
 <pre>
 origin["3,5"] = [3, 6]

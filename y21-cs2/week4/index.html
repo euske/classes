@@ -57,10 +57,10 @@ dd { margin-bottom: 1em; }
 
 <h4>アルゴリズムを舞踊で表現する</h4>
 <ul>
-<li> <a href="https://www.youtube.com/watch?v=iP897Z5Nerk">フラメンコによる二分探索</a>
-<li> <a href="https://www.youtube.com/watch?v=ROalU379l3U">ルーマニアの民族舞踊で挿入法</a>
-<li> <a href="https://www.youtube.com/watch?v=XaqR3G_NVoo">トランシルヴァニア・ザクソンの民族舞踊でマージソート</a>
-<li> <a href="https://www.youtube.com/watch?v=o2Yim7vTsWw">おまけ・ソートする女の子</a>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=iP897Z5Nerk">フラメンコによる二分探索</a>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=ROalU379l3U">ルーマニアの民族舞踊で挿入法</a>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=XaqR3G_NVoo">トランシルヴァニア・ザクソンの民族舞踊でマージソート</a>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=o2Yim7vTsWw">おまけ・ソートする女の子</a>
 </ul>
 
 <h4>アホなソート法</h4>
@@ -84,7 +84,7 @@ dd { margin-bottom: 1em; }
 
 <h4>ソーティング・ゲーム</h4>
 <ul>
-<li> 東工大の学生が以前に開発した、<a href="http://www.e.gsic.titech.ac.jp/~kashima/SortGame/cs.html">ソートを手動でやってみるゲーム</a>がある。
+<li> 東工大の学生が以前に開発した、<a target="_blank" href="http://www.e.gsic.titech.ac.jp/~kashima/SortGame/cs.html">ソートを手動でやってみるゲーム</a>がある。
 </ul>
 
 
@@ -168,9 +168,8 @@ for i in range(10):
 <code>seed</code> の値がわかれば、以後の結果は完全に予測可能である。
 しかしこの関数はカオス的なふるまいを示すため、
 人間が見ると「乱数っぽい値」に見える。
-ちなみに 134217727 (= 2<sup>31</sup>-1) は<a href="https://ja.wikipedia.org/wiki/%E3%83%A1%E3%83%AB%E3%82%BB%E3%83%B3%E3%83%8C%E6%95%B0">メルセンヌ素数</a>のひとつである。
 <ul>
-<li> <a href="https://en.wikipedia.org/wiki/List_of_random_number_generators">有名な疑似乱数発生アルゴリズム</a>
+<li> <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_random_number_generators">有名な疑似乱数発生アルゴリズム</a>
 </ul>
 
 <h3 id="prng-seed">1.1. 実際の乱数生成</h3>
@@ -180,7 +179,7 @@ for i in range(10):
 <a href="../../y21-cs1/week6/index.html#crypto-ceaser">シーザー暗号</a>などの
 鍵を生成するのに使われているため、この値が予測可能になってしまうのは
 大きな問題である。(実際にこれで暗号が破られ、
-<a href="https://en.wikipedia.org/wiki/Random_number_generator_attack">秘密の情報が漏洩してしまう事故がある</a>。)
+<a target="_blank" href="https://en.wikipedia.org/wiki/Random_number_generator_attack">秘密の情報が漏洩してしまう事故がある</a>。)
 そのため、通常は疑似乱数のシードとして、
 なんらかの外部から入力した値を使う。ここでは簡単な例として、
 現在の時刻を使ってみる:
@@ -378,8 +377,8 @@ showmaze(m)
 <h3 id="maze-algorithm">3.2. 迷路生成アルゴリズム</h3>
 <p>
 実際には、
-<a href="http://www.astrolog.org/labyrnth/algrithm.htm">迷路を生成するアルゴリズムはいくつもある</a>。
-ここでは、<a href="https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AA%E3%83%A0%E6%B3%95">Primの方法</a>を使う。
+<a target="_blank" href="http://www.astrolog.org/labyrnth/algrithm.htm">迷路を生成するアルゴリズムはいくつもある</a>。
+ここでは、<a target="_blank" href="https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AA%E3%83%A0%E6%B3%95">Primの方法</a>を使う。
 いわゆる「根っこ伸ばし方式」:
 <ol>
 <li> 迷路のすべての部分を「土」とする。
@@ -566,7 +565,7 @@ nが 5とか 6ぐらいになると、この分布はどのような形をとり
 統計学では、ある分布 (どんな分布でもよい) をもつ複数の
 確率変数を足し合わせると、多くの変数を足せば足すほど、
 それらの合計値の分布は正規分布に近くなることが知られている
-(<a href="https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%BF%83%E6%A5%B5%E9%99%90%E5%AE%9A%E7%90%86">中心極限定理</a>)。
+(<a target="_blank" href="https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%BF%83%E6%A5%B5%E9%99%90%E5%AE%9A%E7%90%86">中心極限定理</a>)。
 <p>
 自然界の量 (身長、平均寿命、テストの成績など) にこれほど
 正規分布を示すものが多いのは、これらの量が多くの
@@ -596,7 +595,7 @@ nが 5とか 6ぐらいになると、この分布はどのような形をとり
 <p>
 (疑似)乱数を使って、一見、計算不可能そうに見える数を
 シミュレーションによって求める方法がある。
-これを<a href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%83%86%E3%82%AB%E3%83%AB%E3%83%AD%E6%B3%95">モンテカルロ法</a>という。
+これを<a target="_blank" href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%83%86%E3%82%AB%E3%83%AB%E3%83%AD%E6%B3%95">モンテカルロ法</a>という。
 <p>
 (0,0) 〜 (1,1) の領域中にランダムな n個の点を打ったとする。
 そのうちのいくつかは (0,0) を中心とする 1/4円の中に入る。

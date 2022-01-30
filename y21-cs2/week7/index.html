@@ -924,6 +924,16 @@ for i in range(22):
 テストデータとして使うと、偏った結果を学習してしまう。これを避けるために、
 <code>random.shuffle()</code> 関数を使って、
 リスト<code>table</code> をまずシャッフルしてから使うことにする。
+<code>random.shuffle()</code> 関数は、
+<a href="../week4/index.html#ex4-4">第4回で出てきた <code>shuffle()</code>関数</a>と
+まったく同じもので、Python にもとから内蔵されているバージョンである。
+使い方はまったく同じで:
+<blockquote><pre>
+a = [1,2,3,4]
+import random
+random.shuffle(a)
+print(a)   <span class=comment># ランダムな順序。例: [2,4,3,1]</span>
+</pre></blockquote>
 
 <div class=exercise id="ex7-6">
 <div class=header>演習7-6. キノコの特徴量を使った決定木の学習</div>
@@ -1071,7 +1081,8 @@ for row in table:
     row[2] = row[2].strip()
 
 <span class=comment># シャッフル後、訓練データとテストデータを作成。</span>
-shuffle(table)
+import random
+random.shuffle(table)
 train = table[:-1000]
 test = table[-1000:]
 </pre></blockquote>
@@ -1108,7 +1119,7 @@ $ <strong>python splice.py</strong>
 </pre></blockquote>
 <p>
 <strong>注意:</strong>
-<code>shuffle</code>を使っているため、
+<code>random.shuffle()</code>を使っているため、
 最適な素性およびスコアは必ずしもこの値にならないことがあるが、
 上の結果と違っていても真面目に計算した結果であれば正解とする。
 </div>
@@ -1122,7 +1133,7 @@ $ <strong>python splice.py</strong>
 <p>
 1901年〜2099年の任意の月のカレンダーを表示するプログラムを書け。
 コマンドラインから「年」「月」「日」の順で引数を与えると、
-以下のように1週ごとに行を表示し (始まりは日曜日とする)、
+以下のように指定された月の 1週ごとに行を表示し (始まりは日曜日とする)、
 指定された日は <code>[…]</code> で囲んで表示すること。
 うるう年も考慮すること。
 <blockquote><pre>

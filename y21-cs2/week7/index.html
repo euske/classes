@@ -900,7 +900,7 @@ mushroom.py (つづき)
 <pre>
 for i in range(22):
     <span class=comment># (i+1)番目の特徴量を使った決定木を作成。</span>
-    c = {}
+    feats = {}
     for row in train:
         answer = row[0]  <span class=comment># 回答</span>
         f = row[<mark>i+1</mark>]  <span class=comment># (i+1)番目の特徴量</span>
@@ -986,7 +986,7 @@ for i in range(22):
         <span class=comment># (i,j) と (j,i) を2度やらないように、i &lt; j のケースだけ考える。</span>
         if i &lt; j:
             <span class=comment># (i+1)番目と(j+1)番目の特徴量を使った決定木を作成。</span>
-            c = {}
+            feats = {}
             for row in train:
                 answer = row[0]  <span class=comment># 回答</span>
                 f1 = row[<mark>i+1</mark>]  <span class=comment># (i+1)番目の特徴量</span>
@@ -1059,11 +1059,11 @@ DNA の鎖の中には、実際にタンパク質合成に用いられる部分 
 <li> UCI のサイトから <a href="https://archive.ics.uci.edu/ml/machine-learning-databases/molecular-biology/splice-junction-gene-sequences/splice.data">splice.data</a> をダウンロードする。
 これは 60文字からなる塩基配列とその正解が羅列されている CSV ファイルである。
 <li> 各塩基配列に対して、異なる位置から<strong>2文字ずつ</strong>を
-切り出して素性として利用する。
+切り出して特徴量として利用する。
 つまり <code>CCAGCT</code> なら <code>CC</code>, <code>CA</code>, <code>AG</code>,
-<code>GC</code>, <code>CT</code> の 5つの素性があり、
-60文字の塩基配列には 59個の素性が含まれていると考える。
-<li> このような素性を <strong>2つ</strong>使った決定木を学習する。
+<code>GC</code>, <code>CT</code> の 5つの特徴量があり、
+60文字の塩基配列には 59個の特徴量が含まれていると考える。
+<li> このような特徴量を <strong>2つ</strong>使った決定木を学習する。
 </ol>
 
 <p>
@@ -1088,39 +1088,39 @@ test = table[-1000:]
 </pre></blockquote>
 
 <p>
-次に 59個の素性のうち 2つを調べる決定木を学習する。
+次に 59個の特徴量のうち 2つを調べる決定木を学習する。
 <strong>注意:</strong>
-<code>row[2]</code> をまるごと素性として使うのではなく、
-その中の (i, j) 文字目から 2文字ずつを切り出して素性とするのである:
+<code>row[2]</code> をまるごと特徴量として使うのではなく、
+その中の (i, j) 文字目から 2文字ずつを切り出して特徴量とするのである:
 <blockquote><pre>
-<span class=comment># 2種類の素性の組み合わせをすべて試す。</span>
+<span class=comment># 2種類の特徴量の組み合わせをすべて試す。</span>
 for i in range(59):
     for j in range(59):
         if i &lt; j:
-            <span class=comment># i文字目とj文字目の素性を使った決定木を作成。</span>
-            c = {}
+            <span class=comment># i文字目とj文字目の特徴量を使った決定木を作成。</span>
+            feats = {}
             for row in train:
                 answer = row[0]  <span class=comment># 回答</span>
                 <mark>seq = row[2]</mark>     <span class=comment># 塩基配列</span>
-                <mark>f1 = seq[i:i+2]</mark>  <span class=comment># i文字目の素性</span>
-                <mark>f2 = seq[j:j+2]</mark>  <span class=comment># j文字目の素性</span>
-                f = f1+","+f2    <span class=comment># 連結した素性</span>
+                <mark>f1 = seq[i:i+2]</mark>  <span class=comment># i文字目の特徴量</span>
+                <mark>f2 = seq[j:j+2]</mark>  <span class=comment># j文字目の特徴量</span>
+                f = f1+","+f2    <span class=comment># 連結した特徴量</span>
                 ...
 </pre></blockquote>
 
 <p>
 このプログラムを実行すると、同じフォルダにある
 <code>splice.data</code> を読み込み
-「何文字目と何文字目を素性として利用するともっとも正しく分類できたか」を表示する:
+「何文字目と何文字目を特徴量として利用するともっとも正しく分類できたか」を表示する:
 <blockquote><pre>
 $ <strong>python splice.py</strong>
-使った素性: 28 30
+使った特徴量: 28 30
 スコア: 876
 </pre></blockquote>
 <p>
 <strong>注意:</strong>
 <code>random.shuffle()</code>を使っているため、
-最適な素性およびスコアは必ずしもこの値にならないことがあるが、
+最適な特徴量およびスコアは必ずしもこの値にならないことがあるが、
 上の結果と違っていても真面目に計算した結果であれば正解とする。
 </div>
 

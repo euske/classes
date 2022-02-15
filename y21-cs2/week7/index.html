@@ -776,7 +776,8 @@ for row in test:
     if (f in rule) and (rule[f] == answer):
         <span class=comment># 規則を使った結果、正しい回答を出せれば得点。</span>
         score = score + 1
-print(score)
+<span class=comment># 規則とスコアを表示する。</span>
+print(f"規則:{rule}, スコア:{score}")
 </pre></blockquote>
 
 <li> 以上 1. 〜 4. を、すべての特徴量
@@ -909,8 +910,10 @@ for i in range(22):
     score = 0
     for row in test:
         ...
-    <span class=comment># 使った特徴量の番号とスコアを表示する。</span>
-    print(f"使った特徴量:{i+1}, スコア:{score}")
+    <span class=comment># 使った特徴量と規則、スコアを表示する。</span>
+    print(f"使った特徴量:{i+1}")
+    print(f"規則:{rule}")
+    print(f"スコア:{score}")
 </pre>
 </div>
 
@@ -996,8 +999,10 @@ for i in range(22):
             <span class=comment># できた決定木の正しさを測定する。</span>
             score = 0
             ...
-            <span class=comment># 使った特徴量の番号とスコアを表示する。</span>
-            print(f"使った特徴量:{i+1},{j+1}, スコア:{score}")
+            <span class=comment># 使った特徴量と規則、スコアを表示する。</span>
+            print(f"使った特徴量:{i+1},{j+1}")
+            print(f"規則:{rule}")
+            print(f"スコア:{score}")
 </pre>
 </div>
 
@@ -1115,6 +1120,7 @@ for i in range(59):
 <blockquote><pre>
 $ <strong>python splice.py</strong>
 使った特徴量: 28 30
+規則: {'GC,TC': 'N', 'AG,GT': 'EI', 'AG,AT': 'IE', 'TG,AA': 'N', ... }
 スコア: 876
 </pre></blockquote>
 <p>

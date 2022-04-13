@@ -1,0 +1,694 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2022年度 情報リテラシ第一 (1a)
+第3回 - インターネットのしくみ、電子メールの使い方
+/ 新山 祐介</title>
+<style><!--
+.mheader { outline: 1px solid; padding: 4px; background: #ffffaa; }
+.mbody { outline: 1px solid; padding: 4px; background: #aaffaa; }
+.address { font-size: 200%; font-family: monospace; font-weight: bold; text-decoration: underline; }
+.caption { font-size: 75%; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第3回 - インターネットのしくみ、電子メールの使い方</h1>
+<div class=nav>2022年4月25日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#internet">インターネットのしくみ</a>
+<ul>
+  <li> <a href="#internet-history">コンピュータ・ネットワークの歴史</a>
+  <li> <a href="#internet-freedom">インターネットの特徴 = 自由</a>
+  <li> <a href="#internet-cable">どこを通っているのか?</a>
+  <li> <a href="#internet-packet">どうやって通信するのか?</a>
+  <li> <a href="#internet-protocol">パケット通信とは何か?</a>
+  <li> <a href="#internet-server">サーバとクライアント</a>
+</ul>
+<li> <a href="#email">電子メールの原理</a>
+<ul>
+  <li> <a href="#email-protocol">電子メールの送信手順</a>
+  <li> <a href="#email-headers">メールの「ヘッダ」</a>
+  <li> <a href="#email-address">メールアドレスの書き方・読み方</a>
+  <li> <a href="#email-errors">送れないとき</a>
+  <li> <a href="#email-risks">電子メールの危険性</a>
+</ul>
+<li> <a href="#client">メールアプリの設定</a>
+<ul>
+  <li> <a href="#client-forward">メール転送の設定</a>
+</ul>
+<li> <a href="#summary">本日のまとめ</a>
+<ul>
+  <li class=ex> <a href="#ex-s2">小課題2. 電子メール送信の練習 (5月3日締切)</a>
+  <li class=ex> <a href="#ex-m1">クラス共通課題1. 電子メールの仕組み (5月3日締切)</a>
+  <li> <a href="#nextweek">来週の予定</a>
+</ul>
+</ol>
+
+<p> <strong>注意</strong>:
+今週は、<mark>課題が2つ</mark> (小課題 + クラス共通課題) あります。
+
+
+<h3>雑談</h3>
+<p>
+本日のお題: 趣味について。
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+  <li> ポータルサイトで使えるパスワードを設定した。
+  <li> コンピュータの原理について説明した。
+  <li> 情報の量について解説した。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 3-1. 前回の復習</div>
+<ol type=a>
+  <li> コンピュータの4大装置を答えよ。
+  <li> 容量 1メガバイトのメモリには、0 または 1 の組み合わせが何桁入れられるか?
+  <li> 動作周波数 1GHz のコンピュータは、1秒間に何回命令を処理できるか?
+</ol>
+</div>
+
+
+<h2 id="internet">1. インターネットのしくみ</h2>
+<p>
+コンピュータから見ると、ネットワークは巨大な入出力装置である。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="350" height="130"
+       transform="scale(1,1)">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" stroke-width="2" fill="none">
+      <ellipse cx="240" cy="70" rx="100" ry="50" />
+      <rect x="10" y="50" width="80" height="40" />
+      <line x1="90" y1="60" x2="140" y2="60" marker-end="url(#arrow)" />
+      <line x1="140" y1="80" x2="91" y2="80" marker-end="url(#arrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="50" y="70">演算装置</text>
+      <text x="240" y="70">ネットワーク</text>
+      <text x="120" y="55">入力</text>
+      <text x="120" y="95">出力</text>
+    </g>
+  </svg>
+</div>
+
+<h3 id="internet-history">1.1. コンピュータ・ネットワークの歴史</h3>
+<ul>
+  <li> 1980年ごろ … LAN (学校・会社内だけで接続)<br>
+  <a href="http://mercury.lcs.mit.edu/~jnc/tech/arpageo.html">昔のインターネット地図</a>
+  <li> 1990年ごろ … インターネットで全世界がつながった
+  <li> 2000年ごろ … WiFi の普及、携帯でどこでもネット接続
+</ul>
+
+<h3 id="internet-freedom">1.2. インターネットの特徴 = 自由</h3>
+<p>
+ネットワークは構築するのが非常に大変だ (道路と同じ)。
+なので、一度作ったら、なるべく自由に使えるようにしたい:
+<ul>
+<li> いろいろな端末・機器を変えたい。 =  送信機・受信機 (クライアント/端末) の自由<br>
+  パソコンで使おうが、テレビで使おうが、冷蔵庫で使おうが自由。
+<li> いろいろな用途に使いたい。 = 伝えたい「内容」 (アプリケーション) の自由<br>
+  ゲームに使おうが、チャットに使おうが、動画に使おうが自由。
+  実験や自作アプリのために使ってもOK。
+<li> いろいろな伝送経路を使いたい。 = 伝送媒体 (メディア、“土管”) の自由<br>
+  電線を使おうが、電波を使おうが、<a href="https://web.archive.org/web/20160507230659/http://www.blug.linux.no/rfc1149/vegard_bilder">伝書鳩を使おう</a>が自由。
+</ul>
+<p>
+インターネットと比べると、テレビは自由がほとんどない:
+<ul>
+<li> 使えるの機器はメーカーが生産したものだけ。= 送信機・受信機の自由なし
+<li> 放送できるのはテレビ局が認めた内容のみ。= 内容の自由なし
+<li> 基本的には特定の周波数の電波を使って送信する。= 伝送媒体の自由なし
+</ul>
+
+<h4>ウェブページと電子メール = オープン</h4>
+<p>
+ウェブと電子メールは、世界標準の規格が公開されている。
+そのため、誰がどんな目的で使ってもよいし、どんな機材で使ってもよい。
+このような規格を「<u>オープン</u>である」という。
+<ul>
+  <li> ウェブページ… <u>HTTP</u> (Hyper Text Transfer Protocol) という
+    規格にさえ従っていれば、どんな目的にも、どんな機材 (自作の機材含む) でも使える。<br>
+    (例: <a href="http://naenara.com.kp/main/index/ja/first">北朝鮮のウェブサイト</a>)
+  <li> 電子メール… <u>SMTP</u> (Simple Mail Transfer Protocol) という
+    規格にさえ従っていれば、どんな目的にも、どんな機材 (自作の機材含む) でも使える。
+  <li> LINE… LINE社が決めた規格。オープンではない。
+    特定の目的・機材でしか使えないし、LINE社は特定の人が使うのを禁止できる。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 3-2. ウェブと電子メールを使う理由</div>
+<p>
+なぜ大学からのお知らせは LINE ではなく電子メールを使い、
+大学案内は「あつ森」でなくウェブに載っているのか?
+</div>
+
+<h3 id="internet-cable">1.3. どこを通っているのか?</h3>
+<ul>
+  <li> <a href="https://www.submarinecablemap.com/">海底ケーブル全図</a>
+  <li> <a href="https://jpn.nec.com/info-square/mitatv/discover/01_sequel/index.html">海底ケーブルの秘密に迫る！ (NEC)</a>
+  <li> <a href="https://wondernetwork.com/pings/">各都市間のネットワークの遅延</a>
+  <li> <a href="https://livemap.pingdom.com/">障害が発生している部分</a>
+</ul>
+
+<h3 id="internet-packet">1.4. どうやって通信するのか?</h3>
+<p>
+線は一本しかないのに、複数のコンピュータが同時に通信できる。なぜか?
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       version="1.1" width="400" height="240" bgcolor="red">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" fill="none" stroke="black" stroke-width="2">
+      <rect x="10" y="10" width="30" height="20" />
+      <polygon points="10,32 0,40 50,40 40,32" />
+    </symbol>
+  </defs>
+  <g stroke="black" stroke-width="2" fill="none">
+    <use xlink:href="#computer" transform="translate(10,100)" />
+    <use xlink:href="#computer" transform="translate(100,40)" />
+    <use xlink:href="#computer" transform="translate(120,120)" />
+    <use xlink:href="#computer" transform="translate(200,160)" />
+    <use xlink:href="#computer" transform="translate(210,50)" />
+    <use xlink:href="#computer" transform="translate(280,100)" />
+    <use xlink:href="#computer" transform="translate(290,10)" />
+    <line x1="50" y1="120" x2="130" y2="140" />
+    <line x1="140" y1="130" x2="120" y2="80" />
+    <line x1="140" y1="60" x2="220" y2="70" />
+    <line x1="150" y1="160" x2="210" y2="180" />
+    <line x1="230" y1="170" x2="240" y2="90" />
+    <line x1="240" y1="180" x2="300" y2="140" />
+    <line x1="305" y1="110" x2="310" y2="50" />
+    <path d="M 70,150 C 80,150 120,150 140,170 C 160,200 200,210 230,210 C 270,210 290,170 300,150" marker-end="url(#arrow)" stroke="blue" />
+    <path d="M 290,60 C 290,70 290,110 280,130 C 270,150 240,160 230,160 C 210,160 170,140 150,120 C 140,110 140,90 140,90" marker-end="url(#arrow)" stroke="blue" />
+  </g>
+  </svg>
+</div>
+
+<p> 2通りの方法がある:
+<ol type=a>
+  <li> 回線交換 …
+    電線を実際につなぎ替える。
+    (<a href="https://www.youtube.com/watch?v=-uuNf3_FZH0">1960年代の電話交換手</a>)
+  <li> パケット交換 …
+    情報を小さく分けて (パケット) 送信する。
+    (現在のネットワークは、ほとんどこの方式)
+</ol>
+
+<h3 id="internet-protocol">1.5. パケット通信とは何か?</h3>
+<p>
+ケーブルの中には、複数のデータ (パケット) が流れている。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="600" height="200">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" stroke-width="3" fill="none">
+      <rect x="60" y="10" width="500" height="180" />
+      <ellipse cx="60" cy="100" rx="50" ry="90" fill="white" />
+      <rect x="180" y="25" width="80" height="40" />
+      <rect x="405" y="65" width="80" height="40" />
+      <rect x="330" y="130" width="100" height="40" />
+      <rect x="160" y="100" width="80" height="40" />
+      <line x1="180" y1="40" x2="140" y2="40" marker-end="url(#arrow)" />
+      <line x1="240" y1="120" x2="290" y2="120" marker-end="url(#arrow)" />
+      <line x1="485" y1="80" x2="510" y2="80" marker-end="url(#arrow)" />
+      <line x1="330" y1="150" x2="290" y2="150" marker-end="url(#arrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="220" y="40" dy="0.5em">ウェブ</text>
+      <text x="445" y="80" dy="0.5em">LINE</text>
+      <text x="200" y="120" dy="0.5em">メール</text>
+      <text x="380" y="145" dy="0.5em">動画配信</text>
+    </g>
+  </svg>
+</div>
+<p>
+各パケットには「ポート番号」という (仮想的な入り口を模した)
+数字がつけられている。このポート番号により通信の種類
+(HTTP, SMTP など) を区別する:
+<ul>
+  <li> HTTP (ウェブページ) … 80番, HTTPS … 443番。
+  <li> SMTP (電子メール) … 25番, IMAPS … 993番。
+  <li> LINE… ??? (企業秘密なので不明)
+</ul>
+
+<div class=exercise>
+<div class=header>演習 3-3. ブラウザとメールアプリ</div>
+<ol type=a>
+  <li> 自分の知っているウェブブラウザ (ウェブを見るもの) を 2つ以上挙げよ。
+  <li> 自分の知っている電子メールアプリ (電子メールを読み書きするもの) を 2つ以上挙げよ。
+</ol>
+</div>
+
+<h3 id="internet-server">1.6. サーバとクライアント</h3>
+<p>
+ネットワークにつながっているコンピュータには2種類ある:
+<ul>
+  <li> クライアント (客) … 勝手な時間に来店する。<br>
+    例: スマートフォン, PC, 冷蔵庫, ...
+  <li> サーバ (店) … 24時間つねに開店している。<br>
+    例: ルータ, 箱(のようなもの)
+  <li> サーバには、名前がついている。
+    (<code>www.titech.ac.jp</code> とか)
+</ul>
+
+
+<h2 id="email">2. 電子メールの原理</h2>
+<p>
+電子メール (E-mail) とは、
+インターネットの「25番ポート」を使って、
+文字や画像を送信するための仕組みである。
+<p>
+(<strong>注意:</strong>
+同じく文字を使っていても、たとえば LINE は仕組みが違うので
+電子メールとは呼ばない)
+
+<h3 id="email-protocol">2.1. 電子メールの送信手順</h3>
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" height="130"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="arrow2" viewBox="-5 -5 10 10" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M-5,-5 L5,0 L-5,5" stroke="black" fill="none" stroke-width="2" />
+    </marker>
+    <pattern id="hatch" width="5" height="5"
+	     patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+    </pattern>
+    <g id="computer" fill="white" stroke="black" stroke-width="2">
+      <rect x="10" y="10" width="30" height="20" />
+      <polygon points="10,32 0,40 50,40 40,32" />
+    </g>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+  </defs>
+  <use x="0" y="50" xlink:href="#user" />
+  <use x="50" y="30" xlink:href="#computer" />
+  <use x="670" y="30" xlink:href="#computer" />
+  <use x="720" y="50" xlink:href="#user" />
+  <g stroke="black" stroke-width="3" fill="none">
+    <rect x="180" y="20" width="80" height="60" />
+    <rect x="500" y="10" width="100" height="80" />
+    <g stroke-width="2">
+      <path d="M570,20 l0,10 l20,0 l0,-10" />
+      <path d="M570,40 l0,10 l20,0 l0,-10" />
+      <path d="M570,60 l0,10 l20,0 l0,-10" />
+    </g>
+    <line x1="100" x2="170" y1="50" y2="50" marker-end="url(#arrow)" />
+    <line x1="270" x2="490" y1="50" y2="50" marker-end="url(#arrow)" />
+    <line x1="610" x2="660" y1="50" y2="50" marker-end="url(#arrow)" />
+    <ellipse cx="380" cy="50" rx="80" ry="40" fill="white" />
+  </g>
+    <g text-anchor="middle">
+      <text x="380" y="50" dy="0.5em">インターネット</text>
+      <text x="220" y="50" dy="0.0em">送信用</text>
+      <text x="220" y="50" dy="1.0em">サーバ</text>
+      <text x="530" y="50" dy="0.0em">受信用</text>
+      <text x="530" y="50" dy="1.0em">サーバ</text>
+      <text x="80" y="80" dy="0.5em">PC</text>
+      <text x="690" y="80" dy="0.5em">PC</text>
+      <text x="30" y="110" dy="0.5em">自分</text>
+      <text x="740" y="110" dy="0.5em">相手</text>
+    </g>
+  </svg>
+</div>
+<ol>
+<li> 自分: メールを書く。
+<li> 自分PC: 大学の送信用サーバに送る (〜10秒)
+<li> 送信用サーバ: 宛て先に書かれた受信用サーバに送る (〜10秒)<br>
+  (送れない場合、4〜5日のあいだ繰り返す。)
+<li> 受信用サーバ: 宛て先ユーザのメールボックスに格納する (〜10秒)<br>
+<li> 相手PC: 受信用サーバにメールが来ているかどうかをチェック。
+<li> 相手: メールを読む。
+</ol>
+
+<h3 id="email-headers">2.2. メールの「ヘッダ」</h3>
+<ul>
+<li> メールには「ヘッダ」と「本文」がある:
+<blockquote><pre>
+<div class=mheader><span style="color:red; font-size: 50%;">(ヘッダ)</span>
+Date: 2021年4月16日 09:10:12
+From: 大田区立図書館
+To: 新山 祐介
+Subject: 大田区立図書館からのお知らせ
+</div>
+<div class=mbody><span style="color:red; font-size: 50%;">(本文)</span>
+新山祐介様
+
+ご予約の図書が用意できましたので、
+下記の図書館までおいでください。
+
+大田区立大田図書館　電話番号03-3758-3051
+
+なお貸出上限は、貸出中資料を含めて図書12冊、AV6点です。
+休館日にご注意ください。
+</pre></blockquote>
+<li> ヘッダに書いてあるもの:
+  <ol type=a>
+    <li> 差出人のメールアドレス (<code>From</code>)
+    <li> 宛て先のメールアドレス (<code>To</code>)
+    <li> 送信日時 (<code>Date</code>)
+    <li> メールの題名 (<code>Subject</code>)
+    <li> ...
+  </ol>
+</ul>
+
+<h3 id="email-address">2.3. メールアドレスの書き方・読み方</h3>
+<ul>
+<li> <code>From</code> および <code>To</code> ヘッダに書く。
+<li> 空白は入れない。
+<li> <mark>一文字でも</mark>間違えたら、届かない。
+<li> アドレスおよび <code>@</code> はすべて半角で。
+</ul>
+<table align=center><tr>
+<td class=address align=center>shinyama.y.aa</td>
+<td class=address align=center>@</td>
+<td class=address align=center>m.titech.ac.jp</td>
+</tr><tr>
+<td class=caption align=center>ユーザ名</td>
+<td class=caption align=center>アット</td>
+<td class=caption align=center>サーバ名<br>(ドメイン名)</td>
+</tr></table>
+
+<div class=exercise>
+<div class=header>演習 3-4. 間違いを探せ!</div>
+<p>
+以下のメールアドレスで、間違っている部分はどこか。
+<ol type=a>
+<li> shinyama.y.aa@m.titech.ac.pj
+<li> shinyama.y.aa@m.titech,ac.jp
+<li> shinyama.y.aa@m.t&iexcl;tech.ac.jp
+<li> shinyama.y.aa@m．titech.ac.jp
+<li> shinyama.y.aa@M.TITECH.AC.JP
+<li> shinyama.y.aa＠m.titech.ac.jp
+</ol>
+</div>
+</div>
+
+<h3 id="email-errors">2.4. 送れないとき</h3>
+<p>
+メールが送れない場合、自分から相手までのネットワークのどこかに原因がある。
+(が、どこか正確にわからないことも多い)
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" height="130"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="arrow2" viewBox="-5 -5 10 10" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M-5,-5 L5,0 L-5,5" stroke="black" fill="none" stroke-width="2" />
+    </marker>
+    <pattern id="hatch" width="5" height="5"
+	     patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+    </pattern>
+    <g id="computer" fill="white" stroke="black" stroke-width="2">
+      <rect x="10" y="10" width="30" height="20" />
+      <polygon points="10,32 0,40 50,40 40,32" />
+    </g>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+  </defs>
+  <use x="0" y="50" xlink:href="#user" />
+  <use x="50" y="30" xlink:href="#computer" />
+  <use x="670" y="30" xlink:href="#computer" />
+  <use x="720" y="50" xlink:href="#user" />
+  <g stroke="black" stroke-width="3" fill="none">
+    <rect x="180" y="20" width="80" height="60" />
+    <rect x="500" y="20" width="80" height="60" />
+    <line x1="100" x2="170" y1="50" y2="50" marker-end="url(#arrow)" />
+    <line x1="270" x2="490" y1="50" y2="50" marker-end="url(#arrow)" />
+    <line x1="590" x2="660" y1="50" y2="50" marker-end="url(#arrow)" />
+    <ellipse cx="380" cy="50" rx="80" ry="40" fill="white" />
+  </g>
+    <g text-anchor="middle">
+      <text x="380" y="50" dy="0.5em">?</text>
+      <text x="220" y="50" dy="1.0em">?</text>
+      <text x="540" y="50" dy="0.5em">?</text>
+      <text x="80" y="80" dy="0.5em">?</text>
+      <text x="690" y="80" dy="0.5em">?</text>
+      <text x="30" y="110" dy="0.5em">自分</text>
+      <text x="740" y="110" dy="0.5em">相手</text>
+    </g>
+  </svg>
+</div>
+<ol type=a>
+<li> 自分側のサーバの電源が切れていたら?
+<li> インターネットの接続が切れていたら?
+<li> 相手のサーバ名が間違っていたら?
+<li> 相手側のサーバの電源が切れていたら?
+<li> 相手のユーザ名が間違っていたら?
+<li> サーバのディスクが一杯だったら?
+<li> 相手がメールをチェックしなかったら?
+</ol>
+<p>
+メールが送れなかったとき、
+「送れませんでした」という通知が自分宛のメールに来る。
+
+<div class=exercise>
+<div class=header>演習 3-5. 電子メールのふるまい</div>
+<ol type=a>
+<li> メールの差出人はなぜ書く必要があるか?
+<li> <code>aaa@nonexistent.com</code> に送ったら、どの時点でエラーが発生するか?
+<li> <code>nonexistnet@titech.ac.jp</code> ではどうか?
+<li> 大学サーバが停電している場合、メールは届くか?
+<li> インターネット全体が停電している場合はどうか?
+<li> 相手先サーバが停電している場合、メールは届くか?
+<li> 3日間、メールが届かない場合、それは永久に届かないか?
+  10日ではどうか?
+<li> 大学の合格通知をメールで出すのに問題はあるか?
+<li> 電子メールはつねに郵便よりも早く届くか?
+</ol>
+</div>
+</div>
+
+<h3 id="email-risks">2.5. 電子メールの危険性</h3>
+<ul>
+<li> “ベストエフォート方式” → 「精一杯やったから許して」
+<li> 中継している = 中継者は盗み見れる。暗号化もされていない。
+<li> 受信用サーバが改竄される危険性がある。
+<li> <mark>届かない場合もある</mark>。
+<li> <mark>偽物の可能性もある</mark>。
+  <ul>
+    <li> Apple や Amazon、銀行など、有名どころを装った詐欺は非常に多い。
+    <li> たいていは「あなたのアカウントが使用停止になります」といった内容で、
+      慌てさせてクリックさせようとする戦略。
+    <li> 送り先 (自分) の本名が書かれていないことが多い。
+    <li> 詐欺電子メール:
+      <a href="../../y20-il1/week3/spam1.png">例1</a>,
+      <a href="../../y20-il1/week3/spam2.png">例2</a>,
+      <a href="../../y20-il1/week3/spam3.png">例3</a>.
+  </ul>
+</ul>
+
+<h4>雑談・チャット等における「顔文字」文化の違い</h4>
+<ul>
+<li> 絵文字 (Emoji): &#x263a;, &#x1f606;, &#x1f62d;
+<li> 顔文字 (日本):
+<code>(^^;)</code>, <code>(＾▽＾)</code>, <code>(≧∇≦)</code>,
+<code>（ ´Д｀）</code>, <code>orz</code>
+<li> Emoticon, Smiley (欧米):
+<code>:-)</code>, <code>:D</code>, <code>XD</code>,
+<code>D:</code>
+<li> <A href="https://www.emojistats.org/">現在、Twitterで使われている絵文字一覧</a>
+</ul>
+
+
+<h2 id="client">3. メールアプリの設定</h2>
+<p>
+とりあえず、今のところは
+東工大ポータルにログインして Tokyo Tech Mail を開けば
+メールの読み書きができる。
+しかし、いちいちポータルにログインするのは面倒くさい。
+専用のメールアプリを使うと、ログインしなくてもメールの読み書きができる。
+<p>
+大学の演習室では「Thunderbird」というアプリを使う。
+これは Windows、Mac のどちらにも対応している。
+
+<h4>自宅のパソコンで Thunderbird を使う方法</h4>
+<ol type=i>
+<li> まず <a href="https://portal.titech.ac.jp/ezguide/mailid.html">共通メール認証ID</a>
+  を発行し、メモしておく。
+<li> <a href="https://www.thunderbird.net/ja/">Thunderbird</a> アプリをインストールする。
+<div class=figure>
+<img width="343" height="80"
+     src="https://www.thunderbird.net/media/img/thunderbird/landing/wordmark.png">
+</div>
+<li> <a href="https://portal.titech.ac.jp/ezguide/mailsetup17-tb.html">Thunderbird 設定ガイド</a>
+に従って、設定しませう。
+</ol>
+
+<h3 id="client-forward">3.1. メール転送の設定</h3>
+<p>
+別の方法として、
+もし別のメールアドレス (Gmailなど) をすでに持っている場合、
+大学のアドレス宛てに来たメールをさらにそのアドレスに転送
+(実際にはコピー) することもできる。
+こうすると大学のメールは従来のアプリで受けとれるので、
+新しくメールアプリを設定する必要はない。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" height="130"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="arrow2" viewBox="-5 -5 10 10" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M-5,-5 L5,0 L-5,5" stroke="black" fill="none" stroke-width="2" />
+    </marker>
+    <pattern id="hatch" width="5" height="5"
+	     patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="5" stroke="black" stroke-width="1" />
+    </pattern>
+    <g id="computer" fill="white" stroke="black" stroke-width="2">
+      <rect x="10" y="10" width="30" height="20" />
+      <polygon points="10,32 0,40 50,40 40,32" />
+    </g>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+  </defs>
+  <use x="0" y="50" xlink:href="#user" />
+  <use x="50" y="30" xlink:href="#computer" />
+  <g stroke="black" stroke-width="3" fill="none">
+    <line x1="100" x2="130" y1="50" y2="50" marker-end="url(#arrow)" />
+    <rect x="140" y="30" width="60" height="40" />
+    <line x1="210" x2="370" y1="50" y2="50" marker-end="url(#arrow)" />
+    <ellipse cx="290" cy="50" rx="60" ry="40" fill="white" />
+    <rect x="380" y="20" width="95" height="60" />
+    <g stroke-width="2">
+      <path d="M445,30 l0,10 l20,0 l0,-10" />
+      <path d="M445,50 l0,10 l20,0 l0,-10" />
+    </g>
+    <line x1="480" x2="640" y1="50" y2="50" marker-end="url(#arrow)" />
+    <ellipse cx="560" cy="50" rx="60" ry="40" fill="white" />
+    <rect x="650" y="20" width="95" height="60" />
+    <g stroke-width="2">
+      <path d="M715,30 l0,10 l20,0 l0,-10" />
+      <path d="M715,50 l0,10 l20,0 l0,-10" />
+    </g>
+  </g>
+    <g text-anchor="middle">
+      <text x="30" y="110" dy="0.5em">相手</text>
+      <text x="290" y="50" dy="0.5em">インターネット</text>
+      <text x="170" y="50" dy="0.0em">送信用</text>
+      <text x="170" y="50" dy="1.0em">サーバ</text>
+      <text x="410" y="50" dy="0.0em">受信用</text>
+      <text x="410" y="50" dy="1.0em">サーバ</text>
+      <text x="560" y="50" dy="0.5em">インターネット</text>
+      <text x="680" y="50" dy="0.0em">受信用</text>
+      <text x="680" y="50" dy="1.0em">サーバ</text>
+      <text x="430" y="105" dy="0.0em">大学の</text>
+      <text x="430" y="105" dy="1.0em">アドレス</text>
+      <text x="700" y="105" dy="0.0em">別の</text>
+      <text x="700" y="105" dy="1.0em">アドレス</text>
+    </g>
+  </svg>
+</div>
+<p> <strong>注意</strong>:
+メールの転送をおこなう場合、
+2つの受信用サーバが<strong>完璧に</strong>動く必要がある。
+さもないと、最悪の場合、<mark>届いたメールが失われる</mark>危険がある。
+<ol>
+  <li> ポータルにログインし、Tokyo Tech Mail を開く。
+  <li> 画面左下の「<code>環境設定</code>」をクリックする。
+  <li> 以下のように転送先のアドレスを入力する:
+    <div class=figure>
+      <img width="668" height="549" src="../../y20-il1/week3/forwarding.png">
+    </div>
+    上の画面で「<code>メールのコピーを残す</code>」にチェックを入れることをおすすめする。
+    さもないと、転送がうまく動かない場合、届いたメールが失われてしまう。
+</ol>
+
+
+<h2 id="summary">4. 本日のまとめ</h2>
+<ul>
+  <li> ネットワークの基本的なしくみを学習した。
+  <li> 電子メールの原理を学習した。
+    <ul>
+      <li> メールは届かない場合もあるし、偽物の可能性もある。
+    </ul>
+  <li> <s>メールアプリを使えるように設定した。</s>
+    あるいは、メール転送を設定した。
+  <li> おまけ: <a href="https://www.dailymotion.com/video/x2hwqlw">なぜ迷惑メールは「スパム」と呼ばれるのか?</a>
+</ul>
+
+<div class=exercise id="ex-s2">
+<div class=header>小課題2. 電子メール送信の練習 (5月2日締切)</div>
+<ul>
+  <li> 締め切り: 5月2日 (1週間後)
+  <li> 次のアドレスに<mark>大学の</mark>アドレス
+    (...<code>@m.titech.ac.jp</code>) からメールを送れ:
+    <div class=figure>
+      <img width="100" height="25" align="center" src="../address.png"><code>@shinyama.jp</code><br>
+    </div>
+  <li> メールの題名 (件名) は以下のようにすること:<br>
+    <div class=figure>
+    <code>小課題2</code>
+    </div>
+  <li> 本文に以下のものを書くこと:
+    <ol type=a>
+      <li> 学籍番号
+      <li> 氏名
+      <li> なぜ鏡は左右逆に写るのに上下逆ではないのか、自分なりに考えた回答。
+    </ol>
+  <li> 正しく送れた人は、3日以内に必ず新山が<strong>返事を出します</strong>。
+  <li> <strong>注意:</strong>
+    新山から「回答を受け取りました」というメールが来ない人は、
+    まだ提出したことになっていません。
+</ul>
+</div>
+</div>
+
+<p>
+クラス共通課題は、全クラス共通の (やや大変な?) 課題です。
+<div class=exercise id="ex-m1">
+<div class=header>クラス共通課題1. 電子メールの仕組み (5月2日締切)</div>
+<ul>
+  <li> 締め切り: 5月2日 (1週間後)
+  <li> 以下のページを開く: (今までとやり方が違うので注意)
+    <ul>
+      <li> クラス共通課題1「メール」
+    </ul>
+    <strong>注意:</strong>
+    「授業時に伝えられた鍵を入力しなさい」という欄に正しい文字を入力しないと先へ進めません。
+    鍵は授業中および Discord 上でアナウンスします。
+  <li> <strong>ヒント:</strong> 用語がわからない場合は、
+    <a href="https://titechcomp.github.io/y22-il1j/day3.html">クラス共通資料</a>にある
+    「自習用副教材1」「自習用副教材2」を見ましょう。
+</ul>
+</div>
+</div>
+
+<h3 id="nextweek">来週の予定</h3>
+<ul>
+  <li> 「図書館のシステムの使い方」
+</ul>
+附属図書館スタッフの方が直接 Zoom 授業をおこないます。<br>
+(<strong>注意:</strong> この回だけは Zoom リンクが異なります。
+リンクは後日メールで送信・Discordでアナウンスします。)
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

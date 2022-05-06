@@ -351,15 +351,14 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
 <h3 id="computer-colors">2.5. 色を 0 と 1で表すには</h3>
 <ul>
 <li> 色とは何か?
-<div class=figure>
-<a href="https://en.wikipedia.org/wiki/File:Spectrum4websiteEval.png"><img width="600" height="72" src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spectrum4websiteEval.png"></a><br>
-<a href="https://en.wikipedia.org/wiki/File:Cone-response-en.png"><img width="550" height="346" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Cone-response-en.png"></a>
-</div>
 <li> 桿体細胞 (明るさを認識する)
 <li> 錐体細胞 (色を認識する -
 <span style="color:red;">赤</span>、
 <span style="color:green;">緑</span>、
 <span style="color:blue;">青</span>のあたりにピークがある)
+<div class=figure>
+<img src="Cone-fundamentals-with-srgb-spectrum.svg">
+</div>
 <li>
 <span style="color:red;">R</span>,
 <span style="color:green;">G</span>,
@@ -367,18 +366,24 @@ Zoom の「ブレイクアウト (breakout) ルーム」とは、
 の各成分をそれぞれ 256段階の数値で表す
 = 256×256×256種類の色が表現可能<br>
 これをピクセルの数だけ並べれば画像が表現できる。
-<table border class=figure align=center>
+<table border>
 <tr>
-<td style="background:#cc8855; width:1em; height:1em;"></td>
-<td style="background:#aaaa44; width:1em; height:1em;"></td>
-<td style="background:#88cc44; width:1em; height:1em;"></td>
-<td style="background:#66cc88; width:1em; height:1em;"></td>
-<td style="background:#3388cc; width:1em; height:1em;"></td>
-<td style="width:1em;">...</td>
+<td style="background:rgb(0,0,0); color:white;">R:0<br>G:0<br>B:0</td>
+<td style="background:rgb(0,0,200); color:white;">R:0<br>G:0<br>B:200</td>
+<td style="background:rgb(0,100,200); color:white;">R:0<br>G:100<br>B:200</td>
+<td style="background:rgb(0,200,100); color:black;">R:0<br>G:200<br>B:100</td>
+<td style="background:rgb(200,200,0); color:black;">R:200<br>G:200<br>B:0</td>
+<td style="background:rgb(200,100,100); color:white;">R:200<br>G:100<br>B:100</td>
+<td style="background:rgb(200,0,100); color:white;">R:200<br>G:0<br>B:100</td>
+<td style="background:rgb(200,100,200); color:white;">R:200<br>G:100<br>B:200</td>
+<td style="background:rgb(100,100,200); color:white;">R:100<br>G:100<br>B:200</td>
+<td style="background:rgb(100,0,0); color:white;">R:100<br>G:0<br>B:0</td>
+<td style="background:rgb(200,200,200); color:black;">R:200<br>G:200<br>B:200</td>
+<td style="background:rgb(255,255,255); color:black;">R:255<br>G:255<br>B:255</td>
+<td>...</td>
 </tr>
 <tr>
-<td style="background:#cc88ee; width:1em; height:1em;"></td>
-<td style="width:1em;">...</td>
+<td>...</td>
 </tr>
 </table>
 </ul>

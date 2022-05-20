@@ -1,0 +1,661 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2022年度 情報リテラシ第一 (1a)
+第6回 - 情報の圧縮とは何か? インターネットのしくみ詳細
+/ 新山 祐介</title>
+<style><!--
+.url { font-weight: bold; font-size: 100%; }
+.url code { text-decoration: underline; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第6回 - 情報の圧縮とは何か? インターネットのしくみ詳細</h1>
+<div class=nav>2022年5月23日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#bits">コンピュータ上の情報 (復習)</a>
+<ul>
+  <li> <a href="#bits-info">情報 (データ) とは何だったか?</a>
+  <li> <a href="#bits-types">データの「形式」とは?</a>
+  <li> <a href="#bits-metadata">「メタデータ」とは?</a>
+</ul>
+<li> <a href="#compression">データ圧縮とは</a>
+<ul>
+  <li> <a href="#compression-types">データ圧縮技術の種類</a>
+  <li> <a href="#compression-redu">圧縮による情報量の削減</a>
+</ul>
+<li> <a href="#internet">インターネットのしくみ (復習)</a>
+<ul>
+  <li> <a href="#internet-servers">サーバとクライアント</a>
+  <li> <a href="#internet-ipaddrs">IPアドレスとは</a>
+  <li> <a href="#internet-packets">実際のパケット</a>
+  <li> <a href="#internet-urls">URLとは?</a>
+  <li> <a href="#internet-dns">Domain Name System (DNS) とは</a>
+  <li> <a href="#internet-www">World Wide Web (WWW) の動き</a>
+  <li> <a href="#internet-errors">ブラウザがうまく動かない場合</a>
+</ul>
+<li> <a href="#summary">本日のまとめ</a>
+<ul>
+  <li class=ex> <a href="#ex-s4">小課題4. 「クッキー」の画面写真提出 (5月30日締切)</a>
+  <li class=ex> <a href="#ex-m2">クラス共通課題2. 「インターネットとウェブ」 (5月30日締切)</a>
+</ul>
+</ol>
+
+
+<h3>雑談:</h3>
+<p>
+話題: 大学の勉強で役に立ったこと
+
+
+<h2>連絡事項</h2>
+
+<div class=exercise style="background:#aaffff;">
+<div class=header>授業学修アンケート提出のお願い</div>
+<p>
+世の中をよくしたいと思ったら、自分の意見をはっきり言うことが必要です。
+<p>
+授業学修アンケートの提出をお願いします:
+<a href="https://t2schola.titech.ac.jp/mod/ltifmane/view.php?id=77048">T2SCHOLA: 授業学修アンケート</a>
+</div>
+
+<div class=exercise style="background:#aaffff;">
+<div class=header>情報リテラシ第二の履修申告について</div>
+<p>
+<a href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=7&amp;KamokuCD=110800&amp;KougiCD=202207182&amp;Nendo=2022&amp;vid=03">情報リテラシ第二 1a (IL2)</a> を
+まだ履修申告していない人は、追加申告が <strong>7/18 まで</strong> 可能です。
+<p>
+<strong>注意:</strong>
+1aクラスの人は、<strong>2Qでも 1aクラス</strong>を選んでください。
+</div>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+
+<ul>
+<li> 研究とは、調べることである。
+<li> 真実 = 資料・論文。
+<li> Wikipedia は、疑ってかかるべし。
+<li> 著作権は、じつは世の中を楽しくするための仕組みだった。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 6-1. (前回の復習)</div>
+<ol type=a>
+<li> コンピュータの4大装置とは何か?
+<li> コンピュータ上では、あらゆる情報は「?」と「?」のみで表される。
+<li> 「1ビット」とは何か説明せよ。
+<li> 「1バイト」とは何か説明せよ。
+</ol>
+</div>
+
+<div class=exercise>
+<div class=header>演習 6-2. Wikipediaのウソをさがせ! グループ発表</div>
+<p>
+先週の<a href="../week5/index.html#ex-s3">小課題 3.</a>で自分が発見した
+Wikipedia のウソをグループ発表する。
+<p>
+ブレイクアウトルーム (最大5名) に分かれて、
+各自 Zoom の画面共有を使って発表せよ。
+<ol>
+<li> ブレイクアウトルームに分かれたのち、あいうえお順で
+氏名が最初にくる人 (TAがいるグループの場合は、TA) が
+そのグループの進行を担当する。
+(といっても「次の人、お願いします」というだけ)
+<li> 発表も氏名のあいうえお順で行う。発表時間は<mark>各自 1〜2分</mark>。
+<li> 発表者はまず自分のマイクをオンにし (カメラの使用はしなくてもよい)、
+  Zoom の <kbd>画面の共有</kbd> ボタンを押して、自分のパソコン画面を共有する。<br>
+  (注意: 間違って変なウィンドウを見せないこと!)
+  <div class=figure><img src="zoom_share_begin.png" width="96" height="53"></div>
+<li> まずウソを発見した Wikipedia の当該ページを見せ、
+  それのどこが間違っていたのか (あるいは出典が欠けているか) を説明する。
+  つぎに自分が発見した正しい内容 (あるいは出典) を示す証拠ページを開き、説明する。
+<li> 説明が終わったら、<kbd>共有の停止</kbd> ボタンを押し、
+  次の人に順番をまわす。
+  <div class=figure>  <img src="zoom_share_end.png" width="312" height="22"></div>
+<li> 全員の説明が終わったらブレイクアウトルームを抜ける。(合計10分)
+</ol>
+</div>
+
+
+<h2 id="bits">1. コンピュータ上の情報 (復習)</h2>
+
+<h3 id="bits-info">1.1. 情報 (データ) とは何だったか?</h3>
+<ul>
+<li> パソコン上で扱う情報は、すべて 0 と 1 の組み合わせで表される:
+  <ul>
+    <li> 数値
+    <li> 文字(列) / テキスト
+    <li> 静止画像
+    <li> 音声
+    <li> 動画
+    <li> ...
+  </ul>
+</ul>
+
+<h3 id="bits-types">1.2. データの「形式」とは?</h3>
+<ul>
+<li> パソコン (記憶装置) 上のデータは、
+  すべて<u>ファイル</u>に保存される。
+<li> 各ファイルには、<u>ファイル名</u>と<u>拡張子</u>がついている。
+<li> ファイルの中身 … 0 と 1 の羅列。
+  <ul>
+    <li> 0と1をどのように解釈するかがわからないと、正しく表示できない。
+      (データの形式)
+    <li> パソコンでは、データの形式は<u>拡張子</u>によって区別している:<Br>
+      <pre class=example>myfile<mark>.txt</mark></pre>
+  </ul>
+</ul>
+
+<h4>ファイル拡張子の例</h4>
+<ul>
+<li> テキストファイル: <code>.txt</code>
+<li> HTMLファイル (テキストファイル): <code>.htm</code> または <code>.html</code>
+<li> JPEG画像ファイル: <code>.jpg</code> または <code>.jpeg</code>
+<li> PNG画像ファイル: <code>.png</code>
+<li> 音声ファイル: <code>.mp3</code> など
+<li> 動画ファイル: <code>.mp4</code>, <code>.mov</code> など
+<li> 圧縮ファイル: <code>.zip</code>
+<li> 実行可能ファイル(アプリ): <code>.app</code>, <code>.exe</code>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 6-3. ファイル拡張子を変えてみる</div>
+<ol>
+  <li> パソコン上で、なんらかの画像ファイルを作成する。
+  <li> ファイル名を「<code>.jpg</code>」などから「<code>.txt</code>」に変換し、
+    それをメモ帳で開いてみる。
+  <li> ファイル名を「<code>.txt</code>」から「<code>.jpg</code>」に戻し、
+    ふたたび開いてみる。
+</ol>
+</div>
+
+<h4>ファイル拡張子を表示させる (Windows)</h4>
+<p>
+Windowsでは、ファイルの拡張子はふだんは表示されない設定になっている。
+これを変更するには、以下のようにする:
+<ol>
+  <li> エクスプローラーから <kbd>フォルダー オプション</kbd>ウィンドウを開く。
+  <li> <kbd>表示</kbd> タブをクリックし、<kbd>登録されている拡張子は表示しない</kbd> の
+    チェックをはずす。
+    <div class=figure><img width="1123" height="621" src="../../y20-il2/week1/showexts-win.png"></div>
+</ol>
+
+<h4>ファイル拡張子を表示させる (Mac)</h4>
+<p>
+Macでは、ファイルの拡張子はふだんは表示されない設定になっている。
+これを変更するには、以下のようにする:
+<ol>
+  <li> Finderをクリックし、メニューから <kbd>環境設定...</kbd> を選ぶ。
+  <li> <kbd>詳細</kbd> タブをクリックし、
+    <kbd>すべてのファイル名拡張子を表示</kbd> にチェックを入れる。
+    <div class=figure><img width="434" height="292" src="../../y20-il2/week1/showexts-mac.png"></div>
+</ol>
+
+<h3 id="bits-metadata">1.3. 「メタデータ」とは?</h3>
+<ul>
+<li> データ (data) … 情報
+<li> メタデータ (metadata) … 情報に関する情報
+</ul>
+
+<p>
+ほぼすべてのデータには、
+<u>メタデータ</u> がついているのが普通である。
+パソコンで扱うメタデータには以下のようなものがある:
+
+<ul>
+<li> ファイル名 (その 0 と 1 の羅列についた名前)
+<li> 拡張子 (データ形式、その 0 と 1 をどのように解釈すべきか)
+<li> ファイルサイズ (データの大きさ)
+<li> 作成日時
+<li> 変更日時
+<li> 作成者, etc.
+</ul>
+
+<div class=exercise>
+<div class=header>演習6-4. さまざまな形式のデータを入手する</div>
+<ol type=a>
+<li> インターネットから、
+  <u>テキスト形式</u>のファイルと、
+  <u>画像形式</u>のファイルをそれぞれ 1つずつダウンロードせよ。
+  <ul>
+    <li> <a href="https://www.aozora.gr.jp/">青空文庫</a>
+    <li> <a href="https://www.reddit.com/r/EarthPorn/">reddit</a>
+  </ul>
+<li> ダウロードしたファイルの<u>拡張子</u>を確認せよ。
+<li> 各ファイルのアイコンを右クリックし、
+  <ul>
+    <li> Windows の場合 … <kbd>プロパティ...</kbd> を実行せよ。
+    <li> Mac の場合 … <kbd>情報を見る</kbd> を実行せよ。
+  </ul>
+  ひとつのファイルには、内容の他にどのようなメタデータが付随しているかを見よ。
+</ol>
+</div>
+
+
+<h2 id="compression">2. データ圧縮とは</h2>
+<ul>
+<li> 携帯のデータ通信料: 月20GB で 6000円〜。
+<li> <a href="https://www.ntt.com/personal/services/mobile/one/hajimete/startguide/01.html">データ通信料のめやす</a>
+<br> 「こんな大量のデータを扱うのはイヤだ」
+<li> データ量を減らす技術: <u>データ圧縮</u>
+</ul>
+
+<h3 id="compression-types">2.1. データ圧縮技術の種類</h3>
+<ul>
+<li> 可逆圧縮 … もとに戻る (可逆) 圧縮。
+<br> <strong>PNG画像</strong> (くり返しを省く)
+<li> 非可逆圧縮 … 完全にはもとに戻らない (非可逆) 圧縮。
+<br> <strong>JPEG画像</strong> (人間が気づかない部分を省く: 約1/10倍)
+<br>
+<a href="https://en.wikipedia.org/wiki/File:JPEG_example_JPG_RIP_050.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/JPEG_example_JPG_RIP_050.jpg" width="156" height="117"></a>
+<a href="https://en.wikipedia.org/wiki/File:JPEG_example_JPG_RIP_010.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/3/38/JPEG_example_JPG_RIP_010.jpg" width="156" height="117"></a>
+<a href="https://en.wikipedia.org/wiki/File:JPEG_example_JPG_RIP_001.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/3/38/JPEG_example_JPG_RIP_001.jpg" width="156" height="117"></a>
+<br> <strong>MPEG動画</strong> (変化しない部分を省く: 約1/100倍)
+</ul>
+
+<h3 id="compression-redu">2.2. 圧縮による情報量の削減</h3>
+<p>
+データ圧縮技術は、こんにちデータを送受信する際にはほぼ必須となっている。
+<table border class=figure align=center>
+<tr><th></th><th>圧縮なし</th><th>圧縮あり</th></tr>
+<tr><td>メール1通</td><td>100KB</td><td>20KB</td></tr>
+<tr><td>写真1枚</td><td>10MB</td><td>1MB</td></tr>
+<tr><td>動画1本</td><td>10GB</td><td>100MB</td></tr>
+</table>
+
+
+<h2 id="internet">3. インターネットのしくみ (復習)</h2>
+<ul>
+  <li> 今日、多くのデータはネットワークからダウンロードされている。
+  <li> コンピュータから見ると、ネットワークは巨大な入出力装置である。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="350" height="130"
+       transform="scale(1,1)">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" stroke-width="2" fill="none">
+      <ellipse cx="240" cy="70" rx="100" ry="50" />
+      <rect x="10" y="50" width="80" height="40" />
+      <line x1="90" y1="60" x2="140" y2="60" marker-end="url(#arrow)" />
+      <line x1="140" y1="80" x2="91" y2="80" marker-end="url(#arrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="50" y="70">演算装置</text>
+      <text x="240" y="70">ネットワーク</text>
+      <text x="120" y="55">入力</text>
+      <text x="120" y="95">出力</text>
+    </g>
+  </svg>
+</div>
+</ul>
+
+<h3 id="internet-servers">3.1. サーバとクライアント</h3>
+<p>
+ネットワークにつながっているコンピュータには2種類ある:
+<ul>
+  <li> クライアント (客) … 勝手な時間に来店する。<br>
+    例: スマートフォン, PC, 冷蔵庫, ...
+  <li> サーバ (店) … 24時間つねに開店している。<br>
+    例: ルータ, 箱(のようなもの)
+  <li> インターネット上のいろいろな役に立つウェブサイト:
+    <ul>
+      <li> <a href="http://www.ismycomputeron.com/">自分のパソコンの電源が入っているかどうか教えてくれるサイト</a> (24時間営業)
+      <li> <a href="http://www.isthatcherdeadyet.co.uk/">マーガレット・サッチャー (元英首相) が死んだかどうか教えてくれるサイト</a> (毎日更新)
+      <li> <a href="https://istheshipstillstuck.com/">スエズ運河に「あの船」がまだひっかかってるかどうかを教えてくれるサイト</a> (随時更新)
+    </ul>
+</ul>
+
+<h3 id="internet-ipaddrs">3.2. IPアドレスとは</h3>
+<ul>
+<li> インターネットにつながっているすべてのコンピュータが持つ固有のアドレス。
+サーバ・クライアントのどちらにも必要。
+これがなければインターネットは使えない。
+<li> 8ビット(0〜255) × 4つの数字で表される。
+  <ul>
+    <li> 49.212.234.52
+    <li> 131.112.244.84
+    <li> ...
+    <li> 原則、同じアドレスは世界中に2つと存在しない。
+  </ul>
+</ul>
+
+<h3 id="internet-packets">3.3. 実際のパケット</h3>
+<ul>
+  <li> ケーブルの中には、複数のデータ (<u>IPパケット</u>) が流れている。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="600" height="200">
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g stroke="black" stroke-width="3" fill="none">
+      <rect x="60" y="10" width="500" height="180" />
+      <ellipse cx="60" cy="100" rx="50" ry="90" fill="white" />
+      <rect x="180" y="25" width="80" height="40" />
+      <rect x="405" y="65" width="80" height="40" />
+      <rect x="330" y="130" width="100" height="40" />
+      <rect x="160" y="100" width="80" height="40" />
+      <line x1="180" y1="40" x2="140" y2="40" marker-end="url(#arrow)" />
+      <line x1="240" y1="120" x2="290" y2="120" marker-end="url(#arrow)" />
+      <line x1="485" y1="80" x2="510" y2="80" marker-end="url(#arrow)" />
+      <line x1="330" y1="150" x2="290" y2="150" marker-end="url(#arrow)" />
+    </g>
+    <g text-anchor="middle">
+      <text x="220" y="40" dy="0.5em">ウェブ</text>
+      <text x="445" y="80" dy="0.5em">LINE</text>
+      <text x="200" y="120" dy="0.5em">メール</text>
+      <text x="380" y="145" dy="0.5em">動画配信</text>
+    </g>
+    <g>
+      <text x="170" y="60" dy="0.5em" text-anchor="end">11.22.33.44</text>
+      <text x="490" y="100" dy="0.5em" text-anchor="begin">55.66.77.88</text>
+      <text x="245" y="130" dy="0.5em" text-anchor="begin">123.45.200.10</text>
+      <text x="320" y="165" dy="0.5em" text-anchor="end">20.10.8.5</text>
+    </g>
+  </svg>
+</div>
+  <li> 各IPパケットには、行き先をあらわす <u>IPアドレス</u> がついている。
+  <li> データの種類は、各パケットにつけられた「<u>ポート番号</u>」および
+    「通信手順 (<u>プロトコル</u>)」で区別する。
+    <ul>
+  <li> 電子メール… SMTP (Simple Mail Transfer Protocol, ポート番号 25)
+  <li> ウェブページ… HTTP (Hyper Text Transfer Protocol, ポート番号 80 あるいは 443)
+</ul>
+</ul>
+
+<h3 id="internet-urls">3.4. URLとは?</h3>
+<ul>
+  <li> ブラウザの上に表示されている文字列。<br>
+    "Uniform Resource Locator" の略だが、
+    「ゆーあーるえる」または単に「ウェブページのアドレス」と呼ばれる。
+<div class=figure>
+<a href="url.png"><img width="609" height="151" src="url.png"></a>
+</div>
+  <li> インターネット上のデータ (資源) を特定するのに使われる:
+<table align=center>
+<tr><td class=url><code>https</code></td><td class=url>://</td><td class=url><code>www.titech.ac.jp</code></td><td>&nbsp;</td><td class=url><code>/education/features/first_year.html</code></td></tr>
+<tr><td>プロトコル名</td><td></td><td>ホスト名 (サーバの名前)</td><td></td><td>ファイル名</td></tr>
+</table>
+</ul>
+
+<h3 id="internet-dns">3.5. Domain Name System (DNS) とは</h3>
+<ul>
+<li> 数字だけの (<code>131.112.244.84</code> のような)
+  IPアドレスは覚えにくいので、
+  <code>www.titech.ac.jp</code> のような「名前」から
+  IPアドレスを解決する仕組み。
+<li> サーバの IP アドレスは、名前がついていることが多い。
+<li> たとえば、以下の2つのURLは同じである:
+<ul>
+<li> <code>http://131.112.242.8/</code>
+<li> <code>http://www.ocw.titech.ac.jp/</code>
+</ul>
+<li> 電子メールでも使われる:<br>
+  <code>dareka.aaa@<mark>m.titech.ac.jp</mark></code><br>
+  (メールサーバのIPアドレス)
+<li> IPアドレスが見つからない場合はエラー。
+  <ul>
+    <li> 例: <code>oosamanomimiharobanomimi.com</code>
+    <li> 例: <code>www.igakubu.titech.ac.jp</code>
+  </ul>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 6-5. pingコマンドを使ったサーバ検査実験</div>
+<p>
+パソコンには、インターネット上にある特定のサーバが
+本当に応答しているか否かを検査するプログラム "<code>ping</code>" が附属している。
+ここではそれを使って、実際にいくつかのサーバの応答を検査してみる。
+<ol>
+<li> パソコンで「<code>コマンド プロンプト</code>」
+(Mac の場合は、「<code>ユーティリティ</code>」フォルダ内にある「<code>ターミナル</code>」)
+アプリを起動せよ。
+<li> 以下のコマンドを入力し、<kbd>Enter</kbd> を押せ:<br>
+  (コマンドが無反応になった場合は、<code>Ctrl</code> + <code>C</code> を押して止める。)
+  <ol type=a>
+    <li> <code>ping 127.0.0.1</code><br>
+      (自分自身の PC の応答をチェックする)
+    <li> <code>ping 198.41.0.4</code><br>
+      (世界にあるルートサーバの 1つをチェックする)
+    <li> <code>ping a.root-servers.net</code><br>
+      (b. と同じサーバをチェックするが、IPアドレスではなく名前で指定する)
+  </ol>
+<li> アプリの実行方法がわからない場合は、ウェブサイト
+<a href="https://pingtool.org/">https://pingtool.org/</a> を使ってもよい。
+</ol>
+</div>
+
+<h3 id="internet-www">3.6. World Wide Web (WWW) の動き</h3>
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="510" height="140"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="arrow2" viewBox="-5 -5 10 10" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M-5,-5 L5,0 L-5,5" stroke="black" fill="none" stroke-width="2" />
+    </marker>
+    <g id="computer" fill="white" stroke="black" stroke-width="2">
+      <rect x="10" y="10" width="30" height="20" />
+      <polygon points="10,32 0,40 50,40 40,32" />
+    </g>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+  </defs>
+  <use x="0" y="40" xlink:href="#user" />
+  <use x="50" y="40" xlink:href="#computer" />
+  <g stroke="black" stroke-width="3" fill="none">
+    <rect x="200" y="10" width="80" height="60" />
+    <rect x="400" y="10" width="100" height="120" />
+    <line x1="100" x2="190" y1="40" y2="40" marker-end="url(#arrow)" />
+    <line x1="280" x2="390" y1="40" y2="40" marker-end="url(#arrow)" />
+    <line x1="400" x2="100" y1="100" y2="100" marker-end="url(#arrow)" />
+  </g>
+    <g text-anchor="middle">
+      <text x="80" y="40" dy="0.0em">1.</text>
+      <text x="150" y="35" dy="0.0em">2.</text>
+      <text x="330" y="35" dy="0.0em">3.</text>
+      <text x="250" y="115" dy="0.0em">4.</text>
+      <text x="80" y="120" dy="0.0em">5.</text>
+      <text x="240" y="40" dy="0.0em">DNS</text>
+      <text x="240" y="40" dy="1.0em">サーバ</text>
+      <text x="450" y="60" dy="0.0em">WWW</text>
+      <text x="450" y="60" dy="1.0em">(ウェブ)</text>
+      <text x="450" y="60" dy="2.0em">サーバ</text>
+      <text x="80" y="85" dy="0.5em">PC</text>
+      <text x="25" y="100" dy="0.5em">自分</text>
+    </g>
+  </svg>
+</div>
+
+<ol>
+<li> ブラウザに URL "<code>https://www.titech.ac.jp/</code>" が入力される。
+<li> クライアント (PC) が DNS サーバを使って、この名前を IPアドレス (131.112.244.84) に変換する。
+<li> クライアントが指定されたIPアドレスの WWW サーバにパケットを送る。(HTTP)
+<li> <u>HTMLファイル</u>がサーバからクライアントに送られる:
+<blockquote><pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;title&gt;東京工業大学&lt;/title&gt;
+&lt;a href="/entrance_information/"&gt;入試情報&lt;/a&gt;
+&lt;a href="/maps/index.html"&gt;アクセス&lt;/a&gt;
+...
+</pre></blockquote>
+<li> ブラウザがデータを画面上に表示する。
+<li> ユーザがリンクをクリックすると、そのリンク先の URL を使って 2. に戻る。
+</ol>
+
+<div class=exercise>
+<div class=header>演習 6-6. ウェブブラウザの動作</div>
+<p>
+以下の質問について ○ か × かを答えよ。
+<ol type=a>
+<li> 文字だけのページよりも画像が沢山使われているページのほうが、通信量が多い。
+<li> アドレスに ".jp" がついているサーバは、必ず日本国内にある。
+<li> ブラウザがページを表示している間ずっと、通信が発生している。
+</ol>
+</div>
+
+<h4>ネットを使うことによる個人情報の流出</h4>
+<p>
+サーバとクライアントはお互いの IP アドレスを知っているので、
+WWW サーバにアクセスするときは、
+<a href="https://whatismyipaddress.com/">自分の IP アドレス</a>もサーバに知られている。
+これによって、自分に関するさまざまな情報がサーバ側に知られてしまうことがある。
+<p>
+また、IP アドレス以外にも「<u>クッキー</u> (cookie)」と呼ばれるものがある。
+これは HTML ファイルと同時にサーバから送られてくる識別情報で、
+クライアントは受け取ったクッキーを記憶し、次回以降そのサーバに
+アクセスするときつねにその情報を渡すようになっている。
+こうするとサーバは、例えば「ログインしたユーザ」に対して別の
+情報を渡すことができるが、同時にIPアドレスよりもさらに正確に
+「誰がアクセスしてきたか」を把握できることになる。
+多くのサイトはクッキーを使ってアクセスしてきた人を追跡している。
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="510" height="140"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="arrow2" viewBox="-5 -5 10 10" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M-5,-5 L5,0 L-5,5" stroke="black" fill="none" stroke-width="2" />
+    </marker>
+    <g id="computer" fill="white" stroke="black" stroke-width="2">
+      <rect x="10" y="10" width="30" height="20" />
+      <polygon points="10,32 0,40 50,40 40,32" />
+    </g>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+    <g id="cookie" fill="white" stroke="black" stroke-width="2">
+      <ellipse cx="17" cy="15" rx="10" ry="7" />
+      <ellipse cx="10" cy="10" rx="10" ry="7" />
+    </g>
+  </defs>
+  <use x="0" y="40" xlink:href="#user" />
+  <use x="50" y="40" xlink:href="#computer" />
+  <use x="120" y="20" xlink:href="#cookie" />
+  <use x="270" y="95" xlink:href="#cookie" />
+  <g stroke="black" stroke-width="3" fill="none">
+    <rect x="400" y="10" width="100" height="120" />
+    <line x1="400" x2="100" y1="50" y2="50" marker-end="url(#arrow)" />
+    <line x1="100" x2="390" y1="90" y2="90" marker-end="url(#arrow)" />
+  </g>
+    <g text-anchor="middle">
+      <text x="450" y="60" dy="1.0em">サーバ</text>
+      <text x="80" y="85" dy="0.5em">PC</text>
+    </g>
+    <g style="font-size: 75%;">
+      <text x="150" y="30" dy="0.5em">クッキーが送られる</text>
+      <text x="300" y="105" dy="0.5em">クッキーを送る</text>
+    </g>
+  </svg>
+</div>
+
+<h3 id="internet-errors">3.7. ブラウザがうまく動かない場合</h3>
+<ol>
+<li> URL の形式がおかしい。
+  <br>例: <code>moo://w4i&hearts;zqs&#x266a;x&gt;よ-\o/-</code>
+<li> 名前から IPアドレスが変換できない。
+  <br>例: <code>http://oosamanomimiharobanomimi.com/</code>
+<li> ケーブルが切れている・パケットが到達できない。
+  <br>例: <code>http://10.10.10.10/</code>
+<li> サーバの電源が切れている。
+  <br>例: <code>http://192.168.xxx.xxx/</code>
+<li> 「お探しのページは見つかりません」
+  <br>例: <code>https://www.titech.ac.jp/moo/</code>
+<li> サーバのデータがうまく解釈できない。
+</ol>
+
+<h4>ワンポイント</h4>
+<p>
+インターネット上の有名なサイトが止まっている場合は、
+上のような <code>ping</code> コマンドを使って検査する以外にも、
+以下のような「障害チェック」サイトを使って調べることもできる。
+<ul>
+<li> <a href="https://downdetector.jp">Downdetector</a>
+<li> <a href="https://livemap.pingdom.com/">Pingdom</a>
+</ul>
+</div>
+
+
+<h2 id="summary">4. 本日のまとめ</h2>
+<ul>
+<li> コンピュータ上のデータは、すべて 0 と 1 で表される。
+<li> データ圧縮技術のおかげで、通信料金が節約できる。
+<li> インターネットはややこしい。
+</ul>
+
+<div class=exercise id="ex-s4">
+<div class=header>小課題4. 「クッキー」の画面写真提出 (5月30日締切)</div>
+<ul>
+  <li> 締め切り: 5月30日 (1週間後)
+</ul>
+<p>
+自分のパソコン上に保管されている「クッキー」の一覧を表示し、
+その画面写真 (<u>スクリーンショット</u>) を撮影して
+<mark>PNG形式</mark>のファイルを提出すること。
+<strong>注意:</strong>
+スマートフォンのカメラで画面を撮影したものは受けつけない。
+<p>
+クッキーの一覧を見る方法は、使用しているブラウザによって異なる:
+<dl>
+<dt> Windows の場合
+<dd> ブラウザで <strong>Edge</strong> を使っている場合は、
+メニューから <kbd>設定</kbd> → <kbd>Cookieとサイトのアクセス許可</kbd> を開く。
+(Chrome を使っている場合は自分でやり方を調べること)
+<div class=figure><a href="cookies_edge.png"><img width="648" height="328" src="cookies_edge.png"></a></div>
+<p>
+撮影するには、スタートメニューから <kbd>切り取り・スケッチ</kbd> を選ぶ。
+(あるいは <kbd>Print Screen</kbd> キーを押してもよい。)
+<div class=figure><img width="325" height="150" src="screenshot-win.png"></div>
+
+<dt> Mac の場合
+<dd> ブラウザで <strong>Safari</strong> を使っている場合は、
+メニューから <kbd>環境設定</kbd> → <kbd>プライバシー</kbd> →
+<kbd>Webサイトデータを管理...</kbd> を開く。
+<div class=figure><a href="cookies_safari.png"><img width="658" height="427" src="cookies_safari.png"></a></div>
+<p>
+撮影するには、Finder のメニューから <kbd>表示</kbd> →
+<kbd>ユーティリティ</kbd> を選び、
+<kbd>スクリーンショット</kbd> を開く。
+(あるいは <kbd>Shift</kbd> + <kbd>&#8984; Command</kbd> + <kbd>5</kbd> を押してもよい)
+<div class=figure><img width="110" height="114" src="screenshot-mac.png"></div>
+</dl>
+</div>
+
+<div class=exercise id="ex-m2">
+<div class=header>クラス共通課題2. 「インターネットとウェブ」 (5月30日締切)</div>
+<ul>
+  <li> 締め切り: 5月30日 (1週間後)
+  <li> 以下のページを開く:
+    <ul>
+      <li> <a href="https://docs.google.com/forms/d/e/1FAIpQLSeFmme-NM8C2Vc0d5bIsSS_Cf7BYSe5CEDhYzzkWNZ32mr4ug/viewform?usp=sf_link">クラス共通課題2. 「インターネットとウェブ」 </a>
+    </ul>
+    <strong>注意:</strong>
+    「授業時に伝えられた合言葉を入力しなさい」という欄に正しい文字を入力しないと先へ進めません。
+    鍵は授業中および Discord 上でアナウンスします。
+  <li> <strong>ヒント:</strong> 用語がわからない場合は、
+    <a href="https://titechcomp.github.io/y22-il1j/day6.html">クラス共通資料</a>にある
+    スライドを見ましょう。
+</ul>
+</div>
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

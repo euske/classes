@@ -1,0 +1,723 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../common.css" />
+<title>2022年度 情報リテラシ第一 (1a)
+第7回 - 情報セキュリティと情報リテラシ
+/ 新山 祐介</title>
+<style><!--
+.answer li { background: #dddddd; margin: 4px; padding: 2px; outline: 1px solid gray; }
+blockquote { background: #dddddd; padding: 1em; outline: 1px solid gray; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第7回 - 情報セキュリティと情報リテラシ</h1>
+<div class=nav>2022年5月30日</div>
+
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#security">情報セキュリティ</a>
+<ul>
+  <li> <a href="#security-safety">セーフティとセキュリティ</a>
+  <li> <a href="#security-infosec">情報セキュリティとは</a>
+  <li> <a href="#security-measures">ふつうの人にできる対策</a>
+  <li> <a href="#security-crypto">暗号を正しく使うのは大変</a>
+  <li> <a href="#security-summary">セキュリティ - まとめ</a>
+</ul>
+<li> <a href="#literacy">情報リテラシ</a>
+<ul>
+  <li> <a href="#literacy-what">結局、情報リテラシとは何なのか?</a>
+  <li> <a href="#literacy-truthiness">作られた真実</a>
+  <li> <a href="#literacy-media">マスコミは「中立」か?</a>
+  <li> <a href="#literacy-people">なにがフェイクなのか?</a>
+  <li> <a href="#literacy-company">企業は信頼できるのか?</a>
+  <li> <a href="#literacy-summary">結局、どうすればいいのか</a>
+</ul>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<ul>
+<li> <a href="#ex-s5">小課題5. グラフに騙されないようにする (6月7日締切)</a>
+<li> <a href="#ex-m3">クラス共通課題3. 「情報倫理とセキュリティ」 (6月7日締切)</a>
+</ul>
+<li> <a href="#nextweek">情報リテラシ第二の予告</a>
+<ul>
+<li> <a href="#cn">みなさんに提出してもらった、Wikipedia における真偽のあやしい情報</a>
+</ul>
+</ol>
+
+
+<h3>雑談</h3>
+<p>
+話題: 現在の東工大で不満なこと
+
+
+<h2>連絡事項</h2>
+
+<div class=exercise style="background:#aaffff;">
+<div class=header>授業学修アンケート提出のお願い</div>
+<p>
+世の中をよくしたいと思ったら、自分の意見をはっきり言うことが必要です。
+<p>
+授業学修アンケートの提出をお願いします:
+<a target="_blank" href="https://t2schola.titech.ac.jp/mod/ltifmane/view.php?id=77048">T2SCHOLA: 授業学修アンケート</a>
+</div>
+
+<div class=exercise style="background:#aaffff;">
+<div class=header>情報リテラシ第二の履修申告について</div>
+<p>
+<a target="_blank" href="http://www.ocw.titech.ac.jp/index.php?module=General&amp;action=T0300&amp;GakubuCD=7&amp;KamokuCD=110800&amp;KougiCD=202207182&amp;Nendo=2022&amp;vid=03">情報リテラシ第二 1a (IL2)</a> を
+まだ履修申告していない人は、追加申告が <strong>7/18 まで</strong> 可能です。
+<p>
+<strong>注意:</strong>
+1aクラスの人は、<strong>2Qでも 1aクラス</strong>を選んでください。
+</div>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> コンピュータ上のデータは、すべて 0 と 1 で表される。
+<li> データ圧縮技術のおかげで、通信料金が節約できる。
+<li> インターネットはややこしい。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 7-1. (前回の復習)</div>
+<ol type=a>
+<li> IPアドレスとは何か?
+<li> 次のうちもっとも多く通信料を使うサイトはどれか:
+  Twitter、YouTube、Wikipedia、Instagram
+<li> 「サーバ」と「クライアント」の違いを説明せよ。
+</ol>
+</div>
+
+
+<h2 id="security">1. 情報セキュリティとは</h2>
+
+<h3 id="security-safety">1.1. セーフティとセキュリティ</h3>
+<ul>
+<li> セーフティ (safety) … 安全。災害や事故から守ること。
+<li> セキュリティ (security) … 保安。悪い人間から守ること。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 7-2. セーフティかセキュリティか?</div>
+<ol type=a>
+<li> 信号機
+<li> <a target="_blank" href="https://www.google.co.jp/search?q=%E3%81%AF%E3%81%84%E3%81%A3%E3%81%A6%E3%81%AF%E3%81%84%E3%81%91%E3%81%BE%E3%81%9B%E3%82%93&source=lnms&tbm=isch">「はいってはいけません」の看板</a>
+<li> 金庫
+<li> <a target="_blank" href="https://www.amazon.co.jp/s?k=%E7%9B%A3%E8%A6%96%E3%82%AB%E3%83%A1%E3%83%A9+%E3%83%80%E3%83%9F%E3%83%BC">ダミー監視カメラ</a>
+</ol>
+</div>
+<p>
+おまけ: <a target="_blank" href="https://i.imgur.com/Yffu60C.gifv">アホな錠前</a>
+<h4>安全対策・セキュリティ対策</h4>
+<p>
+おもに 3つのパターンがある:
+<ol type=a>
+<li> <strong>予防</strong> (抑制) … 事件・事故が起こる原因を減らす。
+<li> <strong>強化</strong> (保護) … 対象を頑丈にする。
+<li> <strong>緩和</strong> (封鎖) … 万が一、事件・事故が起きた後のダメージを少なくする。
+</ol>
+
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="110"
+       transform="translate(5,5)">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+  </defs>
+  <g stroke="black" stroke-width="3" fill="none">
+    <rect x="100" y="10" width="40" height="80" />
+    <g stroke-width="8" marker-end="url(#arrow)">
+      <line x1="10" x2="80" y1="50" y2="50" />
+      <line x1="145" x2="220" y1="50" y2="50" />
+    </g>
+  </g>
+    <g text-anchor="middle">
+      <text x="40" y="35" dy="0.0em">予防</text>
+      <text x="120" y="35" dy="0.0em">強化</text>
+      <text x="180" y="35" dy="0.0em">緩和</text>
+    </g>
+  </svg>
+</div>
+
+<ol type=i>
+<li> 火事の場合 …
+  <ol type=a>
+    <li> <strong>予防</strong> … 火をなるべく使わない。
+    <li> <strong>強化</strong> … 燃えにくい素材を使う。
+    <li> <strong>緩和</strong> … 消火器を用意する。避難訓練をする。
+  </ol>
+<li> 自動車事故 (運転者) の場合 …
+  <ol type=a>
+    <li> <strong>予防</strong> … なるべく車に乗らない。安全運転を心がける。
+    <li> <strong>強化</strong> … 頑丈なクルマに乗る。
+    <li> <strong>緩和</strong> … シートベルト・エアバッグ等の装備。自動車保険。
+  </ol>
+<li> 外出時の盗難の場合 …
+  <ol type=a>
+    <li> <strong>予防</strong> … 貴重品はなるべく持ち歩かない。
+    <li> <strong>強化</strong> … 出しにくい所に入れる。
+    <li> <strong>緩和</strong> … 現金を小分けにして複数箇所に入れておく。
+  </ol>
+</ol>
+
+<div class=exercise>
+<div class=header>演習 7-3. 対策の種類</div>
+<ol>
+<li> コロナウイルス感染症について、
+  <strong>予防</strong>・<strong>強化</strong>・<strong>緩和</strong>の手段を答えよ。
+<li> パスワード漏洩について、
+  <strong>予防</strong>・<strong>強化</strong>・<strong>緩和</strong>の手段を答えよ。
+</ol>
+</div>
+
+<h3 id="security-infosec">1.2. 情報セキュリティとは</h3>
+<p>
+以下の 3つのものを守るのが情報セキュリティである。
+<ol type=i>
+<li> <strong>秘匿性</strong> (秘密を守れる) … 知られたくないことを知られたら ×。
+<li> <strong>正真性</strong> (内容が正しい) … 勝手にデータを改竄・なりすまされたら ×。
+<li> <strong>可用性</strong> (必要なときに使える) … いざ必要なときに動かなかったら ×。
+</ol>
+
+<h4>セキュリティが破られるとき</h4>
+<ol type=i>
+<li> コンピュータが悪い場合:
+<ul>
+  <li> 機械の停電・故障・ケーブル切断。
+  <li> ソフトウェアの欠陥 (バグ)。
+    <ul>
+      <li> もし欠陥のまったくないソフトウェアができれば、
+        それを悪用されてハッキングされることはない。
+      <li> 残念ながら、現代のソフトウェアはバグだらけ。
+    </ul>
+</ul>
+<li> 人間が悪い場合:
+<ul>
+  <li> パスワードを推測される。
+  <li> まちがった操作をする。
+    <ul>
+      <li> コンピュータは人間の指示どおり実行するが、
+        それが<strong>人間にとって害があるかどうか</strong>までは判断できない。
+      <li> たとえ機械が完璧でも、人間は間違った指示を出したら人間の責任。
+      <li> 特に、あやしいプログラムを実行する:
+        「自分のデータを勝手に消す」「自分のデータを勝手にどこかに送信する」
+        等の処理が行われる。
+    </ul>
+</ul>
+</ol>
+
+<h3 id="security-measures">1.3. ふつうの人にできる対策</h3>
+<ol type=i>
+  <li> 「自分なんて誰からも狙われないだろう」とは思わないこと。
+    <ul>
+      <li> 犯罪者の考えることはみな同じ。<br>
+        「自分では直接手を出さない → 他人に罪をかぶせる」
+      <li> 自分のパスワード・銀行口座等を人に使わせると、
+        なりすましの温床になる。
+      <li> 犯罪に使われる、コードを盗まれる、「いいね」を売る。
+      <li> <strong>対策</strong>:
+        パスワードはきちんとつける。
+    </ul>
+  <li> PCはなるべく強化しておくこと。
+    <ul>
+      <li> ウイルスの 99% は既知の欠陥 (バグ) を悪用したもの。
+      <li> 例: ブラウザであるページを開くだけで、
+        あやしいプログラムが勝手に実行されてしまうバグ (特定のバージョンの Chrome で発生)。
+      <li> <strong>対策</strong>:
+        ソフトウェアはつねに最新のバージョン (=バグが少ない) に更新する。
+    </ul>
+  <li> 何事にも冷静に対処すること。
+    <ul>
+      <li> 記事の作者は信用できるか? → できない。
+      <li> メールの差出人は信用できるか? → できない。
+      <li> ウェブサイトは信用できるか? → (完璧には)できない。
+    </ul>
+</ol>
+
+<h3 id="security-crypto">1.4. 暗号を正しく使うのは大変</h3>
+<p>
+現在のインターネットでは、ほとんどのサイトに「鍵マーク」がついている。
+これは、そのサーバとの通信 (パケット) が「安全である」ことを意味している。
+
+<div class=figure>
+  <table align=center border><tr>
+  <td><a href="https://www.titech.ac.jp/"><img width="405" height="144" src="https.png"></a></td>
+  <td><a href="http://www.cs.titech.ac.jp/"><img width="492" height="195" src="http.png"></a></td>
+  </tr><tr>
+  <td>暗号化あり (HTTP<mark>S</mark>)</td>
+  <td>暗号化なし (HTTP)</td>
+  </tr></table>
+</div>
+
+<p>
+しかし「安全である」というのは、
+ただ「暗号を使っている」だけではない。
+
+<div class=exercise>
+<div class=header>演習 7-4. 暗号さえ使っていれば OK か?</div>
+<p>
+あなたはネットショップで見たある商品を購入しようと思い、
+そこに書いてある口座に代金をふりこんだ。
+この通信は暗号化されているので、この口座番号は正しいはずである。
+この論理の穴を指摘せよ。
+</div>
+
+<p>
+悪者も暗号は使えるので、たとえば正当な相手のフリをして
+自分と暗号を使って通信すれば、結局のところ情報は悪者の手に渡ってしまう。
+(中間者攻撃)
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="500" height="120"
+       transform="scale(1,1)">
+    <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+    <g id="baddie" fill="black" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+    </defs>
+    <use xlink:href="#user" x="10" y="20" />
+    <use xlink:href="#baddie" x="260" y="20" />
+    <use xlink:href="#user" x="410" y="20" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="80" x2="240" y1="40" y2="40" />
+      <line x1="240" x2="80" y1="60" y2="60" />
+    </g>
+    <g style="font-size: 75%;" text-anchor="middle">
+      <text x="160" y="30">暗号</text>
+      <text x="35" y="90">自分</text>
+      <text x="285" y="90">悪者</text>
+      <text x="285" y="90" dy="1.1em">(中間者)</text>
+      <text x="435" y="90">本当の相手</text>
+    </g>
+  </svg>
+</div>
+<p>
+したがって、通信を本当に安全にするためには 2つのことが必要である:
+<ol type=a>
+  <li> 暗号を使う。
+  <li> 確実に正しい相手と通信する。
+</ol>
+<p>
+しかし b. をどうやったら確信できるのか?
+
+<div class=exercise>
+<div class=header>演習 7-5. どうやって信頼する?</div>
+<p>
+ある日、母親の親戚を名乗る (会ったことがない) 人から電話がかかってきて
+「荷物を送りたいので住所を教えてほしい」という連絡があった。
+これが本当に親戚からの電話で、詐欺でないことを確認するにはどうすればよいか?
+</div>
+<p>
+ブラウザにおける「鍵マーク」は、通信時に相手の<strong>サーバ名</strong>が
+正しいかどうかを <u>認証局 (CA)</u> と呼ばれる第三者機関に
+確認してもらうことによって「安全」というお墨付を得ている。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="200"
+       transform="scale(1,1)">
+    <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <g id="user" fill="none" stroke="black" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+    <g id="ca" fill="none" stroke="black" stroke-width="2">
+      <rect x="5" y="0" width="40" height="50" />
+      <path d="M10,10 l0,40 M15,10 l0,40 M20,10 l0,40 M25,10 l0,40 M30,10 l0,40 M35,10 l0,40 M40,10 l0,40" />
+    </g>
+    <g id="titech" fill="none" stroke="black" stroke-width="2">
+      <rect x="15" y="0" width="20" height="50" />
+      <rect x="0" y="20" width="50" height="30" />
+    </g>
+    </defs>
+    <use xlink:href="#user" x="10" y="120" />
+    <use xlink:href="#ca" x="160" y="20" />
+    <use xlink:href="#titech" x="310" y="120" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="80" x2="280" y1="145" y2="145" />
+      <line x1="280" x2="80" y1="160" y2="160" />
+      <line x1="70" y1="110" x2="140" y2="50" />
+      <line x1="150" y1="60" x2="80" y2="120" />
+    </g>
+    <g style="font-size: 75%;" text-anchor="middle">
+      <text x="60" y="55">これって本当に</text>
+      <text x="60" y="70">www.titech.ac.jp?</text>
+      <text x="130" y="100">うん</text>
+      <text x="185" y="180">暗号</text>
+      <text x="185" y="85">認証局</text>
+      <text x="35" y="185">自分</text>
+      <text x="335" y="185">www.titech.ac.jp</text>
+    </g>
+  </svg>
+</div>
+<p>
+認証局は<a target="_blank" href="https://ccadb-public.secure.force.com/mozilla/CACertificatesInFirefoxReport">世界に100箇所以上</a>あり、パソコンやスマートフォンの中には
+これらの機関を確認する仕組みが<strong>最初から</strong>内蔵されている。
+(なので、パソコンや携帯を買った時点で、すでにこれらの認証局を信用したことになっている。)
+<p>
+しかし…
+<div class=exercise>
+<div class=header>演習 7-6. サイト名だけで十分か?</div>
+<p>
+以下のウェブサイトは、どの有名企業のもの (に見える) か答えよ:
+<ol type=a>
+<li> <a target="_blank" href="https://www.nissan.com">www.nissan.com</a>
+ (<a href="https://ja.wikipedia.org/wiki/%E6%97%A5%E7%94%A3%E8%87%AA%E5%8B%95%E8%BB%8A%E5%AF%BE%E3%83%8B%E3%83%83%E3%82%B5%E3%83%B3%E3%83%BB%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E4%BA%8B%E4%BB%B6">日産自動車対ニッサン・コンピューター事件</a>)
+<li> <a target="_blank" href="https://www.applesupport.com">www.applesupport.com</a>
+</ol>
+</div>
+<p>
+結論をいえば、サーバ名がそれっぽくても、騙されることがありうる。
+ブラウザが保証するのは「その<strong>サーバ名</strong>と安全に通信できているか」
+だけであって、その中身が本物かどうかについては、何も言っていないのである。
+
+<h3 id="security-summary">1.5. セキュリティ - まとめ</h3>
+<ul>
+<li> <mark>パスワード</mark>はきちんとつける。
+<li> つねに<mark>最新のバージョン</mark> (=バグが少ない) に更新する。
+<li> <mark>信頼できない情報</mark>に注意する。
+</ul>
+
+
+<h2 id="literacy">2. 情報リテラシ</h2>
+
+<h3 id="literacy-what">2.1. 結局、情報リテラシとは何なのか?</h3>
+<ul>
+<li> 「パソコンが使えること」では<strong>ない</strong>。
+<li> 「情報」を正しく使えること:
+<ul>
+<li> 情報がどのように処理されるかを知っている。
+<li> 欲しい情報を検索・入手できる。
+<li> <strong>ウソ</strong>を見抜く。
+</ul>
+</ul>
+
+<h3 id="literacy-truthiness">2.2. 作られた真実</h3>
+<ul>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=iYhCn0jf46U">Dove Evolution</a>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=ohmajJTcpNk">Face2Face: Real-time Face Capture and Reenactment of RGB Videos</a>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=JMPEagWVAHU">スマートフォンをドローン化する</a> (← インチキ)
+  <ul>
+    <li> <a target="_blank" href="https://www.youtube.com/watch?v=LEZCxxKp0hM">Mark Rober氏による暴露</a>
+  </ul>
+<li> <a target="_blank" href="https://retractionwatch.com">Retraction Watch</a> - 不正な学術研究 (論文) を報告するサイト。
+</ul>
+<p>
+また、ネットの記事はあとから
+<strong>こっそり改竄されたり削除されたりする</strong>ので注意。
+
+<h3 id="literacy-media">2.3. マスコミは「中立」か?</h3>
+<p>
+実際には「完全に虚偽のニュース」は少ない。問題は、
+<strong>極端に偏ったニュースが多い</strong>ことである。
+このようなニュースは人々の意見を特定の方向に
+<ul>
+  <li> <a target="_blank" href="https://www.asahi.com/news/editorial.html">朝日新聞</a> … 憲法改正反対、政権に批判的。
+  <li> <a target="_blank" href="https://www.sankei.com/column/newslist/editorial-n1.html">産経新聞</a> … 憲法改正賛成、政権に好意的。
+  <li> <a target="_blank" href="https://www.rt.com/">RT (Russia Today)</a> …
+    ロシア政府による報道機関。
+    「ロシアはまともで、アメリカは信用できない」という論調の記事を多く掲載している。
+  <li> <a target="_blank" href="https://fij.info/">ファクトチェック・イニシアティブ</a> - マスコミの間違いを指摘するサイト。
+</ul>
+
+<h4>データも間違える</h4>
+<ul>
+<li> 2016年 米国大統領選挙
+  <ul>
+    <li> 予想では<a target="_blank" href="https://www.huffingtonpost.com/entry/polls-hillary-clinton-win_us_5821074ce4b0e80b02cc2a94">98%の確率でヒラリーが勝つ</a>と思われていた。
+    <li> トランプ陣営は自分たちが「はめられて」いると主張していた。
+  </ul>
+</ul>
+
+<h4>陰謀論</h4>
+<p>
+マスコミが信用できないからといって、ネットの言うことを全部信用すると…
+<ul>
+  <li> <a target="_blank" href="https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%9D%E3%83%AD%E8%A8%88%E7%94%BB%E9%99%B0%E8%AC%80%E8%AB%96">地球は実は球体ではなく平面で、アポロ11号の月着陸はウソだった</a>。
+  <li> <a target="_blank" href="https://en.wikipedia.org/wiki/Misinformation_related_to_the_COVID-19_pandemic#Conspiracy_theories">エイズウイルス・新型コロナウイルスは生物兵器として開発された</a>。
+  <li> <a target="_blank" href="https://ja.wikipedia.org/wiki/%E5%9C%B0%E7%90%83%E6%B8%A9%E6%9A%96%E5%8C%96%E3%81%AB%E5%AF%BE%E3%81%99%E3%82%8B%E6%87%90%E7%96%91%E8%AB%96">地球温暖化は実は起きておらず、科学者・政治家が世界を支配するために作られたウソである</a>。
+  <li> 東工大の本館 (あるいは百年記念館) はいざというときにロボットに変形する。
+  <li> ...
+</ul>
+
+<p>
+ネットの「多数派」はじつは大して多数派ではない。
+ネットを利用する人の 9割以上は「見るだけ」で発言していない。
+ただし全体の 1%程度の「声の大きい人」が目立ってしまう。
+<a target="_blank" href="https://ja.wikipedia.org/wiki/1%25%E3%81%AE%E6%B3%95%E5%89%87">1%の法則</a>
+
+<h4>同調圧力</h4>
+<p>
+多数派がつねに正しいわけではなく、人気者が偉いわけでもない。
+しかし、そのように考える人々は大勢いる。
+<ul>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=TYIh4MkcfJA">アッシュの協調実験</a> …
+  人は (あきらかに間違っていても) 他人の意見に同調してしまう。
+<li> マスコミは、一部の人の意見を (それが正しかろうといまいと) 何万倍にも
+  拡声してしまう。
+</ul>
+
+<h3 id="literacy-people">2.4. なぜ人は信じてしまうのか?</h3>
+<p>
+<ul>
+<li> 科学的議論: 事実や統計をもとに議論する。
+<li> 感情論: 恐怖あるいは怒りに訴える極端な事例のみを取り上げる。
+<li> しかし
+  「科学的議論 = つねに正しい」「感情論 = つねに間違っている」とは限らない。
+</ul>
+
+<h4>マスコミもしょせんは商売である</h4>
+<p>
+科学的な議論は凡庸であり、退屈だ。
+マスコミが儲けるためには、人が読みたがる記事を書く必要がある
+(とくにネット時代のメディアは、クリック数が収入に直結する) :
+<ul>
+  <li> 不安を煽るような記事 (災害、犯罪、病気、戦争)
+  <li> 怒りを煽るような記事 (政治家、芸能人の不祥事)
+  <li> 羨望を煽るような記事 (金持ち、芸能人、東大生)
+</ul>
+
+<p>
+重要だが毎日起こっていることは無視される: 食べ物、空気、日光、職業のリスク。
+人間の「直感的な」リスク計算は間違っていることが多い。
+<ul>
+<li> <a target="_blank" href="http://www.phyast.pitt.edu/~blc/book/chapter8.html">いろいろな健康上のリスク</a>
+<li> <a target="_blank" href="https://ourworldindata.org/causes-of-death#does-the-news-reflect-what-we-die-from">実際の危険と、マスコミが言う「危険」の違い</a>
+</ul>
+
+<p>
+情報は無尽蔵にあるが、人間の注意力は限られている。
+
+<h4>インチキな議論 (<a target="_blank" href="https://ja.wikipedia.org/wiki/%E8%A9%AD%E5%BC%81">詭弁</a>) の例</h4>
+<ul>
+<li> 権威に訴える議論 (「有名なあの人が言ってるから正しい」)
+<li> 十把ひとからげ (「バカな東工大生がいた」 → 「東工大生はみなバカである」)
+<li> 藁人形論法 (「A氏は東工大が世界最悪の大学だといっているが…」)
+<li> ニセの二者択一 (「Aを否定するなら、つまりBということか!」)
+<li> 相関と因果関係 (「アイスを食べる人が増えると、エアコンが売れる」)
+<li> そっちこそどうなんだ論法 (「もっとひどいことをやってる人がいる」)
+</ul>
+
+<div class=exercise>
+<div class=header>演習 7-6. 扇情的な記事とは</div>
+<p>
+次の新聞記事のうち、不安または怒りに訴えているものを挙げよ:
+<ol type=a>
+<li> 野球部員がランニング中に倒れ死亡、監督は救急車呼ばず
+<li> ネットの中傷が原因でアイドルが自殺
+<li> 北朝鮮が核兵器の開発を加速
+<li> 千葉県で震度4
+</ol>
+</div>
+
+<h3 id="literacy-company">2.5. 企業は信頼できるのか?</h3>
+<p>
+企業は政治的に中立かもしれないが、企業には企業の思惑がある…
+<ul>
+  <li> 多くのサイトが IPアドレスや、クッキーを使ってユーザを追跡している。
+  <li> なぜ Google・Facebook・Twitter はタダなのか? …
+    <a target="_blank" href="https://support.google.com/adwords/topic/3121935?hl=ja&amp;ref_topic=3119122,3181080,3126923,">広告を売っている</a>ため。
+    <ul>
+      <li> Googleの本当の客は我々ではなく、広告主である。
+        Google検索のユーザは、利用するための「動物」のようなもの。
+      <li> 広告の原理: 対象を絞り込むほど価値があがる。
+      <li> たとえ自分の携帯電話に年齢・性別・職業・趣味・友達一覧を
+        入力していなくても、Google にはほぼすべて知られている。
+        <ul>
+          <li> 検索キーワードから漏れる情報:
+            <br>年齢、性別、家族構成、地域、収入、趣味、etc.
+          <li> 位置情報を見れば、どんな生活をしているかがわかるし (会社員・学生)、
+            誰と一緒にいるかもわかる。
+          <li> 起きた時刻・電話した時刻・ゲームをやった時刻などを見れば、
+            一日の生活リズムがわかる。
+          <li> 写真に映っている景色からも位置が推測できる。
+          <li> マウスの動き・スクロールを検出し、ページのどの部分を熱心に見ているかがわかる。
+        </ul>
+    </ul>
+  <li> Facebook幹部が語った話 …
+    「10〜20代の若者が不安になったり、感動したり、嫉妬したり、劣等感をもつ瞬間を検出できる」
+    <ul>
+      <li> そのタイミングで趣味に合った広告を出せば売れる。
+      <li> Google や Facebook が得た情報は、別の会社にも利用されている。
+        その会社が何をしているか、Google や Facebook は責任を持たなくてよい。
+      <li> これらのデータの一部は警察に提供されたり、
+        <a target="_blank" href="https://courrier.jp/news/archives/86209/?ate_cookie=1591831624">大統領選挙に影響を与えている</a>。
+    </ul>
+  <li> Amazon の場合 … 買う品物で住所・性別・職業・趣味、
+    妊娠しているか否かなどがわかる。
+    <ul>
+      <li> Amazon Echo と Google Home … 家での会話を録音している。<br>
+        その一部は、<a target="_blank" href="https://www.itmedia.co.jp/news/articles/1904/12/news075.html">数千人のスタッフによって聞かれている</a>。
+      <li> これらのデバイスには過去にいくつもの欠陥 (バグ) が発見されており、
+        ハックされれば悪意のある目的に使われる危険がある。
+    </ul>
+  <li> Pok&eacute;mon Go … 「人間を遠隔操作する実験」。
+    <ul>
+      <li> <a target="_blank" href="https://nianticlabs.com/sponsoredlocations/">あなたのお店の客足を伸ばします!</a>
+    </ul>
+  <li> すべての監視・盗聴処理は、可能なかぎり人間に気づかれないように作られている。
+    <ul>
+      <li> 監視されないようにネットワークに接続しないようにしたら? → 作動しなくなる。
+    </ul>
+  <li> 機械はなるべくタダで売る → 本当の価値はデータである。
+    <ul>
+      <li> なぜ Android のほうが iPhone より安いのか?
+      <li> <a target="_blank" href="https://www.amazon.co.jp/s?i=amazon-devices">なぜ Amazon のデバイスはあんなに安いのか?</a>
+    </ul>
+</ul>
+
+<h3 id="literacy-summary">2.6. 結局、どうすればいいのか</h3>
+
+<blockquote>
+The first principle is that you must not fool yourself, and you are the easiest person to fool.<br>
+(科学における第一の原則はまず自分自身を騙さないことだが、ところで自分というのはいちばん騙されやすい人間だ。)<br>
+<div align=right>-- <em>Richard Feynmann</em></div>
+</blockquote>
+
+<ul>
+<li> ヒトは「これだけを信じれていれば絶対安心」というものを求めたがる。
+  実際には、そんなものは存在しない。
+<li> 「自分が間違っていた」と認めるのは、勇気のある行動である。
+  (大人でもできる人は少ない。)
+<li> 100% 信頼できる情報なんてありえないので「半分ぐらい信じる」。
+<ul>
+<li> 複数の情報源にあたる。
+<li> 自分の経験と合致するかどうか確かめる。
+<li> 別の視点から物事を見てみる。
+</ul>
+<li> 情報リテラシ = <strong>健全な懐疑精神をもつこと</strong>。
+</ul>
+
+
+<h2 id="summary">3. 本日のまとめ・小課題</h2>
+
+<ul>
+<li> セキュリティには気をつけよう。
+<li> 思い込みに気をつけよう。
+<li> 自分の行動はおそらくかなり他人にバレている。
+<li> 究極的には、大学 (および教師) は、ただの道具である。
+  使い方がヘタだと、大したものも得られない。
+</ul>
+
+<div class=exercise id="ex-s5">
+<div class=header>小課題5. グラフに騙されないようにする (6月6日締切)</div>
+<ul>
+  <li> 締め切り: 6月6日 (1週間後)
+<p>
+産経新聞の 2018年の記事
+<a target="_blank" href="https://www.sankei.com/west/news/180502/wst1805020020-n1.html">「訪日外国人のレンタカー死傷事故、３年で３倍に」</a>
+を見ると、訪日外国人による自動車事故が大きな問題となっているように読める。
+しかし、この記事には訪日外国人がここ最近で急速に増えているという事実が記されていない。
+この記事から過去5年間 (2013年〜2018年) の訪日外国人の数をネットで調べ、
+この記事のいう問題が本当に「問題」なのかどうか考察せよ。
+また、記事中のグラフの描き方についても問題点を指摘せよ。
+</ul>
+</div>
+
+<div class=exercise id="ex-m3">
+<div class=header>クラス共通課題3. 「情報倫理とセキュリティ」 (6月6日締切)</div>
+<ul>
+  <li> 締め切り: 6月6日 (1週間後)
+  <li> 以下のページを開く:
+    <ul>
+      <li> <a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSdlo24EaT3lfnHKmCY4B6YEjQhfjXyGzfHCndVw34GJJ9R0rQ/viewform?usp=sf_link">クラス共通課題3. 「情報倫理とセキュリティ」</a>
+    </ul>
+    <strong>注意:</strong>
+    「授業時に伝えられた合言葉を入力しなさい」という欄に正しい文字を入力しないと先へ進めません。
+    鍵は授業中および Discord 上でアナウンスします。
+  <li> <strong>ヒント:</strong>
+    <a target="_blank" href="https://www.is.c.titech.ac.jp/infoliteracy/index/">情報倫理とセキュリティのためのクイックガイド</a> を参照。
+</ul>
+</div>
+
+
+<h2 id="nextweek">4. 情報リテラシ第二の予告</h2>
+<p>
+6月14日(2週間後)より開始。
+<ul>
+  <li> <strong>注意:</strong> パソコン(Windows あるいは Mac) が必要です。
+  <li> パソコン上におけるデータ処理の方法。
+  <li> 数式・グラフを使ったレポートの書き方。
+  <li> プレゼン作法。 (バイトの面接に有利かも)
+  <li> …その他、雑学など。
+</ul>
+
+
+<h4 id="cn">みなさんに提出してもらった、Wikipedia における真偽のあやしい情報</h4>
+<p>
+(一部簡略化しています)
+<ul class=answer>
+<li> <strong>地球空洞説</strong> … 地球空洞説の歴史→フィクションでの扱い，の項に出典が不明瞭な箇所がある．出典となりうるのは例えば https://fukuoka-u.repo.nii.ac.jp/?action=repository_action_common_download&amp;item_id=1036&amp;item_no=1&amp;attribute_id=22&amp;file_no=1のp14にある作品群である．(しかし，出典がなくとも後述されている作品群から選んで具体的に書くことでも成立はする)
+<li> <strong>鵜の木</strong> … 施設の欄に以下のように書いてある 鵜の木 老人いこいの家 ゆうゆうくらぶ鵜の木 大田区のHPにはこれらが同一の施設であると書いてある https://www.city.ota.tokyo.jp/shisetsu/fukushi/kourei/ikoinoie/index.html
+<li> <strong>富士急ハイランド</strong> … 「主な施設」という項目において、「高飛車」というアトラクションを『最大落下角度は121度で当時世界一、ギネス認定。』と説明している。しかし、この「ギネス認定」という記述に出典が見当たらなかったので、探したところ、それらしきものが1点見つかった。 Guinness World Records(ギネスワールドレコーズ公式サイト)で、検索をかけたところ、『Steepest rollercoaster made from steel 』(=鋼製の最も急なジェットコースター)という記録名で、アメリカの「TMNT Shellraiser」というジェットコースターが、最大落下角度121.5度で世界記録だという内容が記載されていた。その文章中に、『the previous record holder,Takabisha』と書かれており、「高飛車」がそれまでの世界記録保持ジェットコースターであったことが読み取れる。 これより、このWikipedia内の文章を、書き換えるとするならば、『最大落下速度は121度で、建設当時世界一で、ギネス認定されたが、のちに最大落下角度121.5度を有するアメリカの「TMNT Shellraiser」が造られ、世界記録は更新された。』などとすると良いかもしれない。 参考資料Guinness World Records〈https://www.guinnessworldrecords.jp/search/applicationrecordsearch?term=takabisha#faq_0_15-85463〉
+<li> <strong>群馬県立高崎高等学校</strong> … 授業時間が60分と書かれているが出典がない。高崎高校のホームページ(https://takasaki-hs.gsn.ed.jp/profile/page_20210222073445)を見ると65分授業時間であることが分かる。
+<li> <strong>ソフトテニス</strong> … ルールの部分で、失点する場合について、自分のコートで2回連続バウンドしたら失点と書いてあるが、厳密には自分のコートで1回バウンドしたボールを2回以上バウンドさせてしまったときに失点である。出典：http://www.soft-tennis.com/shiga/2_HSAF/H31/handbook.pdf
+<li> <strong>品川区立小山小学校</strong> … 進学中学校が荏原第六中学校のみとなっていた、しかし、小山小学校の児童の進学先は荏原第六中学校のみならず、荏原第一中学校や、荏原平塚学園などもあるため、このWikipediaの情報は不十分である。
+<li> <strong>千葉県立千葉中学校・高等学校</strong> … 2022／05／15に調べたところ二つの誤りを確認した。一つ目は千葉県立千葉中学校の入試倍率がおよそ10倍と記載されている件である。実際の千葉県が公式に発表しているデータでは令和四年度では7.5倍となっており、10倍には程遠い。加えて、千葉県立千葉高等学校の部活紹介の欄で、クイズ研究部があると紹介されているが、高校のホームページではクイズ研究同好会として紹介されている。
+<li> <strong>和歌山県立田辺中学校・高等学校</strong> … 「沿革」の情報に出典がない。3,中学校の部活欄に男子バスケ部、写真部、ホッケー部、華道部、茶道部と記載されているが、実際にはない。また文芸部が記載されていない。
+<li> <strong>成年</strong> … 「20歳未満であっても、婚姻していれば成年者とみなされる（民法第753条）。これは『婚姻による成年擬制』と呼ばれ、婚姻関係にある未成年者に独立性を与え、また男女平等を維持するための措置であると考えられている。」という情報がある。しかし、法務省のサイトを見ると、令和4年4月1日の民法改正により民法第753条は削除されているので、この情報は間違いであるとわかる。
+<li> <strong>草津市</strong> … ページの中にある草津市の総人口の欄で2022年4月1日時点で144,564人とあるが実際は137,321人である。出典は次の通り。草津市のホームページから引用した。 2022.03.31.pdf (city.kusatsu.shiga.jp)
+<li> <strong>東京工業大学</strong> … 学生数10,357↑どの時点でのデータか記載されていない ちなみに、2021年は、学部生・学院生で、10,492(出典:東工大公式サイト)
+<li> <strong>杉本和陽</strong> … Wikipediaでは棋歴や棋風、師匠などについて述べられているが、棋歴について出典が明記されていなかった。そのためこのことについて調べた。 将棋のプロの対局結果はまず日本将棋連盟のHPから見ることができる。そして棋歴の出典を調べたところ、「デビューの2017年度は第3期叡王戦の四段予選決勝まで勝ち上がたが、藤井聡太に敗戦し本戦進出ならず。」の部分は日本将棋連盟のHPの叡王戦予選のところであるhttps://www.shogi.or.jp/match/eiou/3/yosen.htmlにある。また、「2018年度、初の順位戦（第76期順位戦）では4勝6敗となり、降級点の回避に成功した（以降の順位戦は、2022年現在まで勝ち越し続けている）。NHK杯では予選突破するも、本戦1回戦で斎藤慎太郎に敗れる。」の部分は日本将棋連盟のHPの名人戦・順位戦のところであるhttps://www.shogi.or.jp/match/junni/から見ることができる。そして「2019年度は第32期竜王戦にて、昇級者決定戦を1回戦から怒涛の7連勝で制し、5組への昇級を決めた。」の部分は日本将棋連盟のHPのhttps://www.shogi.or.jp/match/ryuuou/32/6hon.htmlから見ることができる。これらのサイトが出典である。
+<li> <strong>芝中学校・高等学校</strong> … 概要/教義・校風より「生徒に手渡されている手帳にある詩文」・「悩むる」ではなく「眺むる」（手帳ではひらがなで「ながむる」）が正しい。((http://www.saiganji.jp/about/46/))・手帳に2行目以降の歌の解釈は記載されていない。（解釈も微妙に異なる）
+<li> <strong>金正恩</strong> … 金正恩死亡説に関して、2020年5月1日に「99％死亡している」と脱北者の池成浩（チ・ソンホ）の話を根拠に、朝鮮日報や聯合ニュースが発表したということ。根拠は諸説あるが、数週間公に姿を現さず、その後顔を出したときは太ったことが原因で顔が別人のようであったから。2022年5月前後で公に出た金正恩の顔をAI顔認証で調べると、99％一致しているということが、YouTubeであげられていた。確かにこの頃は急激に太ったこともあり、人間の目では別人にも見えなくはないが、AIの目は確かであった。
+<li> <strong>桐光学園中学校・高等学校</strong> … 第七項目「主な年間行事」において、11月の第二回実力テストはWiki上で「第三回実力試験」となっており、1月の第三回実力テストは記述がない。またWiki上で第二回実力テストがいつなのかの記述もない。数年前までは4月に第一回、7月に第二回、11月に第三回が行われていて1月に実力テストを行っていなかったので、情報の更新が不十分と思われる。桐光学園の公式パンフレット2022年度版 http://www.toko.ed.jp/high/exam/SchoolGuide-2022.pdf の、p8~11年間スケジュールがソースである。
+<li> <strong>東京工業大学</strong> … 基礎データ - 象徴 - シンボルマーク 出典なしのため真偽不明：脚注なし、参考文献は全てシンボルマーク制定より前に出版されたものであるため出典：東京工業大学 東工大について - シンボルマーク ( https://www.titech.ac.jp/public-relations/about/overview/logo/seal )
+<li> <strong>神奈川県立平塚江南高等学校</strong> … 委員会 学級・放送・風紀・環境整備・体育・文化・新聞 https://www.pen-kanagawa.ed.jp/hiratsukakonan-h/gaiyou/bukatsu.html 上記のホームページによると、 委員会 放送委員会、新聞委員会、JRC委員会
+<li> <strong>平本蓮</strong> … 母親の影響でTHE BLUE HEARTSとTHE HIGH-LOWSのファンであり、入場曲に日曜日よりの使者やTRAIN-TRAIN、リンダリンダを使用している。2020の大晦日rizin26において、平本蓮の入場曲は、Champion Road / CHEHON SICKO MODE / Travis Scottである。つまり、入場曲に、THE BLUE HEARTSとTHE HIGH-LOWSに使用しないこともある。格闘家は、入場曲を変えない選手もいる。そのため、このような書き方は、平本蓮がTHE BLUE HEARTSとTHE HIGH-LOWSに入場曲を固定しているという誤解を与えかねない。確かに、THE BLUE HEARTSとTHE HIGH-LOWSの曲を入場曲に使用したこともあるのだが、それが母親の影響であるということについての出典は明記されていなかった。さまざまなサイトを調べてみたが、それらしい情報は見つけられなかった。
+<li> <strong>西小学校</strong> … 間違いと思われる情報：全国の西小学校 判断できる理由：全国の西小学校の一覧の中に「宇都宮市立西小学校」が載っていなかった。 情報の出典元：宇都宮市立西小学校HP http://www.ueis.ed.jp/school/nishi/
+<li> <strong>イチロー</strong> … 身長が180センチと書かれている情報 資料によると175センチとしていたり、180センチとしているところもある。本人が177、８と言っていたという情報もあり、キリをよくして175（180）にしたのかもしれない。シアトル・マリナーズの公式サイトでは５フィート９インチとなっており、換算すると175センチとなる。これを5.９フィートとしてしまうと180センチになることから、これが真相だろうとも言われる。
+<li> <strong>広尾学園中学校・高等学校</strong> … 部活動の「数理研究同好会」はもう存在していない。「華道部」も存在しない。https://www.hiroogakuen.ed.jp/info/club_culture.html 広尾学園の公式ページにおいてかかれていない。生徒会であったときの代表者一覧にも書かれていない。
+<li> <strong>東京都立三鷹中等教育学校</strong> … 適性検査I、IIはそれぞれ満点が100点だが、Iは500点に、IIは300点に換算される。正：適性検査I、IIはそれぞれ満点が100点だが、Iは300点に、IIは500点に換算される。http://www.mitakachuto-e.metro.tokyo.jp/site/zen/content/000443536.pdf
+<li> <strong>Johnny's World Happy LIVE with YOU</strong> … 出典が不十分な箇所：日程・出演者（Johnny's netオンライン有料配信）見つけた出典→https://www.johnnys-net.jp/page?id=happylive
+<li> <strong>東京工業大学</strong> … このページに記載されている「概観→教育及び研究」の順に進み世界大学ランキングを見ると、東工大は２０２１年の国内順位が４位だと書かれている。しかし引用先のhttps://www.timeshighereducation.com/world-university-rankings/2022/world-ranking#!/page/0/length/-1/sort_by/rank/sort_order/asc/cols/statsのサイトを閲覧すると東工大は２位である。
+<li> <strong>遅刻関数</strong> … いかにも実際にありそうな関数が紹介されていましたが、調べた結果、その関数は個人が適当に作った関数であったことが別のWikipediaで訂正されていました。参照：URL Wikipedia:削除された悪ふざけとナンセンス/遅刻関数 - Wikipedia
+<li> <strong>富山県立富山東高等学校</strong> … この記事の5.主な学校行事 において 2 月に冬季野外活動というものが記されているが、 富山東高校のホームページの年間学校行事(http://www.higashi-h.tym.ed.jp/archives/114) においては 2月に冬季野外活動などは存在せず、Wikipediaの記事は誤っているといったことがわかる。
+<li> <strong>羅臼温泉</strong> … 泉質が含硫黄ナトリウム塩化物泉であるという情報は「出典が明記されていない」  羅臼温泉のホテルの一つのホテル峰の湯の公式ホームページ＊２に含硫黄ーナトリウムー塩化物温泉であるという記載があった。 ＊２http://www.rausu-minenoyu.com/onsen.html
+<li> <strong>東員町</strong> …  いなべ市は4町の合併でできたもので3町の合併ではない
+<li> <strong>都立小山台高校</strong> … 最寄駅から徒歩5秒、または3歩とWikipediaではなっているが、実際にマップアプリで検索してみたところ、徒歩1分、距離にして50mだったので3歩で着くというのは流石に盛っている。
+<li> <strong>Anonymous（ハッカー集団）</strong> … Anonymousのリーダーの存在 ネットで検索したところ、Anonymousのリーダーの存在自体が不明であり、自称リーダーが世界各国で何人も捕まっている。FBIなどの組織も捜索していることからまだリーダーの存在や素性はわかっていないと思われる。
+<li> <strong>新検見川駅</strong> … 花見川区役所の最寄り駅とあるがこれは間違い。google map 等で調べるとわかるが、最寄り駅は幕張駅である。
+<li> <strong>静岡市立大里中学校</strong> … 特色の3番目に生徒数は減少傾向にあるとなっているがそんなことはないのではないか。平成27年度静岡市立中学校 生徒数・学級数(https://www.city.shizuoka.lg.jp/000693911.pdf),平成28年度静岡市立中学校 生徒数・学級数(http://www.city.shizuoka.jp/000721217.pdf),平成29年度静岡市立中学校 生徒数・学級数(https://www.city.shizuoka.lg.jp/000748189.pdf),平成30年度静岡市立中学校 生徒数・学級数(https://www.city.shizuoka.lg.jp/000783377.pdf),令和元年度静岡市立中学校 生徒数・学級数(https://www.city.shizuoka.lg.jp/000818933.pdf),令和２年度静岡市立中学校 生徒数・学級数(https://www.city.shizuoka.lg.jp/000901600.pdf),令和３年度静岡市立中学校 生徒数・学級数(https://www.city.shizuoka.lg.jp/000901597.pdf)によると大里中学校の生徒数は平成27年度から令和３年度まで759人,709人,721人,691人,721人,700人,693人という風に推移しており、ほぼ横ばいで減少傾向にあるとは言い難い。
+<li> <strong>カウラ（オーストラリアの街）</strong> ”1963年、オーストラリア政府の計らいによって、カウラ日本人墓地は日本国に寄贈され、日本国の国庫に帰属した。オーストラリア戦争墓地委員会の管理下にあり、日本政府の主権が及ぶ土地ではない。”（当該ページより引用、出典なし）情報のソース（出典）：”The land was ceded to Japan in 1963, thus Cowra has its own little piece of Japan.” （visitNSW.com (NSW州公式の観光用サイトより)）https://www.visitnsw.com/destinations/country-nsw/cowra-area/cowra/attractions/japanese-and-australian-war-cemeteries"The land was ceded to Japan in 1963. “ (The NSW War Memorials Register) https://www.warmemorialsregister.nsw.gov.au/content/cowra-japanese-war-cemetery-and-shrine-area
+<li> <strong>株式会社トーキン</strong> … 社名がトーキンに変わったと書いているが正確には株式会社トーキン。またkemetではなくyageo corporationが主要株主。情報が全体的に古い。
+<li> <strong>埼玉県本庄市</strong> … Wikipediaに書かれている2022年4月1日の総人口は78233人しかしながら市のホームページに書かれている情報によると2022年4月1日の総人口は77552人である。出典https://www.city.honjo.lg.jp/soshiki/shiminseikatsu/shimin/tantoujouhou/jinkou/choubetsu/14525.html
+<li> <strong>東進ハイスクール</strong> …『二次試験に対応できる力を総合的にはかる「難関大」「有名大」と、各大学への個別の対応力をはかる「東大」「京大」「北大」「東北大」「名大」「阪大」「九大」「神大」「千葉大」「広大」の本番レベル模試が用意されている。「難関大」「有名大」模試は3月を除く奇数月(1月はセンター試験本試験の1週間後)に実施される。』１のリンク中の二次試験対策模試について、上記に挙げられた大学の対策模試のみ行ってるような記述があるが、我らが東工大の模試も行われている。これは情報が欠けており、誤解を招く可能性があるのではないか。大学受験の予備校・塾 東進｜東工大本番レベル模試 (toshin.com)このように、確かに東進では東工大対策模試が行われている。
+<li> <strong>トレッサ横浜</strong> … 間違った情報:北棟2階の主なテナントに新星堂がある 間違いと証明できる情報:新星堂トレッサ横浜店は2021年11月14日に閉店した出典元:新星堂トレッサ横浜店が2021年11月14日閉店予定(神奈川県横浜市) http://business.her.jp/新星堂トレッサ横浜店が2021年11月14日閉店予定神奈川/heiten/新星堂 神奈川県の店舗一覧http://shinseido.co.jp/shop/list/kanagawa/
+<li> <strong>埼玉県立大宮高等学校</strong> … 真偽がはっきりしていない情報 「大宮高校はSSHに指定されている。」 現在はSSH指定校ではない 指定校一覧｜スーパーサイエンスハイスクール(SSH)https://www.jst.go.jp/cpse/ssh/school/list.html?msclkid=0b87241fcf7411eca52589c974aab917
+<li> <strong>プロテイン</strong> … ハーバード大学医学部がプロテインの摂取は消化器官系に苦痛を与えうると書いてあったが、その文章がその出典の和訳をそのままコピーしてペーストしたもので、加えてその出典自体も論文などではなく、一個人のインタビューをまとめたものであった。成分表示にもある通り自然由来のタンパク質と認可された甘味料が使われており、さらにはこういった健康食品についての論文は無数にあり、自分が見た限り全てが一般的な食事よりも有害物質の含有量は非常に少ないと書いていたため、情報源が非常に少ないプロテインの危険性に関する記述は間違っているといえる。
+<li> <strong>日本</strong> … 人口の所が2021年のものになっており、出典のリンクは2020年のもので、1億2914万6099人となっていたが、情報も古く、リンクと人口の年度も違っていた。総務省統計局のホームページ(http://www.stat.go.jp/)によると、2022年4月1日の概算値は1億2519万人となっていた。
+<li> <strong>キルギス共和国</strong> … 大使館は目黒区内にあるはずだが、現在キルギス大使館は港区にある。 発見経緯の説明 Wikipediaの「目黒区」の項目によると、目黒区に大使館を置いている国は以下のとおりである。本文中の国名をあいうえお順に並び変えた アルジェリア民主人民共和国、エジプト・アラブ大使館、カボン共和国、キルギス共和国、ケニア共和国、スーダン共和国、セネガル共和国、トーゴ共和国、ネパール連邦民主共和国、パプアニューギニア、ポーランド共和国、モーリタニア・イスラム しかし、NAVITIMEによると、目黒区内にある在日大使館は アゼルバイジャン共和国、アルジェリア民主人民共和国、エジプト・アラブ共和国、ガボン共和国、ケニア共和国、スーダン共和国、セネガル共和国、トーゴ共和国、ネパール連邦民主共和国、パプアニューギニア、ポーランド共和国、モーリタニア・イスラム共和国 とある。 在日大使館ポータルサイトによるとそれぞれの大使館の場所は キルギス共和国大使館は東京都港区三田 アゼルバイジャン共和国大使館は東京都目黒区東が丘 にあるとされている。つまりWikipediaの情報は嘘である。 Q.E.D 参考文献 “目黒区.” Wikipedia, Wikimedia Foundation, 1 May 2022, https://ja.wikipedia.org/wiki/%E7%9B%AE%E9%BB%92%E5%8C%BA. “東京都目黒区の大使館.” NAVITIME, NAVITIME JAPAN, https://www.navitime.co.jp/category/0502008/13110/. “アゼルバイジャン駐日大使館・総領事館embassy &amp; Consulate General of Azerbaijan in Japan.” Embassy in Japan RSS, Embassy in Japan, http://www.embassyin.jp/azerbaijan/. “キルギス駐日大使館・総領事館embassy &amp; Consulate General of Kyrgyz in Japan.” Embassy in Japan RSS, Embassy in Japan, http://www.embassyin.jp/kyrgyz/.
+<li> <strong>岡崎高等学校</strong> … https://okazaki-h.aichi-c.ed.jp/cms/wp-content/uploads/2021/04/nenkankeikau0430.pdf このURLを参照すると、日付が間違っていることが分かる。日にちは年によって変わるので、せめて月だけにする方がいいと思った。
+<li> <strong>千葉県立千葉高校</strong> … 「学校行事」の項目を見ると，「3月 - 後期入学者選抜、学年末考査（高1、高2）、卒業式」という記述があるが，千葉県教育委員会の入試方法の変更に関するページで明らかなように，2021年度入試から後期入試は実施されていない。Wikipediaの情報は更新されていないことがあるようだ。
+<li> <strong>森羅万象(サークル)</strong> … 来歴 2008 年に kaztora,azuki にて結成された。一時期活動を休止するが、2012 年に活動を 再開した。その際にベーシストの Pira が加わる。 2016 年 12 月に歌手としてあやぽんず＊が加入した。 2017 年 5 月 あよが加入した。 以上は出典が不十分である。森羅万象の公式サイトを確認すると、 2008 年に kaztora,azuki にて結成、一時期休止していたが 2012 年に活動再開。その際にベーシストの Pira が加わる。 2016 年 12 月に歌手としてあやぽんず＊加入。2017 年 5 月 あよ加入。 との記述があり、この情報は正しいことがわかった。 Wikipedia 森羅万象（サークル） https://ja.wikipedia.org/wiki/%E6%A3%AE%E7%BE%85%E4%B8%87%E8%B1 %A1_(%E3%82%B5%E3%83%BC%E3%82%AF%E3%83%AB) 森羅万象公式 https://shinrabansho-music.com/
+<li> <strong>東京工業大学</strong> … 剣道部は2005年に100周年を迎えたと記述されているが、出典が明記されていない。 実際の剣道部の公式サイト(東京工業大学剣道部 (fc2.com))を見ると、設立は1906年で、2006年に100周年を迎えたと記述されており、wikipediaの記述は誤りだとわかる。
+<li> <strong>森村学園</strong> … 制服の人気があるという情報のデータが提示されていないため、ただの主観で終わってしまっている。
+<li> <strong>市川高校</strong> … コロナ禍で制服登校だけでなく体操服登校も認められたが、その記載がない。
+<li> <strong>浦和レッドダイヤモンズ</strong> … ここに書いてあった埼玉スタジアム２００２の収容人数に誤りがあった。 この記事には62010人と書いてあるが、正しくは63700人である。 スタジアムについて｜埼玉スタジアム2002 (stadium2002.com)
+<li> <strong>駿台予備学校</strong> … 主な講師 ･表三郎(英語) 下に元講師という欄があるにも関わらず、主な講師欄に表三郎の名が書いてあるがすでに引退している。3. ①Wikipediaの表三郎の個人ページに2019年をもって引退した記載がある(https://ja.wikipedia.org/wiki/%E8%A1%A8%E4%B8%89%E9%83%8E) ②生徒による独自のwikipediaもどきにも2018年引退と記載あり(https://newoskwest.wicurio.com/index.php?%E8%A1%A8%E4%B8%89%E9%83%8E)
+<li> <strong>幕張新都心</strong> … 日本都市計画学会賞受賞。(Wikipedia：出典なし)→出典: https://www.city.chiba.jp/sogoseisaku/miraitoshi/makuhari/makuharishintoshingaiyo.html
+<li> <strong>公文国際学園中等部・高等部</strong> … 全ての情報が参考文献表記なし 誤った箇所:SGH指定年数が2012年(平成24年)→2014年(平成26年) 残りの50名は国語、算数、理科、社会の四教科による試験で選抜される。→残りの40名は国語、算数、理科、社会の四教科による試験、10名は帰国生入試で選抜される。 等々参考文献:公文国際学園ホームページ
+<li> <strong>土浦第一高校</strong> … 進路の欄に「筑波大学への合格者数は筑波大学の開校以来2回を除き全国1位」 とあるが、https://trendk.link/6390.html/このサイトによれば少なくとも2022,2021,2020の3回は全国一位ではないことがわかる。
+<li> <strong>東郷平八郎</strong> … 「逸話」の欄の記述「初めて日本で肉じゃがを作らせたと言われている（諸説あり）。」 「肉じゃが」の方のWikipediaではちゃんと出典付きでその説が否定されている。もともとビーフシチューを作らせようとして肉じゃがが出来た、という逸話が広まっているが、実際にはその当時からビーフシチューはあり、海軍のメニューにも存在していたことから信憑性は低い。
+<li> <strong>広島学院</strong> … Wikipediaではクラブ活動は週2回の活動、練習試合は月１回と制限されていると書いてあるが、実際週２回の活動は守られていない部分もあり、自主練と称して部活動と同じメニューをこなす部活があったり、どこの部活も月１回の練習試合の回数制限を気にせずに練習試合を組んでいる。
+<li> <strong>専修大学松戸高等学校</strong> … 生徒会組織の欄の同窓会・愛好会一覧にゴルフ愛好会と珠算同好会がありますが現在の専修大学松戸中学校・高等学校にそのような同好会・愛好会は存在しません。専修大学松戸中学校・高等学校のホームページで確認できます。リンクhttps://www.senshu-u-matsudo.ed.jp/中学校は同窓会・愛好会はなく高校はホームページから高校を選択し学校生活の欄から部活動・委員会活動を選択するとないことが確認できます。
+</ul>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

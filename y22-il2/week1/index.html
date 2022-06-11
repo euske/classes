@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2022年度 情報リテラシ第二 (1a)
+第1回 - ファイルとフォルダ、拡張子、パス名、テキストエディタ
+/ 新山 祐介</title>
+<style><!--
+.quote { margin: 2em; padding: 1em; outline: 4px double gray; }
+.quote .author { text-align: right; }
+--></style>
+</head>
+<body>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第1回 - ファイルとフォルダ、拡張子、パス名、テキストエディタ</h1>
+<div class=nav>2022年6月13日</div>
+
+<ol start="1">
+<li> <a href="#intro">ガイダンス</a>
+<ul>
+  <li> <a href="#intro-goals">本授業の目的</a>
+  <li> <a href="#intro-tasks">本授業でやること</a>
+  <li> <a href="#intro-grades">成績評価の方法</a>
+  <li> <a href="#intro-discord">Discord</a>
+</ul>
+<li> <a href="#research">学術研究とは何か?</a>
+<ul>
+  <li> <a href="#research-facts">「真実」の取り扱い</a>
+  <li> <a href="#research-invalid-1">不正な研究の例 1</a>
+  <li> <a href="#research-invalid-2">不正な研究の例 2</a>
+  <li> <a href="#research-goals">本授業で身につけること</a>
+</ul>
+<li> <a href="#bits">コンピュータ上の情報 (復習)</a>
+<ul>
+  <li> <a href="#bits-info">情報 (データ) とは何だったか?</a>
+  <li> <a href="#bits-types">データの「形式」とは?</a>
+  <li> <a href="#bits-metadata">「メタデータ」とは?</a>
+</ul>
+<li> <a href="#folders">フォルダとは?</a>
+<ul>
+  <li> <a href="#folders-hier">フォルダの階層</a>
+  <li> <a href="#folders-bits">実際のファイル・フォルダは何でできているのか?</a>
+</ul>
+<li> <a href="#pathnames">パス名とは?</a>
+<ul>
+  <li> <a href="#pathnames-chdir">カレント・フォルダ (カレント・ディレクトリ) とは</a>
+  <li> <a href="#pathnames-abs-rel">絶対パス名と相対パス名</a>
+  <li> <a href="#pathnames-relpath">相対パス名の表し方</a>
+</ul>
+<li> <a href="#texteditor">テキストエディタとは?</a>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<ul>
+  <li> <a href="#ex-s1">小課題1. テキストファイルの提出 (6月21日締切)</a>
+  <li> <a href="#ex-e1">次週までにやっておいてほしいこと</a>
+</ul>
+</ol>
+
+
+<h3>雑談</h3>
+<p>
+世界をリアルタイムに見れるウェブサイトの紹介。
+<ul>
+<li> <a target="_blank" href="https://zoom.earth/">衛星画像</a>
+<li> <a target="_blank" href="https://earth.nullschool.net/">大気と海流</a>
+<li> <a target="_blank" href="https://james.darpinian.com/satellites/">今晩見れる人工衛星</a>
+<li> <a target="_blank" href="http://stars.chromeexperiments.com/">100,000 Stars</a>
+<li> <a target="_blank" href="https://river-runner.samlearner.com/">米国に降った雨粒</a>
+<li> <a target="_blank" href="https://www.window-swap.com/">誰かの家の窓</a>
+</ul>
+
+
+<h2 id="intro">1. ガイダンス</h2>
+
+<h3 id="intro-goals">1.1. 本授業の目的</h3>
+<p>
+学術研究とは、調査であった:
+<ol>
+  <li> 問題をみつける。
+  <li> その問題について調べる。(← 情報リテラシ第一)
+  <li> 得られた知識を論文に書く。(← 情報リテラシ<mark>第二</mark>)
+</ol>
+<p>
+つまり
+<ul>
+<li> 情報リテラシ第一 … 入力
+<ul>
+<li> 調べる方法 (ネットの使い方、セキュリティ、著作権)
+</ul>
+<li> 情報リテラシ第二 … <mark>出力</mark>
+<ul>
+<li> 書く方法 (論文、グラフの書き方)
+</ul>
+</ul>
+
+<h3 id="intro-tasks">1.2. 本授業でやること</h3>
+<ul>
+<li> パソコンを使って学術文書を製作する。
+<ul>
+<li> 最終目標: これとそっくり同じものを作る。<br>
+  「<a target="_blank" href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」
+<li> 材料 (文章・実験データ) はあらかじめ与えられる。
+<li> <strong>注意</strong>: 「文章の書き方」はやりません。
+</ul>
+<li> 使用アプリ:
+<ul>
+<li> 文書作成: <s>演習室のLaTeX</s>
+  <a target="_blank" href="https://www.overleaf.com/">Overleaf</a>
+<li> グラフ描画: <s>演習室のgnuplot</s>
+  <a target="_blank" href="https://colab.research.google.com/">Google Colaboratory</a>
+</ul>
+</ul>
+
+<h3 id="intro-grades">1.3. 成績評価の方法</h3>
+<ul>
+<li> 履修すると: 5点。
+<li> 小課題: 5点×7回 = 35点。
+<li> 中課題: 20点×2回 = 40点。
+<li> プレゼンテーション = 20点。
+<li> 授業中の質問に答えた場合 = プラス3点。
+  (ただし加点は1度だけ)
+<li> 100点以上の場合は、切り捨てで100点とする。
+<li> 出席しなくても課題さえ提出すれば点数を与える。
+  (意志が弱い人にはおすすめしない。)
+</ul>
+
+<h3 id="intro-discord">1.4. Discord</h2>
+<p>
+本授業でも、引き続き Discord を使用する。
+Discord は情報リテラシ第一と同じものを使う。
+2Q から新しく本授業を履修した学生は、T2SCHOLA 内の
+「Discordリンク」をクリックして自分の名前を登録せよ。
+<ul>
+  <li> 本名でもニックネームでも参加可能。
+  <li> 24時間いつでも利用できます。(ただし、夜間・休日は教員の返信はありません。)
+  <li> 雑談もOK。
+  <li> チャットでの発言が成績に影響することはありません
+    (が、マナーの悪い人は退出してもらいます)。
+  <li> 内容の一部は、授業等で公開することがあります。
+    ご了承ください。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 1-1. Discord で自己紹介する</div>
+<p>
+Discord にログインし、「雑談」チャネルで簡単な自己紹介をせよ。
+(まだしていない人のみ)
+</div>
+
+
+<h2 id="research">2. 学術研究とは何か?</h2>
+
+<div class=exercise>
+<div class=header>演習 1-2. 科学者に求められる態度とは?</div>
+<ol type=a>
+  <li> 他人にウケるような結論を書く。
+  <li> お金が儲かるような結論を書く。
+  <li> 真実を書く。
+</ol>
+</div>
+
+<p>
+実際には、真実を書くのは (その気があっても) 難しい。
+なぜかというと、世の中は複雑で混乱しやすいからである。
+
+<div class=quote>
+第一の原則は自分で自分をだまさないことだが、
+ところで自分というのはいつも一番だまされやすい人間だ。
+<div class=author>-- <a target="_blank" href="https://en.wikiquote.org/wiki/Richard_Feynman">Richard Feynman</a></div>
+</div>
+
+<h3 id="research-facts">2.1. 「真実」の取り扱い</h3>
+<ul>
+<li> つまるところ、論文というのは「調査・実験の結果を加工したもの」である。
+  情報の流れを図示すると、たとえば以下のようになる:
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="600" height="350">
+    <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="experiment" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <polygon points="0,0 20,15 35,0 35,15 50,0 40,20 50,25 35,30 50,50 30,40 25,50 15,35 0,50 10,30 0,20 15,20" />
+      </g>
+    </symbol>
+    <symbol id="data" width="50" height="60">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="10" x2="40" y1="15" y2="15" />
+        <line x1="10" x2="40" y1="20" y2="20" />
+        <line x1="10" x2="40" y1="25" y2="25" />
+        <line x1="10" x2="40" y1="30" y2="30" />
+        <line x1="10" x2="30" y1="35" y2="35" />
+      </g>
+    </symbol>
+    <symbol id="table" width="50" height="60">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="2" x2="48" y1="15" y2="15" />
+        <line x1="2" x2="48" y1="25" y2="25" />
+        <line x1="2" x2="48" y1="35" y2="35" />
+        <line x1="2" x2="48" y1="45" y2="45" />
+        <line x1="20" x2="20" y1="2" y2="58" />
+      </g>
+    </symbol>
+    <symbol id="graph" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="46" />
+        <rect x="12" y="12" width="10" height="30" fill="gray" />
+        <rect x="27" y="32" width="10" height="10" fill="gray" />
+      </g>
+    </symbol>
+    <symbol id="process" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <circle cx="25" cy="25" r="23" />
+        <circle cx="25" cy="25" r="18" />
+      </g>
+    </symbol>
+    <symbol id="paper" width="50" height="60">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="10" x2="40" y1="15" y2="15" />
+        <line x1="10" x2="40" y1="20" y2="20" />
+        <line x1="10" x2="40" y1="25" y2="25" />
+        <line x1="10" x2="40" y1="30" y2="30" />
+        <rect x="20" y="35" width="20" height="15" />
+      </g>
+    </symbol>
+    </defs>
+    <g transform="translate(20,0)">
+    <g stroke="black" fill="none" stroke-width="4">
+      <use x="0" y="20" xlink:href="#experiment" />
+      <use x="0" y="140" xlink:href="#experiment" />
+      <use x="120" y="20" xlink:href="#data" />
+      <use x="120" y="140" xlink:href="#data" />
+      <use x="120" y="260" xlink:href="#data" />
+      <use x="240" y="140" xlink:href="#process" />
+      <use x="360" y="20" xlink:href="#table" />
+      <use x="360" y="140" xlink:href="#graph" />
+      <use x="360" y="260" xlink:href="#data" />
+      <use x="480" y="140" xlink:href="#paper" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="60" x2="110" y1="50" y2="50" />
+      <line x1="180" x2="350" y1="50" y2="50" />
+      <line x1="420" x2="470" y1="60" y2="130" />
+      <line x1="60" x2="110" y1="170" y2="170" />
+      <line x1="180" x2="230" y1="170" y2="170" />
+      <line x1="300" x2="350" y1="170" y2="170" />
+      <line x1="420" x2="470" y1="170" y2="170" />
+      <line x1="180" x2="230" y1="280" y2="210" />
+      <line x1="420" x2="470" y1="280" y2="210" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25" y="100">実験1</text>
+      <text x="145" y="100">測定結果1</text>
+      <text x="385" y="100">表1</text>
+      <text x="25" y="220">実験2</text>
+      <text x="145" y="220">測定結果2</text>
+      <text x="265" y="220">計算</text>
+      <text x="385" y="220">グラフ1</text>
+      <text x="505" y="220">論文</text>
+      <text x="145" y="340">実験条件</text>
+      <text x="385" y="340">文章</text>
+    </g>
+    </g>
+  </svg>
+</div>
+</ul>
+
+<ul>
+<li> すべての結果には理由がある:
+<ul>
+<li> なぜこの結果なのか? <br>→ 元の結果がそうだから (○)
+<li> なぜこの結果なのか? <br>→ 元の結果を見やすく変換・変形したから (○)
+<li> なぜこの結果なのか? <br>→ こっそり手で改竄したから (×、不正な研究)
+</ul>
+</ul>
+</div>
+
+<h3 id="research-invalid-1">2.2. 不正な研究の例 1</h3>
+<ul>
+<li> ある時点で結果を不正に改竄したため、それ以降の情報はすべてウソになる:
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="600" height="350">
+    <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="redarrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+    </marker>
+    <symbol id="experiment" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <polygon points="0,0 20,15 35,0 35,15 50,0 40,20 50,25 35,30 50,50 30,40 25,50 15,35 0,50 10,30 0,20 15,20" />
+      </g>
+    </symbol>
+    <symbol id="data" width="50" height="60">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="10" x2="40" y1="15" y2="15" />
+        <line x1="10" x2="40" y1="20" y2="20" />
+        <line x1="10" x2="40" y1="25" y2="25" />
+        <line x1="10" x2="40" y1="30" y2="30" />
+        <line x1="10" x2="30" y1="35" y2="35" />
+      </g>
+    </symbol>
+    <symbol id="table1" width="50" height="60">
+      <g stroke="red" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="2" x2="48" y1="15" y2="15" />
+        <line x1="2" x2="48" y1="25" y2="25" />
+        <line x1="2" x2="48" y1="35" y2="35" />
+        <line x1="2" x2="48" y1="45" y2="45" />
+        <line x1="20" x2="20" y1="2" y2="58" />
+      </g>
+    </symbol>
+    <symbol id="graph" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="46" />
+        <rect x="12" y="12" width="10" height="30" fill="gray" />
+        <rect x="27" y="32" width="10" height="10" fill="gray" />
+      </g>
+    </symbol>
+    <symbol id="process" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <circle cx="25" cy="25" r="23" />
+        <circle cx="25" cy="25" r="18" />
+      </g>
+    </symbol>
+    <g id="baddie" fill="red" stroke="red" stroke-width="2">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+    </g>
+    <symbol id="paper1" width="50" height="60">
+      <g stroke="red" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="10" x2="40" y1="15" y2="15" />
+        <line x1="10" x2="40" y1="20" y2="20" />
+        <line x1="10" x2="40" y1="25" y2="25" />
+        <line x1="10" x2="40" y1="30" y2="30" />
+        <rect x="20" y="35" width="20" height="15" />
+      </g>
+    </symbol>
+    </defs>
+    <g transform="translate(20,0)">
+    <g stroke="black" fill="none" stroke-width="4">
+      <use x="0" y="20" xlink:href="#experiment" />
+      <use x="0" y="140" xlink:href="#experiment" />
+      <use x="240" y="20" xlink:href="#baddie" />
+      <use x="120" y="20" xlink:href="#data" />
+      <use x="120" y="140" xlink:href="#data" />
+      <use x="120" y="260" xlink:href="#data" />
+      <use x="240" y="140" xlink:href="#process" />
+      <use x="360" y="20" xlink:href="#table1" />
+      <use x="360" y="140" xlink:href="#graph" />
+      <use x="360" y="260" xlink:href="#data" />
+      <use x="480" y="140" xlink:href="#paper1" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="60" x2="110" y1="50" y2="50" />
+      <line x1="180" x2="230" y1="50" y2="50" />
+      <line x1="300" x2="350" y1="50" y2="50" stroke="red" marker-end="url(#redarrow)" />
+      <line x1="420" x2="470" y1="60" y2="130" stroke="red" marker-end="url(#redarrow)" />
+      <line x1="60" x2="110" y1="170" y2="170" />
+      <line x1="180" x2="230" y1="170" y2="170" />
+      <line x1="300" x2="350" y1="170" y2="170" />
+      <line x1="420" x2="470" y1="170" y2="170" />
+      <line x1="180" x2="230" y1="280" y2="210" />
+      <line x1="420" x2="470" y1="280" y2="210" />
+    </g>
+    <g text-anchor="middle">
+      <text x="265" y="100" fill="red">修正</text>
+      <text x="25" y="100">実験1</text>
+      <text x="145" y="100">測定結果1</text>
+      <text x="385" y="100" fill="red">表1</text>
+      <text x="25" y="220">実験2</text>
+      <text x="145" y="220">測定結果2</text>
+      <text x="265" y="220">計算</text>
+      <text x="385" y="220">グラフ1</text>
+      <text x="505" y="220" fill="red">論文</text>
+      <text x="145" y="340">実験条件</text>
+      <text x="385" y="340">文章</text>
+    </g>
+    </g>
+  </svg>
+</div>
+</ul>
+
+<h3 id="research-invalid-2">2.3. 不正な研究の例 2</h3>
+<ul>
+<li> 実験データの管理がまずいと、結果の紛失、取り違えが起こる。
+  この場合も、最終的な論文はウソとなる。
+<div class=figure>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="600" height="350">
+    <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <marker id="redarrow" viewBox="-5 -5 10 10" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="red" stroke="none" />
+    </marker>
+    <symbol id="experiment" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <polygon points="0,0 20,15 35,0 35,15 50,0 40,20 50,25 35,30 50,50 30,40 25,50 15,35 0,50 10,30 0,20 15,20" />
+      </g>
+    </symbol>
+    <symbol id="data" width="50" height="60">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="10" x2="40" y1="15" y2="15" />
+        <line x1="10" x2="40" y1="20" y2="20" />
+        <line x1="10" x2="40" y1="25" y2="25" />
+        <line x1="10" x2="40" y1="30" y2="30" />
+        <line x1="10" x2="30" y1="35" y2="35" />
+      </g>
+    </symbol>
+    <symbol id="data1" width="50" height="60">
+      <g stroke="red" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="10" x2="40" y1="15" y2="15" />
+        <line x1="10" x2="40" y1="20" y2="20" />
+        <line x1="10" x2="40" y1="25" y2="25" />
+        <line x1="10" x2="40" y1="30" y2="30" />
+        <line x1="10" x2="30" y1="35" y2="35" />
+      </g>
+    </symbol>
+    <symbol id="table1" width="50" height="60">
+      <g stroke="red" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="2" x2="48" y1="15" y2="15" />
+        <line x1="2" x2="48" y1="25" y2="25" />
+        <line x1="2" x2="48" y1="35" y2="35" />
+        <line x1="2" x2="48" y1="45" y2="45" />
+        <line x1="20" x2="20" y1="2" y2="58" />
+      </g>
+    </symbol>
+    <symbol id="graph" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <rect x="2" y="2" width="46" height="46" />
+        <rect x="12" y="12" width="10" height="30" fill="gray" />
+        <rect x="27" y="32" width="10" height="10" fill="gray" />
+      </g>
+    </symbol>
+    <symbol id="process" width="50" height="50">
+      <g stroke="black" stroke-width="2">
+        <circle cx="25" cy="25" r="23" />
+        <circle cx="25" cy="25" r="18" />
+      </g>
+    </symbol>
+    <symbol id="paper1" width="50" height="60">
+      <g stroke="red" stroke-width="2">
+        <rect x="2" y="2" width="46" height="56" />
+        <line x1="10" x2="40" y1="15" y2="15" />
+        <line x1="10" x2="40" y1="20" y2="20" />
+        <line x1="10" x2="40" y1="25" y2="25" />
+        <line x1="10" x2="40" y1="30" y2="30" />
+        <rect x="20" y="35" width="20" height="15" />
+      </g>
+    </symbol>
+    </defs>
+    <g transform="translate(20,0)">
+    <g stroke="black" fill="none" stroke-width="4">
+      <use x="0" y="20" xlink:href="#experiment" />
+      <use x="0" y="140" xlink:href="#experiment" />
+      <use x="240" y="20" xlink:href="#data1" />
+      <use x="120" y="20" xlink:href="#data" />
+      <use x="120" y="140" xlink:href="#data" />
+      <use x="120" y="260" xlink:href="#data" />
+      <use x="240" y="140" xlink:href="#process" />
+      <use x="360" y="20" xlink:href="#table1" />
+      <use x="360" y="140" xlink:href="#graph" />
+      <use x="360" y="260" xlink:href="#data" />
+      <use x="480" y="140" xlink:href="#paper1" />
+    </g>
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="60" x2="110" y1="50" y2="50" />
+      <line x1="300" x2="350" y1="50" y2="50" stroke="red" marker-end="url(#redarrow)" />
+      <line x1="420" x2="470" y1="60" y2="130" stroke="red" marker-end="url(#redarrow)" />
+      <line x1="60" x2="110" y1="170" y2="170" />
+      <line x1="180" x2="230" y1="170" y2="170" />
+      <line x1="300" x2="350" y1="170" y2="170" />
+      <line x1="420" x2="470" y1="170" y2="170" />
+      <line x1="180" x2="230" y1="280" y2="210" />
+      <line x1="420" x2="470" y1="280" y2="210" />
+    </g>
+    <g text-anchor="middle">
+      <text x="25" y="100">実験1</text>
+      <text x="145" y="100">測定結果1</text>
+      <text x="265" y="100" fill="red">古い測定結果</text>
+      <text x="385" y="100" fill="red">表1</text>
+      <text x="25" y="220">実験2</text>
+      <text x="145" y="220">測定結果2</text>
+      <text x="265" y="220">計算</text>
+      <text x="385" y="220">グラフ1</text>
+      <text x="505" y="220" fill="red">論文</text>
+      <text x="145" y="340">実験条件</text>
+      <text x="385" y="340">文章</text>
+    </g>
+    </g>
+  </svg>
+</div>
+</ul>
+
+<h3 id="research-goals">2.4. 本授業で身につけること</h3>
+<ul>
+  <li> 研究・実験における情報の流れを意識する。
+  <li> データの汚染を防ぐための管理技術を学ぶ:
+    <ul>
+      <li> パソコンにおけるデータの扱い方
+      <li> 基本的なデータ処理の技法
+    </ul>
+</ul>
+</div>
+
+<h4>研究におけるパソコンの用途</h4>
+<ul>
+<li> この授業では「パソコンを使う方法」=<br>
+  「パソコンを<strong>研究に</strong>使う方法」に限定する:
+<ul>
+  <li> <s>チャット</s>
+  <li> <s>動画を見る</s>
+  <li> <s>ゲーム</s>
+  <li> データ管理
+  <li> グラフ・文書作成
+</ul>
+</ul>
+
+
+<h2 id="bits">3. コンピュータ上の情報 (復習)</h2>
+
+<h3 id="bits-info">3.1. 情報 (データ) とは何だったか?</h3>
+<ul>
+<li> パソコン上で扱う情報は、すべて 0 と 1 の組み合わせで表される:
+  <ul>
+    <li> 数値
+    <li> 文字(列) / テキスト
+    <li> 静止画像
+    <li> 音声
+    <li> 動画
+    <li> ...
+  </ul>
+</ul>
+
+<h3 id="bits-types">3.2. データの「形式」とは?</h3>
+<ul>
+<li> パソコン (記憶装置) 上のデータは、
+  すべて<u>ファイル</u>に保存される。
+<li> 各ファイルには、<u>ファイル名</u>と<u>拡張子</u>がついている。
+<li> ファイルの中身 … 0 と 1 の羅列。
+  <ul>
+    <li> 0と1をどのように解釈するかがわからないと、正しく表示できない。
+      (データの形式)
+    <li> パソコンでは、データの形式は<u>拡張子</u>によって区別している:<Br>
+      <pre class=example>myfile<mark>.txt</mark></pre>
+  </ul>
+</ul>
+
+<h4>ファイル拡張子の例</h4>
+<ul>
+<li> テキストファイル: <code>.txt</code>
+<li> HTMLファイル (テキストファイル): <code>.htm</code> または <code>.html</code>
+<li> JPEG画像ファイル: <code>.jpg</code> または <code>.jpeg</code>
+<li> PNG画像ファイル: <code>.png</code>
+<li> <mark>Word文書</mark>: <code>.doc</code> または <code>.docx</code>
+<li> <mark>Excel文書</mark>: <code>.xls</code> または <code>.xlsx</code>
+<li> <mark>PDF文書</mark>: <code>.pdf</code>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 1-3. ファイル拡張子を変えてみる</div>
+<ol>
+  <li> パソコン上で、なんらかの画像ファイルを作成する。
+  <li> ファイル名を「<code>.jpg</code>」などから「<code>.txt</code>」に変換し、
+    それをメモ帳で開いてみる。
+  <li> ファイル名を「<code>.txt</code>」から「<code>.jpg</code>」に戻し、
+    ふたたび開いてみる。
+</ol>
+</div>
+
+<h4>ファイル拡張子を表示させる (Windows)</h4>
+<p>
+Windowsでは、ファイルの拡張子はふだんは表示されない設定になっている。
+これを変更するには、以下のようにする:
+<ol>
+  <li> エクスプローラーから <kbd>フォルダー オプション</kbd>ウィンドウを開く。
+  <li> <kbd>表示</kbd> タブをクリックし、<kbd>登録されている拡張子は表示しない</kbd> の
+    チェックをはずす。
+    <div class=figure><img width="1123" height="621" src="../../y20-il2/week1/showexts-win.png"></div>
+</ol>
+
+<h4>ファイル拡張子を表示させる (Mac)</h4>
+<p>
+Macでは、ファイルの拡張子はふだんは表示されない設定になっている。
+これを変更するには、以下のようにする:
+<ol>
+  <li> Finderをクリックし、メニューから <kbd>環境設定...</kbd> を選ぶ。
+  <li> <kbd>詳細</kbd> タブをクリックし、
+    <kbd>すべてのファイル名拡張子を表示</kbd> にチェックを入れる。
+    <div class=figure><img width="434" height="292" src="../../y20-il2/week1/showexts-mac.png"></div>
+</ol>
+
+<h3 id="bits-metadata">3.3. 「メタデータ」とは?</h3>
+<ul>
+<li> データ (data) … 情報
+<li> メタデータ (metadata) … 情報に関する情報
+</ul>
+
+<p>
+ほぼすべてのデータには、
+<u>メタデータ</u> がついているのが普通である。
+パソコンで扱うメタデータには以下のようなものがある:
+
+<ul>
+<li> ファイル名 (その 0 と 1 の羅列についた名前)
+<li> 拡張子 (データ形式、その 0 と 1 をどのように解釈すべきか)
+<li> ファイルサイズ (データの大きさ)
+<li> 作成日時
+<li> 変更日時
+<li> 作成者, etc.
+</ul>
+
+<div class=exercise>
+<div class=header>演習 1-4. さまざまな形式のデータを入手する</div>
+<ol type=a>
+<li> インターネットから、
+  <u>テキスト形式</u>のファイルと、
+  <u>画像形式</u>のファイルをそれぞれ 1つずつダウンロードせよ。
+  <ul>
+    <li> <a target="_blank" href="https://www.aozora.gr.jp/">青空文庫</a>
+    <li> <a target="_blank" href="https://www.reddit.com/r/EarthPorn/">reddit</a>
+  </ul>
+<li> ダウロードしたファイルの<u>拡張子</u>を確認せよ。
+<li> 各ファイルのアイコンを右クリックし、
+  <ul>
+    <li> Windows の場合 … <kbd>プロパティ...</kbd> を実行せよ。
+    <li> Mac の場合 … <kbd>情報を見る</kbd> を実行せよ。
+  </ul>
+  ひとつのファイルには、内容の他にどのようなメタデータが付随しているかを見よ。
+</ol>
+</div>
+
+
+<h2 id="folders">4. フォルダとは?</h2>
+<ul>
+<li> ファイルが多すぎる!<br>
+  現在のパソコンでは、扱うファイルの数は数万〜数百万にのぼる。
+<li> フォルダ = ファイルを分類するための容れ物。
+</ul>
+
+<h3 id="folders-hier">4.1. フォルダの階層</h3>
+<ul>
+<li> フォルダの中に、<u>ファイル</u>または<u>フォルダ</u>が入る。
+<li> 同一フォルダ内に、同じ名前のファイルまたはフォルダが存在してはならない。
+</ul>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g text-anchor="end">
+      <text x="300" y="50">ディスク</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+    </g>
+    <g style="font-family: monospace;">
+      <text x="400" y="50">C:</text>
+    </g>
+  </g>
+</svg>
+</div>
+</div>
+
+<h3 id="folders-bits">4.2. 実際のファイル・フォルダは何でできているのか?</h3>
+<p>
+コンピュータ上の記憶装置 (ディスク) はつねに一定容量であり、
+一定個数の「0」または「1」が書き込まれている。
+これらの個数は変化しないため、
+実際には「空き容量」などというものは存在しない。
+また「フォルダ」という実体も存在せず、ファイルの「削除」など
+というものもありえない。
+これらは、すべてソフトウェアによる「見せかけ」である。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="620" height="80">
+  <g stroke="black" fill="none" stroke-width="2">
+    <rect x="10" y="10" width="600" height="60" />
+  </g>
+  <g stroke="black" stroke-width="1">
+    <rect x="100" y="15" width="40" height="50" fill="#00ff00" />
+    <rect x="180" y="15" width="70" height="50" fill="#4444ff" />
+    <rect x="330" y="15" width="50" height="50" fill="#ffff00" />
+    <rect x="400" y="15" width="20" height="50" fill="#00ffff" />
+    <rect x="500" y="15" width="80" height="50" fill="#ff44ff" />
+  </g>
+  <g text-anchor="middle">
+    <text x="120" y="35" dy="0.5em">K</text>
+    <text x="215" y="35" dy="0.5em">H</text>
+    <text x="355" y="35" dy="0.5em">C</text>
+    <text x="410" y="35" dy="0.5em">K</text>
+    <text x="540" y="35" dy="0.5em">C</text>
+  </g>
+</svg>
+</div>
+
+
+<h2 id="pathnames">5. パス名とは?</h2>
+<ul>
+<li> 同じファイル名が異なるフォルダに存在しうる。
+<li> ファイル名だけでは「どこのファイルか」を特定できない。
+<li> ファイルまたはフォルダの位置を<u>パス名</u> (path name) であらわす:
+<ul class=spacy>
+<li> Windowsの場合:<br>
+<code class=example>C:\<mark>フォルダ名1</mark>\<mark>フォルダ名2</mark>\…\<mark>ファイル名</mark></code>
+<li> Macの場合:<br>
+<code class=example>/<mark>フォルダ名1</mark>/<mark>フォルダ名2</mark>/…/<mark>ファイル名</mark></code>
+</ul>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 1-5. パス名の練習</div>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g text-anchor="end">
+      <text x="300" y="50">ディスク</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+    </g>
+    <g style="font-family: monospace;">
+      <text x="400" y="50">C:</text>
+    </g>
+  </g>
+</svg>
+</div>
+<ol class=spacy>
+<li> <mark>フォルダ <code>X</code></mark> のパス名を書け。
+<li> <mark>ファイル <code>H</code></mark> のパス名を書け。
+<li> <mark>ファイル <code>C</code></mark> のパス名を 2つ書け。
+</ol>
+</div>
+
+<div class=exercise>
+<div class=header>演習 1-6. パス名の確認</div>
+<ol type=a>
+<li> 自分のホームフォルダを開き、<u>パス名</u>を確認せよ。
+<li> デスクトップもフォルダである。<u>パス名</u>を確認せよ。
+<li> 先ほどダウンロードしたファイルがどこにあるか確認し、その<u>パス名</u>を書け。
+<li> 以下のフォルダを探索し、
+  その中にあるJPEG画像ファイル (拡張子 <code>.jpg</code>) を発見せよ。
+  その<u>パス名</u>を書け。
+  <ul>
+    <li> Window の場合 … C: ドライブの中の「<code>Windows</code>」フォルダ
+    <li> Mac の場合 … Macintosh HD の中の「<code>ライブラリ</code>」フォルダ
+  </ul>
+</ol>
+</div>
+
+<h3 id="pathnames-chdir">5.1. カレント・フォルダ (カレント・ディレクトリ) とは</h3>
+<ul>
+  <li> パス名を使うことの問題: いくらでも長くなりうる!<br>
+    <code>/Applications/Safari.app/Contents/MacOS/...</code>
+  <li> いちいちパス名を入力するのは面倒。簡単にできないか?<br>
+    → <strong>いま開いている・注目している</strong> (カレント, current)
+    フォルダという考えを導入する。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレント・フォルダ</text>
+    </g>
+  </g>
+</svg>
+</div>
+</div>
+</ul>
+
+<h3 id="pathnames-abs-rel">5.2. 絶対パス名と相対パス名</h3>
+<p>
+実は「パス名」と呼ばれているものには 2つの種類がある。
+上で説明した「パス名」は「<u>絶対パス名</u>」のことであった。
+<ul>
+<li> <u>絶対パス名</u>: <mark>ディスクの先頭から</mark>たどったパス名。
+<li> <u>相対パス名</u>: <mark>カレント・フォルダから</mark>たどったパス名。
+</ul>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+      <rect x="210" y="390" width="110" height="100" stroke="blue" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレント・フォルダ</text>
+      <text x="340" y="490" text-anchor="start" fill="blue">目的のフォルダ</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<p>
+つまり、上のフォルダ <code>X</code> の位置は、次の2通りで表せる:
+<ul>
+  <li> 絶対パス名: <code>/A/<span style="color:red;">E</span>/<span style="color:blue;">X</span></code>
+  <li> 相対パス名: <code><mark>.</mark>/<span style="color:blue;">X</span></code>
+</ul>
+
+<h3 id="pathnames-relpath">5.3. 相対パス名の表し方</h3>
+<ul>
+<li> 相対パス名では、カレント・フォルダの位置を<br>
+  「<code>.</code> (ドット)」で表す:
+  <code>./X</code>, <code>./K</code> など
+<li> さらに、相対パス名では、ひとつ「上の」フォルダを<br>
+  「<code>..</code>」で表せる。
+<li> 相対パス名の能力は、絶対パス名と等価である。
+つまり、絶対パスで表せるどんな位置も相対パス名によって表すことができる。<br>
+例: <code>../../../../../../../Application</code> =
+<code>/Application</code>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+      <line x1="220" y1="30" x2="300" y2="50" />
+      <line x1="50" y1="110" x2="110" y2="140" />
+    </g>
+    <g text-anchor="end">
+      <text x="40" y="100" style="font-family:monospace;">..</text>
+      <text x="220" y="20" style="font-family:monospace;">../..</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレント・フォルダ</text>
+    </g>
+  </g>
+</svg>
+</div>
+</ul>
+
+<div class=exercise>
+<div class=header>演習 1-7. 相対パスの練習</div>
+<p>
+カレント・フォルダが <code>E</code> のとき…
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレント・フォルダ</text>
+    </g>
+  </g>
+</svg>
+</div>
+<ol type=a>
+  <li> フォルダ <code>A</code> への相対パス名は?
+  <li> ファイル <code>H</code> への相対パス名は?
+  <li> ファイル <code>K</code> への相対パス名は? (2つある)
+</ol>
+</div>
+
+
+<h2 id="texteditor">6. テキストエディタとは?</h2>
+<ul>
+<li> <u>テキスト形式</u>のファイル (<code>.txt</code>) の編集だけをするアプリ。
+  (だから text editor)
+<li> 文字の装飾とかできない。
+<li> プログラム等を書くのに使われる。
+<li> 本授業では:
+  <ul>
+    <li> Window の場合 … 「メモ帳」
+    <li> Mac の場合 … 「テキストエディット」
+  </ul>
+  を使う。
+</ul>
+
+<div class=exercise>
+<div class=header>演習1-8. テキストエディタを使う</div>
+<ol type=a>
+<li> パソコンでテキストエディタを開け。
+<li> 以下の<u>テキスト形式</u>のファイルを作成し、保存せよ。
+<blockquote><pre>
+学籍番号: <em>[あなたの学籍番号]</em>
+氏名: <em>[あなたの氏名]</em>
+設問: 第1Qで受けた授業のうち、もっともよかった授業を想定し
+(具体的な講義名は書かなくてよい)、他の授業でも真似してほしい点を挙げよ。
+
+<em>[...質問の答え...]</em>
+</pre></blockquote>
+<li> ファイルを保存し、
+  <u>拡張子</u>が <code>.txt</code> になっていることを確認せよ。
+  (ファイル名はなんでもよい。)
+<p>
+  <strong>注意</strong>:
+  Mac の「テキストエディット」は、ファイルを
+  「テキスト形式 (<code>.txt</code>)」ではなく
+  「リッチテキスト形式 (<code>.rtf</code>)」で保存しようとするので、
+  保存する<u>前に</u>メニューの <kbd>フォーマット</kbd> から
+  <kbd>標準テキストにする</kbd> を実行すること。
+  <div class=figure><img width="584" height="252" src="../../y20-il2/week1/textedit-txt.png"></div>
+
+</ol>
+</div>
+
+
+<h2 id="summary">7. 本日のまとめ・小課題</h3>
+<ul>
+<li> この授業では研究におけるデータ処理の基礎を学習する。
+<li> ファイルの形式は<u>拡張子</u>で表される。
+<li> ファイルの位置は<u>パス名</u>で表される。
+<li> パス名には<u>絶対パス名</u>と<u>相対パス名</u>がある。
+<li> <u>テキストエディタ</u>の使い方を学習した。
+</ul>
+
+<div class=exercise id="ex-s1">
+<div class=header>小課題1. テキストファイルの提出 (6月20日締切)</div>
+<ul>
+  <li> 締め切り: 6月20日 (1週間後)
+  <li> <a target="_blank" href="https://t2schola.titech.ac.jp/course/view.php?id=20739">T2SCHOLA</a> から提出すること。
+</ul>
+<p>
+本日の演習 1-8. で作成したテキストファイルを提出せよ。
+拡張子は <code>.txt</code> であること。
+</div>
+
+<div class=exercise id="ex-e1">
+<div class=header>次週までにやっておいてほしいこと</div>
+<p>
+今後の授業で、以下のサイトを使うため、アカウントを作成しておくこと。
+(すでに持っている場合は、何もしなくてよい。)
+<ul>
+<li> <a target="_blank" href="https://colab.research.google.com/">Google Colaboratory</a> (Googleアカウント)
+<li> <a target="_blank" href="https://ja.overleaf.com/">Overleaf</a>
+  (Googleアカウントを使ってログインすることもできるので、別になくてもよい)
+</ul>
+</div>
+
+
+<hr>
+<address>
+Yusuke Shinyama
+</address>

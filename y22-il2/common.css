@@ -6,6 +6,8 @@ body { font-family: sans-serif; }
     .bl { color: transparent; }
     body { line-height: 1.5; }
 }
+header { }
+footer { border-top: solid 2px #000080; margin-top: 1em; }
 h1 { border-bottom: solid 4px #000080; }
 h2 { border-bottom: solid 2px #000080; }
 h3 { border-bottom: solid 1px #000080; }

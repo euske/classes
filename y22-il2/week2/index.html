@@ -25,11 +25,41 @@
 <nav>
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
+<ul>
+  <li class=ex> <a href="#ex2-1">演習 2-1. (前回の復習) パス名の練習</a>
+</ul>
 <li> <a href="#textfile">テキスト形式について (つづき)</a>
-<li> <a href="#terminals">「ターミナル (コマンド プロンプト)」とは何か?</a>
+<ul>
+  <li class=ex> <a href="#ex2-2">演習 2-2. ファイルをテキスト形式として開く</a>
+</ul>
+<li> <a href="#terminal">「ターミナル (コマンド プロンプト)」とは何か?</a>
+<ul>
+  <li> <a href="#terminal-launch">ターミナルを起動する</a>
+  <li> <a href="#terminal-basic">ターミナルの使い方・超基本</a>
+  <li class=ex> <a href="#ex2-3">演習 2-3. コマンドを入力する</a>
+  <li> <a href="#terminal-misc">ターミナルの便利な機能</a>
+  <li class=ex> <a href="#ex2-4">演習 2-4. ターミナルの補完機能を使う</a>
+  <li> <a href="#terminal-why">なぜターミナルがいいのか?</a>
+</ul>
 <li> <a href="#filesystem">ファイルとフォルダ (つづき)</a>
+<ul>
+  <li> <a href="#filesystem-chdir">カレント・フォルダ</a>
+  <li class=ex> <a href="#ex2-5">演習 2-5. lsコマンド・dirコマンド</a>
+  <li class=ex> <a href="#ex2-6">演習 2-6. カレントフォルダの変更</a>
+  <li class=ex> <a href="#ex2-7">演習 2-7. コマンドを使ったファイルの確認</a>
+</ul>
 <li> <a href="#matplotlib">matplotlib入門</a>
+<ul>
+  <li> <a href="#matplotlib-what">matplotlib とは?</a>
+  <li> <a href="#matplotlib-plot">グラフを描画する</a>
+  <li class=ex> <a href="#ex2-8">演習 2-8. ファイルをテキスト形式として開く</a>
+  <li class=ex> <a href="#ex2-9">演習 2-9. いろいろなグラフを描く</a>
+  <li> <a href="#matplotlib-export">グラフを画像ファイルとして保存する</a>
+</ul>
 <li> <a href="#summary">本日のまとめ・小課題</a>
+<ul>
+  <li class=ex> <a href="#kadai-s2">小課題 2. グラフの画像を保存する (6月27日締切)</a>
+</ul>
 </ol>
 </nav>
 
@@ -57,7 +87,7 @@
 <li> <a target="_blank" href="https://colab.research.google.com/">Google アカウント</a> を作成しておくこと。
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex2-1">
 <div class=header>演習 2-1. (前回の復習) パス名の練習</div>
 <ol>
 <li> 以下のパス名 (Mac) は絶対パス名か、相対パス名か?
@@ -217,9 +247,9 @@
   「テキスト形式のファイルをうまいこと作成し、それを提出する」
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex2-2">
 <div class=header>演習 2-2. ファイルをテキスト形式として開く</div>
-<ol type=a>
+<ol>
 <li> この授業スライドのページ (HTMLファイル) をブラウザで開き、ファイルとして保存せよ。
 <li> 保存したファイルが置かれている位置 (パス名) を答えよ。
 <li> HTMLファイルをテキストエディタで開き、中に隠されている合言葉を発見せよ。<br>
@@ -229,9 +259,9 @@
 </div>
 
 
-<h2 id="terminals">2. 「ターミナル (コマンド プロンプト)」とは何か?</h2>
+<h2 id="terminal">2. 「ターミナル (コマンド プロンプト)」とは何か?</h2>
 
-<h3>2.1. ターミナルを起動する</h3>
+<h3 id="terminal-launch">2.1. ターミナルを起動する</h3>
 
 <h4>Windowsの場合</h4>
 <ul>
@@ -246,7 +276,7 @@
     <code>ターミナル</code> のアイコンを開く。
 </ul>
 
-<h3>2.2. ターミナルの使い方・超基本</h3>
+<h3 id="terminal-basic">2.2. ターミナルの使い方・超基本</h3>
 
 <ol>
   <li> <u>コマンド</u>を入力して <kbd>Enter</kbd> を押す。
@@ -275,7 +305,7 @@ document.getElementById('ct').oninput = function (e) {
 </ul>
 </div>
 
-<div class=exercise>
+<div class=exercise id="ex2-3">
 <div class=header>演習 2-3. コマンドを入力する</div>
 <p>
 アプリの<u>パス名</u>をコマンドとして入力すると、そのアプリが実行される。
@@ -293,7 +323,7 @@ document.getElementById('ct').oninput = function (e) {
 </ul>
 </div>
 
-<h3>2.3. ターミナルの便利な機能</h3>
+<h3 id="terminal-misc">2.3. ターミナルの便利な機能</h3>
 <ul>
   <li> <strong>スクロール機能</strong>
   <li> <strong>履歴機能</strong>:
@@ -308,7 +338,7 @@ document.getElementById('ct').oninput = function (e) {
 </ul>
 </div>
 
-<div class=exercise>
+<div class=exercise id="ex2-4">
 <div class=header>演習 2-4. ターミナルの補完機能を使う</div>
 補完機能を使って、
 以下のコマンドを<u>20回以下</u>のキー入力で入力せよ。
@@ -324,7 +354,7 @@ document.getElementById('ct').oninput = function (e) {
 </ul>
 </div>
 
-<h3>2.4. なぜターミナルがいいのか?</h3>
+<h3 id="terminal-why">2.4. なぜターミナルがいいのか?</h3>
 <ol type=a>
   <li> 「やること」を言葉で書ける。<br>
     アイコンやウィンドウを使った入力方式を GUI (Graphical User Interface) と呼ぶ。
@@ -434,7 +464,7 @@ document.getElementById('ct').oninput = function (e) {
 </ul>
 </div>
 
-<div class=exercise>
+<div class=exercise id="ex2-5">
 <div class=header>演習 2-5. lsコマンド・dirコマンド</div>
 <p>
 以下のコマンドを入力し、結果を確認せよ。
@@ -460,7 +490,7 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 </ul>
 </div>
 
-<h3>3.1. カレント・フォルダ</h3>
+<h3 id="filesystem-chdir">3.1. カレント・フォルダ</h3>
 <ul>
   <li> パス名を使うことの問題: いくらでも長くなりうる!<br>
     <code>/Applications/Safari.app/Contents/MacOS/...</code>
@@ -543,7 +573,7 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 </div>
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex2-6">
 <div class=header>演習 2-6. カレントフォルダの変更</div>
 <p>
 以下のコマンドを順に実行し、何が起きたのか観察せよ:
@@ -598,7 +628,7 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 </ul>
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex2-7">
 <div class=header>演習 2-7. コマンドを使ったファイルの確認</div>
 <ol type=a>
 <li> 自分のデスクトップ (フォルダ) のパス名を確認せよ。
@@ -611,7 +641,7 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 </div>
 
 
-<h3>雑談・その2</h3>
+<h3 id="filesystem-misc">雑談・その2</h3>
 <ul>
 <li> <a target="_blank" href="https://mainichi.jp/articles/20180617/k00/00e/040/177000c">京大論文不正 PCデータに改ざんの痕跡 認定の決め手に</a><br>
   「ハードディスクのデータを復元」… そんなことできんの?
@@ -668,7 +698,7 @@ Mac では、<kbd>ls</kbd> コマンドを使うと、
 
 <h2 id="matplotlib">4. matplotlib入門</h2>
 
-<h3>4.1. matplotlib とは?</h3>
+<h3 id="matplotlib-what">4.1. matplotlib とは?</h3>
 <ul>
 <li> グラフを描画するための機能。科学論文でよく使われる。
 <li> 2通りの方法で利用できる:
@@ -701,9 +731,9 @@ b. を使ってもよい (結果は同じである)。
     <div class=figure><img src="jupyter0.png"></div>
 </ol>
 
-<h3>4.2. グラフを描画する</h3>
+<h3 id="matplotlib-plot">4.2. グラフを描画する</h3>
 
-<div class=exercise>
+<div class=exercise id="ex2-8">
 <div class=header>演習 2-8. 最初のグラフを描画する</div>
 <p>
 Google Colaboratory (あるいは Jupyter Notebook) で
@@ -735,7 +765,7 @@ plt.show()
 <p>
 時間に余裕があれば、以下もやってみよう:
 
-<div class=exercise>
+<div class=exercise id="ex2-9">
 <div class=header>演習 2-9. いろいろなグラフを描く</div>
 <ol>
 <li> 上のプログラムの中で、以下の行
@@ -757,10 +787,10 @@ plt.plot(x, x**3, label="cubic")
 </ol>
 </div>
 
-<h3>4.3. グラフを画像ファイルとして保存する</h3>
+<h3 id="matplotlib-export">4.3. グラフを画像ファイルとして保存する</h3>
 <p>
 上のプログラムに以下の一行を追加すると、
-描画したグラフを実際にファイルとして保存 (ダウンロード) することができる。
+描画したグラフを実際に PNGファイルとして保存 (ダウンロード) することができる。
 <blockquote><pre>
 import numpy as np
 import matplotlib.pyplot as plt
@@ -819,7 +849,7 @@ Juypter Notebook では、
 <li> matplotlib を使ってグラフを描いてみた。
 </ul>
 
-<div class=exercise>
+<div class=exercise id="kadai-s2">
 <div class=header>小課題 2. グラフの画像を保存する (6月27日締切)</div>
 <ul>
 <li> 締め切り: <u>6月27日</u> (1週間後)

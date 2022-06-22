@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2022年度 情報リテラシ第二 (1a)
+第3回 - 相対パス名について + matplotlib の使い方(2)
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+
+<header>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第3回 - 相対パス名について + matplotlib の使い方(2)</h1>
+<div class=nav>2022年6月27日</div>
+</header>
+
+<nav>
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<ul>
+  <li class=ex> <a href="#ex3-1">演習 3-1. (前回の復習)</a>
+</ul>
+<li> <a href="#relpath">相対パス名とは?</a>
+<ul>
+  <li> <a href="#relpath-cd">カレントディレクトリとは (復習)</a>
+  <li> <a href="#relpath-abspath">絶対パス名と相対パス名</a>
+  <li> <a href="#relpath-show">相対パス名の表し方</a>
+  <li class=ex> <a href="#ex3-2">演習 3-2. 相対パスの練習</a>
+  <li class=ex> <a href="#ex3-3">演習 3-3. コマンドで相対パスを使う</a>
+</ul>
+<li> <a href="#commands">ターミナルで使うと便利なコマンド</a>
+<ul>
+  <li class=ex> <a href="#ex3-4">演習3-4. コマンドによるファイル操作</a>
+</ul>
+<li> <a href="#matplotlib">matplotlibつづき</a>
+<ul>
+  <li class=ex> <a href="#ex3-5">演習3-5. データを使ったグラフ描画</a>
+  <li> <a href="#matplotlib-desc">matplotlib のプログラム解説</a>
+  <li> <a href="#matplotlib-paper">論文の実験データを使ってグラフを描画する</a>
+  <li class=ex> <a href="#ex3-6">演習3-6. 本格的なグラフ描画</a>
+</ul>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<ul>
+  <li class=ex> <a href="#kadai-s3">小課題3. 論文のグラフ 図6 を描画する (7月4日締切)</a>
+</ul>
+</ol>
+</nav>
+
+<main>
+
+<h3>雑談</h3>
+
+<h4>政治とは何か?</h4>
+<ul>
+  <li> 「限られた資源 (物資・場所・時間) を複数の人で分ける」ことを考える:
+  <ol type=a>
+    <li> 力ずくで解決する方法 (野生状態)
+    <li> カネまたは物々交換で解決する方法 (経済)
+    <li> 話し合いで解決する方法 (<u>政治</u>)
+  </ol>
+  <li> 基本的には、政治とは「<u>調停</u>」である。
+  <li> <u>公平</u>でなければならない。「公平」って何?
+  <ol type=a>
+    <li> 部室のロッカーを誰が使うか決める。<br>
+      年長者であればエラいのか?
+    <li> 誰が大学入試で合格するか決める。<br>
+      推薦入学は公平か? 視覚障害者の点字受験は公平か?
+    <li> 「能力のある人間は報われる」のは本当か?<br>
+      実際には裕福な家庭に生まれた人がトクをしているのでは?<br>
+      <a href="http://www.l.u-tokyo.ac.jp/2015SSM-PJ/05_01.pdf">世帯所得と子どもの学歴</a>。<br>
+      <a href="https://pumpkinperson.com/2016/02/11/the-incredible-correlation-between-iq-income/">裕福な家の子の知能指数 (IQ) は高い</a>。
+  </ol>
+</ul>
+
+<h4>選挙に行きましょう</h4>
+<ul>
+<li> 年寄りの有権者のほうが<a href="http://www.stat.go.jp/data/jinsui/2018np/">数は多い</a>。
+  → つまり、彼らの都合のいいように法律が決められる。
+<li> にもかかわらず、<a href="http://www.soumu.go.jp/senkyo/senkyo_s/news/sonota/nendaibetu/">若い人は投票に行かない</a>。
+</ul>
+
+<h4>よくある誤解</h4>
+<ul>
+<li> 誰に投票すればいいんだかわからない。<br>
+  → 一個でも気に入った点があれば投票してOK。
+<li> 投票した候補が落選したら意味ない。<br>
+  → 実際には、候補を当選させても細かい選択などできない。選挙のおもな役割は、
+  得票数を上げて政治家・役人に「自分たちは見ているぞ」と思わせること。
+<li> 自分には選挙権がない。<br>
+  → 選挙は政治の一部分にすぎない。実際の政治とは「意見形成のプロセス」であり、
+  たとえ投票しなくとも、以下のことをすれば政治活動をしていることになる:
+  <ol type=a>
+    <li> 特定のニュースについて他人と話すこと。<br>
+      ちなみに<a href="https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0">報道の自由度ランキング</a>では、日本はアジアの他の国よりもかなり下である。「正確な報道」をマスコミに求めよう。
+    <li> ものを買う = 「おカネで投票する」ことである。
+    <li> 人と意見が違う部分を明らかにすること (人と意見が違うのは恥ずかしくない)。
+  </ol>
+<li> 結局、ぜんぶインチキなんじゃないか?<br>
+  → 悪い人間はたしかに存在している。が、よい人間もまた確かに存在する。
+  自分が「よい」と思える世界を目指そう。
+</ul>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> ターミナルの使い方を学習した。
+<li> 長いパス名を省略する方法として、
+  カレントディレクトリという考え方を学習した。
+<li> matplotlib でグラフを描いてみた。
+</ul>
+
+<div class=exercise id="ex3-1">
+<div class=header>演習 3-1. (前回の復習)</div>
+<ol>
+<li> テキスト形式のファイルの拡張子を答えよ。
+<li> <code>dir</code> または <code>ls</code> コマンドは何をするか?
+<li> カレントディレクトリを変更するコマンド名は何か?
+</ol>
+</div>
+
+
+<h2 id="relpath">1. 相対パス名とは?</h2>
+
+<h3 id="relpath-cd">1.1. カレントディレクトリとは (復習)</h3>
+<ul>
+  <li> 長いパス名を入力しなくてすむように、
+    <u>いま注目しているフォルダ</u> を切り替えて操作する。<br>
+    <code>/Applications/Safari.app/Contents/MacOS/...</code>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレントディレクトリ</text>
+    </g>
+  </g>
+</svg>
+</ul>
+
+<h3 id="relpath-abspath">1.2. 絶対パス名と相対パス名</h3>
+<p>
+実は「パス名」と呼ばれているものには 2つの種類がある。
+前回の授業でいう「パス名」は、「絶対パス名」のことであった。
+<ul>
+<li> 絶対パス名: <u>ディスクの先頭から</u>みたパス名。
+<li> 相対パス名: <u>カレントディレクトリから</u>みたパス名。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+      <rect x="210" y="390" width="110" height="100" stroke="blue" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレントディレクトリ</text>
+      <text x="340" y="490" text-anchor="start" fill="blue">目的のフォルダ</text>
+    </g>
+  </g>
+</svg>
+</div>
+<li> フォルダ X の位置…
+  <ul>
+    <li> 絶対パス名: <code>/A/<span style="color:red;">E</span>/<span style="color:blue;">X</span></code>
+    <li> 相対パス名: <code><u>.</u>/<span style="color:blue;">X</span></code>
+  </ul>
+</ul>
+
+<h3 id="relpath-show">1.3. 相対パス名の表し方</h3>
+<ul>
+<li> 相対パス名では、カレントディレクトリの位置を<br>
+  「<code>.</code> (ドット)」で表す:
+  <code>./X</code>, <code>./K</code> など
+<li> さらに、相対パス名では、ひとつ「上の」フォルダを<br>
+  「<code>..</code>」で表せる。
+<li> 相対パス名の能力は、絶対パス名と等価である。
+つまり、絶対パスで表せるどんな位置も相対パス名によって表すことができる。<br>
+例: <code>../../../../../../../Application</code> =
+<code>/Application</code>
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+      <line x1="220" y1="30" x2="300" y2="50" />
+      <line x1="50" y1="110" x2="110" y2="140" />
+    </g>
+    <g text-anchor="end">
+      <text x="40" y="100" style="font-family:monospace;">..</text>
+      <text x="220" y="20" style="font-family:monospace;">../..</text>
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレントディレクトリ</text>
+    </g>
+  </g>
+</svg>
+</div>
+</ul>
+
+<div class=exercise id="ex3-2">
+<div class=header>演習 3-2. 相対パスの練習</div>
+<p>
+カレントディレクトリが <code>E</code> のとき…
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="500" height="300">
+  <defs>
+  <marker id="arrow" viewBox="-5 -5 10 10" orient="auto">
+    <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+  </marker>
+  <symbol id="folder" width="100" height="100">
+    <g stroke="black" stroke-width="2" stroke-linejoin="round" fill="#ffee88">
+      <polygon points="2,2 65,2 65,80 40,80" />
+      <polygon points="2,2 55,10 55,90 2,80" fill="white" />
+      <path d="M10,15 L45,25 M10,25 L45,35 M10,35 L45,45 M10,45 L45,55 M10,55 L45,65 M10,65 L45,75" />
+      <polygon points="2,2 40,20 40,100 2,80" />
+    </g>
+  </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+  <symbol id="disk" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="10,40 30,30 90,30 90,50 70,60 10,60" fill="white" />
+      <path d="M15,42 L68,42 L68,56 M68,42 L86,33 M20,48 L30,48" />
+    </g>
+  </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="300" y="0" xlink:href="#disk" />
+    <use x="150" y="120" xlink:href="#folder" />
+    <use x="300" y="120" xlink:href="#folder" />
+    <use x="410" y="120" xlink:href="#file" />
+    <use x="250" y="250" xlink:href="#file" />
+    <use x="340" y="250" xlink:href="#file" />
+    <use x="40" y="260" xlink:href="#folder" />
+    <use x="160" y="260" xlink:href="#folder" />
+    <use x="210" y="390" xlink:href="#folder" />
+    <use x="100" y="380" xlink:href="#file" />
+    <use x="0" y="390" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="2">
+      <line x1="330" y1="70" x2="200" y2="116" />
+      <line x1="340" y1="70" x2="330" y2="116" />
+      <line x1="350" y1="70" x2="430" y2="116" />
+      <line x1="330" y1="220" x2="300" y2="250" />
+      <line x1="350" y1="220" x2="380" y2="250" />
+      <line x1="170" y1="220" x2="100" y2="256" />
+      <line x1="180" y1="220" x2="200" y2="256" />
+      <line x1="190" y1="360" x2="160" y2="380" />
+      <line x1="210" y1="360" x2="240" y2="386" />
+      <line x1="65" y1="360" x2="50" y2="390" />
+    </g>
+    <g stroke="red" fill="none" stroke-width="4">
+      <rect x="120" y="250" width="110" height="100" />
+      <line x1="220" y1="350" x2="340" y2="380" />
+    </g>
+    <g text-anchor="end">
+      <text x="145" y="160">A</text>
+      <text x="295" y="160">B</text>
+      <text x="500" y="160" text-anchor="start">C</text>
+      <text x="30" y="300">B</text>
+      <text x="150" y="300">E</text>
+      <text x="260" y="300">C</text>
+      <text x="440" y="300">K</text>
+      <text x="10" y="440">H</text>
+      <text x="110" y="440">K</text>
+      <text x="290" y="440" text-anchor="start">X</text>
+      <text x="340" y="400" text-anchor="start" fill="red">カレントディレクトリ</text>
+    </g>
+  </g>
+</svg>
+</div>
+<ol type=a>
+  <li> フォルダ <code>A</code> への相対パス名は?
+  <li> ファイル <code>H</code> への相対パス名は?
+  <li> ファイル <code>K</code> への相対パス名は? (2つある)
+</ol>
+</div>
+
+<div class=exercise id="ex3-3">
+<div class=header>演習3-3. コマンドで相対パスを使う</div>
+<ol>
+  <li> ターミナルを開き、<code>cd</code> コマンドを入力して
+    自分のホームフォルダに移動せよ。
+  <li> デスクトップに新規フォルダを作り、その中に
+    <code>cd</code> コマンドを利用してカレントディレクトリを変更せよ。
+  <li> 相対パス名のみを使って、そこから以下のフォルダに移動せよ:
+    <ul>
+      <li> <strong>Windowsの場合</strong>:
+        <code>C:\Windows</code> フォルダ
+      <li> <strong>Macの場合</strong>:
+        <code>/Application</code> フォルダ
+    </ul>
+    このとき、何回 <code>cd</code> コマンドを実行したか?
+  <li> その場所から、<code>dir</code> / <code>ls</code> コマンドに相対パス名を与え、
+    自分のホームフォルダの一覧を表示させよ。
+</ol>
+</div>
+
+
+<h2 id="commands">2. ターミナルで使うと便利なコマンド</h2>
+<p>
+以下の例における <code>&gt;</code> や <code>%</code> は
+実際に入力する文字ではなく、各行に毎回表示される
+プロンプト ("<code>C:\Users\euske&gt;</code>" や
+"<code>euske@shinyama-macbook ~ %</code>" など) を表す。
+
+<ul>
+  <li> <strong>Windowsの場合</strong>:
+<ul>
+  <li> <code>&gt; <strong>start <u>パス名</u></strong> <sub>(絶対または相対)</sub></code>
+    指定したパス名のフォルダをエクスプローラーで開く。
+  <li> <code>&gt; <strong>ren <u>旧パス名</u> <u>新パス名</u></strong></code>
+    ファイルの名前を変更する。
+  <li> <code>&gt; <strong>copy <u>元パス名</u> <u>新パス名</u></strong></code>
+    ファイルを別名でコピーする。
+  <li> <code>&gt; <strong>del <u>パス名</u></strong></code>
+    ファイルを削除する。
+    (ゴミ箱と違い、<strong>一瞬で削除される</strong>ので注意!)
+</ul>
+
+  <li> <strong>Macの場合</strong>:
+<ul>
+  <li> <code>% <strong>open <em>パス名</em></strong> <sub>(絶対または相対)</sub></code>
+    指定したパス名のフォルダをFinderで開く。
+  <li> <code>% <strong>mv <em>旧パス名</em> <em>新パス名</em></strong></code>
+    ファイルの名前を変更する。
+  <li> <code>% <strong>cp <em>元パス名</em> <em>新パス名</em></strong></code>
+    ファイルを別名でコピーする。
+  <li> <code>% <strong>rm <em>パス名</em></strong></code>
+    ファイルを削除する。
+    (ゴミ箱と違い、<strong>一瞬で削除される</strong>ので注意!)
+</ul>
+
+</ul>
+
+<div class=exercise id="ex3-4">
+<div class=header>演習3-4. コマンドによるファイル操作</div>
+<p>
+コマンド プロンプトまたはターミナルを起動し、以下の操作を実行せよ:
+(注意: 各コマンドは、成功したときには何も表示しない)
+<ol>
+  <li> カレントフォルダをデスクトップに移動し、
+    <code>start .</code> または <code>open .</code> と入力せよ。
+    何が起こるか?
+  <li> デスクトップに適当なテキストファイルを作成し、
+    <code>ren</code> / <code>mv</code> コマンドを使って
+    そのファイル名を変更せよ。
+  <li> <code>copy</code> / <code>cp</code> コマンドを使って、
+    そのファイルを別の名前でコピーせよ。
+  <li> <code>del</code> / <code>rm</code> コマンドを使って、
+    そのファイルを削除せよ。
+</ol>
+</div>
+
+
+<h2 id="matplotlib">3. matplotlibつづき</h2>
+<p>
+matplotlib の本当の使い方は sin(x) などのグラフを描くことではなく、
+実験データをプロットすることである。ここでは、外部から
+テキスト形式のデータを与えることで、任意のグラフを描画する。
+
+<div class=exercise id="ex3-5">
+<div class=header>演習3-5. データを使ったグラフ描画</div>
+<ol class=spacy>
+  <li> 以下のようなテキストファイルを作成し、
+    これを <code>data1.txt</code> という名前で保存する:
+<blockquote><pre>
+1 10
+2 40
+3 25
+4 100
+5 60
+</pre></blockquote>
+  <li> <a href="https://colab.research.google.com/">Google Colab</a> を開き、
+    このテキストファイルを画面左側の
+    ファイル一覧部分にドラッグ・ドロップする。
+    (こうすると matplotlib のプログラムにファイルを読ませることができる)
+    <br>
+    (Jupyter Notebook を使っている場合は、ファイル <code>data1.txt</code> を
+    ホームフォルダ (Notebookファイルが入っているフォルダ) の中に置けばよい。)
+    <div class=figure><img src="files1.png"></div>
+  <li> 以下のプログラムを matplotlib で入力・実行する:
+<blockquote><pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+a = np.genfromtxt("./data1.txt")
+plt.plot(a[:,0], a[:,1], label="data1", color="blue")
+
+a = np.genfromtxt("./data1.txt")
+plt.bar(a[:,0], a[:,1], label="data1", color="red")
+
+plt.title("Simple Plot")
+plt.xlabel("x label")
+plt.ylabel("y label")
+plt.legend()
+plt.savefig("./plot1.png")
+plt.show()
+</pre></blockquote>
+    正しく動いていれば、以下のようなグラフが表示されるはずである:
+    <div class=figure><img src="plot1.png"></div>
+  <li> <code>data1.txt</code> を開いて中の値を適当に書き換え、
+    グラフを再描画させて内容が変化していることを確認する。
+</ol>
+</div>
+
+<h3 id="matplotlib-desc">3.1. matplotlib のプログラム解説</h3>
+<p>
+上の演習 3-5. で使った matplotlib プログラムを簡単に解説する。
+<p>
+まず、最初の2行は、<u>とにかく必要</u>。
+<blockquote><pre>
+import numpy as np
+import matplotlib.pyplot as plt
+</pre></blockquote>
+次にプロットを描く部分が続く。
+これは基本的に、以下の繰り返しである。
+まず、どのファイルをデータとして使うか (<code>./data1.txt</code>) を指定し、
+そのプロットの名前 (<code>data1</code>)、
+および線の色 (<code>blue</code>) を指定している。
+ファイルの指定には<u>相対パス</u>が使われる。
+<blockquote><pre>
+a = np.genfromtxt("<mark>./data1.txt</mark>")
+plt.plot(a[:,0], a[:,1], label="<mark>data1</mark>", color="<mark>blue</mark>")
+</pre></blockquote>
+次の部分は前とほとんど同じだが、<code>plot</code> の部分が <code>bar</code> に
+変わっている。こうすると折れ線グラフではなく、棒グラフが描かれる。
+<blockquote><pre>
+a = np.genfromtxt("<mark>./data1.txt</mark>")
+plt.<u>bar</u>(a[:,0], a[:,1], label="<mark>data1</mark>", color="<mark>red</mark>")
+</pre></blockquote>
+最後に、グラフの題名を「<code>Simple Plot</code>」、
+X軸、Y軸の表示をそれぞれ「<code>x label</code>」「<code>y label</code>」に設定し、
+完成したグラフを <code>./plot1.png</code> というファイル名で保存する。
+このときのファイル名も実は相対パス名である。
+<blockquote><pre>
+plt.title("<mark>Simple Plot</mark>")
+plt.xlabel("<mark>x label</mark>")
+plt.ylabel("<mark>y label</mark>")
+plt.legend()
+plt.savefig("<mark>./plot1.png</mark>")
+plt.show()
+</pre></blockquote>
+
+<h4>Excel と matplotlib の違い</h4>
+<ul>
+  <li> Excel: データが与えられたあと、グラフの描き方を決めるのは人間 (の操作)。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="120">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="user" width="80" height="80">
+      <g fill="none" stroke="black" stroke-width="3">
+      <path d="M10,60 q0,-10,15,-15 q-10,-5,-10,-15 q0,-15,15,-20 q20,0,20,20 q0,15,-15,15 q15,0,15,15" />
+      </g>
+    </symbol>
+    <symbol id="file" width="100" height="100">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+    <symbol id="fig" width="100" height="100">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,70 l20,-20 l10,5 l10,-10 " />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="10" y="10" xlink:href="#user" />
+    <use x="0" y="100" xlink:href="#file" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#fig" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="80" y1="50" x2="150" y2="80" />
+      <line x1="90" y1="150" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+  <li> matplotlib:
+    同じプログラムを使えば、誰がやっても同じグラフができあがる。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="120">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="file" width="100" height="100">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+    <symbol id="fig" width="100" height="100">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,70 l20,-20 l10,5 l10,-10 " />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(10.5,0.5) scale(0.6,0.6)">
+    <use x="0" y="10" xlink:href="#file" />
+    <use x="0" y="100" xlink:href="#file" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#fig" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="90" y1="50" x2="150" y2="80" />
+      <line x1="90" y1="150" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+</ul>
+
+<h3 id="matplotlib-paper">3.2. 論文の実験データを使ってグラフを描画する</h3>
+<p>
+つぎに、クラス共通課題の
+<a href="../../data/model.pdf">論文</a>で使われる
+本物のグラフを作成しよう。
+まず、図 5. 「実行時間比較」から始めることにする。
+
+<div class=exercise id="ex3-6">
+<div class=header>演習3-6. 本格的なグラフ描画</div>
+<ol class=spacy>
+  <li> まず元データをダウンロードする。
+    このファイルは <u>Zip形式</u> であり、複数のファイル(フォルダ) が圧縮されている:<br>
+    <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a><br>
+    (このデータに関する説明は
+    <a href="https://titechcomp.github.io/y22-il2j/14-dataset.html">実習に用いるデータセット</a>
+    のページにある)
+
+  <li> ダウンロードした Zip ファイルを開き、
+    <code>kadai-plot-data</code> というフォルダをデスクトップに移動する。<br>
+    (Macの場合は、自動的に開かれる。)
+
+  <li> 次に <a href="https://drive.google.com/">Google Drive</a> を開き、
+    ここに取り出した <code>kadai-plot-data</code> フォルダをドラッグ・ドロップする。
+    これにより、フォルダの中身が Google Drive にアップロード (送信) される。
+    <strong>注意:</strong>
+    zipファイルの中から直接 kadai-plot-data をドラッグ・ドロップしないこと。
+    必ず一度、デスクトップ上に出してからでないと、うまく動かない。
+    <div class=figure><img src="gdrive.png"></div>
+
+  <li> ふたたび <a href="https://colab.research.google.com/">Google Colab</a> を開き、
+    「Google Drive アイコン (<img style="vertical-align:bottom;" src="gdicon.png">)」をクリックすると、
+    ファイル一覧部分に先ほどアップロードした <code>kadai-plot-data</code> フォルダが
+    表示されているはずである。このフォルダの相対パス名は
+    <code>./drive/My Drive/kada-plot-data</code> である。
+    <div class=figure><img src="files2.png"></div>
+
+  <li> 以下のプログラムを matplotlib で入力・実行する:
+<blockquote><pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/cnm/etime-size.txt")
+plt.plot(a[:,0], a[:,1], label="CNM", linestyle="-.", color="black")
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/he2/etime-size.txt")
+plt.plot(a[:,0], a[:,1], label="HE'", linestyle=":", color="black")
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/he1/etime-size.txt")
+plt.plot(a[:,0], a[:,1], label="HE", linestyle="--", color="black")
+
+a = np.genfromtxt("./drive/My Drive/kadai-plot-data/hn/etime-size.txt")
+plt.plot(a[:,0], a[:,1], label="HN", linestyle="-", color="black")
+
+plt.xlabel("Size of Social Network")
+plt.ylabel("Elapsed Time [sec]")
+plt.legend()
+plt.show()
+</pre></blockquote>
+    正しく動いていれば、以下のようなグラフが表示されるはずである:
+    <div class=figure><img src="plot2.png"></div>
+
+</ol>
+</div>
+
+
+<h2 id="summary">4. 本日のまとめ・小課題</h2>
+<ul>
+<li> 絶対パス名と相対パス名について学習した。
+<li> 実際のデータを使ってグラフを描く方法を学習した。
+</ul>
+
+<div class=exercise id="kadai-s3">
+<div class=header>小課題3. 論文のグラフ 図6 を描画する (7月4日締切)</div>
+<ul>
+  <li> 締め切り: <u>7月4日</u> (1週間後)
+  <li> 演習 3-6. でやったグラフを修正して、以下のようなグラフ
+  (<a href="../../data/model.pdf">論文</a>の図6) を描け。
+  このときの matplotlib の<u>プログラム</u> (画像ファイルではない) を
+  テキストファイルで提出せよ。
+  ファイル名はなんでもよいが、拡張子は <code>.txt</code> であること。
+  <div class=figure><img src="plot3.png"></div>
+</ul>
+<p>
+  演習 3-6. のグラフとの違い:
+  <ul>
+    <li> 前のグラフでは 4つのプロット (CNM, HE', HE, HN) を
+      描いていたが、今回のプロットは 3つ (HE', HE, HN) である。
+    <li> 前のグラフでは
+      <code>cnm</code>, <code>hn2</code>, <code>hn1</code>, <code>hn</code> の
+      各フォルダにある <code>etime-size.txt</code> というデータを使ってプロットしていたが、
+      今回のプロットは各フォルダにある <code>etime-size<u>-M</u>.txt</code> というデータを
+      使ってプロットすること。
+  </ul>
+<p>
+  ここで作成したグラフは、今後の課題でも利用するので
+  着実に完成させよう。
+</div>
+
+</main>
+
+<footer>
+<address>Yusuke Shinyama</address>
+</footer>

@@ -24,11 +24,32 @@
 <nav>
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
+<ul>
+  <li class=ex> <a href="#ex3-1">演習 3-1. (前回の復習)</a>
+</ul>
 <li> <a href="#relpath">相対パス名とは?</a>
+<ul>
+  <li> <a href="#relpath-cd">カレントディレクトリとは (復習)</a>
+  <li> <a href="#relpath-abspath">絶対パス名と相対パス名</a>
+  <li> <a href="#relpath-show">相対パス名の表し方</a>
+  <li class=ex> <a href="#ex3-2">演習 3-2. 相対パスの練習</a>
+  <li class=ex> <a href="#ex3-3">演習 3-3. コマンドで相対パスを使う</a>
+</ul>
 <li> <a href="#commands">ターミナルで使うと便利なコマンド</a>
+<ul>
+  <li class=ex> <a href="#ex3-4">演習3-4. コマンドによるファイル操作</a>
+</ul>
 <li> <a href="#matplotlib">matplotlibつづき</a>
+<ul>
+  <li class=ex> <a href="#ex3-5">演習3-5. データを使ったグラフ描画</a>
+  <li> <a href="#matplotlib-desc">matplotlib のプログラム解説</a>
+  <li> <a href="#matplotlib-paper">論文の実験データを使ってグラフを描画する</a>
+  <li class=ex> <a href="#ex3-6">演習3-6. 本格的なグラフ描画</a>
+</ul>
 <li> <a href="#summary">本日のまとめ・小課題</a>
-<li> <a href="#nextweek">次回予告</a>
+<ul>
+  <li class=ex> <a href="#kadai-s3">小課題3. 論文のグラフ 図6 を描画する (7月4日締切)</a>
+</ul>
 </ol>
 </nav>
 
@@ -54,9 +75,7 @@
     <li> 「能力のある人間は報われる」のは本当か?<br>
       実際には裕福な家庭に生まれた人がトクをしているのでは?<br>
       <a href="http://www.l.u-tokyo.ac.jp/2015SSM-PJ/05_01.pdf">世帯所得と子どもの学歴</a>。<br>
-      米国には <a href="https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%95%E3%82%A1%E3%83%BC%E3%83%9E%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%82%A2%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3">Affrimative Action</a> という制度がある。
-    <li> 「頭のよさ」は金で買える。<br>
-      裕福な家で育った子供の知能指数 (IQ) は高いことが知られている。
+      <a href="https://pumpkinperson.com/2016/02/11/the-incredible-correlation-between-iq-income/">裕福な家の子の知能指数 (IQ) は高い</a>。
   </ol>
 </ul>
 
@@ -109,7 +128,7 @@
 
 <h2 id="relpath">1. 相対パス名とは?</h2>
 
-<h3>1.1. カレントディレクトリとは (復習)</h3>
+<h3 id="relpath-cd">1.1. カレントディレクトリとは (復習)</h3>
 <ul>
   <li> 長いパス名を入力しなくてすむように、
     <u>いま注目しているフォルダ</u> を切り替えて操作する。<br>
@@ -189,7 +208,7 @@
 </svg>
 </ul>
 
-<h3>1.2. 絶対パス名と相対パス名</h3>
+<h3 id="relpath-abspath">1.2. 絶対パス名と相対パス名</h3>
 <p>
 実は「パス名」と呼ばれているものには 2つの種類がある。
 前回の授業でいう「パス名」は、「絶対パス名」のことであった。
@@ -279,7 +298,7 @@
   </ul>
 </ul>
 
-<h3>1.3. 相対パス名の表し方</h3>
+<h3 id="relpath-show">1.3. 相対パス名の表し方</h3>
 <ul>
 <li> 相対パス名では、カレントディレクトリの位置を<br>
   「<code>.</code> (ドット)」で表す:
@@ -583,7 +602,7 @@ plt.show()
 </ol>
 </div>
 
-<h3>3.1. matplotlib のプログラム解説</h3>
+<h3 id="matplotlib-desc">3.1. matplotlib のプログラム解説</h3>
 <p>
 上の演習 3-5. で使った matplotlib プログラムを簡単に解説する。
 <p>
@@ -717,7 +736,7 @@ plt.show()
 </div>
 </ul>
 
-<h3>3.2. 論文の実験データを使ってグラフを描画する</h3>
+<h3 id="matplotlib-paper">3.2. 論文の実験データを使ってグラフを描画する</h3>
 <p>
 つぎに、クラス共通課題の
 <a href="../../data/model.pdf">論文</a>で使われる
@@ -731,7 +750,7 @@ plt.show()
     このファイルは <u>Zip形式</u> であり、複数のファイル(フォルダ) が圧縮されている:<br>
     <a href="../../data/kadai-plot-data.zip">kadai-plot-data.zip</a><br>
     (このデータに関する説明は
-    <a href="https://titechcomp.github.io/y20-il2j/14-dataset.html">実習に用いるデータセット</a>
+    <a href="https://titechcomp.github.io/y22-il2j/14-dataset.html">実習に用いるデータセット</a>
     のページにある)
 
   <li> ダウンロードした Zip ファイルを開き、

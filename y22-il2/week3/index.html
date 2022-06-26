@@ -27,7 +27,7 @@
 <ul>
   <li class=ex> <a href="#ex3-1">演習 3-1. (前回の復習)</a>
 </ul>
-<li> <a href="#relpath">相対パス名とは?</a>
+<li> <a href="#relpath"><s>相対パス名とは?</s></a> <a href="#excel">Excel入門</a>
 <ul>
   <li> <a href="#relpath-cd">カレントディレクトリとは (復習)</a>
   <li> <a href="#relpath-abspath">絶対パス名と相対パス名</a>
@@ -77,12 +77,26 @@
       <a href="http://www.l.u-tokyo.ac.jp/2015SSM-PJ/05_01.pdf">世帯所得と子どもの学歴</a>。<br>
       <a href="https://pumpkinperson.com/2016/02/11/the-incredible-correlation-between-iq-income/">裕福な家の子の知能指数 (IQ) は高い</a>。
   </ol>
+  <li> 世の中のすべてはある意味「政治」である。
+    <ul>
+      <li> 「安くていいものが好き」 →<br>
+        <nobr><span class=bl>ロシアと仲良くして安い原油を輸入せよ。</span></nobr><br>
+        <nobr><span class=bl>外国人をもっと日本に増やし、日本人と同等に扱え。</span></nobr><br>
+      <li> 「自販機は超便利だ」<Br>
+        「エアコンがないと生きていけない」 →<br>
+        <nobr><span class=bl>原発を東京都に建てろ。</span></nobr><br>
+        <nobr><span class=bl>温暖化とか気候変動は忘れろ。</span></nobr><br>
+      <li> 「Amazonは便利だ」<br>
+        「安定した大企業に就職したい」<br>
+        「実力のある奴が出世するのは当然」 →<br>
+        <nobr><span class=bl>金持ちはますます金持ちになり、貧しい人は一生貧しい世界。</span></nobr><br>
+    </ul>
 </ul>
 
 <h4>選挙に行きましょう</h4>
 <ul>
 <li> 年寄りの有権者のほうが<a href="http://www.stat.go.jp/data/jinsui/2018np/">数は多い</a>。
-  → つまり、彼らの都合のいいように法律が決められる。
+  → つまり、彼らの意見で自分たちの将来が決まってしまう。
 <li> にもかかわらず、<a href="http://www.soumu.go.jp/senkyo/senkyo_s/news/sonota/nendaibetu/">若い人は投票に行かない</a>。
 </ul>
 
@@ -126,7 +140,38 @@
 </div>
 
 
-<h2 id="relpath">1. 相対パス名とは?</h2>
+<h2 id="excel">1. Excel入門</h2>
+<ul>
+<li> Excel は、表計算をおこなうアプリである。
+<li> 各<u>セル</u>に、文字または数値を入力する。
+<li> <u>数式バー</u> に計算式を入力すると、結果が自動的に計算される。<br>
+例:
+<ul>
+<li> <code>=SUM(B2:D2)</code> (セルB2からD2 までの合計)
+<li> <code>=AVERAGE(B2:B3)</code> (セルB2からB3 までの合計)
+</ul>
+<li> <u>名前ボックス</u>でセルの名前を確認。
+</ul>
+<div class=figure>
+<a href="excel1.png"><img src="excel1.png" width="292" height="207"></a>
+</div>
+<h3>1.1. Excel で重要なこと</h3>
+<p>
+各セルには、データ<strong>または</strong>数式が入っている。
+数式の場合、一見すると本物の数値と区別がつかないので、
+このような場合は <kbd>数式の表示</kbd> を使う。
+<div class=figure>
+<a href="excel2.png"><img src="excel2.png" width="528" height="129"></a>
+</div>
+<h3>1.2. テーブルを作る</h3>
+<p>
+データが入力されている一定の範囲を指定して<u>テーブル</u>と呼ばれる領域を
+作ることができる。すると、データによる並べ替えが簡単にできる。
+<div class=figure>
+<a href="excel3.png"><img src="excel3.png" width="521" height="178"></a>
+</div>
+
+<h2 id="relpath"><s>1. 相対パス名とは?</s></h2>
 
 <h3 id="relpath-cd">1.1. カレントディレクトリとは (復習)</h3>
 <ul>
@@ -815,7 +860,7 @@ plt.show()
   (<a href="../../data/model.pdf">論文</a>の図6) を描け。
   このときの matplotlib の<u>プログラム</u> (画像ファイルではない) を
   テキストファイルで提出せよ。
-  ファイル名はなんでもよいが、拡張子は <code>.txt</code> であること。
+  ファイル名は <code>fig6.txt</code> とすること。
   <div class=figure><img src="plot3.png"></div>
 </ul>
 <p>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2022年度 情報リテラシ第二 (1a)
+第5回 - LaTeX (Overleaf) の文法・図の埋め込み
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+
+<header>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第5回 - LaTeX (Overleaf) の文法・図の埋め込み</h1>
+<div class=nav>2022年7月11日</div>
+</header>
+
+<nav>
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#latex">LaTeX の基礎</a>
+<ul>
+  <li> <a href="#latex-word">Word と LaTeX の違い</a>
+  <li> <a href="#latex-basic">お約束</a>
+  <li class=ex> <a href="#ex5-1">演習5-1. LaTeXの基礎</a>
+  <li> <a href="#latex-commands">LaTeX コマンドいろいろ</a>
+  <li class=ex> <a href="#ex5-2">演習5-2. 図の埋め込み練習</a>
+  <li> <a href="#latex-troubleshooting">エラーが出る場合のチェックリスト</a>
+</ul>
+<li> <a href="#kadai2">中課題2 の説明</a>
+<ul>
+  <li class=ex> <a href="#ex5-3">演習5-3. 中課題2 の準備</a>
+</ul>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<ul>
+  <li class=ex> <a href="#kadai-s5">小課題5. 図を埋め込んだ文書を提出する (7月25日締切)</a>
+  <li class=ex> <a href="#kadai-m2">中課題2. LaTeXによる論文の再現 (8月1日締切)</a>
+</ul>
+</ol>
+</nav>
+
+
+<h3>雑談</h3>
+<p>
+アホなおすすめウェブサイト:
+<ul>
+  <li> <a target="_blank" href="http://www.ismycomputeron.com/">Is my computer on?</a>
+    (自分のPC電源が入っているかどうか確認できるサイト)
+  <li> <a target="_blank" href="https://bongo.cat/">Bongo Cat </a>
+    (なごみ系サイト)
+  <li> <a target="_blank" href="https://inspirobot.me/">InspiroBot</a>
+    (多くは意味不明、時に笑いすぎ注意)
+  <li> <a target="_blank" href="https://humanclock.com/">Human Clock</a>
+    (実写の写真を使って現在時刻を表示)
+  <li> <a target="_blank" href="https://pointerpointer.com/">Pointer Pointer</a>
+    (マウスポインタを指さす)
+  <li> <a target="_blank" href="https://www.window-swap.com/">WindowSwap</a>
+    (どこかの家の窓を中継)
+  <li> <a target="_blank" href="https://www.crazycardtrick.com/">Crazy Card Trick&#x2122;</a>
+    (自分の心を読むサイト)
+</ul>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+<li> matplotlib の課題を遂行した。
+<li> LaTeX (Overleaf) を使ってみた。
+</ul>
+
+
+<h2 id="latex">1. LaTeX の基礎</h2>
+
+<h3 id="latex-word">1.1. Word と LaTeX の違い</h3>
+<ul>
+  <li> Word: 人間の操作によって文書のレイアウトが決まる。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="180">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="user" width="50" height="50">
+      <g fill="none" stroke="black" stroke-width="3">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+      </g>
+    </symbol>
+  <symbol id="file" width="100" height="100">
+    <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round">
+      <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+      <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+      <polygon points="60,10 60,30 80,30" fill="white" />
+    </g>
+  </symbol>
+    <symbol id="file2" width="75" height="75">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"
+         transform="scale(0.75)">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(0.5,0.5)">
+    <use x="10" y="10" xlink:href="#user" />
+    <use x="0" y="100" xlink:href="#file2" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="70" y1="50" x2="150" y2="80" />
+      <line x1="70" y1="130" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+  <li> LaTeX: コマンド (=プログラム) が文書のレイアウトを決める。
+<div class=figure>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" width="400" height="180">
+  <defs>
+    <marker id="arrow" viewBox="-5 -5 10 10" markerWidth="4" markerHeight="4" orient="auto">
+      <polygon points="-5,-5 5,0 -5,5" fill="black" stroke="none" />
+    </marker>
+    <symbol id="computer" width="60" height="60">
+      <g fill="white" stroke="black" stroke-width="2">
+        <rect x="10" y="10" width="40" height="28" />
+        <polygon points="0,50 60,50 50,42 10,42" />
+      </g>
+    </symbol>
+    <symbol id="user" width="50" height="50">
+      <g fill="none" stroke="black" stroke-width="3">
+      <path d="M0,50 Q0,40,15,35 Q5,30,5,20 Q5,0,25,0 Q45,0,45,20 Q45,30,35,35 Q50,40,50,50" />
+      </g>
+    </symbol>
+    <symbol id="file2" width="75" height="75">
+      <g fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"
+         transform="scale(0.75)">
+        <polygon points="20,10 60,10 80,30 80,90 20,90" fill="white" />
+        <path d="M30,25 L70,25 M30,35 L70,35 M30,45 L70,45 M30,55 L70,55 M30,65 L70,65 M30,75 L70,75" />
+        <polygon points="60,10 60,30 80,30" fill="white" />
+      </g>
+    </symbol>
+  </defs>
+  <g transform="translate(0.5,0.5)">
+    <use x="0" y="10" xlink:href="#file2" />
+    <use x="0" y="100" xlink:href="#file2" />
+    <use x="165" y="65" xlink:href="#computer" />
+    <use x="300" y="40" xlink:href="#file" />
+    <g stroke="black" fill="none" stroke-width="4" marker-end="url(#arrow)">
+      <line x1="70" y1="50" x2="150" y2="80" />
+      <line x1="70" y1="130" x2="150" y2="100" />
+      <line x1="230" y1="90" x2="300" y2="90" />
+    </g>
+  </g>
+</svg>
+</div>
+</ul>
+
+<h3 id="latex-basic">1.2. お約束</h3>
+<ul>
+  <li> 最初の1行はかならずコレ:
+<pre>
+\documentclass[a4j,11pt]{jarticle}
+</pre>
+  <li> 文書全体を <code>\begin{document}</code> 〜 <code>\end{document}</code> で囲む:
+<pre>
+\begin{document}
+...
+\end{document}
+</pre>
+  <li> 「<code>%</code>」以降はコメントとして無視される。
+  <li> すべてのコマンドは「<code>\command</code>」などのように
+    バックスラッシュ (<code>\</code>) のあとに書いた英単語で表される。
+  <li> コマンドによっては後にくる文字を <code>{〜}</code> で
+    囲む必要がある<strong>場合もある</strong>。
+  <li> コマンドは数百種類もあるので、
+    基本的には他人の技をパクって覚える。
+</ul>
+
+<div class=exercise id="ex5-1">
+<div class=header>演習5-1. LaTeXの基礎</div>
+<ol>
+  <li> 以下のファイルをダウンロードせよ:
+    <a href="https://titechcomp.github.io/y22-il2j/2/sample.tex">sample.tex</a>
+  <li> Overleaf で、新しいプロジェクトを作成せよ (前回の hello プロジェクトを開いてもよい)。
+    前回と同じように <code>latexmkrc</code> を作成すること:
+<pre>
+$latex = 'platex';
+$bibtex = 'pbibtex';
+$dvipdf = 'dvipdfmx %O -o %D %S';
+</pre>
+    (自分のPCにLaTeXをインストールした場合は、新しいフォルダを作成する。)
+  <li> 画面左上にある <kbd>アップロード</kbd> ボタンをクリックし、
+    ダウンロードした sample.tex を Overleaf 上にアップロードせよ。
+<div class=figure><img src="ov_upload.png"></div>
+  <li> <code>sample.tex</code> ファイルをクリックして <kbd>リコンパイル</kbd> し、
+    正しく文書が表示されることを確認せよ。
+<div class=figure><img src="ov_sample.png"></div>
+  <li> <code>\author</code> の中身を自分の名前に書き換えよ。
+  <li> 見よう見真似で <code>\section</code> コマンドを使って、
+    文書の最後に「<code>おわりに</code>」という節を追加せよ。
+</ol>
+</div>
+
+
+<h3 id="latex-commands">1.3. LaTeX コマンドいろいろ</h3>
+
+<h4>参考資料</h4>
+<ul>
+  <li> クラス共通: <a target="_blank" href="https://titechcomp.github.io/y22-il2j/latex/">LaTeX サポートサイト</a>
+  <li> クラス共通: <a target="_blank" href="https://titechcomp.github.io/y22-il2j/theme2.html">科学技術文書執筆</a>
+  <li> <a target="_blank" href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a target="_blank" href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
+</ul>
+
+<h4>技術1. 段落を変える</h4>
+<ul>
+  <li> LaTeX では、ただ改行しても改行にならない。
+    <pre class=example>王様の
+耳は
+ロバの耳。</pre>
+  <li> 1行あけると、次の段落になる。
+    <pre class=example>下の文章のいっていることは本当です。
+
+上の文章がいっていることはウソです。</pre>
+</ul>
+
+<h4>技術2. 数式の埋め込み</h4>
+<ul>
+<li> 文章中に埋め込む: <code>$ 〜 $</code>
+  <pre class=example>以下が成り立つ: $(a+b)^2 = a^2 + 2ab + b^2$</pre>
+<li> ひとつの段落として表示: <code>\[ 〜 \]</code>
+  <pre class=example>以下が成り立つ: \[ (a+b)^2 = a^2 + 2ab + b^2 \]</pre>
+</ul>
+
+<h4>技術3. 図の埋め込み</h4>
+<p>
+以下のコマンドを使うと、
+文書中に画像ファイル (.png あるいは .pdf ファイル) を埋め込むことができる。
+<blockquote><pre class=example>
+\begin{figure}
+\includegraphics[width=0.80\linewidth]{<mark>ファイル名</mark>}
+\caption{<mark>図のキャプション</mark>}
+\end{figure}
+</pre></blockquote>
+
+<div class=exercise id="ex5-2">
+<div class=header>演習5-2. 図の埋め込み練習</div>
+<ol>
+  <li> 演習 5-1 のプロジェクトに、
+    以前 matplotlib で作成した論文 図2 の
+    画像ファイル (<code>fig2.png</code>) をアップロードせよ。
+    (ファイル名は違っていてもかまわない)
+  <li> <code>sample.tex</code> の中に、以下の内容を追加せよ:
+<pre class=example>
+\begin{figure}
+\includegraphics[width=0.80 \linewidth] {<mark>fig2.png</mark>}
+\caption{<mark>ネットワークの解析に要した時間の時系列遷移</mark>}
+\end{figure}
+</pre>
+  <li> <kbd>リコンパイル</kbd>し、正しく図が埋めこまれていることを確認せよ。
+    (LaTeX の判断により、図が勝手に次ページに送られることがある)
+  <li> <strong>注意:</strong> 図を埋め込むためには、
+    文書の最初 (<code>\documentclass</code> のあと) に以下の1行が必要である:
+    (<code>sample.tex</code> にはすでに入っている)
+<pre>
+\usepackage [dvipdfmx]{graphicx}
+</pre>
+</ol>
+</div>
+
+<h3 id="latex-troubleshooting">1.4. エラーが出る場合のチェックリスト</h3>
+<ol type=a>
+<li> <code>latexmkrc</code> は正しく作ったか? (<code>latexmkrc.tex</code> ではダメ)
+<li> 「コンパイラ」を <kbd>pdfLaTeX</kbd> から <kbd>LaTeX</kbd> に変更したか?
+<li> 文書の先頭に <code>\documentclass</code> が正しく書かれているか?
+<li> 文章が正しく
+  <code>\begin{document}</code> 〜 <code>\end{document}</code> で囲まれているか?
+<li> コマンドやファイル名が正しく (全角ではなく) 半角文字で入力されているか?
+</ol>
+
+
+<h2 id="kadai2">2. 中課題2 の説明</h2>
+<ul>
+<li> 締め切り: <strong>8月1日</strong> (3週間後)。<br>
+  時間がかかるので、いまから始めたほうがよい。
+<li> やること:
+  <ol>
+    <li> LaTeX でこれと同じものを作る:
+      「<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a>」
+    <li> 元の文書と同じになるように、 main.tex に足りない部分を追加せよ。
+    <li> matplotlib で作成した図2 〜 図6を挿入せよ。
+    <li> 完成したプロジェクトをまるごと zip ファイルにまとめ、
+      T2SCHOLA から提出せよ。
+  </ol>
+</ul>
+
+<div class=exercise id="ex5-3">
+<div class=header>演習5-3. 中課題2 の準備</div>
+<ol>
+  <li> まず材料となるファイルをダウンロードする:<br>
+    <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+  <li> Overleaf の最初の画面に戻り、
+    <kbd>新規プロジェクト</kbd> → <kbd>プロジェクトのアップロード</kbd> を選ぶ。
+  <li> ダウンロードした zip ファイルをアップロードする。
+    <div class=figure><img src="ov_upload2.png"></div>
+  <li> 「kadai-latex-overleaf」プロジェクトができるので、
+    またもや画面左上のメニューから設定の
+    「コンパイラ」を <kbd>LaTeX</kbd> に変更。
+    <div class=figure><img src="../week4/ov_menu.png"></div>
+  <li> <kbd>リコンパイル</kbd> し、正しく文書が表示されることを確認する。
+</ol>
+</div>
+
+
+<h2 id="summary">3. 本日のまとめ・小課題</h2>
+<ul>
+  <li> LaTeX 演習をおこなった。
+    <ul>
+      <li> 節の追加 (<code>\section</code>コマンド)
+      <li> 図の埋め込み。
+    </ul>
+  <li> 中課題 2. の準備をした。
+</ul>
+
+<div class=exercise id="kadai-s5">
+<div class=header>小課題5. 図を埋め込んだ文書を提出する (7月25日締切)</div>
+<ul>
+  <li> 締め切り: <strong>7月25日</strong> (2週間後)
+</ul>
+<p>
+本日の <a href="#ex5-2">演習 5-2.</a> で作成したPDFファイルと、
+それを生成するのに必要な以下のファイル
+すべてをzip形式でひとつにまとめ、提出せよ。
+(図のファイル名は fig2.png でなくてもよい、
+latexmkrc は入れなくてもよい)
+<ul>
+  <li> <code>sample.pdf</code>
+  <li> <code>sample.tex</code>
+  <li> <code>fig2.png</code>
+</ul>
+<p>
+<code>sample.tex</code> ファイルは、
+メモ帳やテキストエディットで作成すること。(Overleafからコピー・ペーストする)
+</div>
+
+<div class=exercise id="kadai-m2">
+<div class=header>中課題2. LaTeXによる論文の再現 (8月1日締切)</div>
+<ul>
+  <li> 提出期限: <strong>8月1日</strong> (3週間後)
+</ul>
+<p>
+<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a> を
+LaTeX で印刷するのに必要なファイル一式を Zip 形式で提出せよ。(計20点)<Br>
+(まだ現在までに習ったことだけは完成できないが、作業を始めたほうがよい。)
+<p>
+<strong>やりかた:</strong>
+<ol>
+  <li> 材料となるファイル
+      <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+      をダウンロードする。<br>
+      (注意: Macを使っている場合は、上のリンクを<u>直接クリックしない</u>こと! <a href="#macissues">以下参照</a>)
+  <li> ダウンロードしたフォルダ中に含まれている <code>hints.pdf</code> を見る。
+  <li> <code>main.tex</code> を修正して (<kbd>空欄</kbd> の部分を埋める)、
+    <code>goal.pdf</code> と同じになるように加筆する。
+  <li> matplotlib で作成した図2 〜 図6を挿入する。
+  <li> 完成したプロジェクトをまるごと zip ファイルにまとめ、
+    T2SCHOLA から提出する。
+</ol>
+<p>
+<strong>採点基準:</strong>
+<ol type=a>
+  <li> すべてのファイルが揃っており、リコンパイル時にエラーが出なければ 5点。
+  <li> 図と表がきちんとできていれば +5点。<mark>(← 表については次回やります)</mark>
+  <li> 数式の埋め込みがきちんとできていれば +5点。
+  <li> <code>\cite</code> や <code>\ref</code> を使った引用ができていれば +5点。<mark>(← 次回やります)</mark>
+  <li> (多少のミスや、図が完璧に元論文と同じにならないことは
+    減点対象とはならない)
+</ol>
+</div>
+
+</main>
+
+<footer>
+<address>Yusuke Shinyama</address>
+</footer>

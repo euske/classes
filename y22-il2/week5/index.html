@@ -326,6 +326,36 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
 </ol>
 </div>
 
+<h4 id="macissues">Mac でうまくコンパイルできない場合</h4>
+<p>
+Mac を使っていて Overleaf でうまくコンパイルできない場合は、
+以下のことを試してみる:
+<ol class=spacy>
+<li> まず上の
+  <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+  をダウンロードするときに、リンクを<mark>直接クリックしない</mark>こと。
+  こうすると Mac は zipファイルを勝手に展開・削除してしまう。
+  これを防ぐためにはリンクを<kbd>Control</kbd>+クリックして
+  メニューを開き、<kbd>リンク先のファイルをダウンロード</kbd> を選ぶ。
+  こうすると zipファイルがそのまま保存されるので、
+  これを Overleaf にアップロードすればよい。
+<div class=figure><img width="909" height="236" src="mac-download-zip.png"></div>
+<li> Overleaf にプロジェクトをアップロードするときは、
+  ダウンロードしたzipファイルを<mark>そのまま</mark>アップロードすること。
+  一度、展開したフォルダを再び zip に圧縮してはならない。
+  こうすると以下のようなエラーが出てしまう。
+  (具体的には、Overleaf の画面左上に「kada-latex-overleaf」という余計な
+  フォルダができてしまっている、
+  こうすると latexmkrc が Overleaf に正しく認識されず、エラーとなる) :
+<div class=figure>
+<img width="799" height="430" src="overleaf-ok.png"><br>
+正常な場合
+<p>
+<img width="802" height="391" src="overleaf-ng.png"><br>
+ダメな場合
+</div>
+</ol>
+
 
 <h2 id="summary">3. 本日のまとめ・小課題</h2>
 <ul>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../common.css">
+<title>2022年度 情報リテラシ第二 (1a)
+第6回 - LaTeX (Overleaf) の高度な技
+/ 新山 祐介</title>
+<style><!--
+--></style>
+</head>
+<body>
+
+
+<header>
+<div class=nav>
+<a href="../index.html">&lt; もどる</a>
+</div>
+
+<h1>第6回 - LaTeX (Overleaf) の高度な技</h1>
+<div class=nav>2022年7月25日</div>
+</header>
+
+<nav>
+<ol start="0">
+<li> <a href="#prev">前回までのあらすじ</a>
+<li> <a href="#kadai2">中課題2 の説明 (つづき)</a>
+<li> <a href="#latex">LaTeX の高度な技</a>
+<li> <a href="#breakout">Zoom の練習</a>
+<li> <a href="#summary">本日のまとめ・小課題</a>
+<li> <a href="#nextweek">次回予告</a>
+</ol>
+</nav>
+
+<main>
+
+<h3>雑談</h3>
+<ul>
+  <li> 前回の授業アンケート結果。
+  <li> 教員が本当に欲しいのは「ほめ言葉」よりも「改善提案」である。(ただし、無理なものはムリ)
+</ul>
+
+<div class=exercise style="background:#aaffff;">
+<div class=header>授業学修アンケート提出のお願い</div>
+<p>
+世の中をよくしたいと思ったら、自分の意見をはっきり言うことが必要です。
+<p>
+授業学修アンケートの提出をお願いします:
+<a target="_blank" href="https://t2schola.titech.ac.jp/mod/ltifmane/view.php?id=77048">T2SCHOLA: 授業学修アンケート</a>
+</div>
+
+
+<h2 id="prev">0. 前回までのあらすじ</h2>
+<ul>
+  <li> LaTeX 演習をおこなった。
+    <ul>
+      <li> 節の追加 (<code>\section</code>コマンド)
+      <li> 図の埋め込み。
+    </ul>
+  <li> Zipファイルの使い方について学習した。
+</ul>
+
+<div class=exercise>
+<div class=header>演習 6-1. (前回の復習)</div>
+<ol type=a>
+<li> Zipファイル形式は普通のファイルと比べて何が違うのか?
+  2つあげよ。
+<li> LaTeX で、文書の最後に必ず書かねばならないものは?
+  <code>\<span class=bl>end</span>{<span class=bl>document</span>}</code>
+<li> なぜ画像を記録するのに PDF, JPEG, PNG など違う
+  形式がいくつも存在するのか?
+</ol>
+</div>
+
+
+<h2 id="kadai2">1. 中課題2 の説明 (つづき)</h2>
+
+<div class=exercise id="kadai-m2">
+<div class=header>中課題2. LaTeXによる論文の再現 (8月1日締切)</div>
+<ul>
+  <li> 提出期限: <strong>8月1日</strong> (3週間後)
+</ul>
+<p>
+<a href="../../data/model.pdf">大規模社会ネットワークからのクラスタ構造の抽出</a> を
+LaTeX で印刷するのに必要なファイル一式を Zip 形式で提出せよ。(計20点)<Br>
+(まだ現在までに習ったことだけは完成できないが、作業を始めたほうがよい。)
+<p>
+<strong>やりかた:</strong>
+<ol>
+  <li> 材料となるファイル
+      <a href="../../data/kadai-latex-overleaf.zip">kadai-latex-overleaf.zip</a>
+      をダウンロードする。<br>
+      (注意: Macを使っている場合は、上のリンクを<strong>直接クリックしない</strong>こと! <a href="../week5/index.html#macissues">前回の資料参照</a>)
+  <li> ダウンロードしたフォルダ中に含まれている <code>hints.pdf</code> を見る。
+  <li> <code>main.tex</code> を修正して (<kbd>空欄</kbd> の部分を埋める)、
+    <code>goal.pdf</code> と同じになるように加筆する。
+  <li> matplotlib で作成した図2 〜 図6を挿入する。
+  <li> 完成したプロジェクトをまるごと zip ファイルにまとめ、
+    T2SCHOLA から提出する。
+</ol>
+<p>
+<strong>採点基準:</strong>
+<ol type=a>
+  <li> すべてのファイルが揃っており、リコンパイル時にエラーが出なければ 5点。
+  <li> 図と表がきちんとできていれば +5点。
+  <li> 数式の埋め込みがきちんとできていれば +5点。
+  <li> <code>\cite</code> や <code>\ref</code> を使った引用ができていれば +5点。
+  <li> (多少のミスや、図が完璧に元論文と同じにならないことは
+    減点対象とはならない)
+</ol>
+</div>
+
+<h4>参考資料</h4>
+<ul>
+  <li> クラス共通: <a target="_blank" href="https://titechcomp.github.io/y22-il2j/latex/">LaTeX サポートサイト</a>
+  <li> クラス共通: <a target="_blank" href="https://titechcomp.github.io/y22-il2j/theme2.html">科学技術文書執筆</a>
+  <li> <a target="_blank" href="https://ja.wikibooks.org/wiki/TeX/LaTeX%E5%85%A5%E9%96%80">LaTeX Wikibook</a> (<a target="_blank" href="https://en.wikibooks.org/wiki/LaTeX">英語</a>)
+</ul>
+
+
+<h2 id="latex">2. LaTeX の高度な技</h2>
+
+<h3>2.1. 表の埋め込み</h3>
+<ul>
+<li> <code>\begin{tabular} 〜 \end{tabular}</code> を使う:
+<pre class=example>
+\begin{center}
+\begin{tabular}{lrr}
+品名 &amp; 値段 &amp; 数量 \\
+チョコレート &amp; 10 &amp; 300 \\
+クッキー &amp; 150 &amp; 20 \\
+アイスクリーム &amp; 200 &amp; 4 \\
+\end{tabular}
+\end{center}</pre>
+<li> 欄の数・書式は、ここで決まる:
+<pre class=example>\begin{tabular}{<mark>lrr</mark>}</pre>
+<kbd>l</kbd>…左寄せ, <kbd>r</kbd>…右寄せ, <kbd>c</kbd>…中央寄せ。
+<li> 縦の罫線を入れるには:
+<pre class=example>\begin{tabular}{<mark>|l|r|r|</mark>}</pre>
+<li> 横の罫線を入れるには:
+<pre class=example>\hline</pre>
+</ul>
+
+<div class=exercise>
+<div class=header>演習6-2. 表の作成</div>
+<ul>
+  <li> 以下の表を LaTeX で作成せよ:
+<table class=figure border>
+  <tr><td class=l>City</td><td class=r>Highest ℃</td><td class=r>Lowest ℃</td></tr>
+  <tr><td class=l>Tokyo</td><td class=r>31</td><td class=r>1</td></tr>
+  <tr><td class=l>Honolulu</td><td class=r>32</td><td class=r>19</td></tr>
+  <tr><td class=l>Yakutsk</td><td class=r>26</td><td class=r>-42</td></tr>
+</table>
+<li> <code>.tex</code>の最初の部分:
+<pre class=example>\documentclass[a4j,11pt]{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\begin{document}
+\begin{center}
+\begin{tabular}
+...</pre>
+</ul>
+</div>
+
+<h3>2.2. 図表へのリンク</h3>
+<ul>
+  <li> 図や表が30枚ぐらい入っている文章を考える:
+    <div class="example gray">詳しくは、表.17 (第6章) を参照のこと。</div>
+    <em>…どこなのよ?</em>
+  <li> LaTeX では、図・表・節に名前 (ラベル) をつけておき、
+    別の場所からリンクできる。
+  <li> 図を参照する:
+<pre class=example>図 \ref{fig:neuman time diff} を参照せよ。</pre>
+これが、こうなる:
+<div class=example>図 1 を参照せよ。</div>
+  <li> 図にラベルをつける:
+<pre class=example>\begin{figure}
+\begin{center}
+\includegraphics[width=0.80\linewidth]
+    {fig2-cnm-joins-time-series.pdf}
+\caption{ネットワークの解析に要した時間の時系列遷移}
+<mark>\label{fig:neuman time diff}</mark>
+\end{center}
+\end{figure}</pre>
+  <li> 図を参照する:
+<pre class=example>図 <mark>\ref{fig:neuman time diff}</mark> を参照せよ。</pre>
+  <li> 表にラベルをつける場合:
+<pre class=example><mark>\begin{table}</mark>
+\begin{center}
+\begin{tabular}{lrr}
+...
+\end{tabular}
+\end{center}
+<mark>\caption{各都市の気温}
+\label{tbl:temp}
+\end{table}</mark></pre>
+  <li> 節にラベルをつける場合:
+<pre class=example>\section{節の名前}
+<mark>\label{sect:nanka}</mark>
+...</pre>
+</ul>
+
+<div class=exercise>
+<div class=header>演習6-3. 図表へのリンク</div>
+<ol type=a>
+  <li> 演習6-2. で作成した表に
+    見出し「<code>各都市の気温</code>」、
+    およびラベル <code>tbl:temp</code> をつけよ:
+<pre class=example>
+\begin{table}
+...
+\caption{各都市の気温}
+\label{tbl:temp}
+\end{table}
+</pre>
+  <li> 同じく演習6-2. の表を matplotlib で棒グラフとして描画し、
+    <code>fig:temp</code> というラベルをつけよ。
+<div class=figure><img src="temp.png"></div>
+<pre class=example>
+\caption{各都市の気温}
+\label{fig:temp}
+</pre>
+棒グラフを描画するには以下のようにする:
+<pre>
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.bar(['Tokyo','Honolulu','Yakutsk'], [31,32,26], label="Highest", color="red")
+plt.bar(['Tokyo','Honolulu','Yakutsk'], [1,19,-42], label="Lowest", color="blue")
+
+plt.xlabel("City")
+plt.ylabel("Temperature")
+plt.legend()
+plt.savefig("./temp.png")
+plt.show()
+</pre>
+  <li> 上の a. と b. を配置した文書を作成し、
+    以下のような文を入れよ:
+<pre class=example>
+表 \ref{tbl:temp} および
+図 \ref{fig:temp} を参照のこと。
+</pre>
+  <li> 上の文章に正しく番号が挿入されることを確認せよ:
+<pre class=example>
+表 1 および図 1 を参照のこと。
+</pre>
+</ol>
+</div>
+
+<h3>2.3. 論文の引用</h3>
+<ul>
+  <li> 論文を参照する:
+<pre class=example>\cite{kumar-1999-trawling-the-web-for-<br>emerging-cyber-communities}
+は特によく知られている。</pre>
+これが、こうなる:
+<div class=example>[6] は特によく知られている。<br>
+...<br>
+<sub>[6] Ravi Kumar, Prabhakar Raghavan, Sridhar Rajagopalan and Andrew Tomkins,
+Trawling the Web for emerging cyber-communities.</sub>
+</div>
+  <li> これらの対応関係は <code>references.bib</code> ファイルに記載されているので、
+    このファイルを <code>.tex</code> と同じフォルダに置いておけば自動的に利用される。
+</ul>
+
+
+<h2 id="breakout">3. Zoom の練習</h2>
+<p>
+Zoom の Breakout Room 機能を使って、
+各グループに分かれて作業する練習をおこなう。
+<ul>
+<li> 顔は出さない。
+<li> まずお互いに自己紹介すること。
+<li> 各自、勝手にTeXの課題をやる。
+<li> 質問があれば同じグループ内の誰かに聞く。
+<li> 教員およびTAが適当に巡回する。
+</ul>
+
+
+<h2 id="summary">4. 本日のまとめ・小課題</h2>
+<ul>
+  <li> 中課題 2. の説明をした。
+  <li> LaTeX 演習をおこなった。
+    <ul>
+      <li> 表の埋め込み。
+      <li> 図表へのリンク。
+      <li> 論文の引用。
+    </ul>
+</ul>
+
+<div class=exercise>
+<div class=header>演習6-4. LaTeXおまけ演習 (8月1日締切)</div>
+<ul>
+  <li> 締め切り: <strong>8月1日</strong> (1週間後)
+  <li> 演習6-3. で作成した
+    <code>.tex</code>ファイルを OCW-i から提出せよ。
+    ここには「各都市の気温」表と棒グラフの図がどちらも含まれており、
+    各図表に正しい番号がふられていること。
+    (なお、提出するのは .texファイルのみでよい)
+</ul>
+</div>
+
+<div class=exercise>
+<div class=header>演習6-5. 宿題その2 (提出の必要なし)</div>
+<ul>
+<li> 来週のプレゼンで自分が話したいことを考えてくること。
+  (考えるだけ、スライド等は作らなくてよい)
+<li> Office 365 をインストールしておくこと。
+  (PowerPoint を使ってプレゼンしたい人のみ)<br>
+  Portal から「Microsoft365 アカウント (テスト公開中)」を選ぶとダウンロードできる。
+  <div class=figure><img src="o365.png"></div>
+</ul>
+</div>
+
+
+<h2 id="nextweek">5. 次回予告</h2>
+<ul>
+<li> 8月1日: プレゼンテーション練習
+  <ul>
+    <li> 演習1: 自分が話したいことを<strong>スライド1枚</strong>にまとめ、
+      グループ内で発表する。(10点)
+    <li> 演習2: 他人の発表に質問する。(10点)
+  </ul>
+<li> <strong>注意:</strong> 遅刻しないこと!<br>
+  参加できないと点数になりません。
+</ul>
+
+</main>
+
+<footer>
+<address>Yusuke Shinyama</address>
+</footer>

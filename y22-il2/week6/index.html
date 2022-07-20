@@ -25,10 +25,24 @@
 <nav>
 <ol start="0">
 <li> <a href="#prev">前回までのあらすじ</a>
+<ul>
+  <li class=ex> <a href="#ex6-1">演習 6-1. 前回の復習</a>
+</ul>
 <li> <a href="#kadai2">中課題2 の説明 (つづき)</a>
 <li> <a href="#latex">LaTeX の高度な技</a>
+<ul>
+  <li> <a href="#latex-tabular">表の埋め込み</a>
+  <li class=ex> <a href="#ex6-2">演習 6-2. 表の作成</a>
+  <li> <a href="#latex-ref">図表へのリンク</a>
+  <li class=ex> <a href="#ex6-3">演習 6-3. 図表へのリンク</a>
+  <li> <a href="#latex-cite">論文の引用</a>
+</ul>
 <li> <a href="#breakout">Zoom の練習</a>
 <li> <a href="#summary">本日のまとめ・小課題</a>
+<ul>
+  <li class=ex> <a href="#kadai-s6">小課題6. LaTeXおまけ演習 (8月1日締切)</a>
+  <li class=ex> <a href="#kadai-ext">宿題その2 (提出の必要なし)</a>
+</ul>
 <li> <a href="#nextweek">次回予告</a>
 </ol>
 </nav>
@@ -47,7 +61,7 @@
 世の中をよくしたいと思ったら、自分の意見をはっきり言うことが必要です。
 <p>
 授業学修アンケートの提出をお願いします:
-<a target="_blank" href="https://t2schola.titech.ac.jp/mod/ltifmane/view.php?id=77048">T2SCHOLA: 授業学修アンケート</a>
+<a target="_blank" href="https://t2schola.titech.ac.jp/mod/ltifmane/view.php?id=92089">T2SCHOLA: 授業学修アンケート</a>
 </div>
 
 
@@ -61,8 +75,8 @@
   <li> Zipファイルの使い方について学習した。
 </ul>
 
-<div class=exercise>
-<div class=header>演習 6-1. (前回の復習)</div>
+<div class=exercise id="ex6-1">
+<div class=header>演習 6-1. 前回の復習</div>
 <ol type=a>
 <li> Zipファイル形式は普通のファイルと比べて何が違うのか?
   2つあげよ。
@@ -121,7 +135,7 @@ LaTeX で印刷するのに必要なファイル一式を Zip 形式で提出せ
 
 <h2 id="latex">2. LaTeX の高度な技</h2>
 
-<h3>2.1. 表の埋め込み</h3>
+<h3 id="latex-tabular">2.1. 表の埋め込み</h3>
 <ul>
 <li> <code>\begin{tabular} 〜 \end{tabular}</code> を使う:
 <pre class=example>
@@ -142,7 +156,7 @@ LaTeX で印刷するのに必要なファイル一式を Zip 形式で提出せ
 <pre class=example>\hline</pre>
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex6-2">
 <div class=header>演習6-2. 表の作成</div>
 <ul>
   <li> 以下の表を LaTeX で作成せよ:
@@ -162,7 +176,7 @@ LaTeX で印刷するのに必要なファイル一式を Zip 形式で提出せ
 </ul>
 </div>
 
-<h3>2.2. 図表へのリンク</h3>
+<h3 id="latex-ref">2.2. 図表へのリンク</h3>
 <ul>
   <li> 図や表が30枚ぐらい入っている文章を考える:
     <div class="example gray">詳しくは、表.17 (第6章) を参照のこと。</div>
@@ -200,7 +214,7 @@ LaTeX で印刷するのに必要なファイル一式を Zip 形式で提出せ
 ...</pre>
 </ul>
 
-<div class=exercise>
+<div class=exercise id="ex6-3">
 <div class=header>演習6-3. 図表へのリンク</div>
 <ol type=a>
   <li> 演習6-2. で作成した表に
@@ -247,7 +261,7 @@ plt.show()
 </ol>
 </div>
 
-<h3>2.3. 論文の引用</h3>
+<h3 id="latex-cite">2.3. 論文の引用</h3>
 <ul>
   <li> 論文を参照する:
 <pre class=example>\cite{kumar-1999-trawling-the-web-for-<br>emerging-cyber-communities}
@@ -287,23 +301,23 @@ Zoom の Breakout Room 機能を使って、
     </ul>
 </ul>
 
-<div class=exercise>
-<div class=header>演習6-4. LaTeXおまけ演習 (8月1日締切)</div>
+<div class=exercise id="kadai-s6">
+<div class=header>小課題6. LaTeXおまけ演習 (8月1日締切)</div>
 <ul>
   <li> 締め切り: <strong>8月1日</strong> (1週間後)
   <li> 演習6-3. で作成した
-    <code>.tex</code>ファイルを OCW-i から提出せよ。
+    <code>.tex</code>ファイルを T2SCHOLA から提出せよ。
     ここには「各都市の気温」表と棒グラフの図がどちらも含まれており、
     各図表に正しい番号がふられていること。
     (なお、提出するのは .texファイルのみでよい)
 </ul>
 </div>
 
-<div class=exercise>
-<div class=header>演習6-5. 宿題その2 (提出の必要なし)</div>
+<div class=exercise id="kadai-ext">
+<div class=header>宿題その2 (提出の必要なし)</div>
 <ul>
 <li> 来週のプレゼンで自分が話したいことを考えてくること。
-  (考えるだけ、スライド等は作らなくてよい)
+  (スライド等は作らなくてよい)
 <li> Office 365 をインストールしておくこと。
   (PowerPoint を使ってプレゼンしたい人のみ)<br>
   Portal から「Microsoft365 アカウント (テスト公開中)」を選ぶとダウンロードできる。
